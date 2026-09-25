@@ -165,8 +165,8 @@ export struct PasswordDetailPage {
           // 解密中
           Column() {
             LoadingProgress()
-              .width(48)
-              .height(48)
+              .width(IconSize.XL)
+              .height(IconSize.XL)
             Text('正在解密...')
               .fontSize(FontSize.BODY)
               .fontColor(this.colors.textTertiary)
@@ -196,7 +196,7 @@ export struct PasswordDetailPage {
                 .type(InputType.Password)
                 .fontSize(FontSize.BODY)
                 .width('100%')
-                .height(44)
+                .height(ComponentSize.CONTROL)
                 .borderRadius(Radius.CARD)
                 .backgroundColor(this.colors.inputBackground)
                 .onChange((v: string) => {
@@ -209,7 +209,7 @@ export struct PasswordDetailPage {
                   .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                   .layoutWeight(1)
                   .height(ButtonSpec.SECONDARY_HEIGHT)
-                  .backgroundColor(this.colors.inputBackground)
+                  .backgroundColor(this.colors.neutralButton)
                   .fontColor(this.colors.textSecondary)
                   .margin({ right: Spacing.SM })
                   .onClick(() => {
@@ -539,7 +539,7 @@ export struct PasswordDetailPage {
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
           .height(ButtonSpec.SECONDARY_HEIGHT)
-          .backgroundColor(this.colors.inputBackground)
+          .backgroundColor(this.colors.neutralButton)
           .fontColor(this.colors.textPrimary)
           .enabled(!this.viewModel.isDeleting)
           .margin({ right: Spacing.SM })

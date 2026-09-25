@@ -459,8 +459,8 @@ export struct SshKeyManagerPage {
         });
       })
     }
-    // 下拉菜单宽度：无对应宽度令牌，保留 220vp
-    .width(220)
+    // 下拉菜单宽度
+    .width(ComponentSize.MENU_WIDTH)
     .borderRadius(Radius.CARD)
     .backgroundColor(this.colors.surface)
     .padding({ top: Spacing.XS, bottom: Spacing.XS })

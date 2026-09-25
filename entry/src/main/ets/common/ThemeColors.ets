@@ -79,10 +79,15 @@ export interface Palette {
    * 「后面不可操作」的视觉表达，故深浅两套取同一族半透明黑。
    */
   overlayScrim: string;
+  /** 密码强度：弱（< 40 bits 熵） */
+  strengthWeak: string;
+  /** 密码强度：中（< 80 bits 熵） */
+  strengthFair: string;
+  /** 密码强度：强（< 120 bits 熵） */
+  strengthGood: string;
+  /** 密码强度：极强（≥ 120 bits 熵） */
+  strengthStrong: string;
 }
-
-/** HarmonyOS Design 强调色（鸿蒙蓝，浅色模式） */
-export const EMPHASIZE_COLOR: string = '#007DFF';
 
 /** 浅色调色板（对齐 HarmonyOS 浅色语义） */
 const LIGHT_PALETTE: Palette = {
@@ -99,11 +104,15 @@ const LIGHT_PALETTE: Palette = {
   warning: '#E8A739',
   danger: '#E84026',
   dangerSoft: '#FEF2F2',
-  inputBackground: '#F1F3F5',
+  inputBackground: '#E8EBED',
   neutralButton: '#E5E5E5',
   pressed: '#E6E7E9',
   warningSoft: '#FEF7E8',
   overlayScrim: '#66000000',
+  strengthWeak: '#E84026',
+  strengthFair: '#E8A739',
+  strengthGood: '#64BB5C',
+  strengthStrong: '#4A8F44',
 };
 
 /** 深色调色板（对齐 HarmonyOS 深色语义，深蓝黑体系） */
@@ -112,7 +121,7 @@ const DARK_PALETTE: Palette = {
   surface: '#1A1A1A',
   textPrimary: '#E5E5E5',
   textSecondary: '#999999',
-  textTertiary: '#666666',
+  textTertiary: '#888888',
   divider: '#333333',
   primary: '#317AF7',
   primarySoft: '#317AF733',
@@ -126,6 +135,10 @@ const DARK_PALETTE: Palette = {
   pressed: '#333333',
   warningSoft: '#2A2113',
   overlayScrim: '#8C000000',
+  strengthWeak: '#FF6B5E',
+  strengthFair: '#FFB84D',
+  strengthGood: '#7ED680',
+  strengthStrong: '#9CE89C',
 };
 
 /** 圆角令牌（对齐 HarmonyOS 圆角阶梯） */
@@ -170,6 +183,10 @@ export class IconSize {
   static readonly FAB_GLYPH: number = 28;
   /** 空状态插图 */
   static readonly EMPTY: number = 56;
+  /** 初始设置步骤指示器：当前步骤圆点（活跃） */
+  static readonly STEP_DOT_ACTIVE: number = 10;
+  /** 初始设置步骤指示器：非当前步骤圆点 */
+  static readonly STEP_DOT: number = 8;
 }
 
 /** 间距令牌（4 的倍数阶梯） */
@@ -257,6 +274,8 @@ export class ComponentSize {
   static readonly SEARCH: number = 40;
   /** 空状态插图尺寸 */
   static readonly EMPTY_ICON: number = 56;
+  /** 下拉菜单 / 动作菜单宽度 */
+  static readonly MENU_WIDTH: number = 220;
 }
 
 /** 分隔线令牌（对齐 comp_divider：1px + 图标行起始缩进 40vp） */
@@ -267,6 +286,8 @@ export class DividerSpec {
   static readonly INSET_ICON: number = 40;
   /** 文本行分隔线的起始缩进 */
   static readonly INSET_TEXT: number = 16;
+  /** 选中卡片描边宽度（初始设置方式选择卡片） */
+  static readonly SELECTED_STROKE: number = 2;
 }
 
 /** 按钮规范令牌（对齐 HarmonyOS 按钮设计规范） */

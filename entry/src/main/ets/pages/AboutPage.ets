@@ -54,6 +54,7 @@ export struct AboutPage {
       Text(label)
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textSecondary)
+        // 固定标签列宽：无对应令牌，4字标签需要更宽列
         .width(80)
       Text(value)
         .fontSize(FontSize.BODY)
@@ -82,7 +83,7 @@ export struct AboutPage {
     }
     .width('100%')
     .padding(Spacing.CARD)
-    .backgroundColor(this.colors.inputBackground)
+    .backgroundColor(this.colors.surface)
     .borderRadius(Radius.CARD)
     .margin({ bottom: Spacing.CARD_GAP })
     .alignItems(HorizontalAlign.Start)

@@ -156,7 +156,6 @@ export struct MoveEntryPage {
           bottom: this.bottomInset,
         })
         .backgroundColor(this.colors.background)
-        .border({ width: { top: 0.5 }, color: this.colors.divider })
         }
         .width('100%')
         .height('100%')
@@ -205,7 +204,7 @@ export struct MoveEntryPage {
                   .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                   .layoutWeight(1)
                   .height(ButtonSpec.SECONDARY_HEIGHT)
-                  .backgroundColor(this.colors.inputBackground)
+                  .backgroundColor(this.colors.neutralButton)
                   .fontColor(this.colors.textSecondary)
                   .fontSize(ButtonSpec.FONT_SIZE)
                   .onClick(() => {

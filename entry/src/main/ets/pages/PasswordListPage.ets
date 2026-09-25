@@ -1494,7 +1494,7 @@ export struct PasswordListPage {
             RouteManager.getInstance().pushPath(RouteNames.SETTINGS);
           })
         }
-        .width(220)
+        .width(ComponentSize.MENU_WIDTH)
         .borderRadius(Radius.CARD)
         .backgroundColor(this.colors.surface)
         .shadow({ radius: Radius.CARD, color: 'rgba(0,0,0,0.2)', offsetY: 4 })

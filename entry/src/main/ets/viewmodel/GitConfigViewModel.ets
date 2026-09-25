@@ -490,6 +490,29 @@ export class GitConfigViewModel {
   }
 
   /**
+   * SSH 密钥显示名：邮箱 / 标识；未设置时回退别名（私钥文件名）
+   *
+   * 与 SshKeyManagerViewModel.displayName 逻辑一致：优先 email、回退公钥 comment、
+   * 最后回退 alias（文件名）。Git 配置页的密钥选择列表与表单当前值都用它。
+   */
+  sshKeyDisplayName(key: SshKeyInfo): string {
+    if (key.email.length > 0) return key.email;
+    const parts: string[] = key.publicKey.trim().split(/\s+/);
+    if (parts.length >= 3 && parts[2].length > 0) return parts[2];
+    return key.alias;
+  }
+
+  /**
+   * 当前选中 SSH 密钥的显示名（空表示未选择）
+   */
+  selectedSshKeyDisplayName(): string {
+    if (this.sshKeyAlias.length === 0) return '';
+    const key: SshKeyInfo | undefined = this.sshKeyList.find((k: SshKeyInfo) => k.alias === this.sshKeyAlias);
+    if (key === undefined) return this.sshKeyAlias;
+    return this.sshKeyDisplayName(key);
+  }
+
+  /**
    * 是否可以保存
    */
   canSave(): boolean {

@@ -273,7 +273,7 @@ export struct RepoManagePage {
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
           .height(ButtonSpec.SECONDARY_HEIGHT)
-          .backgroundColor(this.colors.inputBackground)
+          .backgroundColor(this.colors.neutralButton)
           .fontColor(this.colors.textSecondary)
           .fontSize(ButtonSpec.FONT_SIZE)
           .onClick(() => {

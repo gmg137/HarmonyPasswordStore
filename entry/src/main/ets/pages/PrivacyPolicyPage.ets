@@ -28,7 +28,7 @@ export struct PrivacyPolicyPage {
     }
     .width('100%')
     .padding(Spacing.CARD)
-    .backgroundColor(this.colors.inputBackground)
+    .backgroundColor(this.colors.surface)
     .borderRadius(Radius.CARD)
     .margin({ bottom: Spacing.CARD_GAP })
     .alignItems(HorizontalAlign.Start)

@@ -246,10 +246,12 @@ export struct GitConfigPage {
           ListItem() {
             Row() {
               Column() {
-                Text(`${sshKeyTypeLabel(k.keyType)} · ${k.alias}`)
+                Text(this.viewModel.sshKeyDisplayName(k))
                   .fontSize(FontSize.SUBTITLE)
                   .fontColor(this.colors.textPrimary)
-                Text(k.publicKey.length > 0 ? k.publicKey.substring(0, 40) + '…' : '')
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
+                Text(`${sshKeyTypeLabel(k.keyType)} · ${k.alias}`)
                   .fontSize(FontSize.CAPTION)
                   .fontColor(this.colors.textTertiary)
                   .maxLines(1)
@@ -456,7 +458,7 @@ export struct GitConfigPage {
                   if (this.viewModel.sshKeyList.length > 0) {
                     Row() {
                       Text(this.viewModel.sshKeyAlias.length > 0
-                        ? `${sshKeyTypeLabel(this.viewModel.sshKeyType)} · ${this.viewModel.sshKeyAlias}`
+                        ? this.viewModel.selectedSshKeyDisplayName()
                         : '请选择 SSH 密钥')
                         .fontSize(FontSize.BODY)
                         .fontColor(this.viewModel.sshKeyAlias.length > 0

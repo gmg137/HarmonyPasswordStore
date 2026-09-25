@@ -5,6 +5,7 @@ import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { PgpKeyManager } from '../crypto/PgpKeyManager';
 import { GpgIdValidation, GpgKeyId } from '../model/GpgKeyId';
 import { FileUtils } from '../utils/FileUtils';
+import { ThemeColors } from '../common/ThemeColors';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -362,9 +363,10 @@ export class PasswordCreateViewModel {
    * 密码强度颜色
    */
   getStrengthColor(): string {
-    if (this.passwordStrength < 40) return '#FF4444';
-    if (this.passwordStrength < 80) return '#FF8800';
-    if (this.passwordStrength < 120) return '#44AA44';
-    return '#008800';
+    const p = ThemeColors.getInstance().palette();
+    if (this.passwordStrength < 40) return p.strengthWeak;
+    if (this.passwordStrength < 80) return p.strengthFair;
+    if (this.passwordStrength <8) return p.strengthGood;
+    return p.strengthStrong;
   }
 }

@@ -29,7 +29,7 @@ export struct SheetFormButtons {
         .borderRadius(ButtonSpec.SECONDARY_RADIUS)
         .layoutWeight(1)
         .height(ButtonSpec.SECONDARY_HEIGHT)
-        .backgroundColor(this.colors.inputBackground)
+        .backgroundColor(this.colors.neutralButton)
         .fontSize(ButtonSpec.FONT_SIZE)
         .fontWeight(ButtonSpec.FONT_WEIGHT)
         .fontColor(this.colors.primary)

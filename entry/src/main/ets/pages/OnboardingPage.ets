@@ -2,7 +2,7 @@ import { OnboardingViewModel, RepoSetupOutcome, STEP_WELCOME, STEP_REPO_SETUP, S
 import { AppTitleBar } from '../views/AppTitleBar';
 import { LoadingOverlay } from '../views/LoadingOverlay';
 import { HostKeyConfirmDialog } from '../views/HostKeyConfirmDialog';
-import { ThemeColors, Palette, FontSize, ButtonSpec, Spacing, Radius, ComponentSize, IconSize } from '../common/ThemeColors';
+import { ThemeColors, Palette, FontSize, ButtonSpec, Spacing, Radius, ComponentSize, IconSize, DividerSpec } from '../common/ThemeColors';
 import { RouteManager } from '../common/RouteManager';
 import { RouteNames } from '../common/Constants';
 import { hilog } from '@kit.PerformanceAnalysisKit';
@@ -21,6 +21,9 @@ const TAG: string = 'OnboardingPage';
  * 3. PGP 密钥导入
  * 4. 完成
  */
+/** 引导页底部按钮固定宽度（跳过/上一步） */
+const ONBOARDING_BUTTON_WIDTH: number = 110;
+
 @ComponentV2
 export struct OnboardingPage {
   @Local viewModel: OnboardingViewModel = new OnboardingViewModel();
@@ -184,8 +187,8 @@ export struct OnboardingPage {
     Row() {
       ForEach([0, 1, 2, 3], (step: number) => {
         Circle()
-          .width(this.viewModel.currentStep === step ? 10 : 8)
-          .height(this.viewModel.currentStep === step ? 10 : 8)
+          .width(this.viewModel.currentStep === step ? IconSize.STEP_DOT_ACTIVE : IconSize.STEP_DOT)
+          .height(this.viewModel.currentStep === step ? IconSize.STEP_DOT_ACTIVE : IconSize.STEP_DOT)
           .fill(this.viewModel.currentStep >= step ? this.colors.primary : this.colors.divider)
           .margin({ left: Spacing.XS, right: Spacing.XS })
       }, (step: number) => step.toString())
@@ -260,7 +263,7 @@ export struct OnboardingPage {
         .backgroundColor(this.viewModel.repoMode === 'new' ? this.colors.primarySoft : this.colors.inputBackground)
         .borderRadius(Radius.CARD)
         .border({
-          width: 2,
+          width: DividerSpec.SELECTED_STROKE,
           color: this.viewModel.repoMode === 'new' ? this.colors.primary : Color.Transparent
         })
         .stateStyles({
@@ -285,7 +288,7 @@ export struct OnboardingPage {
         .backgroundColor(this.viewModel.repoMode === 'clone' ? this.colors.primarySoft : this.colors.inputBackground)
         .borderRadius(Radius.CARD)
         .border({
-          width: 2,
+          width: DividerSpec.SELECTED_STROKE,
           color: this.viewModel.repoMode === 'clone' ? this.colors.primary : Color.Transparent
         })
         .margin({ left: Spacing.MD })
@@ -312,9 +315,13 @@ export struct OnboardingPage {
           .placeholderFont({ size: FontSize.SUBTITLE })
           .placeholderColor(this.colors.textTertiary)
           .width('100%')
-          .height(ComponentSize.CONTROL)
-          .borderRadius(Radius.MD)
-          .backgroundColor(this.colors.inputBackground)
+          .height(ComponentSize.ROW)
+          .borderRadius(Radius.CARD)
+          // 浅色模式下 inputBackground(#F1F3F5) 与页面背景(background #F1F3F5)相同，
+          // 输入框直接在页面背景上（无卡片包裹）会完全融为一体。
+          // 改用 surface(白色) + divider 边框，与 PasswordListPage 搜索框同款处理。
+          .backgroundColor(this.colors.surface)
+          .border({ width: DividerSpec.STROKE, color: this.colors.divider })
           .margin({ top: Spacing.LG })
           .onChange((v: string) => {
             this.viewModel.remoteUrl = v;
@@ -385,40 +392,39 @@ export struct OnboardingPage {
         .lineHeight(20)
         .margin({ top: Spacing.SM })
 
-      // 文件选择 + 导入按钮
-      Column() {
-        Row() {
-          // 「浏览」按钮前显示已导入的密钥名称（从密钥管理页返回后由 onShown 刷新）
-          Text(this.viewModel.importedKeyLabel.length > 0
-            ? this.viewModel.importedKeyLabel
-            : '尚未设置 PGP 密钥')
-            .fontSize(FontSize.BODY)
-            .fontColor(this.viewModel.importedKeyLabel.length > 0
-              ? this.colors.textPrimary : this.colors.textTertiary)
-            .layoutWeight(1)
-            .maxLines(1)
-            .textOverflow({ overflow: TextOverflow.Ellipsis })
+      // PGP 密钥浏览卡片：左侧密钥状态（未配置/已配置的密钥名），右侧浏览按钮
+      Row() {
+        // 「浏览」按钮前显示已导入的密钥名称（从密钥管理页返回后由 onShown 刷新）
+        Text(this.viewModel.importedKeyLabel.length > 0
+          ? this.viewModel.importedKeyLabel
+          : '尚未设置 PGP 密钥')
+          .fontSize(FontSize.BODY)
+          .fontColor(this.viewModel.importedKeyLabel.length > 0
+            ? this.colors.textPrimary : this.colors.textTertiary)
+          .layoutWeight(1)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-          Button('浏览')
-            .type(ButtonType.Normal)
-            .borderRadius(ButtonSpec.SMALL_RADIUS)
-            .height(ButtonSpec.SMALL_HEIGHT)
-            .backgroundColor(this.colors.primarySoft)
-            .fontColor(this.colors.primary)
-            .enabled(!this.viewModel.isWorking)
-            .onClick(() => {
-              RouteManager.getInstance().pushPath(RouteNames.PGP_KEY_MANAGER);
-            })
-        }
-        .width('100%')
-
+        Button('浏览')
+          .type(ButtonType.Normal)
+          .borderRadius(ButtonSpec.SMALL_RADIUS)
+          .height(ButtonSpec.SMALL_HEIGHT)
+          .fontSize(FontSize.CAPTION)
+          .backgroundColor(this.colors.primarySoft)
+          .fontColor(this.colors.primary)
+          .margin({ left: Spacing.SM })
+          .enabled(!this.viewModel.isWorking)
+          .onClick(() => {
+            RouteManager.getInstance().pushPath(RouteNames.PGP_KEY_MANAGER);
+          })
       }
       .width('100%')
-      .padding(Spacing.CARD)
-      .backgroundColor(this.colors.inputBackground)
+      .height(ComponentSize.ROW)
+      .padding({ left: Spacing.ROW_H, right: Spacing.SM })
+      .backgroundColor(this.colors.surface)
       .borderRadius(Radius.CARD)
-      .border({ width: 1, color: this.colors.divider })
-      .margin({ top: Spacing.LG })
+      .alignItems(VerticalAlign.Center)
+      .margin({ top: Spacing.CARD_GAP })
 
       if (this.viewModel.progressText.length > 0) {
         Row() {
@@ -503,7 +509,7 @@ export struct OnboardingPage {
             Button('跳过')
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
-              .width(110)
+              .width(ONBOARDING_BUTTON_WIDTH)
               .height(ButtonSpec.SECONDARY_HEIGHT)
               .fontSize(ButtonSpec.FONT_SIZE)
               .backgroundColor(this.colors.neutralButton)
@@ -516,7 +522,7 @@ export struct OnboardingPage {
             Button('上一步')
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
-              .width(110)
+              .width(ONBOARDING_BUTTON_WIDTH)
               .height(ButtonSpec.SECONDARY_HEIGHT)
               .fontSize(ButtonSpec.FONT_SIZE)
               .backgroundColor(this.colors.neutralButton)

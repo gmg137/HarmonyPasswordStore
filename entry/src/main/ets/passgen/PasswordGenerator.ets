@@ -1,5 +1,6 @@
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { ThemeColors } from '../common/ThemeColors';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -229,9 +230,10 @@ export class PasswordGenerator {
    * 获取强度等级颜色
    */
   static getStrengthColor(entropy: number): string {
-    if (entropy < 40) return '#FF4444';
-    if (entropy < 80) return '#FF8800';
-    if (entropy < 120) return '#44AA44';
-    return '#008800';
+    const p = ThemeColors.getInstance().palette();
+    if (entropy < 40) return p.strengthWeak;
+    if (entropy < 80) return p.strengthFair;
+    if (entropy < 120) return p.strengthGood;
+    return p.strengthStrong;
   }
 }

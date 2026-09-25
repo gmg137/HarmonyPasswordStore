@@ -317,8 +317,8 @@ export struct PasswordCreatePage {
           // 保存中加载
           if (this.viewModel.isSaving) {
             LoadingProgress()
-              .width(32)
-              .height(32)
+              .width(IconSize.LG)
+              .height(IconSize.LG)
               .margin({ bottom: Spacing.LG })
           }
         }
