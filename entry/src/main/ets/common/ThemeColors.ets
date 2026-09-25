@@ -52,6 +52,15 @@ export interface Palette {
   /** 输入/键位背景 */
   inputBackground: string;
   /**
+   * 次要（中性）按钮底色
+   *
+   * 与 `inputBackground` 分开的原因：浅色模式下页面底色本身就是 `#F1F3F5`，
+   * 直接拿 inputBackground 当按钮底会**与页面融为一体、看不出是个按钮**
+   * （实测初始设置页「跳过」只剩文字）。系统原生次要按钮在浅色下比页面
+   * 深一档，故这里单独给值；深色下页面是纯黑，取比卡片略亮的灰。
+   */
+  neutralButton: string;
+  /**
    * 卡片按压态底色
    *
    * ArkUI 的 Button 自带按压效果，但 Row/Column/Text 作可点区域时**默认没有任何反馈**
@@ -91,6 +100,7 @@ const LIGHT_PALETTE: Palette = {
   danger: '#E84026',
   dangerSoft: '#FEF2F2',
   inputBackground: '#F1F3F5',
+  neutralButton: '#E5E5E5',
   pressed: '#E6E7E9',
   warningSoft: '#FEF7E8',
   overlayScrim: '#66000000',
@@ -112,6 +122,7 @@ const DARK_PALETTE: Palette = {
   danger: '#FF6B5E',
   dangerSoft: '#2A1A18',
   inputBackground: '#262626',
+  neutralButton: '#2E2E2E',
   pressed: '#333333',
   warningSoft: '#2A2113',
   overlayScrim: '#8C000000',

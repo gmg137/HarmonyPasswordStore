@@ -274,8 +274,11 @@ export class OnboardingViewModel {
         this.pendingHostKeyType = cloneResult.pendingHostKeyType ?? '';
         this.pendingHostKeyMismatch = cloneResult.hostKeyMismatch === true;
         this.errorMessage = '';
+        hilog.warn(DOMAIN, TAG, 'clone needs host key confirmation: %{public}s (%{public}s)',
+          fp, this.pendingHostKeyType);
         return;
       }
+      hilog.warn(DOMAIN, TAG, 'clone failed: %{public}s', cloneResult.error);
       this.errorMessage = cloneResult.error;
     } finally {
       // 无论成功/失败/主机密钥待确认都要复位，否则进度层会永久挡住页面

@@ -459,6 +459,9 @@ export class GitClient {
       return { success: true, error: '' };
     }
     const rawErr: string = result.error;
+    // 原始错误必须先落日志再映射：映射后的文案只覆盖已知几类，
+    // 遇到新形态（如主机密钥反复被拒）时日志里没有原文就无从定位
+    hilog.warn(DOMAIN, TAG, 'cloneOverSsh raw error: %{public}s', rawErr);
     const hostKey: GitResult | null = GitClient.parseHostKeyError(rawErr);
     if (hostKey !== null) {
       return hostKey;
@@ -780,8 +783,7 @@ export class SshUrlTarget {
     this.port = port;
   }
 
-  static parse(url: string): SshUrlTarget | null {
-    const raw: string = url.trim();
+  static parse(url: string): SshUrlTarget | null {    const raw: string = url.trim();
     if (raw.length === 0) {
       return null;
     }
@@ -822,5 +824,29 @@ export class SshUrlTarget {
       }
     }
     return true;
+  }
+
+  /**
+   * 地址里是否**显式**写了端口
+   *
+   * 用于判断「SSH 端口」表单字段该不该生效：地址自带端口时以地址为准。
+   * 曾无条件用表单值覆盖解析结果，于是地址写 `ssh://host:2224/...` 时
+   * 测试连接仍去连 22（探测失败只报「获取主机密钥失败」，与真实原因无关）。
+   * scp 风格 `git@host:path` 的 ':' 后是路径而非端口，这里按「冒号后到斜杠前
+   * 全为数字」判定，天然排除。
+   */
+  static hasExplicitPort(url: string): boolean {
+    const raw: string = url.trim();
+    const rest: string = raw.startsWith('ssh://') ? raw.substring(6) : raw;
+    const at: number = rest.indexOf('@');
+    const hostPort: string = at >= 0 ? rest.substring(at + 1) : rest;
+    const colon: number = hostPort.indexOf(':');
+    if (colon < 0) {
+      return false;
+    }
+    const after: string = hostPort.substring(colon + 1);
+    const slash: number = after.indexOf('/');
+    const portPart: string = slash >= 0 ? after.substring(0, slash) : after;
+    return portPart.length > 0 && SshUrlTarget.isDigits(portPart);
   }
 }

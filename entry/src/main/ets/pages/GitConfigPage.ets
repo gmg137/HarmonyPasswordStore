@@ -8,6 +8,13 @@ import { panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM 
 import { AppTitleBar } from '../views/AppTitleBar';
 import { LoadingOverlay } from '../views/LoadingOverlay';
 import { FormRow } from '../views/FormRow';
+import { HostKeyConfirmDialog } from '../views/HostKeyConfirmDialog';
+import { hilog } from '@kit.PerformanceAnalysisKit';
+
+/** hilog 域 */
+const DOMAIN: number = 0x0001;
+/** hilog 标签 */
+const TAG: string = 'GitConfigPage';
 
 /**
  * Git 配置页
@@ -20,6 +27,8 @@ import { FormRow } from '../views/FormRow';
 export struct GitConfigPage {
   @Local viewModel: GitConfigViewModel = new GitConfigViewModel();
   @Local isSshKeyPickerVisible: boolean = false;
+  /** 主机指纹确认弹窗 id（-1 = 未打开） */
+  @Local hostKeyDialogId: number = -1;
 
   private get colors(): Palette {
     return ThemeColors.getInstance().palette();
@@ -106,14 +115,49 @@ export struct GitConfigPage {
   }
 
   /**
-   * TOFU 主机密钥确认：有待确认指纹时弹原生弹窗
+   * TOFU 主机密钥确认：有待确认指纹时弹确认弹窗
    *
    * 曾是页面里的一张卡片：克隆/测试过程中它插在表单下方，指纹和操作按钮
    * 离触发点很远、还不显眼。改为弹窗后「首次连接确认指纹」必须当场决定，
    * 与系统应用的安全确认一致。注意这是**可重入**的——服务器可能提供多把
    * 不同类型的主机密钥，确认一把后继续连接还可能遇到下一把，故克隆/测试
    * 每次返回后都要调一次本方法。
+   *
+   * 用自绘弹窗（HostKeyConfirmDialog）而不是 showAlertDialog：系统弹窗内边距
+   * 不可调、标题贴顶（实测反馈），且指纹需要等宽字体单独框出便于核对。
    */
+  /**
+   * 主机指纹确认弹窗内容
+   *
+   * **必须是页面的 @Builder**：在 openCustomDialog 的普通箭头函数里直接
+   * `HostKeyConfirmDialog({...})` 不会被 ArkUI 编译期转换，运行时报
+   * `class constructor cannot called without 'new'`（实测整个应用闪退）。
+   * 弹窗内容是一次性快照，@Builder 按值传参不刷新在这里无影响。
+   */
+  @Builder
+  hostKeyDialogBuilder(title: string, hostLine: string, fingerprint: string,
+    explanation: string, mismatch: boolean, confirmLabel: string) {
+    HostKeyConfirmDialog({
+      title: title,
+      hostLine: hostLine,
+      fingerprint: fingerprint,
+      explanation: explanation,
+      mismatch: mismatch,
+      confirmLabel: confirmLabel,
+      onReject: (): void => {
+        this.closeHostKeyDialog();
+        this.viewModel.rejectHostKey();
+      },
+      onConfirm: (): void => {
+        this.closeHostKeyDialog();
+        // 确认后继续连接；服务器又出示另一把未记录类型的主机密钥时再弹一次
+        this.viewModel.confirmHostKey().then((): void => {
+          this.maybeShowHostKeyDialog();
+        });
+      },
+    })
+  }
+
   private maybeShowHostKeyDialog(): void {
     if (this.viewModel.pendingHostKeyFp.length === 0) {
       return;
@@ -123,38 +167,51 @@ export struct GitConfigPage {
     const title: string = mismatch
       ? '警告：主机密钥与已保存记录不一致'
       : (keyType.length > 0 ? `首次连接：确认服务器${keyType}密钥指纹` : '首次连接：确认服务器指纹');
-    const message: string = `主机 ${this.viewModel.pendingHost}:${this.viewModel.pendingPort} 的密钥指纹`
-      + (keyType.length > 0 ? `（${keyType}）` : '') + `：\n${this.viewModel.pendingHostKeyFp}\n\n`
-      + (mismatch
-        ? '该主机已有信任记录，但本次同类型密钥的指纹不同：可能是服务器更换了密钥，也可能是中间人攻击。'
-          + '请与服务器管理员核对后再决定，确认后将覆盖该类型记录。'
-        : '服务器提供多把不同类型的主机密钥，这是尚未记录的一把。确认后追加为本机信任记录（TOFU）；'
-          + '同类型密钥的指纹变化仍会被拒绝（防中间人攻击）。');
-    this.getUIContext().showAlertDialog({
-      title: title,
-      message: message,
-      autoCancel: false,
-      alignment: DialogAlignment.Center,
-      onWillDismiss: (action: DismissDialogAction): void => {
-        action.dismiss();
-      },
-      primaryButton: {
-        value: '拒绝',
-        action: (): void => {
-          this.viewModel.rejectHostKey();
+    const hostLine: string = `主机 ${this.viewModel.pendingHost}:${this.viewModel.pendingPort} 的密钥指纹`
+      + (keyType.length > 0 ? `（${keyType}）` : '') + '：';
+    const explanation: string = mismatch
+      ? '该主机已有信任记录，但本次同类型密钥的指纹不同：可能是服务器更换了密钥，也可能是中间人攻击。'
+        + '请与服务器管理员核对后再决定，确认后将覆盖该类型记录。'
+      : '服务器提供多把不同类型的主机密钥，这是尚未记录的一把。确认后追加为本机信任记录（TOFU）；'
+        + '同类型密钥的指纹变化仍会被拒绝（防中间人攻击）。';
+    const fingerprint: string = this.viewModel.pendingHostKeyFp;
+    const confirmLabel: string = mismatch ? '仍要信任' : '信任并连接';
+    try {
+      this.getUIContext().getPromptAction().openCustomDialog({
+        builder: (): void => {
+          this.hostKeyDialogBuilder(title, hostLine, fingerprint, explanation, mismatch, confirmLabel);
         },
-      },
-      secondaryButton: {
-        value: mismatch ? '仍要信任' : '信任并连接',
-        fontColor: mismatch ? this.colors.danger : this.colors.primary,
-        action: (): void => {
-          // 确认后继续连接；服务器又出示另一把未记录类型的主机密钥时再弹一次
-          this.viewModel.confirmHostKey().then((): void => {
-            this.maybeShowHostKeyDialog();
-          });
-        },
-      },
-    });
+        autoCancel: false,
+        alignment: DialogAlignment.Center,
+        maskColor: 'rgba(0,0,0,0.4)',
+        // 关闭默认背景与模糊层（深色模式下默认模糊层呈黑块），背景由卡片自己承担
+        backgroundColor: Color.Transparent,
+        backgroundBlurStyle: BlurStyle.NONE,
+        isModal: true,
+      }).then((dialogId: number) => {
+        this.hostKeyDialogId = dialogId;
+      }).catch((e: Error) => {
+        hilog.error(DOMAIN, TAG, 'openCustomDialog failed: %{public}s', e.message);
+      });
+    } catch (e) {
+      // openCustomDialog 可能同步抛出，直接调用会逃出上面的 Promise 链
+      hilog.error(DOMAIN, TAG, 'openCustomDialog threw: %{public}s',
+        e instanceof Error ? `${e.name}: ${e.message}` : String(e));
+    }
+  }
+
+  /** 关闭主机指纹弹窗（同样兜异常，避免关闭失败留下关不掉的遮罩） */
+  private closeHostKeyDialog(): void {
+    if (this.hostKeyDialogId < 0) {
+      return;
+    }
+    try {
+      this.getUIContext().getPromptAction().closeCustomDialog(this.hostKeyDialogId);
+    } catch (e) {
+      hilog.error(DOMAIN, TAG, 'closeCustomDialog failed: %{public}s',
+        e instanceof Error ? `${e.name}: ${e.message}` : String(e));
+    }
+    this.hostKeyDialogId = -1;
   }
 
   /** 执行克隆（本地目录已可用） */
@@ -559,7 +616,7 @@ export struct GitConfigPage {
             .borderRadius(ButtonSpec.SECONDARY_RADIUS)
             .layoutWeight(1)
             .height(ButtonSpec.SECONDARY_HEIGHT)
-            .backgroundColor(this.colors.inputBackground)
+            .backgroundColor(this.colors.neutralButton)
             .fontColor(this.colors.textPrimary)
             .fontSize(ButtonSpec.FONT_SIZE)
             .fontWeight(ButtonSpec.FONT_WEIGHT)

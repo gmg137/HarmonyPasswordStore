@@ -445,6 +445,10 @@ export struct PgpKeyManagerPage {
       }
       this.actionItem($r('sys.symbol.lock'), '修改密钥', (): void => {
         this.viewModel.errorMessage = '';
+        // 口令框每次打开都要清空：半模态内容会被复用，残留的旧值会被当成
+        // 本次输入（实测「去除口令」时把上次的新口令又设了一遍）
+        this.oldPw = '';
+        this.newPw = '';
         this.editAction = 'change-pw';
         this.isEditSheetVisible = true;
       })
@@ -485,7 +489,10 @@ export struct PgpKeyManagerPage {
       // 两个输入框被完全裁出布局树（连节点都不存在），用户根本无法输入。
       this.formTitle('修改密钥密码')
 
-      TextInput({ placeholder: '当前密钥密码' })
+      // 两个输入框都**绑定 text**（旧/新口令）：半模态内容会被复用，
+      // 不绑定的话上一次输入的文字会留在框里（实测「去除口令」时把上次的新口令
+      // 又设了一遍），状态与界面必须由同一份数据驱动
+      TextInput({ text: this.oldPw, placeholder: '当前密钥密码' })
         .type(InputType.Password)
         .fontSize(FontSize.SUBTITLE)
         .fontColor(this.colors.textPrimary)
@@ -501,7 +508,7 @@ export struct PgpKeyManagerPage {
           this.viewModel.errorMessage = '';
         })
 
-      TextInput({ placeholder: '新密码（留空则去除密码）' })
+      TextInput({ text: this.newPw, placeholder: '新密码（留空则去除密码）' })
         .type(InputType.Password)
         .fontSize(FontSize.SUBTITLE)
         .fontColor(this.colors.textPrimary)

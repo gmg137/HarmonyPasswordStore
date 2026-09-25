@@ -337,7 +337,7 @@ export class PgpKeyManager {
     const result = NativeBridge.getInstance().pgpChangePassphrase(armored, oldPassphrase, newPassphrase);
     if (!result.success || result.data.length === 0) {
       hilog.warn(DOMAIN, TAG, 'changePassphrase failed: %{public}s', result.error);
-      return { success: false, error: result.error.length > 0 ? result.error : '修改失败（旧密码不正确？）' };
+      return { success: false, error: PgpKeyManager.describeChangePassphraseError(result.error) };
     }
 
     const filePath: string = `${this.getKeysDir()}/${fingerprint}.asc`;
@@ -352,6 +352,29 @@ export class PgpKeyManager {
       const msg: string = e instanceof Error ? e.message : String(e);
       return { success: false, error: `存储新密钥失败: ${msg}` };
     }
+  }
+
+  /**
+   * 改口令失败原因翻译成用户能照做的提示
+   *
+   * native 的失败原文是英文技术描述（`old passphrase incorrect or unlock failed:
+   * invalid input`），直接显示在面板里用户读不懂；而本应用自己产出的提示
+   * （PQC 密钥不支持去除口令、自检失败等）已经是中文，必须原样透传——
+   * 不能一律替换成「密码错误」，那会把「不支持的操作」伪装成用户输错了口令。
+   */
+  private static describeChangePassphraseError(raw: string): string {
+    if (raw.length === 0) {
+      return '修改失败，请重试';
+    }
+    if (raw.includes('old passphrase incorrect') || raw.includes('unlock failed')
+      || raw.includes('unlock subkey failed') || raw.includes('invalid input')) {
+      return '当前密钥密码不正确，请重试';
+    }
+    // 含中日韩字符视为本应用自己的提示，原样返回
+    if (/[\u4e00-\u9fa5]/.test(raw)) {
+      return raw;
+    }
+    return `修改失败：${raw}`;
   }
 
   /**

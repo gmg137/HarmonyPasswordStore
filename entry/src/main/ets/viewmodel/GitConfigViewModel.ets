@@ -355,7 +355,12 @@ export class GitConfigViewModel {
         this.testResult = '无法从地址解析 SSH 主机信息';
         return false;
       }
-      params.port = this.sshPort;
+      // 地址自带端口时以地址为准：表单里的「SSH 端口」只是地址没写端口时的补充，
+      // 无条件覆盖会让测试连接去连错误的端口（实测地址带 :2224 时仍探 22，
+      // 只报「获取主机密钥失败」，与真实原因无关）
+      if (!SshUrlTarget.hasExplicitPort(url)) {
+        params.port = this.sshPort;
+      }
       params.keyAlias = this.sshKeyAlias;
       // 私钥带口令时必须一起传，否则测试连接会用不了这把钥匙
       params.passphrase = this.sshKeyPassphrase;

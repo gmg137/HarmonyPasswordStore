@@ -193,6 +193,11 @@ static int GitCertCheckCallback(git_cert *cert, int valid, const char *host, voi
     }
     if (fingerprintSeen) {
         OH_LOG_INFO(LOG_APP, "gitCertCheck: host key verified (%{public}s)", fp.c_str());
+        // **通过时必须显式置 trusted**：HostKeyErrorOr 只在 state=="trusted" 时
+        // 才回传原始错误。曾经这里只 return 0 不写状态，于是「主机密钥已信任、
+        // 但克隆因别的原因失败」（如仓库名写错）被回报成 host key untrusted——
+        // UI 反复弹「首次连接确认指纹」弹窗，真正的失败原因永远显示不出来。
+        c->presentedTrustState = "trusted";
         return 0;
     }
     if (mismatchSameType) {
