@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>HarmonyPasswordStore 功能验证截图</title>
+<style>
+  body { font-family: system-ui, sans-serif; background: #f0f2f5; margin: 0; padding: 24px; }
+  h1 { font-size: 22px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+  .card { background: #fff; border-radius: 12px; padding: 12px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+  .card img { width: 100%; border-radius: 8px; display: block; }
+  .card h3 { font-size: 14px; margin: 8px 0 2px; }
+  .card p { font-size: 12px; color: #667; margin: 2px 0 0; }
+  .ok { color: #2a8a3a; font-weight: 600; }
+</style>
+</head>
+<body>
+<h1>HarmonyPasswordStore 功能验证截图 <span class="ok">（模拟器 127.0.0.1:5555，2026-09-15）</span></h1>
+<div class="grid">
+  <div class="card"><img src="screenshots/01_home.jpeg"><h3>1. 主页 · 密码仓库</h3><p class="ok">✓ 列表/搜索/排序/同步入口</p></div>
+  <div class="card"><img src="screenshots/02_create.jpeg"><h3>2. 新建密码页</h3><p class="ok">✓ 名称/密码/用户名/URL/备注</p></div>
+  <div class="card"><img src="screenshots/03_passgen.jpeg"><h3>3. 密码生成器面板</h3><p class="ok">✓ 长度滑块 + 字符集选项</p></div>
+  <div class="card"><img src="screenshots/04_passgen_result.jpeg"><h3>4. 生成密码结果</h3><p class="ok">✓ 真实生成，强度评级「中」</p></div>
+  <div class="card"><img src="screenshots/05_sync.jpeg"><h3>5. Git 同步面板</h3><p class="ok">✓ 拉取/提交/推送/一键同步/历史</p></div>
+  <div class="card"><img src="screenshots/06_settings.jpeg"><h3>6. 设置页</h3><p class="ok">✓ 主题/安全/仓库/同步分区</p></div>
+  <div class="card"><img src="screenshots/07_pin.jpeg"><h3>7. PIN 设置页</h3><p class="ok">✓ 数字键盘 + 圆点指示</p></div>
+  <div class="card"><img src="screenshots/08_pgp_import.jpeg"><h3>8. PGP 密钥导入面板</h3><p class="ok">✓ armored 私钥粘贴 + passphrase</p></div>
+  <div class="card"><img src="screenshots/09_ssh_gen.jpeg"><h3>9. SSH 密钥生成面板</h3><p class="ok">✓ Ed25519/ECDSA/RSA 类型选择</p></div>
+  <div class="card"><img src="screenshots/10_ssh_result.jpeg"><h3>10. SSH 密钥生成结果</h3><p class="ok">✓ 真实生成 Ed25519 公钥（修复 getEncodedDer 后）</p></div>
+  <div class="card"><img src="screenshots/11_gitconfig.jpeg"><h3>11. Git 配置页</h3><p class="ok">✓ 远程地址/认证方式/提交身份</p></div>
+  <div class="card"><img src="screenshots/12_gitclone.jpeg"><h3>12. 克隆仓库页</h3><p class="ok">✓ 地址输入 + 认证引导</p></div>
+  <div class="card"><img src="screenshots/13_passkey.jpeg"><h3>13. Passkey 管理页</h3><p class="ok">✓ 列表 + 刷新 + 空状态</p></div>
+  <div class="card"><img src="screenshots/14_dark.jpeg"><h3>14. 深色模式 · 设置页</h3><p class="ok">✓ 深色主题选中（修复 setThemeMode 同步后）</p></div>
+  <div class="card"><img src="screenshots/15_dark_home.jpeg"><h3>15. 深色模式 · 主页</h3><p class="ok">✓ 背景 #121212 生效（像素采样验证）</p></div>
+</div>
+</body>
+</html>

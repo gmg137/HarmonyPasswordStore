@@ -1,0 +1,112 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "密码仓库模块"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "密码仓库入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "密码仓库"
+    },
+    {
+      "name": "search_placeholder",
+      "value": "搜索密码"
+    },
+    {
+      "name": "empty_store_hint",
+      "value": "暂无密码，点击 + 创建"
+    },
+    {
+      "name": "add_password",
+      "value": "添加"
+    },
+    {
+      "name": "password_detail",
+      "value": "密码详情"
+    },
+    {
+      "name": "password_create",
+      "value": "新建密码"
+    },
+    {
+      "name": "passgen",
+      "value": "密码生成器"
+    },
+    {
+      "name": "settings",
+      "value": "设置"
+    },
+    {
+      "name": "pgp_key_manager",
+      "value": "PGP 密钥管理"
+    },
+    {
+      "name": "git_config",
+      "value": "Git 配置"
+    },
+    {
+      "name": "git_clone",
+      "value": "克隆仓库"
+    },
+    {
+      "name": "onboarding",
+      "value": "欢迎"
+    },
+    {
+      "name": "AutofillAbility_desc",
+      "value": "密码仓库自动填充服务"
+    },
+    {
+      "name": "sync",
+      "value": "同步"
+    },
+    {
+      "name": "sort_recent",
+      "value": "最近"
+    },
+    {
+      "name": "search_clear",
+      "value": "清除"
+    },
+    {
+      "name": "found_results",
+      "value": "找到 %d 个结果"
+    },
+    {
+      "name": "app_locked",
+      "value": "应用已锁定"
+    },
+    {
+      "name": "verify_to_continue",
+      "value": "请验证身份以继续"
+    },
+    {
+      "name": "unlock_with_biometric",
+      "value": "使用%s解锁"
+    },
+    {
+      "name": "delete",
+      "value": "删除"
+    },
+    {
+      "name": "refresh",
+      "value": "刷新"
+    },
+    {
+      "name": "perm_internet_reason",
+      "value": "通过 Git 远程同步密码仓库（克隆/拉取/推送）"
+    },
+    {
+      "name": "perm_pasteboard_reason",
+      "value": "配置 Git 远程时粘贴仓库地址"
+    },
+    {
+      "name": "perm_biometric_reason",
+      "value": "使用指纹或面容解锁应用"
+    }
+  ]
+}

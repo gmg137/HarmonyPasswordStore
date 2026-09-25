@@ -1,0 +1,148 @@
+# Define project specific obfuscation rules here.
+# You can include the obfuscation configuration files in the current module's build-profile.json5.
+
+# Obfuscation options:
+# -disable-obfuscation: disable all obfuscations
+# -enable-property-obfuscation: obfuscate the property names
+# -enable-toplevel-obfuscation: obfuscate the names in the global scope
+# -compact: remove unnecessary blank spaces and all line feeds
+# -remove-log: remove all console.* statements
+# -print-namecache: print the name cache that contains the mapping from the old names to new names
+# -apply-namecache: reuse the given cache file
+
+# Keep options:
+# -keep-property-name: specifies property names that you want to keep
+# -keep-global-name: specifies names that you want to keep in the global scope
+
+-enable-property-obfuscation
+-enable-toplevel-obfuscation
+-enable-filename-obfuscation
+-enable-export-obfuscation
+
+# 必须与代码标识保持一致的属性名
+#
+# 属性名混淆只改「定义与引用」，但以下名字同时以字符串形式出现在别处，
+# 改了就对不上：
+# - 设置对象的**字段名**（`AppSettings` / `GitConfig`）：这些以属性访问形式读写，
+#   登记属**防御性保留**——凡「按名字取字段」的路径（落盘 JSON、native 边界、
+#   跨版本读旧数据）改了名就对不上。列表与当前字段名**并非严格一一对应**
+#   （如 `passwordFileOrganization` 已随字段改名成 `fileOrganization` 而失效），
+#   属无害的过度保留：多留不错，漏留才危险。
+# - **不要误以为这些是 Preferences 键**：`PrefKeys` 的值是**字符串字面量**
+#   （`'store_path'`、`'git_config_json'`…），而属性混淆只改标识符、不动字符串，
+#   升级后旧键值照样读得到，本身并不需要登记（下面混进来的 `git_config_json`
+#   就属这一类）。
+-keep-property-name
+storePath
+storeInitialized
+themeMode
+clipboardTimeout
+biometricUnlockEnabled
+unlockSessionTimeout
+sortMode
+searchMode
+passwordFileOrganization
+autoSyncOnLaunch
+gitConfig
+git_config_json
+defaultKeyFingerprint
+usageMap
+
+# - Native 层按名字取字段：hps_napi.cpp 构造的 JSON 键名，
+#   ArkTS 侧按同名属性读取（如 native 状态 JSON 的 hasConflicts）。
+-keep-property-name
+success
+error
+data
+isRepo
+branch
+changedCount
+aheadCount
+behindCount
+hasConflicts
+valid
+encrypted
+fingerprint
+keyId
+userId
+algorithm
+encryptionAlgorithm
+hasEncryptionKey
+encryptionSupported
+gpgPqc
+isSecret
+
+# - 落盘 / 跨 native 边界的 JSON 字段名
+#
+# 属性名混淆只改「定义与引用」，但这些名字还以**字符串**形式出现在 JSON 里
+# （Preferences 落盘、native 产出的 JSON），改了就对不上：
+# - GitConfig：曾落盘成 l30/m30/... 之类混淆名，升级后 remoteUrl/sshKeyAlias
+#   等全部读不到；缺字段的 proxyUrl 更会以 undefined 传进 native 调用，
+#   被 GetArgs 拒绝成「invalid arguments」（真机实测：点击「初始化仓库」直接失败）
+# - GitCommitInfo：native 产出 JSON，JS 侧按同名属性读（改名后提交历史读空）
+-keep-property-name
+remoteUrl
+authMode
+username
+password
+sshKeyType
+sshKeyAlias
+sshKeyPassphrase
+sshPort
+committerName
+committerEmail
+proxyUrl
+publicKey
+privateKeyPem
+createdAt
+lastUsed
+hash
+summary
+authorName
+authorEmail
+timestamp
+
+# - NAPI 模块的函数名
+#
+# **release 构建下最容易踩的坑**：`-enable-property-obfuscation` 会把
+# `hpsNative.gitClone(...)` 这类属性访问一起改名（实测变成 `hpsNative.a8`），
+# 而 native 侧注册的属性名是 .so 里的字符串字面量、不会跟着改，
+# 于是取到 undefined、调用直接抛 "a8 is not callable, a8 is undefined"，
+# 被 NativeBridge.callSafely 兜成「native call failed」。
+# 后果是 release 包里**所有** native 能力（PGP 加解密、密钥生成、git 操作）全部失效，
+# 而 debug 包（不做混淆）一切正常——真机实测：点击「初始化仓库」报 native call failed。
+# 新增 NAPI 函数时必须同步加到这里（与 hps_napi.cpp 的 desc[] 一一对应）。
+-keep-property-name
+pgpEncrypt
+pgpDecrypt
+pgpEncryptGpgPqc
+pgpDecryptGpgPqc
+pgpGpgPqcSupported
+pgpGpgPqcVerifyPassphrase
+pgpEncryptMixed
+pgpRecipientKeyIds
+pgpListKeys
+pgpExtractPublicKey
+pgpVerifyPassphrase
+pgpGenerateKey
+pgpChangePassphrase
+pgpBackupKey
+pgpRestoreBackup
+pgpSplitKeyring
+pgpKeyAsSsh
+sshGenerateKey
+sshTestAuth
+sshTestPassword
+sshFingerprint
+sshPublicFromPrivate
+sshKeyStatus
+gitClone
+gitCloneSsh
+gitTestRemote
+gitPull
+gitPush
+gitCommitAll
+gitLog
+gitStatus
+gitRemoteUrl
+gitCloneProgress

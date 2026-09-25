@@ -1,0 +1,116 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "Password Store module"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Password Store entry ability"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Password Store"
+    },
+    {
+      "name": "search_placeholder",
+      "value": "Search passwords"
+    },
+    {
+      "name": "empty_store_hint",
+      "value": "No passwords yet. Tap + to create one."
+    },
+    {
+      "name": "add_password",
+      "value": "Add"
+    },
+    {
+      "name": "password_detail",
+      "value": "Password Detail"
+    },
+    {
+      "name": "password_create",
+      "value": "New Password"
+    },
+    {
+      "name": "passgen",
+      "value": "Password Generator"
+    },
+    {
+      "name": "settings",
+      "value": "Settings"
+    },
+    {
+      "name": "pgp_key_manager",
+      "value": "PGP Key Manager"
+    },
+    {
+      "name": "git_config",
+      "value": "Git Configuration"
+    },
+    {
+      "name": "git_clone",
+      "value": "Clone Repository"
+    },
+    {
+      "name": "onboarding",
+      "value": "Welcome"
+    },
+    {
+      "name": "AutofillAbility_desc",
+      "value": "Password Store autofill service"
+    },
+    {
+      "name": "sync",
+      "value": "Sync"
+    },
+    {
+      "name": "sort_recent",
+      "value": "Recent"
+    },
+    {
+      "name": "search_clear",
+      "value": "Clear"
+    },
+    {
+      "name": "found_results",
+      "value": "%d results found"
+    },
+    {
+      "name": "app_locked",
+      "value": "App Locked"
+    },
+    {
+      "name": "verify_to_continue",
+      "value": "Verify your identity to continue"
+    },
+    {
+      "name": "unlock_with_biometric",
+      "value": "Unlock with %s"
+    },
+    {
+      "name": "delete",
+      "value": "Delete"
+    },
+    {
+      "name": "refresh",
+      "value": "Refresh"
+    },
+    {
+      "name": "perm_internet_reason",
+      "value": "Sync password repository over Git remote (clone/pull/push)"
+    },
+    {
+      "name": "perm_pasteboard_reason",
+      "value": "Paste repository URL when configuring Git remote"
+    },
+    {
+      "name": "perm_background_reason",
+      "value": "Keep running briefly in background to clear sensitive clipboard content"
+    },
+    {
+      "name": "perm_biometric_reason",
+      "value": "Unlock the app with fingerprint or face recognition"
+    }
+  ]
+}

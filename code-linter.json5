@@ -1,0 +1,47 @@
+{
+  "files": [
+    "**/*.ets"
+  ],
+  "ignore": [
+    "**/src/ohosTest/**/*",
+    "**/src/test/**/*",
+    "**/src/mock/**/*",
+    "**/node_modules/**/*",
+    "**/oh_modules/**/*",
+    "**/build/**/*",
+    "**/.preview/**/*"
+  ],
+  "ruleSet": [
+    "plugin:@performance/recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "@security/no-unsafe-aes": "error",
+    "@security/no-unsafe-hash": "error",
+    "@security/no-unsafe-mac": "warn",
+    "@security/no-unsafe-dh": "error",
+    "@security/no-unsafe-dsa": "error",
+    "@security/no-unsafe-ecdsa": "error",
+    "@security/no-unsafe-rsa-encrypt": "error",
+    "@security/no-unsafe-rsa-sign": "error",
+    "@security/no-unsafe-rsa-key": "error",
+    "@security/no-unsafe-dsa-key": "error",
+    "@security/no-unsafe-dh-key": "error",
+    "@security/no-unsafe-3des": "error"
+  },
+  "overrides": [
+    {
+      // 路由页必须是自定义组件（pageMap 里注册，不能改成 @Builder），内容又是纯静态、
+      // 无状态也无生命周期，@performance/avoid-overusing-custom-component-check
+      // 在这两个文件上属误报，按文件关闭。
+      // 注：AboutPage 已通过 aboutToAppear 从包信息读版本号，不再命中该规则；
+      // 这里只留纯文本的隐私政策页。
+      "files": [
+        "**/pages/PrivacyPolicyPage.ets"
+      ],
+      "rules": {
+        "@performance/avoid-overusing-custom-component-check": "off"
+      }
+    }
+  ]
+}

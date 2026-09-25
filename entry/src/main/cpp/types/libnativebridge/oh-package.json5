@@ -1,0 +1,6 @@
+{
+  "name": "libnativebridge.so",
+  "types": "./index.d.ts",
+  "version": "1.0.0",
+  "description": "NAPI types for libnativebridge.so"
+}

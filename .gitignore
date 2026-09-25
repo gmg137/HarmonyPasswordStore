@@ -1,0 +1,36 @@
+/node_modules
+/oh_modules
+/local.properties
+/.idea
+**/build
+/.hvigor
+# 注意：'.cxx' 无前导斜杠时只匹配顶层，entry/.cxx 匹配不到；
+# 该目录含 CMakeCache.txt 与 compile_commands.json，里面有本机绝对路径。
+**/.cxx/
+/.clangd
+/.clang-format
+/.clang-tidy
+**/.test
+/.appanalyzer
+
+# Rust 构建缓存（2.7 GB）
+**/target/
+**/*.rs.bk
+
+# 本地 lint 缓存与工具状态
+/linter-cache/
+/.atomcode/
+
+# 调试截图残留（规范命名的正式截图在 docs/screenshots/）
+screenshots
+
+# 本地签名/凭据材料（切勿入库）
+*.p12
+*.p7b
+*.cer
+*.keystore
+local.properties
+
+# AI 工具
+.zcodeignore
+/.codeartsdoer

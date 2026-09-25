@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   viewBox="0 0 1024 1024"
+   width="1024"
+   height="1024"
+   version="1.1"
+   id="svg5"
+   sodipodi:docname="foreground.svg"
+   inkscape:version="1.4.4 (unknown)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs5" />
+  <sodipodi:namedview
+     id="namedview5"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="550.83618"
+     inkscape:cy="509.82399"
+     inkscape:window-width="1920"
+     inkscape:window-height="1011"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg5"
+     showguides="true">
+    <sodipodi:guide
+       position="1286.1962,669.18726"
+       orientation="0,-1"
+       id="guide12"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1844.4219,668.40625"
+       orientation="1,0"
+       id="guide13"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1290.7266,669.0625"
+       orientation="1,0"
+       id="guide14"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1330.5781,997.70703"
+       orientation="1,0"
+       id="guide15"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1804.5807,1003.0962"
+       orientation="1,0"
+       id="guide16"
+       inkscape:locked="false" />
+    <sodipodi:guide
+       position="1841.3125,638.09375"
+       orientation="0,-1"
+       id="guide17"
+       inkscape:locked="false" />
+  </sodipodi:namedview>
+  <!-- Lock shackle (U-shaped arc) -->
+  <!-- Lock body (rounded rectangle) -->
+  <!-- Git branch icon (centered on lock body) -->
+  <!-- Main branch vertical line: from bottom node to top node -->
+  <!-- Branch curve: from main branch to right node -->
+  <!-- Bottom node (main branch start) -->
+  <!-- Top node (main branch end) -->
+  <!-- Right node (branch end) -->
+  <g
+     id="g6"
+     transform="translate(0,-19.000033)">
+    <path
+       d="M 360,550 V 410 a 152,152 0 0 1 304,0 v 140"
+       fill="none"
+       stroke="#ffffff"
+       stroke-width="72"
+       stroke-linecap="round"
+       id="path1" />
+    <path
+       d="m 275,440 c -39.888,0 -72,32.112 -72,72 v 27.48828 c 0,0 21.345,152.60193 32.1455,228.79582 C 239.5839,799.59551 274.9966,840 314.9999,840 h 394 c 40.0033,0 75.4641,-40.61199 79.8377,-71.72499 L 821,539.47656 V 512 c 0,-39.888 -32.112,-72 -72,-72 z"
+       style="fill:#ffffff;stroke-width:1.0287"
+       id="path8"
+       sodipodi:nodetypes="sscsssscsss" />
+    <g
+       id="g5">
+      <path
+         d="M 420,720 V 560"
+         stroke="#0a59f7"
+         stroke-width="28"
+         stroke-linecap="round"
+         fill="none"
+         id="path2" />
+      <path
+         d="m 420,640 c 0,-80 184,0 184,-80"
+         stroke="#0a59f7"
+         stroke-width="28"
+         stroke-linecap="round"
+         fill="none"
+         id="path3" />
+      <circle
+         cx="420"
+         cy="720"
+         r="44"
+         fill="#0a59f7"
+         id="circle3" />
+      <circle
+         cx="420"
+         cy="560"
+         r="44"
+         fill="#0a59f7"
+         id="circle4" />
+      <circle
+         cx="604"
+         cy="560"
+         r="44"
+         fill="#0a59f7"
+         id="circle5" />
+    </g>
+  </g>
+</svg>

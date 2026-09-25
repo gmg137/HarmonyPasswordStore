@@ -1,0 +1,56 @@
+[package]
+name = "rpgp_wrapper"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "rpgp_wrapper"
+crate-type = ["staticlib"]
+
+# release 策略显式声明，避免依赖默认值在跨工具链升级时漂移。
+# panic = "abort" 而非 unwind：panic 不跨 FFI 边界（由 lib.rs 的 ffi_guard 兜住），
+# 保留 abort 语义可避免 unwinding 表进入静态库。
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[dependencies]
+# 启用 draft-pqc 以支持 RFC 9580 后量子算法（ML-KEM 等）。
+# 注意：上游 pgp 0.20 要求 ml-kem 0.2.1（依赖 kem 0.3.0-pre.0），而 russh 0.63.3
+# 强制 ml-kem 0.3（要求 kem 0.3.0 正式版）；Cargo 会把 kem 统一到 0.3.0，
+# 导致 ml-kem 0.2.1 编译失败（18 个错误）。
+# 故此处通过下方 [patch.crates-io] 指向 third_party/pgp-patched：
+# 该副本已把 ml-kem 依赖升级到 0.3 并适配其 API 变更（详见该目录 README-patch.md）。
+pgp = { version = "0.20", features = ["draft-pqc"] }
+# pgp 0.20 自身依赖 rand 0.8，必须与其保持同版本以共享 rand_core trait
+rand = "0.8"
+russh = { version = "0.63", default-features = false, features = ["ring", "flate2", "rsa"] }
+tokio = { version = "1", features = ["rt", "net", "time", "macros"] }
+
+# ---- gpg_pqc 模块（GnuPG algo 8 / ky768_cv25519 互通）依赖 ----
+# 与 pgp/russh 已有版本保持一致，避免重复版本导致 trait 冲突
+ml-kem = "0.3"                                            # 与 russh 0.63.3 一致
+x25519-dalek = { version = "2", features = ["static_secrets"] }
+# Weierstrass 曲线（GnuPG `ky768_bp256` / `ky1024_bp384` 的经典部分）。
+# RustCrypto 的 bp256/bp384 **只有曲线参数、没有算术实现**，fiat-crypto 不含
+# brainpool，primefield 又只配 ff 0.14（与本项目的 ff 0.13 冲突），故在
+# src/bp_curve.rs 里用 crypto-bigint 的 Montgomery 原语 + primeorder 的
+# Renes-Costello-Batina 完备加法公式自行补齐（见该文件头注释）。
+elliptic-curve = { version = "0.13", features = ["arithmetic"] }
+sha3 = "0.10"
+sha2 = "0.10"
+sha1 = "0.10"
+aes = "0.8"
+cfb-mode = "0.8"                 # OpenPGP CFB（SEIPDv1 对称加密）
+ocb3 = "0.1"                                              # AES-OCB（AEAD 与私钥保护段）
+aead = "0.5"
+typenum = "1"
+base64 = "0.22"
+flate2 = "1"
+
+[patch.crates-io]
+# 指向已适配 ml-kem 0.3 的 pgp 0.20 副本（见 third_party/pgp-patched/README-patch.md）
+pgp = { path = "../third_party/pgp-patched" }

@@ -1,0 +1,12 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "HarmonyOS password manager compatible with pass (password-store)",
+  "main": "",
+  "author": "gmg137",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "libnativebridge.so": "file:./src/main/cpp/types/libnativebridge"
+  }
+}
+
