@@ -1,13 +1,23 @@
-import { ThemeColors, Palette, Spacing, FontSize, ComponentSize, Radius } from '../common/ThemeColors';
+import { ThemeColors, Palette, Spacing, FontSize, ComponentSize, IconSize } from '../common/ThemeColors';
 
 /**
- * 设置项开关行（标题 + 说明 + 右侧开关）
+ * 设置项开关行（行首图标 + 标题 + 说明 + 右侧开关）
+ *
+ * **行组件，不带卡片外观**：设置页的分组卡片由页面里的 `ListItemGroup` 承载
+ * （对齐 HarmonyOS 官方 UX 样例 `HarmonyOSComponentUXExamples` 的 `EfficientList`：
+ * 组给背景 + 圆角 + 横向内边距 + 分隔线，行只给高度与内容）。因此本组件
+ * 不再有 backgroundColor / borderRadius / margin-top / 横向内边距——横向内边距
+ * 若行内再给，文字起点会比样例的「图标 24 + 间距 16」更深，且与分隔线错位。
+ *
+ * 行高对齐官方阶梯：有说明文字 = 双行 64vp（`ROW_TWO_LINE`），无则单行 56vp
+ * （`ROW`）。说明文字很长（如生物识别不可用原因）时仍允许增高。
  *
  * 必须是独立 @ComponentV2 子组件：@Builder 按值传参在参数变化时不会刷新内部 UI
  * （见 FormRow / SheetFormButtons 的同款说明）。「启动时自动同步」的可用性是
  * **异步**算出来的（要读 Git 配置），用 @Builder 时结果永远进不到这一行——
  * 实测表现为：说明文字始终空白、开关始终是禁用态。
  *
+ * @Require @Param icon 行首图标（sys.symbol 资源）
  * @Param label 标题
  * @Param sublabel 说明（禁用时放不可用原因）
  * @Param isOn 开关状态
@@ -17,6 +27,7 @@ import { ThemeColors, Palette, Spacing, FontSize, ComponentSize, Radius } from '
  */
 @ComponentV2
 export struct ToggleRow {
+  @Require @Param icon: Resource;
   @Param label: string = '';
   @Param sublabel: string = '';
   @Param isOn: boolean = false;
@@ -27,8 +38,20 @@ export struct ToggleRow {
     return ThemeColors.getInstance().palette();
   }
 
+  /** 双行（有说明）64vp / 单行 56vp，与官方列表行阶梯一致 */
+  private get rowMinHeight(): number {
+    return this.sublabel.length > 0 ? ComponentSize.ROW_TWO_LINE : ComponentSize.ROW;
+  }
+
   build() {
     Row() {
+      SymbolGlyph(this.icon)
+        .fontSize(IconSize.MD)
+        // 行首图标与标题同用次要灰（对齐 FolderTreeView 的行首图标惯例）；
+        // 禁用时随标题一起再降一档
+        .fontColor([this.isEnabled ? this.colors.textSecondary : this.colors.textTertiary])
+        .margin({ right: Spacing.LG })
+
       Column() {
         Text(this.label)
           .fontSize(FontSize.SUBTITLE)
@@ -53,10 +76,7 @@ export struct ToggleRow {
         })
     }
     .width('100%')
-    .constraintSize({ minHeight: ComponentSize.ROW_TWO_LINE })
-    .padding({ left: Spacing.ROW_H, right: Spacing.ROW_H, top: Spacing.MD, bottom: Spacing.MD })
-    .borderRadius(Radius.CARD)
-    .backgroundColor(this.colors.surface)
-    .margin({ top: Spacing.CARD_GAP })
+    .constraintSize({ minHeight: this.rowMinHeight })
+    .padding({ top: Spacing.MD, bottom: Spacing.MD })
   }
 }

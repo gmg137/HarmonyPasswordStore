@@ -282,7 +282,13 @@ export class ComponentSize {
 export class DividerSpec {
   /** 线宽 */
   static readonly STROKE: number = 1;
-  /** 图标行分隔线的起始缩进（与图标列右缘对齐） */
+  /**
+   * 图标行分隔线的起始缩进（与行内标题文字起点对齐）
+   *
+   * 设置页分组行的布局：行首图标 24vp（`IconSize.MD`）+ 图标文字间距 16vp
+   * （`Spacing.LG`）= 40vp 处开始文字，分隔线与之对齐。分隔线 margin 相对
+   * ListItem（行）边缘；组的横向内边距由 `ListItemGroup.padding` 承担、不在其中。
+   */
   static readonly INSET_ICON: number = 40;
   /** 文本行分隔线的起始缩进 */
   static readonly INSET_TEXT: number = 16;

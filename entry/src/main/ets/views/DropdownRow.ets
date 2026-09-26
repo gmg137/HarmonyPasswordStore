@@ -1,6 +1,6 @@
 import { LengthMetrics } from '@kit.ArkUI';
 import {
-  ThemeColors, Palette, Spacing, FontSize, ComponentSize, Radius, IconSize,
+  ThemeColors, Palette, Spacing, FontSize, ComponentSize, IconSize,
 } from '../common/ThemeColors';
 
 /** 下拉选项：显示文本 + 回传值（两者分开，值可以是枚举序号） */
@@ -18,9 +18,15 @@ export interface DropdownOption {
 const MENU_MIN_WIDTH: number = 160;
 
 /**
- * 设置项下拉菜单行（标题 + 说明 + 右侧当前值 + 向下三角）
+ * 设置项下拉菜单行（行首图标 + 标题 + 说明 + 右侧当前值 + 向下三角）
  *
- * 按 HarmonyOS 官方 UX 样例（`HarmonyOSComponentUXExamples` 的
+ * **行组件，不带卡片外观**：设置页的分组卡片由页面里的 `ListItemGroup` 承载
+ * （对齐 HarmonyOS 官方 UX 样例 `HarmonyOSComponentUXExamples` 的 `EfficientList`：
+ * 组给背景 + 圆角 + 横向内边距 + 分隔线，行只给高度与内容），不再有
+ * backgroundColor / borderRadius / margin-top / 横向内边距。行高对齐官方阶梯：
+ * 有说明文字 = 双行 64vp（`ROW_TWO_LINE`），无则单行 56vp（`ROW`）。
+ *
+ * 右侧值区与菜单交互按官方 UX 样例（
  * `products/phone/.../action/menu/components/DropdownMenu.ets`）实现：
  * - 右侧值区用**次要灰**（`sys.color.font_secondary`）显示当前值，
  *   指示符是**向下三角**（`arrowtriangle_down_fill`，官方样例用 `sys.color.icon_fourth`）
@@ -47,6 +53,7 @@ const MENU_MIN_WIDTH: number = 160;
  * 必须是独立 @ComponentV2 子组件（与 FormRow/ToggleRow 同因）：@Builder 按值传参
  * 在参数变化时不会刷新，而这里的「当前值」在首帧之后才由设置异步载入。
  *
+ * @Require @Param icon 行首图标（sys.symbol 资源）
  * @Param label 标题
  * @Param sublabel 说明（可选）
  * @Param currentValue 当前值（对应 options[].value）
@@ -55,6 +62,7 @@ const MENU_MIN_WIDTH: number = 160;
  */
 @ComponentV2
 export struct DropdownRow {
+  @Require @Param icon: Resource;
   @Param label: string = '';
   @Param sublabel: string = '';
   @Param currentValue: string = '';
@@ -63,6 +71,11 @@ export struct DropdownRow {
 
   private get colors(): Palette {
     return ThemeColors.getInstance().palette();
+  }
+
+  /** 双行（有说明）64vp / 单行 56vp，与官方列表行阶梯一致 */
+  private get rowMinHeight(): number {
+    return this.sublabel.length > 0 ? ComponentSize.ROW_TWO_LINE : ComponentSize.ROW;
   }
 
   /** 当前值对应的显示文本（找不到时为空串，不显示半截内容） */
@@ -125,6 +138,11 @@ export struct DropdownRow {
 
   build() {
     Row() {
+      SymbolGlyph(this.icon)
+        .fontSize(IconSize.MD)
+        .fontColor([this.colors.textSecondary])
+        .margin({ right: Spacing.LG })
+
       Column() {
         Text(this.label)
           .fontSize(FontSize.SUBTITLE)
@@ -152,15 +170,13 @@ export struct DropdownRow {
         .fontColor([$r('sys.color.icon_fourth')])
     }
     .width('100%')
-    .constraintSize({ minHeight: ComponentSize.ROW_TWO_LINE })
-    .padding({ left: Spacing.ROW_H, right: Spacing.ROW_H, top: Spacing.MD, bottom: Spacing.MD })
-    .borderRadius(Radius.CARD)
-    .backgroundColor(this.colors.surface)
-    .margin({ top: Spacing.CARD_GAP })
+    .constraintSize({ minHeight: this.rowMinHeight })
+    .padding({ top: Spacing.MD, bottom: Spacing.MD })
     .alignItems(VerticalAlign.Center)
-    // 整行可点（不用只点值区：用户习惯点行内任意处），菜单锚到行右下角
+    // 整行可点（不用只点值区：用户习惯点行内任意处），菜单锚到行右下角。
+    // 常态必须显式透明（stateStyles 是替换不是叠加），卡片底色由 ListItemGroup 给
     .stateStyles({
-      normal: { .backgroundColor(this.colors.surface) },
+      normal: { .backgroundColor(Color.Transparent) },
       pressed: { .backgroundColor(this.colors.pressed) },
     })
     .bindMenu(this.menuBuilder(), { placement: Placement.BottomRight })

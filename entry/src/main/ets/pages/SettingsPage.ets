@@ -11,8 +11,13 @@ import { AppTitleBar } from '../views/AppTitleBar';
  *
  * 通用设置（主题/剪贴板超时/应用锁定）、搜索模式、
  * PGP 密钥管理、Git 同步配置入口。
- * 布局对齐 HarmonyOS Design：分组卡片（16vp 圆角 + 列表卡片背景）、
- * 主题分段控件、导航行/开关行统一样式。
+ *
+ * 布局对齐 HarmonyOS 官方 UX 样例（`HarmonyOSComponentUXExamples` 的
+ * `container/list/components/EfficientList.ets`）：整页是一个 `List`，
+ * 每个分组是一张 `ListItemGroup` 卡片——**组**承载背景/圆角/横向内边距/
+ * 行间分隔线，**行**（`ToggleRow` / `DropdownRow` / `navRow`）只负责内容：
+ * 行首图标（`IconSize.MD`）+ 图标文字间距 `Spacing.LG` + 标题/说明 + 右侧后缀。
+ * 组间距由 `List({ space })` 提供（12vp = `Spacing.CARD_GAP`）。
  */
 @ComponentV2
 export struct SettingsPage {
@@ -27,16 +32,13 @@ export struct SettingsPage {
   }
 
   /**
-   * 分组标题
+   * 分组标题（`List` 的一个 `ListItem`，紧跟在所属分组卡片之前）
    *
-   * **下间距必须为 0**：本页标题之后的每一行都是**自带 `margin-top: CARD_GAP`** 的共享
-   * 组件（`DropdownRow` / `ToggleRow` / `navRow` / `sliderCardInline`），标题再给下内边距
-   * 就会叠加成 24vp——实测真机：标题框底边到卡片顶边 42px(12vp) 全部来自行组件的外边距，
-   * 标题自己那 12vp 又加在其上，于是「标题到卡片」与「卡片到下一个标题」都是 24vp，
-   * 上下一样、标题读不出归属（曾把这里改成 CARD_GAP，观感「毫无变化」正是因为
-   * 那 12vp 不是它给的）。注意 Git 配置页 / 仓库管理页的卡片是手写 `Column`、**不带**
-   * 外边距，那两页必须由标题给 `bottom: CARD_GAP`——同一个 12vp 只能由一侧承担，
-   * 改任一处前先确认卡片是否自带 margin。
+   * 「上远下近」的归属节奏由两部分拼出来：`List({ space })` 已提供 12vp 的
+   * **下间距**（标题 → 卡片），上间距 = space(12) + 这里的上内边距，凑成
+   * `Spacing.SECTION_TOP`(24)（首个标题上方没有 space，保持
+   * `SECTION_TOP_FIRST`(12)）。左内边距取 `Spacing.MD`，与组内行首图标对齐
+   * （组的横向内边距同为 12vp）。
    */
   @Builder
   sectionTitle(title: string, isFirst: boolean) {
@@ -46,17 +48,26 @@ export struct SettingsPage {
       .fontColor(this.colors.textSecondary)
       .width('100%')
       .padding({
-        top: isFirst ? Spacing.SECTION_TOP_FIRST : Spacing.SECTION_TOP,
+        top: isFirst ? Spacing.SECTION_TOP_FIRST : Spacing.SECTION_TOP - Spacing.CARD_GAP,
         bottom: 0,
-        left: Spacing.ROW_H,
+        left: Spacing.MD,
       })
   }
 
-
-
+  /**
+   * 导航行（行首图标 + 标题 + 说明 + 右箭头）
+   *
+   * 横向内边距与卡片底色由 `ListItemGroup` 承担；常态显式透明
+   * （stateStyles 是替换不是叠加），按压才显 `pressed` 色。
+   */
   @Builder
-  navRow(label: string, sublabel: string, onTapped: () => void) {
+  navRow(icon: Resource, label: string, sublabel: string, onTapped: () => void) {
     Row() {
+      SymbolGlyph(icon)
+        .fontSize(IconSize.MD)
+        .fontColor([this.colors.textSecondary])
+        .margin({ right: Spacing.LG })
+
       Column() {
         Text(label)
           .fontSize(FontSize.SUBTITLE)
@@ -77,46 +88,12 @@ export struct SettingsPage {
     }
     .width('100%')
     .constraintSize({ minHeight: ComponentSize.ROW_TWO_LINE })
-    .padding({ left: Spacing.ROW_H, right: Spacing.ROW_H, top: Spacing.MD, bottom: Spacing.MD })
-    .borderRadius(Radius.CARD)
-    .backgroundColor(this.colors.surface)
-    .margin({ top: Spacing.CARD_GAP })
+    .padding({ top: Spacing.MD, bottom: Spacing.MD })
     .stateStyles({
-      normal: { .backgroundColor(this.colors.surface) },
+      normal: { .backgroundColor(Color.Transparent) },
       pressed: { .backgroundColor(this.colors.pressed) },
     })
     .onClick(() => onTapped())
-  }
-
-  @Builder
-  toggleRow(label: string, sublabel: string, isOn: boolean, onToggle: (v: boolean) => void,
-            enabled: boolean = true) {
-    Row() {
-      Column() {
-        Text(label)
-          .fontSize(FontSize.SUBTITLE)
-          .fontWeight(FontWeight.Medium)
-          // 禁用时整行转次要色，避免「看着能点却没反应」
-          .fontColor(enabled ? this.colors.textPrimary : this.colors.textTertiary)
-        Text(sublabel)
-          .fontSize(FontSize.CAPTION)
-          .fontColor(this.colors.textTertiary)
-          .margin({ top: Spacing.XS })
-      }
-      .alignItems(HorizontalAlign.Start)
-      .layoutWeight(1)
-
-      Toggle({ type: ToggleType.Switch, isOn: isOn && enabled })
-        .selectedColor(this.colors.primary)
-        .enabled(enabled)
-        .onChange((v: boolean) => onToggle(v))
-    }
-    .width('100%')
-    .constraintSize({ minHeight: ComponentSize.ROW_TWO_LINE })
-    .padding({ left: Spacing.ROW_H, right: Spacing.ROW_H, top: Spacing.MD, bottom: Spacing.MD })
-    .borderRadius(Radius.CARD)
-    .backgroundColor(this.colors.surface)
-    .margin({ top: Spacing.CARD_GAP })
   }
 
   /**
@@ -148,146 +125,252 @@ export struct SettingsPage {
     return opts;
   }
 
-  /** 分段选择控件（单选 pill 组） */
-
   build() {
     NavDestination() {
       Column() {
         // ===== 标题栏（共享组件：40vp 圆形返回按钮 + 24fp 标题） =====
         AppTitleBar({ title: '设置' })
 
-        Scroll() {
-        Column() {
+        List({ space: Spacing.CARD_GAP }) {
           // ===== 通用 =====
-          this.sectionTitle('通用', true)
+          ListItem() {
+            this.sectionTitle('通用', true)
+          }
 
-          DropdownRow({
-            label: '主题',
-            currentValue: `${this.viewModel.themeMode}`,
-            options: [
-              { label: '跟随系统', value: `${ThemeMode.SYSTEM}` },
-              { label: '浅色', value: `${ThemeMode.LIGHT}` },
-              { label: '深色', value: `${ThemeMode.DARK}` },
-            ],
-            onSelect: (v: string): void => {
-              this.viewModel.setThemeMode(Number.parseInt(v) as ThemeMode);
-            },
+          ListItemGroup() {
+            ListItem() {
+              DropdownRow({
+                icon: $r('sys.symbol.paintpalette_fill'),
+                label: '主题',
+                currentValue: `${this.viewModel.themeMode}`,
+                options: [
+                  { label: '跟随系统', value: `${ThemeMode.SYSTEM}` },
+                  { label: '浅色', value: `${ThemeMode.LIGHT}` },
+                  { label: '深色', value: `${ThemeMode.DARK}` },
+                ],
+                onSelect: (v: string): void => {
+                  this.viewModel.setThemeMode(Number.parseInt(v) as ThemeMode);
+                },
+              })
+            }
+
+            ListItem() {
+              DropdownRow({
+                icon: $r('sys.symbol.text_clipboard_fill'),
+                label: '剪贴板自动清除',
+                sublabel: '复制密码后，到点自动清空系统剪贴板',
+                currentValue: `${this.viewModel.clipboardTimeout}`,
+                options: this.clipboardTimeoutOptions(),
+                onSelect: (v: string): void => {
+                  this.viewModel.setClipboardTimeout(Number.parseInt(v));
+                },
+              })
+            }
+          }
+          .borderRadius(Radius.CARD)
+          .backgroundColor(this.colors.surface)
+          .padding({ left: Spacing.MD, right: Spacing.MD })
+          .clip(true)
+          .divider({
+            strokeWidth: DividerSpec.STROKE,
+            startMargin: DividerSpec.INSET_ICON,
+            endMargin: Spacing.MD,
+            color: this.colors.divider,
           })
 
-          this.sectionTitle('安全', false)
+          // ===== 安全 =====
+          ListItem() {
+            this.sectionTitle('安全', false)
+          }
 
-          ToggleRow({
-            label: '生物识别解锁',
-            // 不可用时把原因放在副标题里（与「启动时自动同步」一致）
-            sublabel: this.viewModel.biometricReason.length > 0
-              ? this.viewModel.biometricReason
-              : '使用指纹/面容快速解锁应用',
-            isOn: this.viewModel.biometricUnlockEnabled,
-            // PIN 已彻底移除，应用锁只剩生物识别：设备不支持/未录入时开关置灰，
-            // 否则用户打开它却永远不会被锁（或反之被锁住却无法解锁）
-            isEnabled: this.viewModel.biometricReason.length === 0,
-            onToggle: (v: boolean): void => { this.viewModel.setBiometricEnabled(v); },
-          })
-
-          DropdownRow({
-            label: '剪贴板自动清除',
-            sublabel: '复制密码后，到点自动清空系统剪贴板',
-            currentValue: `${this.viewModel.clipboardTimeout}`,
-            options: this.clipboardTimeoutOptions(),
-            onSelect: (v: string): void => {
-              this.viewModel.setClipboardTimeout(Number.parseInt(v));
-            },
-          })
+          ListItemGroup() {
+            ListItem() {
+              ToggleRow({
+                icon: $r('sys.symbol.touchid'),
+                label: '生物识别解锁',
+                // 不可用时把原因放在副标题里（与「启动时自动同步」一致）
+                sublabel: this.viewModel.biometricReason.length > 0
+                  ? this.viewModel.biometricReason
+                  : '使用指纹/面容快速解锁应用',
+                isOn: this.viewModel.biometricUnlockEnabled,
+                // PIN 已彻底移除，应用锁只剩生物识别：设备不支持/未录入时开关置灰，
+                // 否则用户打开它却永远不会被锁（或反之被锁住却无法解锁）
+                isEnabled: this.viewModel.biometricReason.length === 0,
+                onToggle: (v: boolean): void => { this.viewModel.setBiometricEnabled(v); },
+              })
+            }
+          }
+          .borderRadius(Radius.CARD)
+          .backgroundColor(this.colors.surface)
+          .padding({ left: Spacing.MD, right: Spacing.MD })
+          .clip(true)
 
           // ===== 密码仓库 =====
-          this.sectionTitle('密码仓库', false)
+          ListItem() {
+            this.sectionTitle('密码仓库', false)
+          }
 
-          DropdownRow({
-            label: '搜索模式',
-            currentValue: `${this.viewModel.searchMode}`,
-            options: [
-              { label: '模糊匹配', value: `${SearchMode.FUZZY}` },
-              { label: '精确匹配', value: `${SearchMode.EXACT}` },
-            ],
-            onSelect: (v: string): void => {
-              this.viewModel.setSearchMode(Number.parseInt(v) as SearchMode);
-            },
+          ListItemGroup() {
+            ListItem() {
+              DropdownRow({
+                icon: $r('sys.symbol.magnifyingglass'),
+                label: '搜索模式',
+                currentValue: `${this.viewModel.searchMode}`,
+                options: [
+                  { label: '模糊匹配', value: `${SearchMode.FUZZY}` },
+                  { label: '精确匹配', value: `${SearchMode.EXACT}` },
+                ],
+                onSelect: (v: string): void => {
+                  this.viewModel.setSearchMode(Number.parseInt(v) as SearchMode);
+                },
+              })
+            }
+
+            ListItem() {
+              this.navRow($r('sys.symbol.arrow_clockwise'), '重新运行初始设置', '初始化仓库 / 克隆 / 导入密钥',
+                () => {
+                  this.viewModel.navigateToOnboarding();
+                })
+            }
+          }
+          .borderRadius(Radius.CARD)
+          .backgroundColor(this.colors.surface)
+          .padding({ left: Spacing.MD, right: Spacing.MD })
+          .clip(true)
+          .divider({
+            strokeWidth: DividerSpec.STROKE,
+            startMargin: DividerSpec.INSET_ICON,
+            endMargin: Spacing.MD,
+            color: this.colors.divider,
           })
-
-          this.navRow('重新运行初始设置', '初始化仓库 / 克隆 / 导入密钥',
-            () => {
-              this.viewModel.navigateToOnboarding();
-            })
 
           // ===== Git 同步 =====
-          this.sectionTitle('Git 同步', false)
+          ListItem() {
+            this.sectionTitle('Git 同步', false)
+          }
 
-          ToggleRow({
-            label: '启动时自动同步',
-            sublabel: this.viewModel.autoSyncAvailable
-              ? '应用启动时自动执行拉取+推送'
-              : this.viewModel.autoSyncDisabledReason,
-            isOn: this.viewModel.autoSyncOnLaunch,
-            isEnabled: this.viewModel.autoSyncAvailable,
-            onToggle: (v: boolean): void => { this.viewModel.setAutoSync(v); },
+          ListItemGroup() {
+            ListItem() {
+              ToggleRow({
+                icon: $r('sys.symbol.arrow_2_circlepath'),
+                label: '启动时自动同步',
+                sublabel: this.viewModel.autoSyncAvailable
+                  ? '应用启动时自动执行拉取+推送'
+                  : this.viewModel.autoSyncDisabledReason,
+                isOn: this.viewModel.autoSyncOnLaunch,
+                isEnabled: this.viewModel.autoSyncAvailable,
+                onToggle: (v: boolean): void => { this.viewModel.setAutoSync(v); },
+              })
+            }
+
+            ListItem() {
+              this.navRow($r('sys.symbol.externaldrive_fill'), '仓库管理', 'Git 配置 / 拉取变基 / 删除本地仓库',
+                () => {
+                  this.viewModel.navigateToRepoManage();
+                })
+            }
+          }
+          .borderRadius(Radius.CARD)
+          .backgroundColor(this.colors.surface)
+          .padding({ left: Spacing.MD, right: Spacing.MD })
+          .clip(true)
+          .divider({
+            strokeWidth: DividerSpec.STROKE,
+            startMargin: DividerSpec.INSET_ICON,
+            endMargin: Spacing.MD,
+            color: this.colors.divider,
           })
 
-          this.navRow('仓库管理', 'Git 配置 / 拉取变基 / 删除本地仓库',
-            () => {
-              this.viewModel.navigateToRepoManage();
-            })
-
           // ===== 加密与凭据 =====
-          this.sectionTitle('加密与凭据', false)
+          ListItem() {
+            this.sectionTitle('加密与凭据', false)
+          }
 
-          this.navRow('PGP 密钥管理', '导入密钥 / 选择默认加密密钥',
-            () => {
-              this.viewModel.navigateToPgpKeys();
-            })
+          ListItemGroup() {
+            ListItem() {
+              this.navRow($r('sys.symbol.key_fill'), 'PGP 密钥管理', '导入密钥 / 选择默认加密密钥',
+                () => {
+                  this.viewModel.navigateToPgpKeys();
+                })
+            }
 
-          this.navRow('SSH 密钥管理', '生成 / 导入公钥 / 删除密钥',
-            () => {
-              this.viewModel.navigateToSshKeys();
-            })
+            ListItem() {
+              this.navRow($r('sys.symbol.key_horizontal_fill'), 'SSH 密钥管理', '生成 / 导入公钥 / 删除密钥',
+                () => {
+                  this.viewModel.navigateToSshKeys();
+                })
+            }
 
-          DropdownRow({
-            label: '密码文件格式',
-            sublabel: '仅影响之后新建/编辑的密码',
-            currentValue: `${this.viewModel.passwordFileFormat}`,
-            options: [
-              { label: 'bin', value: `${PasswordFileFormat.BIN}` },
-              { label: 'armor', value: `${PasswordFileFormat.ARMOR}` },
-            ],
-            onSelect: (v: string): void => {
-              this.viewModel.setPasswordFileFormat(Number.parseInt(v) as PasswordFileFormat);
-            },
+            ListItem() {
+              DropdownRow({
+                icon: $r('sys.symbol.doc_plaintext_fill'),
+                label: '密码文件格式',
+                sublabel: '仅影响之后新建/编辑的密码',
+                currentValue: `${this.viewModel.passwordFileFormat}`,
+                options: [
+                  { label: 'bin', value: `${PasswordFileFormat.BIN}` },
+                  { label: 'armor', value: `${PasswordFileFormat.ARMOR}` },
+                ],
+                onSelect: (v: string): void => {
+                  this.viewModel.setPasswordFileFormat(Number.parseInt(v) as PasswordFileFormat);
+                },
+              })
+            }
+          }
+          .borderRadius(Radius.CARD)
+          .backgroundColor(this.colors.surface)
+          .padding({ left: Spacing.MD, right: Spacing.MD })
+          .clip(true)
+          .divider({
+            strokeWidth: DividerSpec.STROKE,
+            startMargin: DividerSpec.INSET_ICON,
+            endMargin: Spacing.MD,
+            color: this.colors.divider,
           })
 
           // ===== 关于 =====
-          this.sectionTitle('关于', false)
+          ListItem() {
+            this.sectionTitle('关于', false)
+          }
 
-          this.navRow('隐私政策', '数据存储与处理说明',
-            () => {
-              RouteManager.getInstance().pushPath(RouteNames.PRIVACY_POLICY);
-            })
+          ListItemGroup() {
+            ListItem() {
+              this.navRow($r('sys.symbol.lock_shield_fill'), '隐私政策', '数据存储与处理说明',
+                () => {
+                  RouteManager.getInstance().pushPath(RouteNames.PRIVACY_POLICY);
+                })
+            }
 
-          this.navRow('关于本应用', '版本 / 开源协议 / 仓库链接',
-            () => {
-              RouteManager.getInstance().pushPath(RouteNames.ABOUT);
-            })
+            ListItem() {
+              this.navRow($r('sys.symbol.info_circle_fill'), '关于本应用', '版本 / 开源协议 / 仓库链接',
+                () => {
+                  RouteManager.getInstance().pushPath(RouteNames.ABOUT);
+                })
+            }
+          }
+          .borderRadius(Radius.CARD)
+          .backgroundColor(this.colors.surface)
+          .padding({ left: Spacing.MD, right: Spacing.MD })
+          .clip(true)
+          .divider({
+            strokeWidth: DividerSpec.STROKE,
+            startMargin: DividerSpec.INSET_ICON,
+            endMargin: Spacing.MD,
+            color: this.colors.divider,
+          })
 
-          Blank()
-            .height(Spacing.XL)
-          Blank()
-            .height(Spacing.XL)
+          // 底部留白（保持改版前的滚动到底余量）
+          ListItem() {
+            Column()
+              .width('100%')
+              .height(Spacing.XL * 2)
+          }
         }
-        // 顶部不留白：首个分组标题自身已有 SECTION_TOP_FIRST(12vp) 上边距，
-        // 再叠加容器顶部内边距会让「通用」离标题栏过远（曾为 16+12=28vp）
+        .layoutWeight(1)
+        .scrollBar(BarState.Off)
+        // 顶部不留白：首个分组标题自身已有 SECTION_TOP_FIRST(12vp) 上边距
         .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H, bottom: Spacing.PAGE_H })
-      }
-      .layoutWeight(1)
-      .scrollBar(BarState.Off)
-      .backgroundColor(this.colors.background)
+        .backgroundColor(this.colors.background)
       }
       .width('100%')
       .height('100%')
