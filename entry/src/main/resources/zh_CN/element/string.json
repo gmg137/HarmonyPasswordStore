@@ -1,6 +1,150 @@
 {
   "string": [
     {
+      "name": "settings_title",
+      "value": "设置"
+    },
+    {
+      "name": "group_general",
+      "value": "通用"
+    },
+    {
+      "name": "group_security",
+      "value": "安全"
+    },
+    {
+      "name": "group_store",
+      "value": "密码仓库"
+    },
+    {
+      "name": "group_git",
+      "value": "Git 同步"
+    },
+    {
+      "name": "group_crypto",
+      "value": "加密与凭据"
+    },
+    {
+      "name": "group_about",
+      "value": "关于"
+    },
+    {
+      "name": "settings_theme",
+      "value": "主题"
+    },
+    {
+      "name": "theme_system",
+      "value": "跟随系统"
+    },
+    {
+      "name": "theme_light",
+      "value": "浅色"
+    },
+    {
+      "name": "theme_dark",
+      "value": "深色"
+    },
+    {
+      "name": "settings_language",
+      "value": "语言"
+    },
+    {
+      "name": "language_system",
+      "value": "系统默认"
+    },
+    {
+      "name": "biometric_title",
+      "value": "生物识别解锁"
+    },
+    {
+      "name": "biometric_sub",
+      "value": "使用指纹/面容快速解锁应用"
+    },
+    {
+      "name": "clipboard_title",
+      "value": "剪贴板自动清除"
+    },
+    {
+      "name": "clipboard_sub",
+      "value": "复制密码后，到点自动清空系统剪贴板"
+    },
+    {
+      "name": "search_mode_title",
+      "value": "搜索模式"
+    },
+    {
+      "name": "search_fuzzy",
+      "value": "模糊匹配"
+    },
+    {
+      "name": "search_exact",
+      "value": "精确匹配"
+    },
+    {
+      "name": "onboarding_row_title",
+      "value": "重新运行初始设置"
+    },
+    {
+      "name": "onboarding_row_sub",
+      "value": "初始化仓库 / 克隆 / 导入密钥"
+    },
+    {
+      "name": "autosync_title",
+      "value": "启动时自动同步"
+    },
+    {
+      "name": "autosync_sub",
+      "value": "应用启动时自动执行拉取+推送"
+    },
+    {
+      "name": "repo_row_title",
+      "value": "仓库管理"
+    },
+    {
+      "name": "repo_row_sub",
+      "value": "Git 配置 / 拉取变基 / 删除本地仓库"
+    },
+    {
+      "name": "pgp_row_title",
+      "value": "PGP 密钥管理"
+    },
+    {
+      "name": "pgp_row_sub",
+      "value": "导入密钥 / 选择默认加密密钥"
+    },
+    {
+      "name": "ssh_row_title",
+      "value": "SSH 密钥管理"
+    },
+    {
+      "name": "ssh_row_sub",
+      "value": "生成 / 导入公钥 / 删除密钥"
+    },
+    {
+      "name": "fileformat_title",
+      "value": "密码文件格式"
+    },
+    {
+      "name": "fileformat_sub",
+      "value": "仅影响之后新建/编辑的密码"
+    },
+    {
+      "name": "privacy_row_title",
+      "value": "隐私政策"
+    },
+    {
+      "name": "privacy_row_sub",
+      "value": "数据存储与处理说明"
+    },
+    {
+      "name": "about_row_title",
+      "value": "关于本应用"
+    },
+    {
+      "name": "about_row_sub",
+      "value": "版本 / 开源协议 / 仓库链接"
+    },
+    {
       "name": "module_desc",
       "value": "密码仓库模块"
     },
@@ -15,18 +159,6 @@
     {
       "name": "search_placeholder",
       "value": "搜索密码"
-    },
-    {
-      "name": "empty_store_hint",
-      "value": "暂无密码，点击 + 创建"
-    },
-    {
-      "name": "add_password",
-      "value": "添加"
-    },
-    {
-      "name": "password_detail",
-      "value": "密码详情"
     },
     {
       "name": "password_create",
@@ -49,28 +181,12 @@
       "value": "Git 配置"
     },
     {
-      "name": "git_clone",
-      "value": "克隆仓库"
-    },
-    {
-      "name": "onboarding",
-      "value": "欢迎"
-    },
-    {
       "name": "AutofillAbility_desc",
       "value": "密码仓库自动填充服务"
     },
     {
-      "name": "sync",
-      "value": "同步"
-    },
-    {
       "name": "sort_recent",
       "value": "最近"
-    },
-    {
-      "name": "search_clear",
-      "value": "清除"
     },
     {
       "name": "found_results",
@@ -79,14 +195,6 @@
     {
       "name": "app_locked",
       "value": "应用已锁定"
-    },
-    {
-      "name": "verify_to_continue",
-      "value": "请验证身份以继续"
-    },
-    {
-      "name": "unlock_with_biometric",
-      "value": "使用%s解锁"
     },
     {
       "name": "delete",
@@ -105,8 +213,2244 @@
       "value": "配置 Git 远程时粘贴仓库地址"
     },
     {
+      "name": "perm_background_reason",
+      "value": "短暂后台运行以清除剪贴板中的敏感内容"
+    },
+    {
       "name": "perm_biometric_reason",
       "value": "使用指纹或面容解锁应用"
+    },
+    {
+      "name": "common_cancel",
+      "value": "取消"
+    },
+    {
+      "name": "common_list_sep",
+      "value": "、"
+    },
+    {
+      "name": "common_configure",
+      "value": "配置"
+    },
+    {
+      "name": "common_apply",
+      "value": "应用"
+    },
+    {
+      "name": "common_confirm",
+      "value": "确认"
+    },
+    {
+      "name": "common_start",
+      "value": "开始"
+    },
+    {
+      "name": "common_got_it",
+      "value": "知道了"
+    },
+    {
+      "name": "common_loading",
+      "value": "加载中..."
+    },
+    {
+      "name": "common_passphrase_wrong",
+      "value": "密钥密码错误，请重试"
+    },
+    {
+      "name": "home_root_title",
+      "value": "密码仓库"
+    },
+    {
+      "name": "home_create_password",
+      "value": "创建新密码"
+    },
+    {
+      "name": "home_create_folder",
+      "value": "创建新目录"
+    },
+    {
+      "name": "home_dirkey_menu",
+      "value": "修改此目录加密密钥"
+    },
+    {
+      "name": "home_dirkey_panel_title",
+      "value": "修改此目录的加密密钥"
+    },
+    {
+      "name": "home_dirkey_current",
+      "value": "当前密钥：%s"
+    },
+    {
+      "name": "home_dirkey_current_inherit",
+      "value": "当前密钥：继承父目录 / 默认密钥"
+    },
+    {
+      "name": "home_dirkey_no_keys",
+      "value": "暂无已导入的私钥，无法设置加密密钥"
+    },
+    {
+      "name": "home_dirkey_need_selection",
+      "value": "请至少选择一把密钥"
+    },
+    {
+      "name": "home_dirkey_updated_no_reencrypt",
+      "value": "已更新目录加密密钥（无需重加密的条目）"
+    },
+    {
+      "name": "home_dirkey_multiselect_hint",
+      "value": "加密密钥（可多选，不选则继承父目录）"
+    },
+    {
+      "name": "home_folder_name_hint",
+      "value": "目录名称"
+    },
+    {
+      "name": "home_creating",
+      "value": "创建中..."
+    },
+    {
+      "name": "home_reencrypting",
+      "value": "正在重加密…"
+    },
+    {
+      "name": "home_reencrypt_confirm_title",
+      "value": "重新加密此目录"
+    },
+    {
+      "name": "home_reencrypt_confirm_msg",
+      "value": "将用「%s」重新加密 %d 个条目。"
+    },
+    {
+      "name": "home_reencrypt_skipped_msg",
+      "value": "另有 %d 个条目因缺少对应私钥将被跳过（保持原样）。"
+    },
+    {
+      "name": "home_reencrypt_need_passphrase",
+      "value": "需要输入旧密钥的口令以解密这些条目。"
+    },
+    {
+      "name": "home_reencrypted_count",
+      "value": "已重加密 %d 个条目"
+    },
+    {
+      "name": "home_reencrypt_skipped_suffix",
+      "value": "，跳过 %d 个"
+    },
+    {
+      "name": "home_reencrypt_failed",
+      "value": "重加密未完成：%s"
+    },
+    {
+      "name": "home_reencrypt_first_failure",
+      "value": "首个失败：%s（%s）"
+    },
+    {
+      "name": "home_reencrypt_error_toast",
+      "value": "重加密流程出错，请查看日志"
+    },
+    {
+      "name": "home_no_recipient_hint",
+      "value": "密文未标注收件人"
+    },
+    {
+      "name": "home_missing_decrypt_key_title",
+      "value": "缺少解密密钥"
+    },
+    {
+      "name": "home_missing_key_msg",
+      "value": "该条目由未导入的密钥加密（Key ID：%s）。"
+    },
+    {
+      "name": "home_missing_key_action",
+      "value": "请在「PGP 密钥管理」中导入对应私钥后重试。"
+    },
+    {
+      "name": "home_a11y_delete_dir",
+      "value": "删除目录：%s"
+    },
+    {
+      "name": "home_a11y_delete_entry",
+      "value": "删除密码：%s"
+    },
+    {
+      "name": "home_delete_dir_title",
+      "value": "删除目录"
+    },
+    {
+      "name": "home_delete_pw_title",
+      "value": "删除密码"
+    },
+    {
+      "name": "home_delete_failed",
+      "value": "删除失败"
+    },
+    {
+      "name": "home_dir_deleted",
+      "value": "目录已删除"
+    },
+    {
+      "name": "home_pw_deleted",
+      "value": "密码已删除"
+    },
+    {
+      "name": "home_passphrase_title",
+      "value": "请输入密钥密码"
+    },
+    {
+      "name": "home_passphrase_hint",
+      "value": "密钥密码"
+    },
+    {
+      "name": "home_pgp_id_label",
+      "value": "PGP ID: %s"
+    },
+    {
+      "name": "home_verifying",
+      "value": "验证中..."
+    },
+    {
+      "name": "home_search_no_match",
+      "value": "没有匹配的密码"
+    },
+    {
+      "name": "home_store_empty",
+      "value": "仓库为空"
+    },
+    {
+      "name": "home_search_try_other",
+      "value": "换个关键词试试"
+    },
+    {
+      "name": "home_create_first_hint",
+      "value": "点击右下角 + 创建第一个密码"
+    },
+    {
+      "name": "home_sync_all",
+      "value": "一键同步"
+    },
+    {
+      "name": "home_sync_repo_menu",
+      "value": "同步存储库"
+    },
+    {
+      "name": "home_refresh_list",
+      "value": "刷新列表"
+    },
+    {
+      "name": "store_root_dir",
+      "value": "仓库根目录"
+    },
+    {
+      "name": "store_delete_dir_confirm",
+      "value": "将删除目录「%s」及其中的全部内容（%d 个条目），此操作不可撤销。"
+    },
+    {
+      "name": "store_delete_entry_confirm",
+      "value": "将删除「%s」，此操作不可撤销。"
+    },
+    {
+      "name": "sync_no_remote_title",
+      "value": "未配置远程仓库"
+    },
+    {
+      "name": "sync_no_remote_message",
+      "value": "同步功能需要先配置远程 Git 仓库地址。是否现在前往配置？"
+    },
+    {
+      "name": "sync_done",
+      "value": "同步完成"
+    },
+    {
+      "name": "sync_pull_done",
+      "value": "拉取完成"
+    },
+    {
+      "name": "sync_push_done",
+      "value": "推送完成"
+    },
+    {
+      "name": "sync_conflict_message",
+      "value": "检测到合并冲突，请手动解决后重试"
+    },
+    {
+      "name": "sync_pulling_remote",
+      "value": "正在拉取远程更新..."
+    },
+    {
+      "name": "sync_pushing_remote",
+      "value": "正在推送到远程..."
+    },
+    {
+      "name": "sync_committing_changes",
+      "value": "正在提交变更..."
+    },
+    {
+      "name": "sync_pulling",
+      "value": "正在拉取..."
+    },
+    {
+      "name": "sync_committing",
+      "value": "正在提交..."
+    },
+    {
+      "name": "sync_pushing",
+      "value": "正在推送..."
+    },
+    {
+      "name": "sync_op_success",
+      "value": "操作成功"
+    },
+    {
+      "name": "sync_op_exception",
+      "value": "操作发生异常"
+    },
+    {
+      "name": "sync_save_hostkey_failed",
+      "value": "保存主机密钥失败"
+    },
+    {
+      "name": "sync_status_no_repo",
+      "value": "未配置 Git 仓库"
+    },
+    {
+      "name": "sync_status_changes",
+      "value": "%d 个变更"
+    },
+    {
+      "name": "sync_status_synced",
+      "value": "已同步"
+    },
+    {
+      "name": "sync_hostkey_mismatch_title",
+      "value": "警告：主机密钥与已保存记录不一致"
+    },
+    {
+      "name": "sync_hostkey_first_type",
+      "value": "首次连接：确认服务器%s密钥指纹"
+    },
+    {
+      "name": "sync_hostkey_first",
+      "value": "首次连接：确认服务器指纹"
+    },
+    {
+      "name": "sync_hostkey_fp_label",
+      "value": "主机 %s:%d 的密钥指纹："
+    },
+    {
+      "name": "sync_hostkey_new_detail",
+      "value": "服务器提供多把不同类型的主机密钥，这是尚未记录的一把。确认后追加为本机信任记录（TOFU）；同类型密钥的指纹变化仍会被拒绝（防中间人攻击）。"
+    },
+    {
+      "name": "sync_reject",
+      "value": "拒绝"
+    },
+    {
+      "name": "sync_trust_retry",
+      "value": "信任并重试"
+    },
+    {
+      "name": "sync_trust_retry_mismatch",
+      "value": "仍要信任并重试"
+    },
+    {
+      "name": "sync_pull_btn",
+      "value": "拉取"
+    },
+    {
+      "name": "sync_commit_btn",
+      "value": "提交"
+    },
+    {
+      "name": "sync_push_btn",
+      "value": "推送"
+    },
+    {
+      "name": "git_log_title",
+      "value": "提交历史"
+    },
+    {
+      "name": "git_log_empty",
+      "value": "暂无提交记录"
+    },
+    {
+      "name": "folder_name_required",
+      "value": "请输入文件夹名称"
+    },
+    {
+      "name": "folder_name_invalid",
+      "value": "文件夹名称不能包含 ..、\\ 或以 . 开头"
+    },
+    {
+      "name": "folder_created",
+      "value": "文件夹已创建"
+    },
+    {
+      "name": "folder_create_failed",
+      "value": "创建失败: %s"
+    },
+    {
+      "name": "move_name_required",
+      "value": "名称不能为空"
+    },
+    {
+      "name": "move_name_no_slash",
+      "value": "名称不能包含 /"
+    },
+    {
+      "name": "move_no_change",
+      "value": "位置和名称未变化"
+    },
+    {
+      "name": "move_missing_key_toast",
+      "value": "已移动；但缺少解密密钥，未按目标目录密钥重新加密"
+    },
+    {
+      "name": "move_saved_default",
+      "value": "已保存"
+    },
+    {
+      "name": "move_read_ciphertext_failed",
+      "value": "读取密文失败"
+    },
+    {
+      "name": "move_decrypt_failed",
+      "value": "解密失败：%s"
+    },
+    {
+      "name": "move_encrypt_failed",
+      "value": "按目标目录密钥加密失败：%s"
+    },
+    {
+      "name": "move_write_failed",
+      "value": "写入新位置失败：%s"
+    },
+    {
+      "name": "move_delete_old_failed",
+      "value": "已写入新位置，但删除原文件失败：%s"
+    },
+    {
+      "name": "move_reencrypted_toast",
+      "value": "已移动并按目标目录密钥重新加密"
+    },
+    {
+      "name": "common_password",
+      "value": "密码"
+    },
+    {
+      "name": "common_username",
+      "value": "用户名"
+    },
+    {
+      "name": "common_email",
+      "value": "邮箱"
+    },
+    {
+      "name": "common_phone",
+      "value": "手机号"
+    },
+    {
+      "name": "common_notes",
+      "value": "备注"
+    },
+    {
+      "name": "common_extra_content",
+      "value": "额外内容"
+    },
+    {
+      "name": "common_name",
+      "value": "名称"
+    },
+    {
+      "name": "common_save",
+      "value": "保存"
+    },
+    {
+      "name": "common_saving",
+      "value": "保存中..."
+    },
+    {
+      "name": "common_deleting",
+      "value": "删除中..."
+    },
+    {
+      "name": "common_processing",
+      "value": "处理中..."
+    },
+    {
+      "name": "common_enter_passphrase",
+      "value": "请输入密钥密码"
+    },
+    {
+      "name": "common_passphrase_placeholder",
+      "value": "密钥密码"
+    },
+    {
+      "name": "common_copy_username",
+      "value": "复制用户名"
+    },
+    {
+      "name": "common_copy_email",
+      "value": "复制邮箱"
+    },
+    {
+      "name": "common_copy_phone",
+      "value": "复制手机号"
+    },
+    {
+      "name": "common_copy_notes",
+      "value": "复制备注"
+    },
+    {
+      "name": "common_copy_extra",
+      "value": "复制额外内容"
+    },
+    {
+      "name": "common_copy_password",
+      "value": "复制密码"
+    },
+    {
+      "name": "common_copy_failed",
+      "value": "复制失败"
+    },
+    {
+      "name": "common_decrypt_failed",
+      "value": "解密失败"
+    },
+    {
+      "name": "common_strength_weak",
+      "value": "弱"
+    },
+    {
+      "name": "common_strength_fair",
+      "value": "中"
+    },
+    {
+      "name": "common_strength_good",
+      "value": "强"
+    },
+    {
+      "name": "common_strength_strong",
+      "value": "极强"
+    },
+    {
+      "name": "create_edit_title",
+      "value": "编辑密码"
+    },
+    {
+      "name": "create_dir_label",
+      "value": "目录"
+    },
+    {
+      "name": "create_name_placeholder",
+      "value": "如: john@example.com"
+    },
+    {
+      "name": "create_password_placeholder",
+      "value": "输入或生成密码"
+    },
+    {
+      "name": "create_username_placeholder",
+      "value": "用户名（可选）"
+    },
+    {
+      "name": "create_email_placeholder",
+      "value": "邮箱（可选）"
+    },
+    {
+      "name": "create_phone_placeholder",
+      "value": "手机号（可选）"
+    },
+    {
+      "name": "create_notes_placeholder",
+      "value": "备注（可选）"
+    },
+    {
+      "name": "create_extra_placeholder",
+      "value": "自定义额外内容（可选）"
+    },
+    {
+      "name": "create_generate",
+      "value": "生成密码"
+    },
+    {
+      "name": "create_gen_upper",
+      "value": "大写字母 (A-Z)"
+    },
+    {
+      "name": "create_gen_lower",
+      "value": "小写字母 (a-z)"
+    },
+    {
+      "name": "create_gen_digits",
+      "value": "数字 (0-9)"
+    },
+    {
+      "name": "create_gen_symbols",
+      "value": "特殊符号 (!@#$)"
+    },
+    {
+      "name": "create_read_fail",
+      "value": "读取密码失败"
+    },
+    {
+      "name": "create_err_name_required",
+      "value": "请输入名称"
+    },
+    {
+      "name": "create_err_password_required",
+      "value": "请输入密码"
+    },
+    {
+      "name": "create_err_name_unsafe",
+      "value": "名称不能包含 ..、\\ 或以 . 开头"
+    },
+    {
+      "name": "create_err_dir_conflict",
+      "value": "已存在同名目录，请更换名称"
+    },
+    {
+      "name": "create_err_no_key",
+      "value": "未导入任何 PGP 密钥，无法加密保存，请先在设置中导入密钥"
+    },
+    {
+      "name": "create_err_write_gpgid",
+      "value": "写入 .gpg-id 失败: %s"
+    },
+    {
+      "name": "create_err_gpgid_unimported",
+      "value": "该目录的 .gpg-id 引用了未导入的密钥（%s），无法为全部接收方加密。请先导入这些密钥，或用「修改此目录加密密钥」显式调整。"
+    },
+    {
+      "name": "create_err_keys_expired",
+      "value": "该目录的加密密钥均已过期，无法创建新密码（请导入新密钥或更新密钥）"
+    },
+    {
+      "name": "detail_decrypting",
+      "value": "正在解密..."
+    },
+    {
+      "name": "detail_passphrase_hint",
+      "value": "该密钥有密码保护，请输入密码以解密"
+    },
+    {
+      "name": "detail_delete_password",
+      "value": "删除密码"
+    },
+    {
+      "name": "detail_delete_confirm",
+      "value": "确定删除「%s」吗？此操作不可撤销。"
+    },
+    {
+      "name": "detail_err_file_missing",
+      "value": "密码文件不存在，可能已被移动或删除"
+    },
+    {
+      "name": "detail_err_passphrase_required",
+      "value": "解密需要密码，请输入密钥密码"
+    },
+    {
+      "name": "detail_err_unlock_failed",
+      "value": "密钥密码错误，解密失败"
+    },
+    {
+      "name": "detail_err_cancelled",
+      "value": "解密已取消"
+    },
+    {
+      "name": "detail_err_delete_failed",
+      "value": "删除失败"
+    },
+    {
+      "name": "detail_copied_password",
+      "value": "密码已复制"
+    },
+    {
+      "name": "detail_copied_username",
+      "value": "用户名已复制"
+    },
+    {
+      "name": "detail_copied_email",
+      "value": "邮箱已复制"
+    },
+    {
+      "name": "detail_copied_phone",
+      "value": "手机号已复制"
+    },
+    {
+      "name": "detail_copied_notes",
+      "value": "备注已复制"
+    },
+    {
+      "name": "detail_copied_extra",
+      "value": "额外内容已复制"
+    },
+    {
+      "name": "detail_copied_all",
+      "value": "全部内容已复制"
+    },
+    {
+      "name": "move_title",
+      "value": "移动 / 重命名"
+    },
+    {
+      "name": "move_old_path",
+      "value": "原位置"
+    },
+    {
+      "name": "move_name_placeholder",
+      "value": "输入新名称"
+    },
+    {
+      "name": "move_target_dir",
+      "value": "目标目录"
+    },
+    {
+      "name": "move_unlock_hint_ids",
+      "value": "目标目录使用其他密钥，需先用原密钥解密。PGP ID：%s"
+    },
+    {
+      "name": "move_unlock_hint",
+      "value": "目标目录使用其他密钥，需先用原密钥解密后重新加密"
+    },
+    {
+      "name": "passgen_tap_hint",
+      "value": "点击下方按钮生成密码"
+    },
+    {
+      "name": "passgen_entropy",
+      "value": "熵值"
+    },
+    {
+      "name": "passgen_entropy_estimate",
+      "value": "预计熵值: %d bits — %s"
+    },
+    {
+      "name": "passgen_entropy_hint",
+      "value": "生成后将显示熵值估算"
+    },
+    {
+      "name": "passgen_generate",
+      "value": "生成"
+    },
+    {
+      "name": "passgen_copied",
+      "value": "已复制"
+    },
+    {
+      "name": "passgen_copy",
+      "value": "复制"
+    },
+    {
+      "name": "passgen_mode_random",
+      "value": "随机密码"
+    },
+    {
+      "name": "passgen_mode_diceware",
+      "value": "口令词组"
+    },
+    {
+      "name": "passgen_length",
+      "value": "长度"
+    },
+    {
+      "name": "passgen_upper",
+      "value": "大写字母 A-Z"
+    },
+    {
+      "name": "passgen_lower",
+      "value": "小写字母 a-z"
+    },
+    {
+      "name": "passgen_digits",
+      "value": "数字 0-9"
+    },
+    {
+      "name": "passgen_symbols",
+      "value": "特殊符号 !@#$"
+    },
+    {
+      "name": "passgen_exclude_ambiguous",
+      "value": "排除歧义字符 (0/O, 1/l)"
+    },
+    {
+      "name": "passgen_word_count",
+      "value": "词组数量"
+    },
+    {
+      "name": "passgen_separator",
+      "value": "分隔符"
+    },
+    {
+      "name": "passgen_capitalize",
+      "value": "首字母大写"
+    },
+    {
+      "name": "passgen_insert_digits",
+      "value": "词间插入数字"
+    },
+    {
+      "name": "passgen_copied_clipboard",
+      "value": "已复制到剪贴板"
+    },
+    {
+      "name": "folder_create_title",
+      "value": "新建文件夹"
+    },
+    {
+      "name": "folder_name_label",
+      "value": "文件夹名称"
+    },
+    {
+      "name": "folder_name_placeholder",
+      "value": "输入文件夹名称"
+    },
+    {
+      "name": "folder_key_label",
+      "value": "加密密钥（可选，覆盖父目录密钥）"
+    },
+    {
+      "name": "folder_no_keys",
+      "value": "暂无已导入的 PGP 密钥，将使用父目录密钥"
+    },
+    {
+      "name": "folder_create_btn",
+      "value": "创建文件夹"
+    },
+    {
+      "name": "autofill_title",
+      "value": "填充建议"
+    },
+    {
+      "name": "autofill_pick_for",
+      "value": "为 %s 选择凭据"
+    },
+    {
+      "name": "autofill_matching",
+      "value": "匹配中..."
+    },
+    {
+      "name": "autofill_no_match",
+      "value": "没有匹配的密码"
+    },
+    {
+      "name": "autofill_no_match_hint",
+      "value": "可在主界面搜索后手动复制"
+    },
+    {
+      "name": "autofill_unlocked_prompt",
+      "value": "已解锁，请选择操作"
+    },
+    {
+      "name": "autofill_err_load",
+      "value": "加载候选失败"
+    },
+    {
+      "name": "autofill_fill_applied",
+      "value": "已自动填充 %d 个字段"
+    },
+    {
+      "name": "autofill_fill_failed",
+      "value": "自动填充失败，可使用复制"
+    },
+    {
+      "name": "onboarding_hostkey_fp_line",
+      "value": "主机 %s:%d 的密钥指纹："
+    },
+    {
+      "name": "onboarding_trust_clone",
+      "value": "信任并克隆"
+    },
+    {
+      "name": "onboarding_trust_clone_mismatch",
+      "value": "仍要信任并克隆"
+    },
+    {
+      "name": "onboarding_local_not_empty",
+      "value": "本地目录已有内容"
+    },
+    {
+      "name": "onboarding_local_not_empty_msg",
+      "value": "克隆要求目标目录为空，当前目录中已有文件（可能是上次克隆的残留或旧仓库）。\n\n继续将删除该目录下的全部内容，再从远程仓库重新克隆。此操作不可撤销。"
+    },
+    {
+      "name": "onboarding_delete_clone",
+      "value": "删除并克隆"
+    },
+    {
+      "name": "onboarding_welcome_title",
+      "value": "欢迎使用 HarmonyPasswordStore"
+    },
+    {
+      "name": "onboarding_welcome_desc",
+      "value": "与 pass 命令行工具完全兼容的密码管理器。密码以 GPG 加密文件存储，可通过 Git 在多设备间同步。"
+    },
+    {
+      "name": "onboarding_feature_pass",
+      "value": "· 标准 pass 目录结构与 .gpg 加密文件"
+    },
+    {
+      "name": "onboarding_feature_huks",
+      "value": "· PGP 加密，密钥由 HUKS 安全管理"
+    },
+    {
+      "name": "onboarding_feature_git",
+      "value": "· Git 同步，支持 HTTPS 与 SSH"
+    },
+    {
+      "name": "onboarding_feature_passgen",
+      "value": "· 内置密码生成器与口令词组"
+    },
+    {
+      "name": "onboarding_repo_title",
+      "value": "初始化密码仓库"
+    },
+    {
+      "name": "onboarding_repo_desc",
+      "value": "新建一个空仓库，或从远程 Git 仓库克隆已有密码库。"
+    },
+    {
+      "name": "onboarding_mode_new",
+      "value": "新建仓库"
+    },
+    {
+      "name": "onboarding_mode_clone",
+      "value": "克隆远程"
+    },
+    {
+      "name": "onboarding_url_placeholder",
+      "value": "git@host:用户名/仓库.git"
+    },
+    {
+      "name": "onboarding_ssh_not_configured",
+      "value": "未配置SSH密钥"
+    },
+    {
+      "name": "onboarding_ssh_configure",
+      "value": "配置SSH密钥"
+    },
+    {
+      "name": "onboarding_pgp_title",
+      "value": "设置 PGP 密钥"
+    },
+    {
+      "name": "onboarding_pgp_desc",
+      "value": "点击「浏览」进入 PGP 密钥管理页，在那里新建或导入密钥（.asc / .pgp 文件或粘贴文本）。私钥将由系统 HUKS 安全保管，不会明文落盘。"
+    },
+    {
+      "name": "onboarding_pgp_not_set",
+      "value": "尚未设置 PGP 密钥"
+    },
+    {
+      "name": "onboarding_browse",
+      "value": "浏览"
+    },
+    {
+      "name": "onboarding_finish_title",
+      "value": "设置完成"
+    },
+    {
+      "name": "onboarding_finish_desc",
+      "value": "一切就绪！现在可以开始管理您的密码了。"
+    },
+    {
+      "name": "onboarding_repo_done",
+      "value": "✓ 密码仓库已初始化"
+    },
+    {
+      "name": "onboarding_repo_todo",
+      "value": "· 密码仓库未初始化（可稍后在设置中完成）"
+    },
+    {
+      "name": "onboarding_key_done",
+      "value": "✓ PGP 密钥已导入"
+    },
+    {
+      "name": "onboarding_key_todo",
+      "value": "· PGP 密钥未导入（可稍后在设置中完成）"
+    },
+    {
+      "name": "onboarding_setup_title",
+      "value": "初始设置"
+    },
+    {
+      "name": "onboarding_skip",
+      "value": "跳过"
+    },
+    {
+      "name": "onboarding_prev",
+      "value": "上一步"
+    },
+    {
+      "name": "onboarding_init_repo",
+      "value": "初始化仓库"
+    },
+    {
+      "name": "onboarding_next",
+      "value": "下一步"
+    },
+    {
+      "name": "onboarding_done",
+      "value": "完成"
+    },
+    {
+      "name": "onboarding_overlay_checkout",
+      "value": "正在检出文件…"
+    },
+    {
+      "name": "onboarding_overlay_cloning",
+      "value": "正在克隆远程仓库…"
+    },
+    {
+      "name": "onboarding_progress_init",
+      "value": "正在初始化本地仓库..."
+    },
+    {
+      "name": "onboarding_err_url_required",
+      "value": "请输入远程仓库地址"
+    },
+    {
+      "name": "onboarding_err_ssh_only",
+      "value": "初始设置只支持 SSH 克隆，请填 git@host:用户名/仓库.git 或 ssh://git@host[:端口]/路径（HTTPS 仓库请先完成初始设置，再到「仓库管理 → Git 配置」中配置用户名与令牌）"
+    },
+    {
+      "name": "onboarding_progress_clone",
+      "value": "正在克隆远程仓库..."
+    },
+    {
+      "name": "onboarding_err_save_hostkey",
+      "value": "保存主机指纹失败，请重试"
+    },
+    {
+      "name": "about_title",
+      "value": "关于"
+    },
+    {
+      "name": "about_app_name",
+      "value": "应用名称"
+    },
+    {
+      "name": "about_version",
+      "value": "版本"
+    },
+    {
+      "name": "about_license",
+      "value": "协议"
+    },
+    {
+      "name": "about_target_os",
+      "value": "目标系统"
+    },
+    {
+      "name": "about_intro_title",
+      "value": "项目简介"
+    },
+    {
+      "name": "about_intro_body",
+      "value": "HarmonyPasswordStore 是 password-store（pass）的 HarmonyOS 实现，兼容标准 GPG 加密的 pass 仓库格式。所有密码以 .gpg 文件形式本地加密存储，私钥通过 HUKS 管理，支持 Git 同步与 SSH/HTTPS 两种传输协议。"
+    },
+    {
+      "name": "about_deps_title",
+      "value": "开源依赖"
+    },
+    {
+      "name": "about_deps_body",
+      "value": "• libgit2 — Git 仓库操作（MPL-2.0）\n• pgp / rpgp — OpenPGP 加解密（MIT 或 Apache-2.0）\n• russh — SSH 协议（MIT）\n• mbedTLS — TLS 加密通道（Apache-2.0）\n• ssh-key — OpenSSH 密钥格式（MIT or Apache-2.0）\n• 完整依赖列表见 Cargo.toml 与 CMakeLists.txt"
+    },
+    {
+      "name": "about_source_title",
+      "value": "源代码"
+    },
+    {
+      "name": "about_source_body",
+      "value": "本项目完全开源，欢迎审查与贡献：\n%s"
+    },
+    {
+      "name": "privacy_title",
+      "value": "隐私政策"
+    },
+    {
+      "name": "privacy_doc_title",
+      "value": "HarmonyPasswordStore 隐私政策"
+    },
+    {
+      "name": "privacy_updated",
+      "value": "更新日期：2026 年 9 月 16 日"
+    },
+    {
+      "name": "privacy_s1_title",
+      "value": "概述"
+    },
+    {
+      "name": "privacy_s1_body",
+      "value": "HarmonyPasswordStore 是一款开源的密码管理工具，兼容标准 pass 仓库格式。本应用以\"本地优先、隐私至上\"为设计原则：您的密码数据始终加密存储在本地设备，不会上传至任何第三方服务器。"
+    },
+    {
+      "name": "privacy_s2_title",
+      "value": "数据存储"
+    },
+    {
+      "name": "privacy_s2_body",
+      "value": "所有密码条目以 GPG 加密文件（.gpg）形式存储在本地文件系统中，加密密钥由您掌握。PGP/SSH 私钥通过 HarmonyOS HUKS（统一密钥管理）管理，永不以明文落盘。解密后的明文仅存在于运行内存中，应用进入后台时自动清除敏感缓存。"
+    },
+    {
+      "name": "privacy_s3_title",
+      "value": "数据同步"
+    },
+    {
+      "name": "privacy_s3_body",
+      "value": "如需多设备同步，可通过内置 Git 功能将密码仓库推送至您自有的 Git 服务器（GitHub/Gitee/自建）。同步通道支持 HTTPS（mbedTLS 加密）与 SSH（russh 加密），认证凭据（Token/SSH 密钥）仅存储在本地，不经过任何中间服务器。"
+    },
+    {
+      "name": "privacy_s4_title",
+      "value": "生物识别解锁"
+    },
+    {
+      "name": "privacy_s4_body",
+      "value": "应用锁只支持生物识别（指纹/面容）：解锁仅在本机完成身份验证，生物特征数据由系统安全模块管理，本应用无法访问原始生物信息，也不保存任何 PIN/口令摘要。验证失败的次数限制由系统侧负责。"
+    },
+    {
+      "name": "privacy_s5_title",
+      "value": "剪贴板"
+    },
+    {
+      "name": "privacy_s5_body",
+      "value": "复制密码到剪贴板后，应用会在可配置的时间（默认 30 秒）后自动清除剪贴板内容，防止其他应用读取。"
+    },
+    {
+      "name": "privacy_s6_title",
+      "value": "日志"
+    },
+    {
+      "name": "privacy_s6_body",
+      "value": "应用日志（hilog）不记录任何密码、密钥或解密后的明文内容，仅记录操作状态与文件路径用于调试。"
+    },
+    {
+      "name": "privacy_s7_title",
+      "value": "不收集的数据"
+    },
+    {
+      "name": "privacy_s7_body",
+      "value": "本应用不收集任何个人身份信息（PII）、不嵌入分析 SDK、不嵌入广告 SDK、不上传任何用户数据。"
+    },
+    {
+      "name": "privacy_s8_title",
+      "value": "开源协议"
+    },
+    {
+      "name": "privacy_s8_body",
+      "value": "本应用基于 GPL-3.0 协议开源，源代码可在 GitHub 仓库审查：\nhttps://github.com/gmg137/HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_verifying",
+      "value": "正在验证…"
+    },
+    {
+      "name": "lock_touch_retry",
+      "value": "轻触图标重新验证"
+    },
+    {
+      "name": "lock_title",
+      "value": "解锁"
+    },
+    {
+      "name": "common_trust_connect",
+      "value": "信任并连接"
+    },
+    {
+      "name": "settings_autosync_no_remote",
+      "value": "未配置远程仓库地址，请先在「Git 配置」中填写"
+    },
+    {
+      "name": "settings_autosync_not_cloned",
+      "value": "本地尚未克隆远程仓库，请先在「仓库管理」中克隆"
+    },
+    {
+      "name": "lock_type_fingerprint",
+      "value": "指纹"
+    },
+    {
+      "name": "lock_type_face",
+      "value": "面容"
+    },
+    {
+      "name": "lock_reason_not_enrolled",
+      "value": "设备支持生物识别，但尚未在系统设置中录入指纹或面容，请先注册"
+    },
+    {
+      "name": "lock_reason_unsupported",
+      "value": "设备不支持生物识别"
+    },
+    {
+      "name": "lock_err_unavailable",
+      "value": "设备不支持或未录入生物识别"
+    },
+    {
+      "name": "lock_auth_dialog_title",
+      "value": "解锁 HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_err_timeout",
+      "value": "认证超时"
+    },
+    {
+      "name": "lock_err_cancelled",
+      "value": "认证已取消"
+    },
+    {
+      "name": "lock_auth_failed_code",
+      "value": "认证失败（%d）"
+    },
+    {
+      "name": "lock_err_start_failed",
+      "value": "无法启动生物识别"
+    },
+    {
+      "name": "common_import",
+      "value": "导入"
+    },
+    {
+      "name": "common_import_failed",
+      "value": "导入失败"
+    },
+    {
+      "name": "common_ok",
+      "value": "确定"
+    },
+    {
+      "name": "common_delete_key",
+      "value": "删除密钥"
+    },
+    {
+      "name": "common_file_read_failed",
+      "value": "文件读取失败: %s"
+    },
+    {
+      "name": "common_copy",
+      "value": "复制"
+    },
+    {
+      "name": "pgp_import_text",
+      "value": "导入文本密钥"
+    },
+    {
+      "name": "pgp_import_from_file",
+      "value": "从文件导入密钥"
+    },
+    {
+      "name": "pgp_create_new",
+      "value": "创建新密钥"
+    },
+    {
+      "name": "pgp_passphrase_optional",
+      "value": "密钥密码（可选）"
+    },
+    {
+      "name": "pgp_gen_eddsa_rec",
+      "value": "EdDSA（推荐）"
+    },
+    {
+      "name": "pgp_userid_placeholder",
+      "value": "User ID（如 Name <email@example.com>）"
+    },
+    {
+      "name": "pgp_passphrase_min6",
+      "value": "密钥密码（可选，至少 6 位）"
+    },
+    {
+      "name": "pgp_create_btn",
+      "value": "创建"
+    },
+    {
+      "name": "pgp_set_default",
+      "value": "设为默认"
+    },
+    {
+      "name": "pgp_edit_key",
+      "value": "修改密钥"
+    },
+    {
+      "name": "pgp_export_private",
+      "value": "导出私钥"
+    },
+    {
+      "name": "pgp_export_public",
+      "value": "导出公钥"
+    },
+    {
+      "name": "pgp_chpw_title",
+      "value": "修改密钥密码"
+    },
+    {
+      "name": "pgp_chpw_old_ph",
+      "value": "当前密钥密码"
+    },
+    {
+      "name": "pgp_chpw_new_ph",
+      "value": "新密码（留空则去除密码）"
+    },
+    {
+      "name": "pgp_chpw_confirm",
+      "value": "确认修改"
+    },
+    {
+      "name": "pgp_import_limited_title",
+      "value": "导入成功，但有限制"
+    },
+    {
+      "name": "pgp_import_failed_title",
+      "value": "无法导入密钥"
+    },
+    {
+      "name": "pgp_export_private_ok",
+      "value": "私钥已保存为 .asc 文件"
+    },
+    {
+      "name": "pgp_export_public_ok",
+      "value": "公钥已保存为 .asc 文件"
+    },
+    {
+      "name": "pgp_delete_key_msg",
+      "value": "确定删除「%s」？删除后用它加密的密码将无法解密，且此操作不可撤销。"
+    },
+    {
+      "name": "pgp_root_switch_title",
+      "value": "切换根目录加密密钥"
+    },
+    {
+      "name": "pgp_root_switch_msg_needs",
+      "value": "仓库根目录当前用「%s」加密。是否切换为「%s」并重新加密根目录下的 %d 个条目？"
+    },
+    {
+      "name": "pgp_root_switch_msg_none",
+      "value": "仓库根目录当前用「%s」加密。是否切换为「%s」？（根目录下没有需要重新加密的条目）"
+    },
+    {
+      "name": "pgp_root_switch_skip_warn",
+      "value": "注意：%d 个条目因缺少对应私钥将被跳过。"
+    },
+    {
+      "name": "pgp_root_switch_only_default",
+      "value": "仅设为默认"
+    },
+    {
+      "name": "pgp_root_switch_both",
+      "value": "一并切换"
+    },
+    {
+      "name": "pgp_root_switched",
+      "value": "根目录加密密钥已切换"
+    },
+    {
+      "name": "pgp_root_reencrypted",
+      "value": "已切换根目录加密密钥，重加密 %d 个条目"
+    },
+    {
+      "name": "pgp_rootkey_title",
+      "value": "输入旧密钥口令"
+    },
+    {
+      "name": "pgp_rootkey_hint",
+      "value": "重新加密需要先解开这些条目的旧密钥"
+    },
+    {
+      "name": "pgp_rootkey_ph",
+      "value": "旧密钥口令"
+    },
+    {
+      "name": "pgp_rootkey_start",
+      "value": "开始重加密"
+    },
+    {
+      "name": "pgp_algo_unknown",
+      "value": "未知算法"
+    },
+    {
+      "name": "pgp_tag_default",
+      "value": "默认"
+    },
+    {
+      "name": "pgp_tag_expired",
+      "value": "已过期"
+    },
+    {
+      "name": "pgp_tag_secret",
+      "value": "私钥"
+    },
+    {
+      "name": "pgp_tag_public",
+      "value": "公钥"
+    },
+    {
+      "name": "pgp_empty_title",
+      "value": "尚未导入任何密钥"
+    },
+    {
+      "name": "pgp_empty_hint",
+      "value": "点击右下角 + 导入或创建密钥"
+    },
+    {
+      "name": "pgp_load_failed",
+      "value": "加载密钥列表失败"
+    },
+    {
+      "name": "pgp_err_userid_required",
+      "value": "请输入 User ID（如 Name <email@example.com>）"
+    },
+    {
+      "name": "pgp_err_passphrase_short",
+      "value": "密码至少 6 位（或留空不设密码）"
+    },
+    {
+      "name": "pgp_generated",
+      "value": "密钥已生成"
+    },
+    {
+      "name": "pgp_err_paste_required",
+      "value": "请粘贴 ASCII-armored 密钥文本"
+    },
+    {
+      "name": "pgp_imported_with_limit",
+      "value": "密钥已导入（有限制）"
+    },
+    {
+      "name": "pgp_imported_ok",
+      "value": "密钥导入成功"
+    },
+    {
+      "name": "pgp_duplicate_key",
+      "value": "该密钥已存在于本机，无需重复导入。"
+    },
+    {
+      "name": "pgp_root_switch_failed",
+      "value": "切换根目录加密密钥失败: %s"
+    },
+    {
+      "name": "pgp_file_empty",
+      "value": "文件为空，未读取到任何内容"
+    },
+    {
+      "name": "pgp_file_not_pgp",
+      "value": "该文件不是 PGP 密钥文件（既非 armored 文本，也不是二进制 OpenPGP 数据）"
+    },
+    {
+      "name": "pgp_set_default_ok",
+      "value": "已设为默认加密密钥"
+    },
+    {
+      "name": "pgp_deleted",
+      "value": "密钥已删除"
+    },
+    {
+      "name": "pgp_pw_changed",
+      "value": "密钥密码已修改"
+    },
+    {
+      "name": "pgp_export_read_private_failed",
+      "value": "读取私钥失败"
+    },
+    {
+      "name": "pgp_export_pub_failed",
+      "value": "导出公钥失败"
+    },
+    {
+      "name": "pgp_export_save_failed",
+      "value": "保存失败：%s"
+    },
+    {
+      "name": "pgp_chpw_failed_retry",
+      "value": "修改失败，请重试"
+    },
+    {
+      "name": "pgp_chpw_wrong_old",
+      "value": "当前密钥密码不正确，请重试"
+    },
+    {
+      "name": "pgp_chpw_failed",
+      "value": "修改失败：%s"
+    },
+    {
+      "name": "ssh_replace_confirm_title",
+      "value": "替换现有的 SSH 密钥？"
+    },
+    {
+      "name": "ssh_replace_confirm_msg",
+      "value": "您可能会失去对服务器的访问权限"
+    },
+    {
+      "name": "ssh_replace_btn",
+      "value": "替换"
+    },
+    {
+      "name": "ssh_import_hint",
+      "value": "请在电脑上准备私钥文件并传到手机：\n· 已有密钥：私钥即 ~/.ssh/id_ed25519（或 id_rsa）\n· 新建：ssh-keygen -t ed25519 -C \"your@email.com\"\n支持 OpenSSH / PKCS8 / RSA PEM（含加密私钥）。"
+    },
+    {
+      "name": "ssh_encrypted_key_title",
+      "value": "私钥已加密"
+    },
+    {
+      "name": "ssh_encrypted_key_msg",
+      "value": "该私钥已加密，请在「私钥口令」中输入口令后再导入。"
+    },
+    {
+      "name": "ssh_generate_new",
+      "value": "生成新密钥"
+    },
+    {
+      "name": "ssh_import_key",
+      "value": "导入密钥"
+    },
+    {
+      "name": "ssh_comment_ph",
+      "value": "注释（可选，通常为邮箱）"
+    },
+    {
+      "name": "ssh_generate_btn",
+      "value": "生成"
+    },
+    {
+      "name": "ssh_pick_key_file",
+      "value": "选择私钥文件"
+    },
+    {
+      "name": "ssh_passphrase_ph",
+      "value": "私钥口令（无口令可留空）"
+    },
+    {
+      "name": "ssh_copy_pub",
+      "value": "复制公钥"
+    },
+    {
+      "name": "ssh_empty_title",
+      "value": "尚未创建 SSH 密钥"
+    },
+    {
+      "name": "ssh_empty_hint",
+      "value": "点击右下角 + 创建或导入密钥"
+    },
+    {
+      "name": "ssh_load_failed",
+      "value": "加载密钥失败"
+    },
+    {
+      "name": "ssh_gen_failed",
+      "value": "密钥生成失败"
+    },
+    {
+      "name": "ssh_replaced",
+      "value": "SSH 密钥已替换"
+    },
+    {
+      "name": "ssh_generated",
+      "value": "SSH 密钥已生成"
+    },
+    {
+      "name": "ssh_imported",
+      "value": "SSH 密钥已导入"
+    },
+    {
+      "name": "ssh_file_empty",
+      "value": "所选文件为空"
+    },
+    {
+      "name": "ssh_err_pick_first",
+      "value": "请先选择私钥文件"
+    },
+    {
+      "name": "ssh_import_private_failed",
+      "value": "私钥导入失败"
+    },
+    {
+      "name": "ssh_pub_missing",
+      "value": "公钥不存在"
+    },
+    {
+      "name": "ssh_pub_copied",
+      "value": "公钥已复制到剪贴板"
+    },
+    {
+      "name": "ssh_deleted",
+      "value": "SSH 密钥已删除"
+    },
+    {
+      "name": "gitcfg_saved_title",
+      "value": "配置已保存"
+    },
+    {
+      "name": "gitcfg_clone_after_save_msg",
+      "value": "是否立即克隆远程仓库？\n%s"
+    },
+    {
+      "name": "gitcfg_clone_btn",
+      "value": "克隆"
+    },
+    {
+      "name": "gitcfg_needs_clean_title",
+      "value": "本地目录已有内容"
+    },
+    {
+      "name": "gitcfg_needs_clean_msg",
+      "value": "克隆要求本地目录为空。当前目录可能已有旧仓库或残留文件，需要先删除本地仓库目录及其中全部密码文件，是否继续？"
+    },
+    {
+      "name": "gitcfg_delete_and_clone",
+      "value": "删除并克隆"
+    },
+    {
+      "name": "gitcfg_hostkey_fp_typed",
+      "value": "主机 %s:%d 的密钥指纹（%s）："
+    },
+    {
+      "name": "gitcfg_hostkey_mismatch_explain",
+      "value": "该主机已有信任记录，但本次同类型密钥的指纹不同：可能是服务器更换了密钥，也可能是中间人攻击。请与服务器管理员核对后再决定，确认后将覆盖该类型记录。"
+    },
+    {
+      "name": "gitcfg_hostkey_trust_anyway",
+      "value": "仍要信任"
+    },
+    {
+      "name": "gitcfg_hostkey_trust_connect",
+      "value": "信任并连接"
+    },
+    {
+      "name": "gitcfg_clone_done_toast",
+      "value": "克隆完成，密码列表已刷新"
+    },
+    {
+      "name": "gitcfg_pick_ssh_key",
+      "value": "选择 SSH 密钥"
+    },
+    {
+      "name": "gitcfg_section_remote",
+      "value": "远程仓库"
+    },
+    {
+      "name": "gitcfg_auth_mode",
+      "value": "认证方式"
+    },
+    {
+      "name": "gitcfg_auth_ssh",
+      "value": "SSH 密钥"
+    },
+    {
+      "name": "gitcfg_auth_ssh_tab",
+      "value": "SSH 密钥"
+    },
+    {
+      "name": "gitcfg_label_url",
+      "value": "远程地址"
+    },
+    {
+      "name": "gitcfg_ph_username",
+      "value": "用户名 / 邮箱"
+    },
+    {
+      "name": "gitcfg_ph_password",
+      "value": "密码 / 访问令牌"
+    },
+    {
+      "name": "gitcfg_token_hint",
+      "value": "Gitee/GitHub 等平台需使用「私人令牌」而非登录密码"
+    },
+    {
+      "name": "gitcfg_select_ssh_key",
+      "value": "请选择 SSH 密钥"
+    },
+    {
+      "name": "gitcfg_no_keys",
+      "value": "暂无密钥"
+    },
+    {
+      "name": "gitcfg_go_create",
+      "value": "前往创建"
+    },
+    {
+      "name": "gitcfg_label_ssh_port",
+      "value": "SSH 端口"
+    },
+    {
+      "name": "gitcfg_ph_ssh_port",
+      "value": "默认 22"
+    },
+    {
+      "name": "gitcfg_label_key_passphrase",
+      "value": "私钥口令"
+    },
+    {
+      "name": "gitcfg_ph_key_passphrase",
+      "value": "私钥未加密可留空"
+    },
+    {
+      "name": "gitcfg_section_identity",
+      "value": "提交身份"
+    },
+    {
+      "name": "gitcfg_label_name",
+      "value": "姓名"
+    },
+    {
+      "name": "gitcfg_ph_name",
+      "value": "Git 提交者姓名"
+    },
+    {
+      "name": "gitcfg_ph_email",
+      "value": "Git 提交者邮箱"
+    },
+    {
+      "name": "gitcfg_section_network",
+      "value": "网络"
+    },
+    {
+      "name": "gitcfg_label_proxy",
+      "value": "代理"
+    },
+    {
+      "name": "gitcfg_ph_proxy",
+      "value": "如 http://127.0.0.1:7890"
+    },
+    {
+      "name": "gitcfg_test_ok",
+      "value": "连接成功"
+    },
+    {
+      "name": "gitcfg_testing",
+      "value": "测试中..."
+    },
+    {
+      "name": "gitcfg_test_btn",
+      "value": "测试连接"
+    },
+    {
+      "name": "gitcfg_checkout_files",
+      "value": "正在检出文件…"
+    },
+    {
+      "name": "gitcfg_cloning_overlay",
+      "value": "正在克隆远程仓库…"
+    },
+    {
+      "name": "gitcfg_err_key_removed",
+      "value": "原先选择的 SSH 密钥已被删除，请重新选择"
+    },
+    {
+      "name": "gitcfg_cloning",
+      "value": "正在克隆远程仓库..."
+    },
+    {
+      "name": "gitcfg_clone_done",
+      "value": "克隆完成"
+    },
+    {
+      "name": "gitcfg_err_url_required",
+      "value": "请输入远程仓库地址"
+    },
+    {
+      "name": "gitcfg_err_url_scheme",
+      "value": "地址必须以 https:// 或 ssh:// 开头（或 git@host:path 格式）"
+    },
+    {
+      "name": "gitcfg_save_failed",
+      "value": "保存失败"
+    },
+    {
+      "name": "gitcfg_err_parse_ssh",
+      "value": "无法从地址解析 SSH 主机信息"
+    },
+    {
+      "name": "gitcfg_err_need_tofu",
+      "value": "首次连接需先确认服务器指纹，请确认后重新保存"
+    },
+    {
+      "name": "gitcfg_https_err_auth",
+      "value": "认证失败：请检查用户名与密码/Token（Gitee/GitHub 需使用访问令牌而非登录密码）"
+    },
+    {
+      "name": "gitcfg_https_err_dns",
+      "value": "无法解析主机地址：请检查网络与远程地址是否正确"
+    },
+    {
+      "name": "gitcfg_https_err_notfound",
+      "value": "仓库不存在或无权访问：请确认远程地址与访问权限"
+    },
+    {
+      "name": "gitcfg_https_err_proto",
+      "value": "不支持的协议：HTTPS 测试需要 native TLS 支持"
+    },
+    {
+      "name": "gitcfg_https_err_generic",
+      "value": "连接失败：%s"
+    },
+    {
+      "name": "gitcfg_clone_cancelled",
+      "value": "已取消克隆（主机密钥未确认）"
+    },
+    {
+      "name": "gitcfg_test_cancelled",
+      "value": "已取消连接（主机密钥未确认）"
+    },
+    {
+      "name": "repo_section_status",
+      "value": "仓库状态"
+    },
+    {
+      "name": "repo_status_cloned",
+      "value": "已克隆远程仓库"
+    },
+    {
+      "name": "repo_status_not_cloned",
+      "value": "未克隆远程仓库"
+    },
+    {
+      "name": "repo_no_remote_url",
+      "value": "尚未配置远程地址"
+    },
+    {
+      "name": "repo_section_sync",
+      "value": "同步行为"
+    },
+    {
+      "name": "repo_pull_rebase_title",
+      "value": "拉取时进行变基"
+    },
+    {
+      "name": "repo_pull_rebase_sub",
+      "value": "拉取远程更新时使用变基（--rebase）保持线性历史"
+    },
+    {
+      "name": "repo_section_ops",
+      "value": "仓库操作"
+    },
+    {
+      "name": "repo_gitcfg_sub",
+      "value": "远程地址 / 认证方式 / 提交身份"
+    },
+    {
+      "name": "repo_section_danger",
+      "value": "危险操作"
+    },
+    {
+      "name": "repo_danger_hint",
+      "value": "删除本地仓库目录及全部密码文件，操作不可撤销"
+    },
+    {
+      "name": "repo_delete_btn",
+      "value": "删除本地仓库"
+    },
+    {
+      "name": "repo_delete_confirm_msg",
+      "value": "将删除本地仓库目录及其中全部密码文件，此操作不可撤销。"
+    },
+    {
+      "name": "repo_err_no_path",
+      "value": "仓库路径未配置"
+    },
+    {
+      "name": "repo_err_delete_failed_dir",
+      "value": "删除仓库失败：目录无法删除"
+    },
+    {
+      "name": "repo_deleted",
+      "value": "本地仓库已删除"
+    },
+    {
+      "name": "repo_err_delete_failed",
+      "value": "删除仓库失败：%s"
+    },
+    {
+      "name": "gitlog_not_repo",
+      "value": "当前目录不是 Git 仓库"
+    },
+    {
+      "name": "gitlog_load_failed",
+      "value": "加载提交历史失败"
+    },
+    {
+      "name": "git_auth_required_hint",
+      "value": "远程仓库要求认证。请在「Git 配置」中填写用户名与访问令牌（Gitee 私人令牌，需含 projects 写权限）后重试"
+    },
+    {
+      "name": "git_remove_repo_dir_failed",
+      "value": "删除本地仓库失败：目录无法删除"
+    },
+    {
+      "name": "git_ssh_no_key_hint",
+      "value": "尚未配置 SSH 密钥。请先在「SSH 密钥管理」中生成或导入密钥"
+    },
+    {
+      "name": "git_ssh_multi_key_hint",
+      "value": "存在 %d 把 SSH 密钥，请先在「Git 配置 → SSH 密钥」中选择用于认证的那把"
+    },
+    {
+      "name": "git_ssh_key_encrypted",
+      "value": "该 SSH 私钥已加密，请先在「Git 配置」中填写私钥口令"
+    },
+    {
+      "name": "git_ssh_remote_notfound",
+      "value": "远程仓库不存在或路径错误：服务器已连通、认证已通过，请检查地址中的仓库路径"
+    },
+    {
+      "name": "git_hostkey_not_trusted",
+      "value": "主机密钥未被信任或不一致：请先完成指纹确认"
+    },
+    {
+      "name": "git_ssh_auth_failed",
+      "value": "SSH 认证失败：请确认公钥已添加到远端账号，且私钥口令正确"
+    },
+    {
+      "name": "git_ssh_url_unparsed_remote",
+      "value": "无法解析远程 SSH 地址。支持 git@host:path 与 ssh://user@host[:端口]/path"
+    },
+    {
+      "name": "git_hostkey_mismatch_short",
+      "value": "服务器主机密钥与已保存指纹不一致（可能存在中间人攻击）"
+    },
+    {
+      "name": "git_hostkey_first_connect",
+      "value": "首次连接该服务器，需确认主机密钥指纹"
+    },
+    {
+      "name": "git_ssh_url_unparsed_clone",
+      "value": "无法解析 SSH 地址。支持 git@host:user/repo.git 与 ssh://git@host[:端口]/user/repo.git"
+    },
+    {
+      "name": "git_clone_dir_not_empty",
+      "value": "本地仓库目录非空，无法克隆。请先清空该目录（「仓库管理 → 删除本地仓库」）后重试；若在「Git 配置」保存后触发克隆，可在弹窗中选择「删除并克隆」"
+    },
+    {
+      "name": "git_err_url_empty",
+      "value": "远程地址不能为空"
+    },
+    {
+      "name": "git_err_url_scheme",
+      "value": "不支持的 URL 格式。请使用 git@host:user/repo.git（SSH）或 https://host/user/repo.git"
+    },
+    {
+      "name": "git_clone_https_tls_unready",
+      "value": "HTTPS 克隆失败（native TLS 未就绪）。请检查网络与地址，或改用其它协议"
+    },
+    {
+      "name": "git_clone_ssh_unsupported",
+      "value": "当前版本不支持 SSH 克隆（native 层未编入 SSH 传输）。请改用 HTTPS 地址 + 访问令牌：例如 https://gitee.com/<用户名>/<仓库>.git，并在「Git 配置」中填写用户名与 Token"
+    },
+    {
+      "name": "git_clone_auth_failed",
+      "value": "认证失败：请检查 Git 配置中的用户名与 Token（GitHub/Gitee 需使用 Token 而非登录密码）"
+    },
+    {
+      "name": "git_pull_failed",
+      "value": "拉取失败：%s"
+    },
+    {
+      "name": "git_push_failed",
+      "value": "推送失败：%s"
+    },
+    {
+      "name": "common_native_call_failed",
+      "value": "native 调用失败，请重试"
+    },
+    {
+      "name": "common_ssh_pem_read_failed",
+      "value": "无法读取 SSH 私钥（%s）。请在「SSH 密钥管理」中重新生成或导入密钥"
+    },
+    {
+      "name": "common_unknown_error",
+      "value": "未知错误"
+    },
+    {
+      "name": "ssh_host_required",
+      "value": "主机名不能为空"
+    },
+    {
+      "name": "ssh_probe_failed",
+      "value": "获取主机密钥失败"
+    },
+    {
+      "name": "ssh_hostkey_mismatch_rejected",
+      "value": "服务器主机密钥与已保存指纹不一致，连接已拒绝（可能存在中间人攻击）"
+    },
+    {
+      "name": "ssh_tcp_no_key",
+      "value": "TCP 可连通，但未配置 SSH 密钥，无法验证认证。请先在「Git 配置 → SSH 密钥」中选择私钥"
+    },
+    {
+      "name": "ssh_tcp_auth_incomplete",
+      "value": "TCP 可连通，但未能完成 SSH 认证，请检查密钥与口令"
+    },
+    {
+      "name": "ssh_params_incomplete",
+      "value": "认证参数不完整"
+    },
+    {
+      "name": "ssh_no_key_unverified",
+      "value": "未配置 SSH 密钥，无法验证认证。请先在「Git 配置 → SSH 密钥」中选择私钥"
+    },
+    {
+      "name": "ssh_tcp_connect_failed",
+      "value": "连接失败: %s"
+    },
+    {
+      "name": "reencrypt_no_key_selected",
+      "value": "未选择加密密钥"
+    },
+    {
+      "name": "reencrypt_no_enc_subkey",
+      "value": "所选密钥没有可用的加密子密钥，无法作为加密接收方"
+    },
+    {
+      "name": "reencrypt_missing_decrypt_key",
+      "value": "缺少解密密钥（收件人 Key ID：%s）"
+    },
+    {
+      "name": "reencrypt_keyids_unlabeled",
+      "value": "未标注"
+    },
+    {
+      "name": "reencrypt_encrypt_failed",
+      "value": "重新加密失败：%s"
+    },
+    {
+      "name": "reencrypt_write_gpgid_failed",
+      "value": "写入 .gpg-id 失败：%s"
+    },
+    {
+      "name": "reencrypt_failed_count",
+      "value": "%d 个条目未能重加密，已保留原 .gpg-id"
+    },
+    {
+      "name": "pgp_no_public_key",
+      "value": "无可用公钥（请先导入 PGP 密钥）"
+    },
+    {
+      "name": "pgp_no_secret_key",
+      "value": "无可用私钥（请先导入 PGP 密钥）"
+    },
+    {
+      "name": "pgp_no_secret_imported",
+      "value": "尚未导入任何私钥，请先在「PGP 密钥管理」中导入"
+    },
+    {
+      "name": "pgp_key_not_found_reimport",
+      "value": "找不到该密钥，请重新导入"
+    },
+    {
+      "name": "pgp_key_file_missing",
+      "value": "密钥文件缺失，请重新导入该密钥"
+    },
+    {
+      "name": "pgp_verify_no_secret_material",
+      "value": "该密钥不含私钥材料（可能是公钥），无法用于解密。请用 `gpg --export-secret-keys --armor <密钥ID>` 导出私钥后重新导入。"
+    },
+    {
+      "name": "pgp_verify_no_mlkem_material",
+      "value": "该密钥不含可用的 GnuPG ML-KEM 私钥材料，请确认导出的是私钥。"
+    },
+    {
+      "name": "pgp_verify_mlkem_unreadable",
+      "value": "密钥的 ML-KEM 私钥材料无法读取（%s）。该段与 ECC 段共用同一口令，故这不是口令问题；请用较新的 gpg 重新导出该密钥后重新导入。"
+    },
+    {
+      "name": "pgp_verify_curve_unsupported",
+      "value": "该密钥的经典曲线本应用不支持（%s）。请改用 GnuPG 的 ky768_cv25519（ML-KEM-768 + Curve25519）密钥。"
+    },
+    {
+      "name": "pgp_key_content_empty",
+      "value": "密钥内容为空"
+    },
+    {
+      "name": "pgp_import_not_secret",
+      "value": "这不是合法的私钥材料，无法用于解密。请改用 `gpg --export-secret-keys --armor <密钥ID>` 导出私钥后再导入。"
+    },
+    {
+      "name": "pgp_parse_failed",
+      "value": "密钥解析失败（格式不正确或不支持）"
+    },
+    {
+      "name": "pgp_warn_algo8",
+      "value": "该密钥的加密子密钥为 %s（GnuPG 私有算法号），本应用可正常用它加解密新条目，但 GnuPG 之外的实现可能无法识别。"
+    },
+    {
+      "name": "pgp_warn_algo8_curve",
+      "value": "该密钥的加密子密钥为 %s，其经典曲线本应用尚未支持（当前支持 ky768_cv25519 / ky768_bp256 / ky1024_bp384）。密钥已导入，可查看与管理，但无法用它加解密新条目。"
+    },
+    {
+      "name": "pgp_warn_enc_unsupported",
+      "value": "该密钥的加密子密钥为 %s，当前版本不支持用它加密新条目。密钥已导入，可查看与管理，但请另选一把 RSA 或 ECC 密钥作为加密密钥。"
+    },
+    {
+      "name": "pgp_key_exists",
+      "value": "该密钥已存在"
+    },
+    {
+      "name": "pgp_import_failed_reason",
+      "value": "导入失败: %s"
+    },
+    {
+      "name": "pgp_split_parse_failed",
+      "value": "密钥拆分结果解析失败"
+    },
+    {
+      "name": "pgp_none_imported",
+      "value": "无密钥被导入"
+    },
+    {
+      "name": "pgp_err_unsupported_algo",
+      "value": "不支持的密钥算法"
+    },
+    {
+      "name": "pgp_key_missing",
+      "value": "密钥不存在"
+    },
+    {
+      "name": "pgp_store_new_key_failed",
+      "value": "存储新密钥失败: %s"
+    },
+    {
+      "name": "pgp_unsupported_algo_reason",
+      "value": "不支持的密钥算法（%s），请改用 RSA 或 ECC 密钥。"
+    },
+    {
+      "name": "ssh_key_content_empty",
+      "value": "私钥内容为空"
+    },
+    {
+      "name": "ssh_not_private_key",
+      "value": "文件不是有效的私钥（未找到 PRIVATE KEY 标记）"
+    },
+    {
+      "name": "ssh_native_unavailable",
+      "value": "native 库不可用，无法解析私钥"
+    },
+    {
+      "name": "ssh_invalid_key_detailed",
+      "value": "私钥格式无效或文件已损坏，请确认是完整的 OpenSSH 私钥文件"
+    },
+    {
+      "name": "ssh_key_encrypted_need_pw",
+      "value": "该私钥已加密，请输入私钥口令"
+    },
+    {
+      "name": "ssh_wrong_passphrase",
+      "value": "私钥口令错误，请重新输入"
+    },
+    {
+      "name": "ssh_invalid_key",
+      "value": "私钥格式无效或文件已损坏"
+    },
+    {
+      "name": "ssh_seal_failed",
+      "value": "私钥加密失败，未能保存（请重试）"
+    },
+    {
+      "name": "repo_src_entry_missing",
+      "value": "源密码文件不存在"
+    },
+    {
+      "name": "repo_dst_entry_exists",
+      "value": "目标位置已存在同名密码"
+    },
+    {
+      "name": "repo_rename_failed",
+      "value": "移动/重命名失败"
+    },
+    {
+      "name": "repo_src_dir_missing",
+      "value": "源文件夹不存在"
+    },
+    {
+      "name": "repo_dst_dir_exists",
+      "value": "目标文件夹已存在"
+    },
+    {
+      "name": "repo_dir_rename_failed",
+      "value": "文件夹重命名失败"
+    },
+    {
+      "name": "repo_invalid_path",
+      "value": "非法路径（%s）：%s"
+    },
+    {
+      "name": "autofill_settings_title",
+      "value": "自动填充"
+    },
+    {
+      "name": "autofill_svc_status",
+      "value": "填充服务状态"
+    },
+    {
+      "name": "autofill_repo_ready",
+      "value": "仓库就绪"
+    },
+    {
+      "name": "autofill_repo_not_init",
+      "value": "仓库未初始化"
+    },
+    {
+      "name": "autofill_entry_count_label",
+      "value": "可用密码条目"
+    },
+    {
+      "name": "autofill_entry_count",
+      "value": "%d 条"
+    },
+    {
+      "name": "autofill_biometric_cap",
+      "value": "生物识别能力"
+    },
+    {
+      "name": "autofill_biometric_support",
+      "value": "支持%s"
+    },
+    {
+      "name": "autofill_biometric_unsupported",
+      "value": "不支持"
+    },
+    {
+      "name": "autofill_howto_title",
+      "value": "如何启用自动填充"
+    },
+    {
+      "name": "autofill_howto_step1",
+      "value": "1. 打开系统设置 → 更多设置 → 密码与填充（或\"自动填充服务\"）"
+    },
+    {
+      "name": "autofill_howto_step2",
+      "value": "2. 选择\"密码仓库（HarmonyPasswordStore）\"作为填充服务"
+    },
+    {
+      "name": "autofill_howto_step3",
+      "value": "3. 在应用或浏览器中点击输入框时，系统将弹出填充建议"
+    },
+    {
+      "name": "autofill_rule_title",
+      "value": "匹配规则"
+    },
+    {
+      "name": "autofill_rule_match",
+      "value": "· 按请求方应用包名或网页域名与密码条目名称/路径匹配"
+    },
+    {
+      "name": "autofill_rule_priority",
+      "value": "· 完全匹配的条目优先展示，同分按最近使用排序"
+    },
+    {
+      "name": "autofill_rule_nodecrypt",
+      "value": "· 匹配过程不解密文件，仅在您选择后才会解密"
+    },
+    {
+      "name": "autofill_sec_title",
+      "value": "安全说明"
+    },
+    {
+      "name": "autofill_sec_fields",
+      "value": "· 填充候选默认只显示名称与用户名，不显示密码"
+    },
+    {
+      "name": "autofill_sec_memory",
+      "value": "· 解密后的密码仅短暂存在于内存中"
+    },
+    {
+      "name": "autofill_sec_usage",
+      "value": "· 填充成功会记录使用时间，用于优化候选排序"
     }
   ]
 }

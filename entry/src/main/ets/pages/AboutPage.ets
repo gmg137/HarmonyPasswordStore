@@ -1,5 +1,6 @@
 import { ThemeColors, Palette, Spacing, FontSize, Radius, IconSize, ComponentSize } from '../common/ThemeColors';
 import { AppTitleBar } from '../views/AppTitleBar';
+import { Strings } from '../common/Strings';
 import { bundleManager } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
@@ -55,7 +56,7 @@ export struct AboutPage {
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textSecondary)
         // 固定标签列宽：无对应令牌，4字标签需要更宽列
-        .width(80)
+        .width(Strings.labelWidth(80))
       Text(value)
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textPrimary)
@@ -92,7 +93,7 @@ export struct AboutPage {
   build() {
     NavDestination() {
       Column() {
-        AppTitleBar({ title: '关于' })
+        AppTitleBar({ title: $r('app.string.about_title') })
 
       Scroll() {
         Column() {
@@ -133,10 +134,10 @@ export struct AboutPage {
 
           // 基本信息
           Column() {
-            this.infoRow('应用名称', 'HarmonyPasswordStore')
-            this.infoRow('版本', `${this.versionName} (build ${this.versionCode})`)
-            this.infoRow('协议', 'GPL-3.0')
-            this.infoRow('目标系统', 'HarmonyOS 5.0+')
+            this.infoRow(Strings.get('about_app_name'), 'HarmonyPasswordStore')
+            this.infoRow(Strings.get('about_version'), `${this.versionName} (build ${this.versionCode})`)
+            this.infoRow(Strings.get('about_license'), 'GPL-3.0')
+            this.infoRow(Strings.get('about_target_os'), 'HarmonyOS 5.0+')
           }
           .width('100%')
           .backgroundColor(this.colors.surface)
@@ -144,24 +145,14 @@ export struct AboutPage {
           .margin({ bottom: Spacing.CARD_GAP })
 
           // 项目简介
-          this.sectionCard('项目简介',
-            'HarmonyPasswordStore 是 password-store（pass）的 HarmonyOS 实现，' +
-            '兼容标准 GPG 加密的 pass 仓库格式。所有密码以 .gpg 文件形式本地加密存储，' +
-            '私钥通过 HUKS 管理，支持 Git 同步与 SSH/HTTPS 两种传输协议。')
+          this.sectionCard(Strings.get('about_intro_title'), Strings.get('about_intro_body'))
 
           // 开源依赖
-          this.sectionCard('开源依赖',
-            '• libgit2 — Git 仓库操作（MPL-2.0）\n' +
-            '• pgp / rpgp — OpenPGP 加解密（MIT 或 Apache-2.0）\n' +
-            '• russh — SSH 协议（MIT）\n' +
-            '• mbedTLS — TLS 加密通道（Apache-2.0）\n' +
-            '• ssh-key — OpenSSH 密钥格式（MIT or Apache-2.0）\n' +
-            '• 完整依赖列表见 Cargo.toml 与 CMakeLists.txt')
+          this.sectionCard(Strings.get('about_deps_title'), Strings.get('about_deps_body'))
 
           // 仓库链接
-          this.sectionCard('源代码',
-            '本项目完全开源，欢迎审查与贡献：\n' +
-            this.repoUrl)
+          this.sectionCard(Strings.get('about_source_title'),
+            Strings.fmt('about_source_body', this.repoUrl))
 
           Text('© 2026 HarmonyPasswordStore Contributors')
             .fontSize(FontSize.CAPTION)

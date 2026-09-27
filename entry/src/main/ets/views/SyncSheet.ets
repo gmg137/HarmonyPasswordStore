@@ -1,5 +1,6 @@
 import { SyncViewModel } from '../viewmodel/SyncViewModel';
 import { GitLogView } from './GitLogView';
+import { Strings } from '../common/Strings';
 import { ThemeColors, Palette, ButtonSpec, FontSize, Spacing, Radius, IconSize } from '../common/ThemeColors';
 import { SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
 
@@ -40,7 +41,7 @@ export struct SyncSheet {
     Column() {
       // 标题
       Row() {
-        Text('Git 同步')
+        Text($r('app.string.group_git'))
           .fontSize(FontSize.TITLE)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textPrimary)
@@ -94,10 +95,10 @@ export struct SyncSheet {
               .fontColor([this.viewModel.pendingHostKeyMismatch
                 ? this.colors.danger : this.colors.warning])
             Text(this.viewModel.pendingHostKeyMismatch
-              ? '警告：主机密钥与已保存记录不一致'
+              ? Strings.get('sync_hostkey_mismatch_title')
               : (this.viewModel.pendingHostKeyType.length > 0
-                ? `首次连接：确认服务器${this.viewModel.pendingHostKeyType}密钥指纹`
-                : '首次连接：确认服务器指纹'))
+                ? Strings.fmt('sync_hostkey_first_type', this.viewModel.pendingHostKeyType)
+                : Strings.get('sync_hostkey_first')))
               .fontSize(FontSize.SUBTITLE)
               .fontWeight(FontWeight.Medium)
               .fontColor(this.colors.textPrimary)
@@ -105,7 +106,7 @@ export struct SyncSheet {
           }
           .alignItems(VerticalAlign.Center)
 
-          Text(`主机 ${this.viewModel.pendingHost}:${this.viewModel.pendingPort} 的密钥指纹：`)
+          Text(Strings.fmt('sync_hostkey_fp_label', this.viewModel.pendingHost, this.viewModel.pendingPort))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textSecondary)
             .margin({ top: Spacing.SM })
@@ -121,17 +122,15 @@ export struct SyncSheet {
             .margin({ top: Spacing.SM })
 
           Text(this.viewModel.pendingHostKeyMismatch
-            ? '该主机已有信任记录，但本次同类型密钥的指纹不同：可能是服务器更换了密钥，也可能是中间人攻击。'
-              + '请与服务器管理员核对后再决定。'
-            : '服务器提供多把不同类型的主机密钥，这是尚未记录的一把。确认后追加为本机信任记录（TOFU）；'
-              + '同类型密钥的指纹变化仍会被拒绝（防中间人攻击）。')
+            ? $r('app.string.gitcfg_hostkey_mismatch_explain')
+            : $r('app.string.sync_hostkey_new_detail'))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.viewModel.pendingHostKeyMismatch
               ? this.colors.danger : this.colors.textTertiary)
             .margin({ top: Spacing.SM })
 
           Row({ space: Spacing.SM }) {
-            Button('拒绝')
+            Button($r('app.string.sync_reject'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
               .layoutWeight(1)
@@ -143,7 +142,8 @@ export struct SyncSheet {
                 this.viewModel.rejectHostKey();
               })
 
-            Button(this.viewModel.pendingHostKeyMismatch ? '仍要信任并重试' : '信任并重试')
+            Button(this.viewModel.pendingHostKeyMismatch
+              ? $r('app.string.sync_trust_retry_mismatch') : $r('app.string.sync_trust_retry'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.PRIMARY_RADIUS)
               .layoutWeight(1)
@@ -169,7 +169,7 @@ export struct SyncSheet {
 
       // 操作按钮
       Row({ space: Spacing.SM }) {
-        Button('拉取')
+        Button($r('app.string.sync_pull_btn'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
@@ -183,7 +183,7 @@ export struct SyncSheet {
             this.viewModel.pull().then(() => this.refreshLogIfOk());
           })
 
-        Button('提交')
+        Button($r('app.string.sync_commit_btn'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
@@ -197,7 +197,7 @@ export struct SyncSheet {
             this.viewModel.commit('').then(() => this.refreshLogIfOk());
           })
 
-        Button('推送')
+        Button($r('app.string.sync_push_btn'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)

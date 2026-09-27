@@ -5,6 +5,7 @@ import { PgpCrypto } from '../crypto/PgpCrypto';
 import { GpgKeyId } from '../model/GpgKeyId';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { GitClient } from './GitClient';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -118,12 +119,12 @@ export class ReencryptService {
       error: '',
     };
     if (targetFingerprints.length === 0) {
-      plan.error = '未选择加密密钥';
+      plan.error = Strings.get('reencrypt_no_key_selected');
       return plan;
     }
     if (plan.targetKeyIds.length === 0) {
       // 目标密钥没有可用的加密子密钥（例如只导入了公钥、或曲线不支持）
-      plan.error = '所选密钥没有可用的加密子密钥，无法作为加密接收方';
+      plan.error = Strings.get('reencrypt_no_enc_subkey');
       return plan;
     }
     const repo: PasswordRepository = PasswordRepository.getInstance();
@@ -199,13 +200,14 @@ export class ReencryptService {
         outcome.skipped++;
         outcome.failures.push({
           relativePath: item.relativePath,
-          error: `缺少解密密钥（收件人 Key ID：${item.currentKeyIds.join('、') || '未标注'}）`,
+          error: Strings.fmt('reencrypt_missing_decrypt_key',
+            item.currentKeyIds.join(Strings.get('common_list_sep')) || Strings.get('reencrypt_keyids_unlabeled')),
         });
         continue;
       }
       const ciphertext: string = repo.readCiphertext(item.relativePath);
       if (ciphertext.length === 0) {
-        outcome.failures.push({ relativePath: item.relativePath, error: '读取密文失败' });
+        outcome.failures.push({ relativePath: item.relativePath, error: Strings.get('move_read_ciphertext_failed') });
         continue;
       }
       // 解密：候选只给「实际能解该密文的密钥」，避免用错密钥白跑；
@@ -214,7 +216,7 @@ export class ReencryptService {
       if (!decrypted.success) {
         outcome.failures.push({
           relativePath: item.relativePath,
-          error: `解密失败：${decrypted.error}`,
+          error: Strings.fmt('move_decrypt_failed', decrypted.error),
         });
         continue;
       }
@@ -223,7 +225,7 @@ export class ReencryptService {
       if (!encrypted.success) {
         outcome.failures.push({
           relativePath: item.relativePath,
-          error: `重新加密失败：${encrypted.error}`,
+          error: Strings.fmt('reencrypt_encrypt_failed', encrypted.error),
         });
         continue;
       }
@@ -239,7 +241,7 @@ export class ReencryptService {
     if (outcome.failures.length === 0) {
       const setResult = repo.setGpgIdForDir(dirPath, targetFingerprints);
       if (!setResult.success) {
-        outcome.error = `写入 .gpg-id 失败：${setResult.error}`;
+        outcome.error = Strings.fmt('reencrypt_write_gpgid_failed', setResult.error);
         return outcome;
       }
       outcome.gpgIdWritten = true;
@@ -250,7 +252,7 @@ export class ReencryptService {
         `Reencrypt ${label} using new GPG id ${this.targetKeyIds(targetFingerprints).join(',')}`);
       outcome.success = true;
     } else {
-      outcome.error = `${outcome.failures.length} 个条目未能重加密，已保留原 .gpg-id`;
+      outcome.error = Strings.fmt('reencrypt_failed_count', outcome.failures.length);
       // 已成功的条目仍然生效（其收件人已是目标），下次执行会跳过
       RepoChangeNotifier.connect().bump();
     }

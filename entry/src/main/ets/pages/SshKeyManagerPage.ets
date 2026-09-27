@@ -8,6 +8,7 @@ import { AppTitleBar } from '../views/AppTitleBar';
 import { AppFab } from '../views/AppFab';
 import { EmptyState } from '../views/EmptyState';
 import { formSheetOptions, menuSheetHeight, panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
+import { Strings } from '../common/Strings';
 
 /**
  * SSH 密钥管理页
@@ -79,7 +80,7 @@ export struct SshKeyManagerPage {
   /**
    * 新建/导入入口：已有密钥时先确认替换
    *
-   * 说明文本已合并进导入弹窗（IMPORT_HINT），不再单独弹提示框。
+   * 说明文本已合并进导入弹窗（ssh_import_hint 资源），不再单独弹提示框。
    * SSH 密钥只保留一把，替换后旧密钥失效，可能失去服务器访问权限。
    * @param action 'generate' 生成新密钥；'import' 导入密钥
    */
@@ -90,8 +91,8 @@ export struct SshKeyManagerPage {
     }
 
     this.getUIContext().showAlertDialog({
-      title: '替换现有的 SSH 密钥？',
-      message: '您可能会失去对服务器的访问权限',
+      title: $r('app.string.ssh_replace_confirm_title'),
+      message: $r('app.string.ssh_replace_confirm_msg'),
       autoCancel: true,
       alignment: DialogAlignment.Center,
       // AlertDialog 无 appear/disappear 回调：弹出时调暗状态栏，
@@ -101,11 +102,11 @@ export struct SshKeyManagerPage {
       },
       // primaryButton 在左、secondaryButton 在右 → 取消 / 替换
       primaryButton: {
-        value: '取消',
+        value: $r('app.string.common_cancel'),
         action: (): void => {},
       },
       secondaryButton: {
-        value: '替换',
+        value: $r('app.string.ssh_replace_btn'),
         fontColor: this.colors.danger,
         action: (): void => {
           this.openForm(action);
@@ -115,18 +116,6 @@ export struct SshKeyManagerPage {
   }
 
   /**
-   * 导入密钥弹窗内的说明文本（PC 端如何准备私钥文件）
-   *
-   * 原先是点击「导入密钥」后先弹一个 AlertDialog 提示，
-   * 改为直接显示在弹窗内「私钥口令」输入框下方，减少一次打断。
-   */
-  private static readonly IMPORT_HINT: string =
-    '请在电脑上准备私钥文件并传到手机：\n' +
-    '· 已有密钥：私钥即 ~/.ssh/id_ed25519（或 id_rsa）\n' +
-    '· 新建：ssh-keygen -t ed25519 -C "your@email.com"\n' +
-    '支持 OpenSSH / PKCS8 / RSA PEM（含加密私钥）。';
-
-  /**
    * 选中加密私钥后以原生弹窗提示输入口令
    *
    * 用系统 AlertDialog 而非面板内联文本，避免占用表单空间、
@@ -134,15 +123,15 @@ export struct SshKeyManagerPage {
    */
   private showEncryptedKeyHint(): void {
     this.getUIContext().showAlertDialog({
-      title: '私钥已加密',
-      message: '该私钥已加密，请在「私钥口令」中输入口令后再导入。',
+      title: $r('app.string.ssh_encrypted_key_title'),
+      message: $r('app.string.ssh_encrypted_key_msg'),
       autoCancel: true,
       alignment: DialogAlignment.Center,
       onWillDismiss: (action: DismissDialogAction): void => {
         action.dismiss();
       },
       confirm: {
-        value: '知道了',
+        value: $r('app.string.common_got_it'),
         fontColor: this.colors.primary,
         action: (): void => {},
       },
@@ -162,7 +151,7 @@ export struct SshKeyManagerPage {
     }
     this.viewModel.errorMessage = '';
     this.getUIContext().showAlertDialog({
-      title: '导入失败',
+      title: $r('app.string.common_import_failed'),
       message: msg,
       autoCancel: true,
       alignment: DialogAlignment.Center,
@@ -170,7 +159,7 @@ export struct SshKeyManagerPage {
         action.dismiss();
       },
       confirm: {
-        value: '知道了',
+        value: $r('app.string.common_got_it'),
         fontColor: this.colors.primary,
         action: (): void => {},
       },
@@ -271,13 +260,13 @@ export struct SshKeyManagerPage {
       if (!this.viewModel.isGenerateFormVisible && !this.viewModel.isImportFormVisible) {
         // 菜单态：动作面板
         Column() {
-          this.actionItem($r('sys.symbol.plus'), '生成新密钥', (): void => {
+          this.actionItem($r('sys.symbol.plus'), Strings.get('ssh_generate_new'), (): void => {
             this.requestAction('generate');
           })
           Divider()
             .color(this.colors.divider)
             .margin({ left: Spacing.MD, right: Spacing.MD })
-          this.actionItem($r('sys.symbol.doc_text'), '导入密钥', (): void => {
+          this.actionItem($r('sys.symbol.doc_text'), Strings.get('ssh_import_key'), (): void => {
             this.requestAction('import');
           })
         }
@@ -287,7 +276,7 @@ export struct SshKeyManagerPage {
       } else if (this.viewModel.isGenerateFormVisible) {
         // 生成新密钥表单：内容固定不滚动，与导入表单结构一致
         Column() {
-          this.formTitle('生成新密钥')
+          this.formTitle(Strings.get('ssh_generate_new'))
 
           Row() {
             this.keyTypeOption('Ed25519', SshKeyType.ED25519)
@@ -300,7 +289,7 @@ export struct SshKeyManagerPage {
           .padding(Spacing.XS)
 
           // 注释输入框：紧随密钥类型选择下方
-          TextInput({ text: this.viewModel.comment, placeholder: '注释（可选，通常为邮箱）' })
+          TextInput({ text: this.viewModel.comment, placeholder: $r('app.string.ssh_comment_ph') })
             .fontSize(FontSize.SUBTITLE)
             .fontColor(this.colors.textPrimary)
             .placeholderColor(this.colors.textTertiary)
@@ -331,7 +320,7 @@ export struct SshKeyManagerPage {
 
         // 按钮行固定在屏幕底部
         SheetFormButtons({
-          confirmLabel: '生成',
+          confirmLabel: Strings.get('ssh_generate_btn'),
           isBusy: this.viewModel.isGenerating,
           canConfirm: true,
           onConfirm: (): void => {
@@ -344,7 +333,7 @@ export struct SshKeyManagerPage {
       } else {
         // 导入密钥表单：字段直接排布（不包 Scroll），按钮行由下方 Blank() 撑到面板底部
         Column() {
-          this.formTitle('导入密钥')
+          this.formTitle(Strings.get('ssh_import_key'))
 
           // 文件选择行：点击选择私钥文件
           Row() {
@@ -354,7 +343,7 @@ export struct SshKeyManagerPage {
 
             Text(this.viewModel.selectedFileName.length > 0
               ? this.viewModel.selectedFileName
-              : '选择私钥文件')
+              : Strings.get('ssh_pick_key_file'))
               .fontSize(FontSize.BODY)
               .fontColor(this.viewModel.selectedFileName.length > 0
                 ? this.colors.textPrimary : this.colors.textTertiary)
@@ -387,7 +376,7 @@ export struct SshKeyManagerPage {
           })
 
           // 私钥口令：紧随「选择私钥文件」下方
-          TextInput({ text: this.viewModel.passphrase, placeholder: '私钥口令（无口令可留空）' })
+          TextInput({ text: this.viewModel.passphrase, placeholder: $r('app.string.ssh_passphrase_ph') })
             .type(InputType.Password)
             .fontSize(FontSize.SUBTITLE)
             .fontColor(this.colors.textPrimary)
@@ -403,8 +392,8 @@ export struct SshKeyManagerPage {
               this.viewModel.passphrase = v;
             })
 
-          // PC 端准备私钥的说明：直接显示在口令框下方（原为独立弹窗）
-          Text(SshKeyManagerPage.IMPORT_HINT)
+          // PC 端准备私钥的说明：直接显示在口令框下方（原为独立弹窗；多行整句一个资源 key）
+          Text($r('app.string.ssh_import_hint'))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textTertiary)
             .width('100%')
@@ -418,7 +407,7 @@ export struct SshKeyManagerPage {
 
         // 按钮行固定在屏幕底部：占位 + 面板 100% 高度共同保证
         SheetFormButtons({
-          confirmLabel: '导入',
+          confirmLabel: Strings.get('common_import'),
           isBusy: this.viewModel.isImporting,
           canConfirm: this.viewModel.privateKeyText.trim().length > 0,
           onConfirm: (): void => {
@@ -444,7 +433,7 @@ export struct SshKeyManagerPage {
   @Builder
   editMenuBuilder() {
     Column() {
-      this.actionItem($r('sys.symbol.doc_text'), '复制公钥', (): void => {
+      this.actionItem($r('sys.symbol.doc_text'), Strings.get('ssh_copy_pub'), (): void => {
         this.viewModel.copyPublicKey(this.viewModel.editAlias).then((msg: string) => {
           showToastSafe(this.getUIContext(), msg, 2000);
         });
@@ -452,7 +441,7 @@ export struct SshKeyManagerPage {
       Divider()
         .color(this.colors.divider)
         .margin({ left: Spacing.MD, right: Spacing.MD })
-      this.dangerActionItem($r('sys.symbol.trash'), '删除密钥', (): void => {
+      this.dangerActionItem($r('sys.symbol.trash'), Strings.get('common_delete_key'), (): void => {
         const alias: string = this.viewModel.editAlias;
         this.viewModel.deleteKey(alias).then((msg: string) => {
           showToastSafe(this.getUIContext(), msg, 2000);
@@ -528,7 +517,7 @@ export struct SshKeyManagerPage {
     NavDestination() {
       Column() {
         // ===== 自定义标题栏（40vp 圆形返回按钮 + 标题，见 AppTitleBar） =====
-        AppTitleBar({ title: 'SSH 密钥管理' })
+        AppTitleBar({ title: $r('app.string.ssh_row_title') })
 
         // ===== 列表区：标题栏下顶置排列 =====
         Scroll() {
@@ -538,7 +527,7 @@ export struct SshKeyManagerPage {
                 LoadingProgress()
                   .width(IconSize.MD)
                   .height(IconSize.MD)
-                Text('加载中...')
+                Text($r('app.string.common_loading'))
                   .fontSize(FontSize.CAPTION)
                   .fontColor(this.colors.textTertiary)
                   .margin({ left: Spacing.SM })
@@ -549,8 +538,8 @@ export struct SshKeyManagerPage {
             } else if (this.viewModel.keys.length === 0) {
               EmptyState({
                 icon: $r('sys.symbol.key'),
-                title: '尚未创建 SSH 密钥',
-                hint: '点击右下角 + 创建或导入密钥',
+                title: Strings.get('ssh_empty_title'),
+                hint: Strings.get('ssh_empty_hint'),
               })
             } else {
               ForEach(this.viewModel.keys, (key: SshKeyInfo) => {

@@ -1,5 +1,6 @@
 import { GitClient, GitCommitInfo } from '../utils/GitClient';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -35,10 +36,10 @@ export class GitLogViewModel {
       this.commits = await this.git.log(limit);
       this.isRepo = this.git.isGitRepo();
       if (!this.isRepo) {
-        this.errorMessage = '当前目录不是 Git 仓库';
+        this.errorMessage = Strings.get('gitlog_not_repo');
       }
     } catch (e) {
-      this.errorMessage = '加载提交历史失败';
+      this.errorMessage = Strings.get('gitlog_load_failed');
       hilog.error(DOMAIN, TAG, 'loadLog failed: %{public}s', JSON.stringify(e));
     }
     this.isLoading = false;

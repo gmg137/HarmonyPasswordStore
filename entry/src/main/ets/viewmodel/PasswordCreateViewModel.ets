@@ -6,6 +6,7 @@ import { PgpKeyManager } from '../crypto/PgpKeyManager';
 import { GpgIdValidation, GpgKeyId } from '../model/GpgKeyId';
 import { FileUtils } from '../utils/FileUtils';
 import { ThemeColors } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -66,7 +67,7 @@ export class PasswordCreateViewModel {
   async initForEditByPath(relativePath: string): Promise<void> {
     const result = await this.repo.readPassword(relativePath);
     if (!result.success || !result.data) {
-      this.errorMessage = result.error.length > 0 ? result.error : '读取密码失败';
+      this.errorMessage = result.error.length > 0 ? result.error : Strings.get('create_read_fail');
       return;
     }
     this.initForEdit(relativePath, result.data);
@@ -194,22 +195,22 @@ export class PasswordCreateViewModel {
   async save(): Promise<void> {
     // 验证输入
     if (this.name.trim().length === 0) {
-      this.errorMessage = '请输入名称';
+      this.errorMessage = Strings.get('create_err_name_required');
       return;
     }
     if (this.password.length === 0) {
-      this.errorMessage = '请输入密码';
+      this.errorMessage = Strings.get('create_err_password_required');
       return;
     }
     // 名称会拼进文件路径：`../`、绝对路径或 `.` 开头都会读写到仓库之外
     if (!FileUtils.isSafeRelativePath(this.name.trim())) {
-      this.errorMessage = '名称不能包含 ..、\\ 或以 . 开头';
+      this.errorMessage = Strings.get('create_err_name_unsafe');
       return;
     }
     // 编辑模式下名称未变化时跳过；新建/改名后与目录同名会遮蔽密码条目，必须拦截
     const conflictPath: string = this.getRelativePath();
     if (conflictPath !== this.originalPath && this.repo.directoryExists(conflictPath)) {
-      this.errorMessage = '已存在同名目录，请更换名称';
+      this.errorMessage = Strings.get('create_err_dir_conflict');
       return;
     }
 
@@ -244,14 +245,14 @@ export class PasswordCreateViewModel {
       // 看到的是无从下手的错误，而不是设置好的默认密钥生效。
       const defaultFp: string = await this.resolveDefaultRecipient();
       if (defaultFp.length === 0) {
-        this.errorMessage = '未导入任何 PGP 密钥，无法加密保存，请先在设置中导入密钥';
+        this.errorMessage = Strings.get('create_err_no_key');
         this.isSaving = false;
         return;
       }
       const gpgIdDir: string = this.repo.findGpgIdDir(relativePath);
       const writeResult = this.repo.setGpgIdForDir(gpgIdDir, [defaultFp]);
       if (!writeResult.success) {
-        this.errorMessage = '写入 .gpg-id 失败: ' + writeResult.error;
+        this.errorMessage = Strings.fmt('create_err_write_gpgid', writeResult.error);
         this.isSaving = false;
         return;
       }
@@ -270,8 +271,7 @@ export class PasswordCreateViewModel {
       if (validation.invalid.length > 0) {
         hilog.warn(DOMAIN, TAG, 'gpg-id has %{public}d unimported entries, refusing to save',
           validation.invalid.length);
-        this.errorMessage = `该目录的 .gpg-id 引用了未导入的密钥（${validation.invalid.join('、')}），`
-          + `无法为全部接收方加密。请先导入这些密钥，或用「修改此目录加密密钥」显式调整。`;
+        this.errorMessage = Strings.fmt('create_err_gpgid_unimported', validation.invalid.join(Strings.get('common_list_sep')));
         this.isSaving = false;
         return;
       }
@@ -289,7 +289,7 @@ export class PasswordCreateViewModel {
         }
       }
       if (!hasUsableKey) {
-        this.errorMessage = '该目录的加密密钥均已过期，无法创建新密码（请导入新密钥或更新密钥）';
+        this.errorMessage = Strings.get('create_err_keys_expired');
         this.isSaving = false;
         return;
       }
@@ -353,10 +353,10 @@ export class PasswordCreateViewModel {
    * 密码强度等级文本
    */
   getStrengthLabel(): string {
-    if (this.passwordStrength < 40) return '弱';
-    if (this.passwordStrength < 80) return '中';
-    if (this.passwordStrength < 120) return '强';
-    return '极强';
+    if (this.passwordStrength < 40) return Strings.get('common_strength_weak');
+    if (this.passwordStrength < 80) return Strings.get('common_strength_fair');
+    if (this.passwordStrength < 120) return Strings.get('common_strength_good');
+    return Strings.get('common_strength_strong');
   }
 
   /**

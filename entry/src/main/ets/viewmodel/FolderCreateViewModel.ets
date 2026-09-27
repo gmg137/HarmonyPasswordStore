@@ -3,6 +3,7 @@ import { FileUtils } from '../utils/FileUtils';
 import { PgpKeyManager } from '../crypto/PgpKeyManager';
 import { GpgKeyId } from '../model/GpgKeyId';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -75,12 +76,12 @@ export class FolderCreateViewModel {
    */
   async createFolder(): Promise<void> {
     if (this.folderName.trim().length === 0) {
-      this.errorMessage = '请输入文件夹名称';
+      this.errorMessage = Strings.get('folder_name_required');
       return;
     }
     // 名称会拼进目录路径：`../`、绝对路径或 `.` 开头都会在仓库之外建/删目录
     if (!FileUtils.isSafeRelativePath(this.folderName.trim())) {
-      this.errorMessage = '文件夹名称不能包含 ..、\\ 或以 . 开头';
+      this.errorMessage = Strings.get('folder_name_invalid');
       return;
     }
 
@@ -115,11 +116,11 @@ export class FolderCreateViewModel {
       // 通知列表刷新
       RepoChangeNotifier.connect().bump();
 
-      this.toast = '文件夹已创建';
+      this.toast = Strings.get('folder_created');
       this.scheduleToastClear();
       this.isSaving = false;
     } catch (e) {
-      this.errorMessage = `创建失败: ${e instanceof Error ? e.message : String(e)}`;
+      this.errorMessage = Strings.fmt('folder_create_failed', e instanceof Error ? e.message : String(e));
       this.isSaving = false;
     }
   }

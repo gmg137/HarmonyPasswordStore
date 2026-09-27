@@ -3,9 +3,9 @@ import {
   ThemeColors, Palette, Spacing, FontSize, ComponentSize, IconSize,
 } from '../common/ThemeColors';
 
-/** 下拉选项：显示文本 + 回传值（两者分开，值可以是枚举序号） */
+/** 下拉选项：显示文本 + 回传值（两者分开，值可以是枚举序号；文本可为资源串） */
 export interface DropdownOption {
-  label: string;
+  label: ResourceStr;
   value: string;
 }
 
@@ -63,8 +63,8 @@ const MENU_MIN_WIDTH: number = 160;
 @ComponentV2
 export struct DropdownRow {
   @Require @Param icon: Resource;
-  @Param label: string = '';
-  @Param sublabel: string = '';
+  @Param label: ResourceStr = '';
+  @Param sublabel: ResourceStr = '';
   @Param currentValue: string = '';
   @Param options: DropdownOption[] = [];
   @Param onSelect: (v: string) => void = (v: string): void => {};
@@ -73,13 +73,14 @@ export struct DropdownRow {
     return ThemeColors.getInstance().palette();
   }
 
-  /** 双行（有说明）64vp / 单行 56vp，与官方列表行阶梯一致 */
+  /** 双行（有说明）64vp / 单行 56vp，与官方列表行阶梯一致（资源串说明视为有） */
   private get rowMinHeight(): number {
-    return this.sublabel.length > 0 ? ComponentSize.ROW_TWO_LINE : ComponentSize.ROW;
+    const hasSub: boolean = typeof this.sublabel === 'string' ? this.sublabel.length > 0 : true;
+    return hasSub ? ComponentSize.ROW_TWO_LINE : ComponentSize.ROW;
   }
 
   /** 当前值对应的显示文本（找不到时为空串，不显示半截内容） */
-  private currentLabel(): string {
+  private currentLabel(): ResourceStr {
     for (let i: number = 0; i < this.options.length; i++) {
       if (this.options[i].value === this.currentValue) {
         return this.options[i].label;
@@ -149,7 +150,8 @@ export struct DropdownRow {
           .fontWeight(FontWeight.Medium)
           .fontColor(this.colors.textPrimary)
 
-        if (this.sublabel.length > 0) {
+        // 资源串说明视为存在；string 时按非空判断（@Builder 体内不能声明局部变量，内联）
+        if (typeof this.sublabel !== 'string' || this.sublabel.length > 0) {
           Text(this.sublabel)
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textTertiary)

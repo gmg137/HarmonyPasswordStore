@@ -1,0 +1,2456 @@
+{
+  "string": [
+    {
+      "name": "settings_title",
+      "value": "Настройки"
+    },
+    {
+      "name": "group_general",
+      "value": "Общие"
+    },
+    {
+      "name": "group_security",
+      "value": "Безопасность"
+    },
+    {
+      "name": "group_store",
+      "value": "Хранилище паролей"
+    },
+    {
+      "name": "group_git",
+      "value": "Синхронизация Git"
+    },
+    {
+      "name": "group_crypto",
+      "value": "Шифрование и ключи"
+    },
+    {
+      "name": "group_about",
+      "value": "О программе"
+    },
+    {
+      "name": "settings_theme",
+      "value": "Тема"
+    },
+    {
+      "name": "theme_system",
+      "value": "Как в системе"
+    },
+    {
+      "name": "theme_light",
+      "value": "Светлая"
+    },
+    {
+      "name": "theme_dark",
+      "value": "Тёмная"
+    },
+    {
+      "name": "settings_language",
+      "value": "Язык"
+    },
+    {
+      "name": "language_system",
+      "value": "Системный язык"
+    },
+    {
+      "name": "biometric_title",
+      "value": "Вход по биометрии"
+    },
+    {
+      "name": "biometric_sub",
+      "value": "Быстрый вход по отпечатку или лицу"
+    },
+    {
+      "name": "clipboard_title",
+      "value": "Автоочистка буфера обмена"
+    },
+    {
+      "name": "clipboard_sub",
+      "value": "Автоматически очищает системный буфер обмена после копирования пароля"
+    },
+    {
+      "name": "search_mode_title",
+      "value": "Режим поиска"
+    },
+    {
+      "name": "search_fuzzy",
+      "value": "Нечёткий поиск"
+    },
+    {
+      "name": "search_exact",
+      "value": "Точный поиск"
+    },
+    {
+      "name": "onboarding_row_title",
+      "value": "Запустить настройку заново"
+    },
+    {
+      "name": "onboarding_row_sub",
+      "value": "Инициализация хранилища / клонирование / импорт ключей"
+    },
+    {
+      "name": "autosync_title",
+      "value": "Синхронизация при запуске"
+    },
+    {
+      "name": "autosync_sub",
+      "value": "Автоматически выполняет извлечение и отправку при запуске"
+    },
+    {
+      "name": "repo_row_title",
+      "value": "Управление репозиторием"
+    },
+    {
+      "name": "repo_row_sub",
+      "value": "Конфигурация Git / извлечение с rebase / удаление локального репозитория"
+    },
+    {
+      "name": "pgp_row_title",
+      "value": "Управление ключами PGP"
+    },
+    {
+      "name": "pgp_row_sub",
+      "value": "Импорт ключей / выбор ключа шифрования по умолчанию"
+    },
+    {
+      "name": "ssh_row_title",
+      "value": "Управление ключами SSH"
+    },
+    {
+      "name": "ssh_row_sub",
+      "value": "Создание / импорт открытого ключа / удаление ключей"
+    },
+    {
+      "name": "fileformat_title",
+      "value": "Формат файла паролей"
+    },
+    {
+      "name": "fileformat_sub",
+      "value": "Влияет только на пароли, созданные или изменённые позже"
+    },
+    {
+      "name": "privacy_row_title",
+      "value": "Конфиденциальность"
+    },
+    {
+      "name": "privacy_row_sub",
+      "value": "Как хранятся и обрабатываются данные"
+    },
+    {
+      "name": "about_row_title",
+      "value": "О приложении"
+    },
+    {
+      "name": "about_row_sub",
+      "value": "Версия / лицензия / ссылка на репозиторий"
+    },
+    {
+      "name": "module_desc",
+      "value": "Модуль хранилища паролей"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Точка входа хранилища паролей"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Хранилище паролей"
+    },
+    {
+      "name": "search_placeholder",
+      "value": "Поиск паролей"
+    },
+    {
+      "name": "password_create",
+      "value": "Новый пароль"
+    },
+    {
+      "name": "passgen",
+      "value": "Генератор паролей"
+    },
+    {
+      "name": "settings",
+      "value": "Настройки"
+    },
+    {
+      "name": "pgp_key_manager",
+      "value": "Управление ключами PGP"
+    },
+    {
+      "name": "git_config",
+      "value": "Конфигурация Git"
+    },
+    {
+      "name": "AutofillAbility_desc",
+      "value": "Служба автозаполнения хранилища паролей"
+    },
+    {
+      "name": "sort_recent",
+      "value": "Недавние"
+    },
+    {
+      "name": "found_results",
+      "value": "Найдено результатов: %d"
+    },
+    {
+      "name": "app_locked",
+      "value": "Приложение заблокировано"
+    },
+    {
+      "name": "delete",
+      "value": "Удалить"
+    },
+    {
+      "name": "refresh",
+      "value": "Обновить"
+    },
+    {
+      "name": "perm_internet_reason",
+      "value": "Синхронизация хранилища паролей через удалённый Git-репозиторий (клонирование/извлечение/отправка)"
+    },
+    {
+      "name": "perm_pasteboard_reason",
+      "value": "Вставка адреса репозитория при настройке удалённого Git-репозитория"
+    },
+    {
+      "name": "perm_background_reason",
+      "value": "Кратковременная работа в фоне для очистки конфиденциального содержимого буфера обмена"
+    },
+    {
+      "name": "perm_biometric_reason",
+      "value": "Вход в приложение по отпечатку пальца или лицу"
+    },
+    {
+      "name": "common_cancel",
+      "value": "Отмена"
+    },
+    {
+      "name": "common_list_sep",
+      "value": ", "
+    },
+    {
+      "name": "common_configure",
+      "value": "Настроить"
+    },
+    {
+      "name": "common_apply",
+      "value": "Применить"
+    },
+    {
+      "name": "common_confirm",
+      "value": "Подтвердить"
+    },
+    {
+      "name": "common_start",
+      "value": "Начать"
+    },
+    {
+      "name": "common_got_it",
+      "value": "Понятно"
+    },
+    {
+      "name": "common_loading",
+      "value": "Загрузка..."
+    },
+    {
+      "name": "common_passphrase_wrong",
+      "value": "Неверный пароль ключа, попробуйте снова"
+    },
+    {
+      "name": "home_root_title",
+      "value": "Хранилище паролей"
+    },
+    {
+      "name": "home_create_password",
+      "value": "Создать новый пароль"
+    },
+    {
+      "name": "home_create_folder",
+      "value": "Создать новую папку"
+    },
+    {
+      "name": "home_dirkey_menu",
+      "value": "Изменить ключи шифрования папки"
+    },
+    {
+      "name": "home_dirkey_panel_title",
+      "value": "Изменение ключей шифрования этой папки"
+    },
+    {
+      "name": "home_dirkey_current",
+      "value": "Текущие ключи: %s"
+    },
+    {
+      "name": "home_dirkey_current_inherit",
+      "value": "Текущие ключи: наследуются из родительской папки / по умолчанию"
+    },
+    {
+      "name": "home_dirkey_no_keys",
+      "value": "Нет импортированных закрытых ключей; задать ключи шифрования невозможно"
+    },
+    {
+      "name": "home_dirkey_need_selection",
+      "value": "Выберите хотя бы один ключ"
+    },
+    {
+      "name": "home_dirkey_updated_no_reencrypt",
+      "value": "Ключи шифрования папки обновлены (перешифрование не потребовалось)"
+    },
+    {
+      "name": "home_dirkey_multiselect_hint",
+      "value": "Ключи шифрования (можно несколько; если ничего не выбрано — наследуется из родительской папки)"
+    },
+    {
+      "name": "home_folder_name_hint",
+      "value": "Название папки"
+    },
+    {
+      "name": "home_creating",
+      "value": "Создание..."
+    },
+    {
+      "name": "home_reencrypting",
+      "value": "Повторное шифрование…"
+    },
+    {
+      "name": "home_reencrypt_confirm_title",
+      "value": "Повторно зашифровать эту папку"
+    },
+    {
+      "name": "home_reencrypt_confirm_msg",
+      "value": "Ключ «%s» будет использован для повторного шифрования записей (всего: %d)."
+    },
+    {
+      "name": "home_reencrypt_skipped_msg",
+      "value": "Часть записей будет пропущена (всего: %d) — нет соответствующего закрытого ключа (останутся прежними)."
+    },
+    {
+      "name": "home_reencrypt_need_passphrase",
+      "value": "Для расшифровки этих записей требуется пароль старого ключа."
+    },
+    {
+      "name": "home_reencrypted_count",
+      "value": "Повторно зашифровано записей: %d"
+    },
+    {
+      "name": "home_reencrypt_skipped_suffix",
+      "value": ", пропущено: %d"
+    },
+    {
+      "name": "home_reencrypt_failed",
+      "value": "Повторное шифрование не завершено: %s"
+    },
+    {
+      "name": "home_reencrypt_first_failure",
+      "value": "Первая ошибка: %s (%s)"
+    },
+    {
+      "name": "home_reencrypt_error_toast",
+      "value": "Ошибка процесса повторного шифрования, подробности в журнале"
+    },
+    {
+      "name": "home_no_recipient_hint",
+      "value": "в шифротексте не указан получатель"
+    },
+    {
+      "name": "home_missing_decrypt_key_title",
+      "value": "Отсутствует ключ расшифровки"
+    },
+    {
+      "name": "home_missing_key_msg",
+      "value": "Запись зашифрована ключом, который не импортирован (Key ID: %s)."
+    },
+    {
+      "name": "home_missing_key_action",
+      "value": "Импортируйте соответствующий закрытый ключ в «Управлении ключами PGP» и повторите попытку."
+    },
+    {
+      "name": "home_a11y_delete_dir",
+      "value": "Удалить папку: %s"
+    },
+    {
+      "name": "home_a11y_delete_entry",
+      "value": "Удалить пароль: %s"
+    },
+    {
+      "name": "home_delete_dir_title",
+      "value": "Удаление папки"
+    },
+    {
+      "name": "home_delete_pw_title",
+      "value": "Удаление пароля"
+    },
+    {
+      "name": "home_delete_failed",
+      "value": "Не удалось удалить"
+    },
+    {
+      "name": "home_dir_deleted",
+      "value": "Папка удалена"
+    },
+    {
+      "name": "home_pw_deleted",
+      "value": "Пароль удалён"
+    },
+    {
+      "name": "home_passphrase_title",
+      "value": "Введите пароль ключа"
+    },
+    {
+      "name": "home_passphrase_hint",
+      "value": "Пароль ключа"
+    },
+    {
+      "name": "home_pgp_id_label",
+      "value": "PGP ID: %s"
+    },
+    {
+      "name": "home_verifying",
+      "value": "Проверка..."
+    },
+    {
+      "name": "home_search_no_match",
+      "value": "Нет подходящих паролей"
+    },
+    {
+      "name": "home_store_empty",
+      "value": "Хранилище пусто"
+    },
+    {
+      "name": "home_search_try_other",
+      "value": "Попробуйте другое ключевое слово"
+    },
+    {
+      "name": "home_create_first_hint",
+      "value": "Нажмите «+» в правом нижнем углу, чтобы создать первый пароль"
+    },
+    {
+      "name": "home_sync_all",
+      "value": "Синхронизировать"
+    },
+    {
+      "name": "home_sync_repo_menu",
+      "value": "Синхронизация хранилища"
+    },
+    {
+      "name": "home_refresh_list",
+      "value": "Обновить список"
+    },
+    {
+      "name": "store_root_dir",
+      "value": "Корневая папка хранилища"
+    },
+    {
+      "name": "store_delete_dir_confirm",
+      "value": "Папка «%s» и всё её содержимое (записей: %d) будут удалены. Это действие необратимо."
+    },
+    {
+      "name": "store_delete_entry_confirm",
+      "value": "«%s» будет удалено. Это действие необратимо."
+    },
+    {
+      "name": "sync_no_remote_title",
+      "value": "Удалённый репозиторий не настроен"
+    },
+    {
+      "name": "sync_no_remote_message",
+      "value": "Для синхронизации нужно указать адрес удалённого Git-репозитория. Настроить сейчас?"
+    },
+    {
+      "name": "sync_done",
+      "value": "Синхронизация завершена"
+    },
+    {
+      "name": "sync_pull_done",
+      "value": "Извлечение завершено"
+    },
+    {
+      "name": "sync_push_done",
+      "value": "Отправка завершена"
+    },
+    {
+      "name": "sync_conflict_message",
+      "value": "Обнаружен конфликт слияния. Устраните его вручную и повторите попытку."
+    },
+    {
+      "name": "sync_pulling_remote",
+      "value": "Извлечение изменений с удалённого репозитория..."
+    },
+    {
+      "name": "sync_pushing_remote",
+      "value": "Отправка на удалённый репозиторий..."
+    },
+    {
+      "name": "sync_committing_changes",
+      "value": "Создание коммита..."
+    },
+    {
+      "name": "sync_pulling",
+      "value": "Извлечение..."
+    },
+    {
+      "name": "sync_committing",
+      "value": "Создание коммита..."
+    },
+    {
+      "name": "sync_pushing",
+      "value": "Отправка..."
+    },
+    {
+      "name": "sync_op_success",
+      "value": "Операция выполнена"
+    },
+    {
+      "name": "sync_op_exception",
+      "value": "Операция завершилась исключением"
+    },
+    {
+      "name": "sync_save_hostkey_failed",
+      "value": "Не удалось сохранить ключ хоста"
+    },
+    {
+      "name": "sync_status_no_repo",
+      "value": "Git-репозиторий не настроен"
+    },
+    {
+      "name": "sync_status_changes",
+      "value": "изменений: %d"
+    },
+    {
+      "name": "sync_status_synced",
+      "value": "Синхронизировано"
+    },
+    {
+      "name": "sync_hostkey_mismatch_title",
+      "value": "Внимание: ключ хоста отличается от сохранённой записи"
+    },
+    {
+      "name": "sync_hostkey_first_type",
+      "value": "Первое подключение: подтвердите отпечаток ключа %s сервера"
+    },
+    {
+      "name": "sync_hostkey_first",
+      "value": "Первое подключение: подтвердите отпечаток сервера"
+    },
+    {
+      "name": "sync_hostkey_fp_label",
+      "value": "Отпечаток ключа хоста %s:%d:"
+    },
+    {
+      "name": "sync_hostkey_new_detail",
+      "value": "Сервер предлагает несколько ключей хоста разных типов; этот ещё не записан. После подтверждения он будет добавлен в доверенные записи этого устройства (TOFU); изменение отпечатка ключа того же типа по-прежнему отклоняется (защита от атак «человек посередине»)."
+    },
+    {
+      "name": "sync_reject",
+      "value": "Отклонить"
+    },
+    {
+      "name": "sync_trust_retry",
+      "value": "Доверять и повторить"
+    },
+    {
+      "name": "sync_trust_retry_mismatch",
+      "value": "Всё равно доверять и повторить"
+    },
+    {
+      "name": "sync_pull_btn",
+      "value": "Извлечь"
+    },
+    {
+      "name": "sync_commit_btn",
+      "value": "Создать коммит"
+    },
+    {
+      "name": "sync_push_btn",
+      "value": "Отправить"
+    },
+    {
+      "name": "git_log_title",
+      "value": "История коммитов"
+    },
+    {
+      "name": "git_log_empty",
+      "value": "Коммитов пока нет"
+    },
+    {
+      "name": "folder_name_required",
+      "value": "Введите название папки"
+    },
+    {
+      "name": "folder_name_invalid",
+      "value": "Название папки не может содержать .., \\ или начинаться с точки"
+    },
+    {
+      "name": "folder_created",
+      "value": "Папка создана"
+    },
+    {
+      "name": "folder_create_failed",
+      "value": "Не удалось создать: %s"
+    },
+    {
+      "name": "move_name_required",
+      "value": "Название не может быть пустым"
+    },
+    {
+      "name": "move_name_no_slash",
+      "value": "Название не может содержать /"
+    },
+    {
+      "name": "move_no_change",
+      "value": "Расположение и название не изменились"
+    },
+    {
+      "name": "move_missing_key_toast",
+      "value": "Перемещено; но отсутствует ключ расшифровки — не перешифровано ключом целевой папки"
+    },
+    {
+      "name": "move_saved_default",
+      "value": "Сохранено"
+    },
+    {
+      "name": "move_read_ciphertext_failed",
+      "value": "Не удалось прочитать шифротекст"
+    },
+    {
+      "name": "move_decrypt_failed",
+      "value": "Ошибка расшифровки: %s"
+    },
+    {
+      "name": "move_encrypt_failed",
+      "value": "Ошибка шифрования ключом целевой папки: %s"
+    },
+    {
+      "name": "move_write_failed",
+      "value": "Не удалось записать в новое расположение: %s"
+    },
+    {
+      "name": "move_delete_old_failed",
+      "value": "Записано в новое расположение, но не удалось удалить исходный файл: %s"
+    },
+    {
+      "name": "move_reencrypted_toast",
+      "value": "Перемещено и перешифровано ключом целевой папки"
+    },
+    {
+      "name": "common_password",
+      "value": "Пароль"
+    },
+    {
+      "name": "common_username",
+      "value": "Пользователь"
+    },
+    {
+      "name": "common_email",
+      "value": "Почта"
+    },
+    {
+      "name": "common_phone",
+      "value": "Телефон"
+    },
+    {
+      "name": "common_notes",
+      "value": "Заметки"
+    },
+    {
+      "name": "common_extra_content",
+      "value": "Дополнительное содержимое"
+    },
+    {
+      "name": "common_name",
+      "value": "Название"
+    },
+    {
+      "name": "common_save",
+      "value": "Сохранить"
+    },
+    {
+      "name": "common_saving",
+      "value": "Сохранение..."
+    },
+    {
+      "name": "common_deleting",
+      "value": "Удаление..."
+    },
+    {
+      "name": "common_processing",
+      "value": "Обработка..."
+    },
+    {
+      "name": "common_enter_passphrase",
+      "value": "Введите пароль ключа"
+    },
+    {
+      "name": "common_passphrase_placeholder",
+      "value": "Пароль ключа"
+    },
+    {
+      "name": "common_copy_username",
+      "value": "Копировать имя пользователя"
+    },
+    {
+      "name": "common_copy_email",
+      "value": "Копировать почту"
+    },
+    {
+      "name": "common_copy_phone",
+      "value": "Копировать телефон"
+    },
+    {
+      "name": "common_copy_notes",
+      "value": "Копировать заметки"
+    },
+    {
+      "name": "common_copy_extra",
+      "value": "Копировать дополнительное содержимое"
+    },
+    {
+      "name": "common_copy_password",
+      "value": "Копировать пароль"
+    },
+    {
+      "name": "common_copy_failed",
+      "value": "Не удалось скопировать"
+    },
+    {
+      "name": "common_decrypt_failed",
+      "value": "Ошибка расшифровки"
+    },
+    {
+      "name": "common_strength_weak",
+      "value": "Слабый"
+    },
+    {
+      "name": "common_strength_fair",
+      "value": "Средний"
+    },
+    {
+      "name": "common_strength_good",
+      "value": "Надёжный"
+    },
+    {
+      "name": "common_strength_strong",
+      "value": "Очень надёжный"
+    },
+    {
+      "name": "create_edit_title",
+      "value": "Редактирование пароля"
+    },
+    {
+      "name": "create_dir_label",
+      "value": "Папка"
+    },
+    {
+      "name": "create_name_placeholder",
+      "value": "напр.: john@example.com"
+    },
+    {
+      "name": "create_password_placeholder",
+      "value": "Введите или сгенерируйте пароль"
+    },
+    {
+      "name": "create_username_placeholder",
+      "value": "Имя пользователя (необязательно)"
+    },
+    {
+      "name": "create_email_placeholder",
+      "value": "Почта (необязательно)"
+    },
+    {
+      "name": "create_phone_placeholder",
+      "value": "Телефон (необязательно)"
+    },
+    {
+      "name": "create_notes_placeholder",
+      "value": "Заметки (необязательно)"
+    },
+    {
+      "name": "create_extra_placeholder",
+      "value": "Своё дополнительное содержимое (необязательно)"
+    },
+    {
+      "name": "create_generate",
+      "value": "Сгенерировать пароль"
+    },
+    {
+      "name": "create_gen_upper",
+      "value": "Прописные буквы (A-Z)"
+    },
+    {
+      "name": "create_gen_lower",
+      "value": "Строчные буквы (a-z)"
+    },
+    {
+      "name": "create_gen_digits",
+      "value": "Цифры (0-9)"
+    },
+    {
+      "name": "create_gen_symbols",
+      "value": "Символы (!@#$)"
+    },
+    {
+      "name": "create_read_fail",
+      "value": "Не удалось прочитать пароль"
+    },
+    {
+      "name": "create_err_name_required",
+      "value": "Введите название"
+    },
+    {
+      "name": "create_err_password_required",
+      "value": "Введите пароль"
+    },
+    {
+      "name": "create_err_name_unsafe",
+      "value": "Название не может содержать .., \\ или начинаться с точки"
+    },
+    {
+      "name": "create_err_dir_conflict",
+      "value": "Папка с таким названием уже существует; выберите другое название"
+    },
+    {
+      "name": "create_err_no_key",
+      "value": "Не импортирован ни один ключ PGP; невозможно зашифровать и сохранить. Сначала импортируйте ключ в настройках"
+    },
+    {
+      "name": "create_err_write_gpgid",
+      "value": "Не удалось записать .gpg-id: %s"
+    },
+    {
+      "name": "create_err_gpgid_unimported",
+      "value": "Файл .gpg-id этой папки ссылается на неимпортированные ключи (%s); шифрование для всех получателей невозможно. Сначала импортируйте эти ключи или явно измените набор через «Изменить ключи шифрования папки»."
+    },
+    {
+      "name": "create_err_keys_expired",
+      "value": "Все ключи шифрования этой папки просрочены; создать новый пароль невозможно (импортируйте новые ключи или обновите их)"
+    },
+    {
+      "name": "detail_decrypting",
+      "value": "Расшифровка..."
+    },
+    {
+      "name": "detail_passphrase_hint",
+      "value": "Ключ защищён паролем; введите его для расшифровки"
+    },
+    {
+      "name": "detail_delete_password",
+      "value": "Удалить пароль"
+    },
+    {
+      "name": "detail_delete_confirm",
+      "value": "Удалить «%s»? Это действие необратимо."
+    },
+    {
+      "name": "detail_err_file_missing",
+      "value": "Файл пароля не существует; возможно, он был перемещён или удалён"
+    },
+    {
+      "name": "detail_err_passphrase_required",
+      "value": "Для расшифровки нужен пароль; введите пароль ключа"
+    },
+    {
+      "name": "detail_err_unlock_failed",
+      "value": "Неверный пароль ключа; расшифровка не удалась"
+    },
+    {
+      "name": "detail_err_cancelled",
+      "value": "Расшифровка отменена"
+    },
+    {
+      "name": "detail_err_delete_failed",
+      "value": "Не удалось удалить"
+    },
+    {
+      "name": "detail_copied_password",
+      "value": "Пароль скопирован"
+    },
+    {
+      "name": "detail_copied_username",
+      "value": "Имя пользователя скопировано"
+    },
+    {
+      "name": "detail_copied_email",
+      "value": "Почта скопирована"
+    },
+    {
+      "name": "detail_copied_phone",
+      "value": "Телефон скопирован"
+    },
+    {
+      "name": "detail_copied_notes",
+      "value": "Заметки скопированы"
+    },
+    {
+      "name": "detail_copied_extra",
+      "value": "Дополнительное содержимое скопировано"
+    },
+    {
+      "name": "detail_copied_all",
+      "value": "Всё содержимое скопировано"
+    },
+    {
+      "name": "move_title",
+      "value": "Перемещение / переименование"
+    },
+    {
+      "name": "move_old_path",
+      "value": "Текущий путь"
+    },
+    {
+      "name": "move_name_placeholder",
+      "value": "Введите новое название"
+    },
+    {
+      "name": "move_target_dir",
+      "value": "Целевая папка"
+    },
+    {
+      "name": "move_unlock_hint_ids",
+      "value": "Целевая папка использует другой ключ; сначала расшифруйте исходным ключом. PGP ID: %s"
+    },
+    {
+      "name": "move_unlock_hint",
+      "value": "Целевая папка использует другой ключ; сначала расшифруйте исходным ключом, затем перешифруйте"
+    },
+    {
+      "name": "passgen_tap_hint",
+      "value": "Нажмите кнопку ниже, чтобы сгенерировать пароль"
+    },
+    {
+      "name": "passgen_entropy",
+      "value": "Энтропия"
+    },
+    {
+      "name": "passgen_entropy_estimate",
+      "value": "Оценка энтропии (бит): %d — %s"
+    },
+    {
+      "name": "passgen_entropy_hint",
+      "value": "Оценка энтропии появится после генерации"
+    },
+    {
+      "name": "passgen_generate",
+      "value": "Сгенерировать"
+    },
+    {
+      "name": "passgen_copied",
+      "value": "Скопировано"
+    },
+    {
+      "name": "passgen_copy",
+      "value": "Копировать"
+    },
+    {
+      "name": "passgen_mode_random",
+      "value": "Случайный пароль"
+    },
+    {
+      "name": "passgen_mode_diceware",
+      "value": "Парольная фраза"
+    },
+    {
+      "name": "passgen_length",
+      "value": "Длина"
+    },
+    {
+      "name": "passgen_upper",
+      "value": "Прописные A-Z"
+    },
+    {
+      "name": "passgen_lower",
+      "value": "Строчные a-z"
+    },
+    {
+      "name": "passgen_digits",
+      "value": "Цифры 0-9"
+    },
+    {
+      "name": "passgen_symbols",
+      "value": "Символы !@#$"
+    },
+    {
+      "name": "passgen_exclude_ambiguous",
+      "value": "Исключить неоднозначные символы (0/O, 1/l)"
+    },
+    {
+      "name": "passgen_word_count",
+      "value": "Количество слов"
+    },
+    {
+      "name": "passgen_separator",
+      "value": "Разделитель"
+    },
+    {
+      "name": "passgen_capitalize",
+      "value": "С заглавной буквы"
+    },
+    {
+      "name": "passgen_insert_digits",
+      "value": "Цифры между словами"
+    },
+    {
+      "name": "passgen_copied_clipboard",
+      "value": "Скопировано в буфер обмена"
+    },
+    {
+      "name": "folder_create_title",
+      "value": "Новая папка"
+    },
+    {
+      "name": "folder_name_label",
+      "value": "Название папки"
+    },
+    {
+      "name": "folder_name_placeholder",
+      "value": "Введите название папки"
+    },
+    {
+      "name": "folder_key_label",
+      "value": "Ключи шифрования (необязательно; переопределяют ключи родительской папки)"
+    },
+    {
+      "name": "folder_no_keys",
+      "value": "Ключи PGP ещё не импортированы; будет использован ключ родительской папки"
+    },
+    {
+      "name": "folder_create_btn",
+      "value": "Создать папку"
+    },
+    {
+      "name": "autofill_title",
+      "value": "Предложения автозаполнения"
+    },
+    {
+      "name": "autofill_pick_for",
+      "value": "Выберите учётные данные для %s"
+    },
+    {
+      "name": "autofill_matching",
+      "value": "Поиск совпадений..."
+    },
+    {
+      "name": "autofill_no_match",
+      "value": "Нет подходящих паролей"
+    },
+    {
+      "name": "autofill_no_match_hint",
+      "value": "Можно выполнить поиск на главном экране и скопировать вручную"
+    },
+    {
+      "name": "autofill_unlocked_prompt",
+      "value": "Разблокировано. Выберите действие"
+    },
+    {
+      "name": "autofill_err_load",
+      "value": "Не удалось загрузить кандидатов"
+    },
+    {
+      "name": "autofill_fill_applied",
+      "value": "Автоматически заполнено полей: %d"
+    },
+    {
+      "name": "autofill_fill_failed",
+      "value": "Не удалось выполнить автозаполнение; используйте копирование"
+    },
+    {
+      "name": "onboarding_hostkey_fp_line",
+      "value": "Отпечаток ключа хоста %s:%d:"
+    },
+    {
+      "name": "onboarding_trust_clone",
+      "value": "Доверять и клонировать"
+    },
+    {
+      "name": "onboarding_trust_clone_mismatch",
+      "value": "Всё равно доверять и клонировать"
+    },
+    {
+      "name": "onboarding_local_not_empty",
+      "value": "Локальная папка не пуста"
+    },
+    {
+      "name": "onboarding_local_not_empty_msg",
+      "value": "Для клонирования требуется пустая целевая папка, но в текущей папке уже есть файлы (возможно, остатки предыдущего клонирования или старый репозиторий).\n\nЕсли продолжить, всё содержимое этой папки будет удалено, после чего клонирование из удалённого репозитория начнётся заново. Это действие необратимо."
+    },
+    {
+      "name": "onboarding_delete_clone",
+      "value": "Удалить и клонировать"
+    },
+    {
+      "name": "onboarding_welcome_title",
+      "value": "Добро пожаловать в HarmonyPasswordStore"
+    },
+    {
+      "name": "onboarding_welcome_desc",
+      "value": "Менеджер паролей, полностью совместимый с утилитой командной строки pass. Пароли хранятся в файлах, зашифрованных GPG, и синхронизируются между устройствами через Git."
+    },
+    {
+      "name": "onboarding_feature_pass",
+      "value": "· Стандартная структура папок pass и файлы .gpg"
+    },
+    {
+      "name": "onboarding_feature_huks",
+      "value": "· Шифрование PGP, ключи надёжно управляются HUKS"
+    },
+    {
+      "name": "onboarding_feature_git",
+      "value": "· Синхронизация Git по HTTPS и SSH"
+    },
+    {
+      "name": "onboarding_feature_passgen",
+      "value": "· Встроенный генератор паролей и парольных фраз"
+    },
+    {
+      "name": "onboarding_repo_title",
+      "value": "Инициализация хранилища паролей"
+    },
+    {
+      "name": "onboarding_repo_desc",
+      "value": "Создайте новое пустое хранилище или клонируйте существующее из удалённого Git-репозитория."
+    },
+    {
+      "name": "onboarding_mode_new",
+      "value": "Новое хранилище"
+    },
+    {
+      "name": "onboarding_mode_clone",
+      "value": "Клонировать"
+    },
+    {
+      "name": "onboarding_url_placeholder",
+      "value": "git@host:пользователь/репозиторий.git"
+    },
+    {
+      "name": "onboarding_ssh_not_configured",
+      "value": "SSH-ключ не настроен"
+    },
+    {
+      "name": "onboarding_ssh_configure",
+      "value": "Настроить SSH-ключ"
+    },
+    {
+      "name": "onboarding_pgp_title",
+      "value": "Настройка ключей PGP"
+    },
+    {
+      "name": "onboarding_pgp_desc",
+      "value": "Нажмите «Обзор», чтобы открыть менеджер ключей PGP: там можно создать или импортировать ключи (файлы .asc / .pgp либо вставленный текст). Закрытые ключи надёжно хранятся системным модулем HUKS и никогда не сохраняются в открытом виде."
+    },
+    {
+      "name": "onboarding_pgp_not_set",
+      "value": "Ключи PGP ещё не настроены"
+    },
+    {
+      "name": "onboarding_browse",
+      "value": "Обзор"
+    },
+    {
+      "name": "onboarding_finish_title",
+      "value": "Настройка завершена"
+    },
+    {
+      "name": "onboarding_finish_desc",
+      "value": "Всё готово! Теперь можно управлять своими паролями."
+    },
+    {
+      "name": "onboarding_repo_done",
+      "value": "✓ Хранилище паролей инициализировано"
+    },
+    {
+      "name": "onboarding_repo_todo",
+      "value": "· Хранилище паролей не инициализировано (можно сделать позже в настройках)"
+    },
+    {
+      "name": "onboarding_key_done",
+      "value": "✓ Ключ PGP импортирован"
+    },
+    {
+      "name": "onboarding_key_todo",
+      "value": "· Ключ PGP не импортирован (можно сделать позже в настройках)"
+    },
+    {
+      "name": "onboarding_setup_title",
+      "value": "Первоначальная настройка"
+    },
+    {
+      "name": "onboarding_skip",
+      "value": "Пропустить"
+    },
+    {
+      "name": "onboarding_prev",
+      "value": "Назад"
+    },
+    {
+      "name": "onboarding_init_repo",
+      "value": "Инициализировать"
+    },
+    {
+      "name": "onboarding_next",
+      "value": "Далее"
+    },
+    {
+      "name": "onboarding_done",
+      "value": "Готово"
+    },
+    {
+      "name": "onboarding_overlay_checkout",
+      "value": "Извлечение файлов…"
+    },
+    {
+      "name": "onboarding_overlay_cloning",
+      "value": "Клонирование удалённого репозитория…"
+    },
+    {
+      "name": "onboarding_progress_init",
+      "value": "Инициализация локального репозитория..."
+    },
+    {
+      "name": "onboarding_err_url_required",
+      "value": "Укажите адрес удалённого репозитория"
+    },
+    {
+      "name": "onboarding_err_ssh_only",
+      "value": "Настройка поддерживает только SSH-клонирование. Используйте git@host:пользователь/репозиторий.git или ssh://git@host[:порт]/путь (для HTTPS-репозиториев завершите настройку, затем задайте имя пользователя и токен в «Управление репозиторием → Конфигурация Git»)"
+    },
+    {
+      "name": "onboarding_progress_clone",
+      "value": "Клонирование удалённого репозитория..."
+    },
+    {
+      "name": "onboarding_err_save_hostkey",
+      "value": "Не удалось сохранить отпечаток хоста, попробуйте снова"
+    },
+    {
+      "name": "about_title",
+      "value": "О программе"
+    },
+    {
+      "name": "about_app_name",
+      "value": "Имя приложения"
+    },
+    {
+      "name": "about_version",
+      "value": "Версия"
+    },
+    {
+      "name": "about_license",
+      "value": "Лицензия"
+    },
+    {
+      "name": "about_target_os",
+      "value": "Целевая ОС"
+    },
+    {
+      "name": "about_intro_title",
+      "value": "О проекте"
+    },
+    {
+      "name": "about_intro_body",
+      "value": "HarmonyPasswordStore — реализация password-store (pass) для HarmonyOS, совместимая со стандартным форматом хранилища pass с шифрованием GPG. Все пароли хранятся локально в зашифрованных файлах .gpg, закрытые ключи управляются через HUKS, поддерживается синхронизация Git по протоколам SSH и HTTPS."
+    },
+    {
+      "name": "about_deps_title",
+      "value": "Зависимости с открытым кодом"
+    },
+    {
+      "name": "about_deps_body",
+      "value": "• libgit2 — операции с Git-репозиторием (MPL-2.0)\n• pgp / rpgp — шифрование OpenPGP (MIT или Apache-2.0)\n• russh — протокол SSH (MIT)\n• mbedTLS — зашифрованный канал TLS (Apache-2.0)\n• ssh-key — формат ключей OpenSSH (MIT или Apache-2.0)\n• Полный список зависимостей см. в Cargo.toml и CMakeLists.txt"
+    },
+    {
+      "name": "about_source_title",
+      "value": "Исходный код"
+    },
+    {
+      "name": "about_source_body",
+      "value": "Проект полностью открыт; обзоры и вклад приветствуются:\n%s"
+    },
+    {
+      "name": "privacy_title",
+      "value": "Политика конфиденциальности"
+    },
+    {
+      "name": "privacy_doc_title",
+      "value": "Политика конфиденциальности HarmonyPasswordStore"
+    },
+    {
+      "name": "privacy_updated",
+      "value": "Дата обновления: 16 сентября 2026 г."
+    },
+    {
+      "name": "privacy_s1_title",
+      "value": "Общие положения"
+    },
+    {
+      "name": "privacy_s1_body",
+      "value": "HarmonyPasswordStore — менеджер паролей с открытым кодом, совместимый со стандартным форматом хранилища pass. Приложение построено на принципах «локальные данные прежде всего, конфиденциальность превыше всего»: ваши пароли всегда хранятся в зашифрованном виде на локальном устройстве и не передаются на сторонние серверы."
+    },
+    {
+      "name": "privacy_s2_title",
+      "value": "Хранение данных"
+    },
+    {
+      "name": "privacy_s2_body",
+      "value": "Все записи паролей хранятся в локальной файловой системе как зашифрованные GPG-файлы (.gpg); ключи шифрования известны только вам. Закрытые ключи PGP/SSH управляются через HarmonyOS HUKS (единое управление ключами) и никогда не хранятся в открытом виде. Расшифрованный текст существует только в оперативной памяти; конфиденциальный кеш автоматически очищается при уходе приложения в фон."
+    },
+    {
+      "name": "privacy_s3_title",
+      "value": "Синхронизация данных"
+    },
+    {
+      "name": "privacy_s3_body",
+      "value": "Для синхронизации между устройствами встроенная поддержка Git может отправлять хранилище паролей на ваш собственный Git-сервер (GitHub/Gitee/собственный). Каналы синхронизации поддерживают HTTPS (шифрование mbedTLS) и SSH (шифрование russh); учётные данные (токен/SSH-ключи) хранятся только локально и не проходят через какие-либо промежуточные серверы."
+    },
+    {
+      "name": "privacy_s4_title",
+      "value": "Биометрическая разблокировка"
+    },
+    {
+      "name": "privacy_s4_body",
+      "value": "Блокировка приложения поддерживает только биометрию (отпечаток/лицо): разблокировка проверяет личность локально на устройстве, биометрические данные управляются системным модулем безопасности, приложение не имеет доступа к исходным биометрическим данным и не хранит дайджесты PIN/паролей. Ограничение числа неудачных попыток обеспечивает система."
+    },
+    {
+      "name": "privacy_s5_title",
+      "value": "Буфер обмена"
+    },
+    {
+      "name": "privacy_s5_body",
+      "value": "После копирования пароля в буфер обмена приложение автоматически очищает его по истечении настраиваемого времени (по умолчанию 30 секунд), чтобы другие приложения не могли его прочитать."
+    },
+    {
+      "name": "privacy_s6_title",
+      "value": "Журналы"
+    },
+    {
+      "name": "privacy_s6_body",
+      "value": "Журналы приложения (hilog) не содержат паролей, ключей или расшифрованного текста; в них фиксируются только статус операций и пути к файлам для отладки."
+    },
+    {
+      "name": "privacy_s7_title",
+      "value": "Данные, которые не собираются"
+    },
+    {
+      "name": "privacy_s7_body",
+      "value": "Приложение не собирает персональные данные (PII), не встраивает аналитические или рекламные SDK и не выгружает пользовательские данные."
+    },
+    {
+      "name": "privacy_s8_title",
+      "value": "Лицензия"
+    },
+    {
+      "name": "privacy_s8_body",
+      "value": "Приложение распространяется по лицензии GPL-3.0; исходный код можно изучить в репозитории GitHub:\nhttps://github.com/gmg137/HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_verifying",
+      "value": "Проверка…"
+    },
+    {
+      "name": "lock_touch_retry",
+      "value": "Коснитесь значка, чтобы повторить проверку"
+    },
+    {
+      "name": "lock_title",
+      "value": "Разблокировка"
+    },
+    {
+      "name": "common_trust_connect",
+      "value": "Доверять и подключиться"
+    },
+    {
+      "name": "settings_autosync_no_remote",
+      "value": "Адрес удалённого репозитория не задан; сначала укажите его в «Конфигурации Git»"
+    },
+    {
+      "name": "settings_autosync_not_cloned",
+      "value": "Удалённый репозиторий ещё не клонирован локально; сначала клонируйте его в «Управлении репозиторием»"
+    },
+    {
+      "name": "lock_type_fingerprint",
+      "value": "отпечаток пальца"
+    },
+    {
+      "name": "lock_type_face",
+      "value": "лицо"
+    },
+    {
+      "name": "lock_reason_not_enrolled",
+      "value": "Устройство поддерживает биометрию, но отпечаток или лицо ещё не зарегистрированы в настройках системы. Сначала зарегистрируйте их"
+    },
+    {
+      "name": "lock_reason_unsupported",
+      "value": "Устройство не поддерживает биометрию"
+    },
+    {
+      "name": "lock_err_unavailable",
+      "value": "Биометрия недоступна: не поддерживается или не зарегистрирована"
+    },
+    {
+      "name": "lock_auth_dialog_title",
+      "value": "Разблокировать HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_err_timeout",
+      "value": "Время ожидания аутентификации истекло"
+    },
+    {
+      "name": "lock_err_cancelled",
+      "value": "Аутентификация отменена"
+    },
+    {
+      "name": "lock_auth_failed_code",
+      "value": "Ошибка аутентификации (%d)"
+    },
+    {
+      "name": "lock_err_start_failed",
+      "value": "Не удалось запустить биометрическую аутентификацию"
+    },
+    {
+      "name": "common_import",
+      "value": "Импортировать"
+    },
+    {
+      "name": "common_import_failed",
+      "value": "Ошибка импорта"
+    },
+    {
+      "name": "common_ok",
+      "value": "ОК"
+    },
+    {
+      "name": "common_delete_key",
+      "value": "Удалить ключ"
+    },
+    {
+      "name": "common_file_read_failed",
+      "value": "Не удалось прочитать файл: %s"
+    },
+    {
+      "name": "common_copy",
+      "value": "Копировать"
+    },
+    {
+      "name": "pgp_import_text",
+      "value": "Импорт ключа из текста"
+    },
+    {
+      "name": "pgp_import_from_file",
+      "value": "Импорт ключа из файла"
+    },
+    {
+      "name": "pgp_create_new",
+      "value": "Создать новый ключ"
+    },
+    {
+      "name": "pgp_passphrase_optional",
+      "value": "Пароль ключа (необязательно)"
+    },
+    {
+      "name": "pgp_gen_eddsa_rec",
+      "value": "EdDSA (рекомендуется)"
+    },
+    {
+      "name": "pgp_userid_placeholder",
+      "value": "User ID (напр. Name <email@example.com>)"
+    },
+    {
+      "name": "pgp_passphrase_min6",
+      "value": "Пароль ключа (необязательно, минимум 6 символов)"
+    },
+    {
+      "name": "pgp_create_btn",
+      "value": "Создать"
+    },
+    {
+      "name": "pgp_set_default",
+      "value": "Сделать ключом по умолчанию"
+    },
+    {
+      "name": "pgp_edit_key",
+      "value": "Изменить ключ"
+    },
+    {
+      "name": "pgp_export_private",
+      "value": "Экспортировать закрытый ключ"
+    },
+    {
+      "name": "pgp_export_public",
+      "value": "Экспортировать открытый ключ"
+    },
+    {
+      "name": "pgp_chpw_title",
+      "value": "Изменить пароль ключа"
+    },
+    {
+      "name": "pgp_chpw_old_ph",
+      "value": "Текущий пароль ключа"
+    },
+    {
+      "name": "pgp_chpw_new_ph",
+      "value": "Новый пароль (оставьте пустым, чтобы убрать пароль)"
+    },
+    {
+      "name": "pgp_chpw_confirm",
+      "value": "Подтвердить изменение"
+    },
+    {
+      "name": "pgp_import_limited_title",
+      "value": "Импортировано, с ограничениями"
+    },
+    {
+      "name": "pgp_import_failed_title",
+      "value": "Не удалось импортировать ключ"
+    },
+    {
+      "name": "pgp_export_private_ok",
+      "value": "Закрытый ключ сохранён в файл .asc"
+    },
+    {
+      "name": "pgp_export_public_ok",
+      "value": "Открытый ключ сохранён в файл .asc"
+    },
+    {
+      "name": "pgp_delete_key_msg",
+      "value": "Удалить «%s»? Зашифрованные им пароли больше нельзя будет расшифровать, и это действие необратимо."
+    },
+    {
+      "name": "pgp_root_switch_title",
+      "value": "Сменить ключ шифрования корневой папки"
+    },
+    {
+      "name": "pgp_root_switch_msg_needs",
+      "value": "Корень хранилища сейчас зашифрован ключом «%s». Переключиться на «%s» и перешифровать записи в корне (всего: %d)?"
+    },
+    {
+      "name": "pgp_root_switch_msg_none",
+      "value": "Корень хранилища сейчас зашифрован ключом «%s». Переключиться на «%s»? (В корне нет записей, требующих перешифрования.)"
+    },
+    {
+      "name": "pgp_root_switch_skip_warn",
+      "value": "Внимание: часть записей будет пропущена (всего: %d) — нет соответствующего закрытого ключа."
+    },
+    {
+      "name": "pgp_root_switch_only_default",
+      "value": "Только сделать ключом по умолчанию"
+    },
+    {
+      "name": "pgp_root_switch_both",
+      "value": "Также переключить"
+    },
+    {
+      "name": "pgp_root_switched",
+      "value": "Ключ шифрования корня сменён"
+    },
+    {
+      "name": "pgp_root_reencrypted",
+      "value": "Ключ шифрования корня сменён; перешифровано записей: %d"
+    },
+    {
+      "name": "pgp_rootkey_title",
+      "value": "Введите пароль старого ключа"
+    },
+    {
+      "name": "pgp_rootkey_hint",
+      "value": "Для перешифрования сначала нужно разблокировать эти записи старым ключом"
+    },
+    {
+      "name": "pgp_rootkey_ph",
+      "value": "Пароль старого ключа"
+    },
+    {
+      "name": "pgp_rootkey_start",
+      "value": "Начать перешифрование"
+    },
+    {
+      "name": "pgp_algo_unknown",
+      "value": "Неизвестный алгоритм"
+    },
+    {
+      "name": "pgp_tag_default",
+      "value": "По умолчанию"
+    },
+    {
+      "name": "pgp_tag_expired",
+      "value": "Просрочен"
+    },
+    {
+      "name": "pgp_tag_secret",
+      "value": "Закрытый"
+    },
+    {
+      "name": "pgp_tag_public",
+      "value": "Открытый"
+    },
+    {
+      "name": "pgp_empty_title",
+      "value": "Ключи ещё не импортированы"
+    },
+    {
+      "name": "pgp_empty_hint",
+      "value": "Нажмите «+» в правом нижнем углу, чтобы импортировать или создать ключи"
+    },
+    {
+      "name": "pgp_load_failed",
+      "value": "Не удалось загрузить список ключей"
+    },
+    {
+      "name": "pgp_err_userid_required",
+      "value": "Введите User ID (напр. Name <email@example.com>)"
+    },
+    {
+      "name": "pgp_err_passphrase_short",
+      "value": "Пароль — минимум 6 символов (или оставьте пустым)"
+    },
+    {
+      "name": "pgp_generated",
+      "value": "Ключ создан"
+    },
+    {
+      "name": "pgp_err_paste_required",
+      "value": "Вставьте текст ключа в ASCII-броне"
+    },
+    {
+      "name": "pgp_imported_with_limit",
+      "value": "Ключ импортирован (с ограничениями)"
+    },
+    {
+      "name": "pgp_imported_ok",
+      "value": "Ключ импортирован"
+    },
+    {
+      "name": "pgp_duplicate_key",
+      "value": "Этот ключ уже есть на устройстве; повторный импорт не требуется."
+    },
+    {
+      "name": "pgp_root_switch_failed",
+      "value": "Не удалось сменить ключ шифрования корня: %s"
+    },
+    {
+      "name": "pgp_file_empty",
+      "value": "Файл пуст; ничего не прочитано"
+    },
+    {
+      "name": "pgp_file_not_pgp",
+      "value": "Этот файл не является файлом ключа PGP (ни текст в ASCII-броне, ни двоичные данные OpenPGP)"
+    },
+    {
+      "name": "pgp_set_default_ok",
+      "value": "Установлен как ключ шифрования по умолчанию"
+    },
+    {
+      "name": "pgp_deleted",
+      "value": "Ключ удалён"
+    },
+    {
+      "name": "pgp_pw_changed",
+      "value": "Пароль ключа изменён"
+    },
+    {
+      "name": "pgp_export_read_private_failed",
+      "value": "Не удалось прочитать закрытый ключ"
+    },
+    {
+      "name": "pgp_export_pub_failed",
+      "value": "Не удалось экспортировать открытый ключ"
+    },
+    {
+      "name": "pgp_export_save_failed",
+      "value": "Не удалось сохранить: %s"
+    },
+    {
+      "name": "pgp_chpw_failed_retry",
+      "value": "Не удалось изменить, попробуйте снова"
+    },
+    {
+      "name": "pgp_chpw_wrong_old",
+      "value": "Текущий пароль ключа неверен, попробуйте снова"
+    },
+    {
+      "name": "pgp_chpw_failed",
+      "value": "Не удалось изменить: %s"
+    },
+    {
+      "name": "ssh_replace_confirm_title",
+      "value": "Заменить существующий ключ SSH?"
+    },
+    {
+      "name": "ssh_replace_confirm_msg",
+      "value": "Вы можете потерять доступ к серверам"
+    },
+    {
+      "name": "ssh_replace_btn",
+      "value": "Заменить"
+    },
+    {
+      "name": "ssh_import_hint",
+      "value": "Подготовьте файл закрытого ключа на компьютере и передайте его на телефон:\n· Существующий ключ: закрытый ключ — ~/.ssh/id_ed25519 (или id_rsa)\n· Новый: ssh-keygen -t ed25519 -C \"your@email.com\"\nПоддерживаются OpenSSH / PKCS8 / RSA PEM (включая зашифрованные ключи)."
+    },
+    {
+      "name": "ssh_encrypted_key_title",
+      "value": "Закрытый ключ зашифрован"
+    },
+    {
+      "name": "ssh_encrypted_key_msg",
+      "value": "Этот закрытый ключ зашифрован; перед импортом введите пароль в поле «Пароль закрытого ключа»."
+    },
+    {
+      "name": "ssh_generate_new",
+      "value": "Создать новый ключ"
+    },
+    {
+      "name": "ssh_import_key",
+      "value": "Импортировать ключ"
+    },
+    {
+      "name": "ssh_comment_ph",
+      "value": "Комментарий (необязательно, обычно почта)"
+    },
+    {
+      "name": "ssh_generate_btn",
+      "value": "Сгенерировать"
+    },
+    {
+      "name": "ssh_pick_key_file",
+      "value": "Выберите файл закрытого ключа"
+    },
+    {
+      "name": "ssh_passphrase_ph",
+      "value": "Пароль закрытого ключа (оставьте пустым, если его нет)"
+    },
+    {
+      "name": "ssh_copy_pub",
+      "value": "Копировать открытый ключ"
+    },
+    {
+      "name": "ssh_empty_title",
+      "value": "Ключ SSH ещё не создан"
+    },
+    {
+      "name": "ssh_empty_hint",
+      "value": "Нажмите «+» в правом нижнем углу, чтобы создать или импортировать ключ"
+    },
+    {
+      "name": "ssh_load_failed",
+      "value": "Не удалось загрузить ключ"
+    },
+    {
+      "name": "ssh_gen_failed",
+      "value": "Не удалось создать ключ"
+    },
+    {
+      "name": "ssh_replaced",
+      "value": "Ключ SSH заменён"
+    },
+    {
+      "name": "ssh_generated",
+      "value": "Ключ SSH создан"
+    },
+    {
+      "name": "ssh_imported",
+      "value": "Ключ SSH импортирован"
+    },
+    {
+      "name": "ssh_file_empty",
+      "value": "Выбранный файл пуст"
+    },
+    {
+      "name": "ssh_err_pick_first",
+      "value": "Сначала выберите файл закрытого ключа"
+    },
+    {
+      "name": "ssh_import_private_failed",
+      "value": "Не удалось импортировать закрытый ключ"
+    },
+    {
+      "name": "ssh_pub_missing",
+      "value": "Открытый ключ не существует"
+    },
+    {
+      "name": "ssh_pub_copied",
+      "value": "Открытый ключ скопирован в буфер обмена"
+    },
+    {
+      "name": "ssh_deleted",
+      "value": "Ключ SSH удалён"
+    },
+    {
+      "name": "gitcfg_saved_title",
+      "value": "Конфигурация сохранена"
+    },
+    {
+      "name": "gitcfg_clone_after_save_msg",
+      "value": "Клонировать удалённый репозиторий сейчас?\n%s"
+    },
+    {
+      "name": "gitcfg_clone_btn",
+      "value": "Клонировать"
+    },
+    {
+      "name": "gitcfg_needs_clean_title",
+      "value": "Локальная папка не пуста"
+    },
+    {
+      "name": "gitcfg_needs_clean_msg",
+      "value": "Для клонирования нужна пустая локальная папка. В текущей папке могут быть старый репозиторий или оставшиеся файлы; сначала нужно удалить папку локального репозитория и все файлы паролей в ней. Продолжить?"
+    },
+    {
+      "name": "gitcfg_delete_and_clone",
+      "value": "Удалить и клонировать"
+    },
+    {
+      "name": "gitcfg_hostkey_fp_typed",
+      "value": "Отпечаток ключа хоста %s:%d (%s):"
+    },
+    {
+      "name": "gitcfg_hostkey_mismatch_explain",
+      "value": "Для этого хоста уже есть доверенная запись, но отпечаток ключа того же типа отличается: сервер мог сменить ключ, либо это атака «человек посередине». Сверьтесь с администратором сервера, прежде чем принимать решение; после подтверждения запись для этого типа ключа будет перезаписана."
+    },
+    {
+      "name": "gitcfg_hostkey_trust_anyway",
+      "value": "Всё равно доверять"
+    },
+    {
+      "name": "gitcfg_hostkey_trust_connect",
+      "value": "Доверять и подключиться"
+    },
+    {
+      "name": "gitcfg_clone_done_toast",
+      "value": "Клонирование завершено; список паролей обновлён"
+    },
+    {
+      "name": "gitcfg_pick_ssh_key",
+      "value": "Выберите ключ SSH"
+    },
+    {
+      "name": "gitcfg_section_remote",
+      "value": "Удалённый репозиторий"
+    },
+    {
+      "name": "gitcfg_auth_mode",
+      "value": "Аутентификация"
+    },
+    {
+      "name": "gitcfg_auth_ssh",
+      "value": "Ключ SSH"
+    },
+    {
+      "name": "gitcfg_auth_ssh_tab",
+      "value": "SSH"
+    },
+    {
+      "name": "gitcfg_label_url",
+      "value": "Удалённый адрес"
+    },
+    {
+      "name": "gitcfg_ph_username",
+      "value": "Имя пользователя / почта"
+    },
+    {
+      "name": "gitcfg_ph_password",
+      "value": "Пароль / токен доступа"
+    },
+    {
+      "name": "gitcfg_token_hint",
+      "value": "Платформы вроде Gitee/GitHub требуют «персональный токен» вместо пароля для входа"
+    },
+    {
+      "name": "gitcfg_select_ssh_key",
+      "value": "Выберите ключ SSH"
+    },
+    {
+      "name": "gitcfg_no_keys",
+      "value": "Ключей пока нет"
+    },
+    {
+      "name": "gitcfg_go_create",
+      "value": "Создать"
+    },
+    {
+      "name": "gitcfg_label_ssh_port",
+      "value": "Порт SSH"
+    },
+    {
+      "name": "gitcfg_ph_ssh_port",
+      "value": "По умолчанию 22"
+    },
+    {
+      "name": "gitcfg_label_key_passphrase",
+      "value": "Пароль ключа"
+    },
+    {
+      "name": "gitcfg_ph_key_passphrase",
+      "value": "Оставьте пустым, если ключ не зашифрован"
+    },
+    {
+      "name": "gitcfg_section_identity",
+      "value": "Личность для коммитов"
+    },
+    {
+      "name": "gitcfg_label_name",
+      "value": "Имя"
+    },
+    {
+      "name": "gitcfg_ph_name",
+      "value": "Имя автора коммитов Git"
+    },
+    {
+      "name": "gitcfg_ph_email",
+      "value": "Почта автора коммитов Git"
+    },
+    {
+      "name": "gitcfg_section_network",
+      "value": "Сеть"
+    },
+    {
+      "name": "gitcfg_label_proxy",
+      "value": "Прокси"
+    },
+    {
+      "name": "gitcfg_ph_proxy",
+      "value": "напр. http://127.0.0.1:7890"
+    },
+    {
+      "name": "gitcfg_test_ok",
+      "value": "Подключение успешно"
+    },
+    {
+      "name": "gitcfg_testing",
+      "value": "Проверка..."
+    },
+    {
+      "name": "gitcfg_test_btn",
+      "value": "Проверить"
+    },
+    {
+      "name": "gitcfg_checkout_files",
+      "value": "Извлечение файлов…"
+    },
+    {
+      "name": "gitcfg_cloning_overlay",
+      "value": "Клонирование удалённого репозитория…"
+    },
+    {
+      "name": "gitcfg_err_key_removed",
+      "value": "Ранее выбранный ключ SSH был удалён; выберите снова"
+    },
+    {
+      "name": "gitcfg_cloning",
+      "value": "Клонирование удалённого репозитория..."
+    },
+    {
+      "name": "gitcfg_clone_done",
+      "value": "Клонирование завершено"
+    },
+    {
+      "name": "gitcfg_err_url_required",
+      "value": "Укажите адрес удалённого репозитория"
+    },
+    {
+      "name": "gitcfg_err_url_scheme",
+      "value": "Адрес должен начинаться с https:// или ssh:// (или иметь вид git@host:path)"
+    },
+    {
+      "name": "gitcfg_save_failed",
+      "value": "Не удалось сохранить"
+    },
+    {
+      "name": "gitcfg_err_parse_ssh",
+      "value": "Не удалось разобрать данные SSH-хоста из адреса"
+    },
+    {
+      "name": "gitcfg_err_need_tofu",
+      "value": "При первом подключении нужно подтвердить отпечаток сервера; подтвердите и сохраните снова"
+    },
+    {
+      "name": "gitcfg_https_err_auth",
+      "value": "Ошибка аутентификации: проверьте имя пользователя и пароль/токен (Gitee/GitHub требуют токен доступа, а не пароль для входа)"
+    },
+    {
+      "name": "gitcfg_https_err_dns",
+      "value": "Не удалось разрешить адрес хоста: проверьте сеть и правильность удалённого адреса"
+    },
+    {
+      "name": "gitcfg_https_err_notfound",
+      "value": "Репозиторий не найден или нет доступа: проверьте удалённый адрес и права доступа"
+    },
+    {
+      "name": "gitcfg_https_err_proto",
+      "value": "Неподдерживаемый протокол: проверка HTTPS требует встроенной поддержки TLS"
+    },
+    {
+      "name": "gitcfg_https_err_generic",
+      "value": "Ошибка подключения: %s"
+    },
+    {
+      "name": "gitcfg_clone_cancelled",
+      "value": "Клонирование отменено (ключ хоста не подтверждён)"
+    },
+    {
+      "name": "gitcfg_test_cancelled",
+      "value": "Подключение отменено (ключ хоста не подтверждён)"
+    },
+    {
+      "name": "repo_section_status",
+      "value": "Состояние репозитория"
+    },
+    {
+      "name": "repo_status_cloned",
+      "value": "Удалённый репозиторий клонирован"
+    },
+    {
+      "name": "repo_status_not_cloned",
+      "value": "Удалённый репозиторий не клонирован"
+    },
+    {
+      "name": "repo_no_remote_url",
+      "value": "Удалённый адрес ещё не настроен"
+    },
+    {
+      "name": "repo_section_sync",
+      "value": "Поведение синхронизации"
+    },
+    {
+      "name": "repo_pull_rebase_title",
+      "value": "Rebase при извлечении"
+    },
+    {
+      "name": "repo_pull_rebase_sub",
+      "value": "Использовать rebase (--rebase) при извлечении удалённых изменений для линейной истории"
+    },
+    {
+      "name": "repo_section_ops",
+      "value": "Операции с репозиторием"
+    },
+    {
+      "name": "repo_gitcfg_sub",
+      "value": "Удалённый адрес / аутентификация / личность для коммитов"
+    },
+    {
+      "name": "repo_section_danger",
+      "value": "Опасные действия"
+    },
+    {
+      "name": "repo_danger_hint",
+      "value": "Удаляет папку локального репозитория и все файлы паролей. Действие необратимо."
+    },
+    {
+      "name": "repo_delete_btn",
+      "value": "Удалить локальный репозиторий"
+    },
+    {
+      "name": "repo_delete_confirm_msg",
+      "value": "Папка локального репозитория и все файлы паролей в ней будут удалены. Это действие необратимо."
+    },
+    {
+      "name": "repo_err_no_path",
+      "value": "Путь к репозиторию не настроен"
+    },
+    {
+      "name": "repo_err_delete_failed_dir",
+      "value": "Не удалось удалить репозиторий: папку невозможно удалить"
+    },
+    {
+      "name": "repo_deleted",
+      "value": "Локальный репозиторий удалён"
+    },
+    {
+      "name": "repo_err_delete_failed",
+      "value": "Не удалось удалить репозиторий: %s"
+    },
+    {
+      "name": "gitlog_not_repo",
+      "value": "Текущая папка не является Git-репозиторием"
+    },
+    {
+      "name": "gitlog_load_failed",
+      "value": "Не удалось загрузить историю коммитов"
+    },
+    {
+      "name": "git_auth_required_hint",
+      "value": "Удалённый репозиторий требует аутентификации. Укажите имя пользователя и токен доступа (персональный токен Gitee с правом записи projects) в «Конфигурации Git» и повторите"
+    },
+    {
+      "name": "git_remove_repo_dir_failed",
+      "value": "Не удалось удалить локальный репозиторий: папку невозможно удалить"
+    },
+    {
+      "name": "git_ssh_no_key_hint",
+      "value": "Ключ SSH не настроен. Сначала создайте или импортируйте его в «Управлении ключами SSH»"
+    },
+    {
+      "name": "git_ssh_multi_key_hint",
+      "value": "Найдено ключей SSH: %d; сначала выберите ключ для аутентификации в «Конфигурация Git → Ключ SSH»"
+    },
+    {
+      "name": "git_ssh_key_encrypted",
+      "value": "Этот закрытый ключ SSH зашифрован; сначала введите его пароль в «Конфигурации Git»"
+    },
+    {
+      "name": "git_ssh_remote_notfound",
+      "value": "Репозиторий не найден или путь неверен: сервер доступен и аутентификация пройдена, проверьте путь к репозиторию в адресе"
+    },
+    {
+      "name": "git_hostkey_not_trusted",
+      "value": "Ключ хоста не доверенный или не совпадает: сначала подтвердите отпечаток"
+    },
+    {
+      "name": "git_ssh_auth_failed",
+      "value": "Ошибка аутентификации SSH: убедитесь, что открытый ключ добавлен в удалённую учётную запись, а пароль ключа верен"
+    },
+    {
+      "name": "git_ssh_url_unparsed_remote",
+      "value": "Не удалось разобрать удалённый SSH-адрес. Поддерживаются git@host:path и ssh://user@host[:порт]/path"
+    },
+    {
+      "name": "git_hostkey_mismatch_short",
+      "value": "Ключ хоста сервера отличается от сохранённого отпечатка (возможна атака «человек посередине»)"
+    },
+    {
+      "name": "git_hostkey_first_connect",
+      "value": "Первое подключение к этому серверу: необходимо подтвердить отпечаток ключа хоста"
+    },
+    {
+      "name": "git_ssh_url_unparsed_clone",
+      "value": "Не удалось разобрать SSH-адрес. Поддерживаются git@host:user/repo.git и ssh://git@host[:порт]/user/repo.git"
+    },
+    {
+      "name": "git_clone_dir_not_empty",
+      "value": "Папка локального репозитория не пуста; клонирование невозможно. Сначала очистите её («Управление репозиторием → Удалить локальный репозиторий») и повторите; если клонирование запущено после сохранения в «Конфигурации Git», выберите в диалоге «Удалить и клонировать»"
+    },
+    {
+      "name": "git_err_url_empty",
+      "value": "Удалённый адрес не может быть пустым"
+    },
+    {
+      "name": "git_err_url_scheme",
+      "value": "Неподдерживаемый формат URL. Используйте git@host:user/repo.git (SSH) или https://host/user/repo.git"
+    },
+    {
+      "name": "git_clone_https_tls_unready",
+      "value": "Не удалось клонировать по HTTPS (нативный TLS не готов). Проверьте сеть и адрес или смените протокол"
+    },
+    {
+      "name": "git_clone_ssh_unsupported",
+      "value": "В этой сборке клонирование по SSH не поддерживается (SSH-транспорт не скомпилирован). Используйте HTTPS-адрес с токеном доступа, напр. https://gitee.com/<пользователь>/<репозиторий>.git, и укажите имя пользователя и токен в «Конфигурации Git»"
+    },
+    {
+      "name": "git_clone_auth_failed",
+      "value": "Ошибка аутентификации: проверьте имя пользователя и токен в конфигурации Git (GitHub/Gitee требуют токен, а не пароль для входа)"
+    },
+    {
+      "name": "git_pull_failed",
+      "value": "Ошибка извлечения: %s"
+    },
+    {
+      "name": "git_push_failed",
+      "value": "Ошибка отправки: %s"
+    },
+    {
+      "name": "common_native_call_failed",
+      "value": "Сбой нативного вызова, попробуйте снова"
+    },
+    {
+      "name": "common_ssh_pem_read_failed",
+      "value": "Не удалось прочитать закрытый ключ SSH (%s). Пересоздайте или импортируйте ключ в «Управлении ключами SSH»"
+    },
+    {
+      "name": "common_unknown_error",
+      "value": "Неизвестная ошибка"
+    },
+    {
+      "name": "ssh_host_required",
+      "value": "Имя хоста не может быть пустым"
+    },
+    {
+      "name": "ssh_probe_failed",
+      "value": "Не удалось получить ключ хоста"
+    },
+    {
+      "name": "ssh_hostkey_mismatch_rejected",
+      "value": "Ключ хоста сервера отличается от сохранённого отпечатка; подключение отклонено (возможна атака «человек посередине»)"
+    },
+    {
+      "name": "ssh_tcp_no_key",
+      "value": "TCP доступен, но ключ SSH не настроен; проверить аутентификацию нельзя. Сначала выберите закрытый ключ в «Конфигурация Git → Ключ SSH»"
+    },
+    {
+      "name": "ssh_tcp_auth_incomplete",
+      "value": "TCP доступен, но аутентификацию SSH завершить не удалось; проверьте ключ и пароль"
+    },
+    {
+      "name": "ssh_params_incomplete",
+      "value": "Параметры аутентификации неполны"
+    },
+    {
+      "name": "ssh_no_key_unverified",
+      "value": "Ключ SSH не настроен; проверить аутентификацию нельзя. Сначала выберите закрытый ключ в «Конфигурация Git → Ключ SSH»"
+    },
+    {
+      "name": "ssh_tcp_connect_failed",
+      "value": "Ошибка подключения: %s"
+    },
+    {
+      "name": "reencrypt_no_key_selected",
+      "value": "Ключ шифрования не выбран"
+    },
+    {
+      "name": "reencrypt_no_enc_subkey",
+      "value": "У выбранного ключа нет пригодного подключа шифрования; он не может быть получателем"
+    },
+    {
+      "name": "reencrypt_missing_decrypt_key",
+      "value": "Отсутствует ключ расшифровки (Key ID получателя: %s)"
+    },
+    {
+      "name": "reencrypt_keyids_unlabeled",
+      "value": "не указан"
+    },
+    {
+      "name": "reencrypt_encrypt_failed",
+      "value": "Ошибка перешифрования: %s"
+    },
+    {
+      "name": "reencrypt_write_gpgid_failed",
+      "value": "Не удалось записать .gpg-id: %s"
+    },
+    {
+      "name": "reencrypt_failed_count",
+      "value": "Не удалось перешифровать записей: %d; исходный .gpg-id сохранён"
+    },
+    {
+      "name": "pgp_no_public_key",
+      "value": "Нет доступного открытого ключа (сначала импортируйте ключ PGP)"
+    },
+    {
+      "name": "pgp_no_secret_key",
+      "value": "Нет доступного закрытого ключа (сначала импортируйте ключ PGP)"
+    },
+    {
+      "name": "pgp_no_secret_imported",
+      "value": "Закрытые ключи ещё не импортированы; сначала импортируйте их в «Управлении ключами PGP»"
+    },
+    {
+      "name": "pgp_key_not_found_reimport",
+      "value": "Ключ не найден; импортируйте его заново"
+    },
+    {
+      "name": "pgp_key_file_missing",
+      "value": "Файл ключа отсутствует; импортируйте этот ключ заново"
+    },
+    {
+      "name": "pgp_verify_no_secret_material",
+      "value": "Этот ключ не содержит материала закрытого ключа (возможно, это открытый ключ) и не может использоваться для расшифровки. Экспортируйте закрытый ключ командой `gpg --export-secret-keys --armor <ID ключа>` и импортируйте заново."
+    },
+    {
+      "name": "pgp_verify_no_mlkem_material",
+      "value": "В этом ключе нет пригодного материала закрытого ключа GnuPG ML-KEM; убедитесь, что экспортирован именно закрытый ключ."
+    },
+    {
+      "name": "pgp_verify_mlkem_unreadable",
+      "value": "Материал закрытого ключа ML-KEM не может быть прочитан (%s). Этот сегмент использует тот же пароль, что и ECC, поэтому дело не в пароле; переэкспортируйте ключ более новой версией gpg и импортируйте заново."
+    },
+    {
+      "name": "pgp_verify_curve_unsupported",
+      "value": "Классическая кривая этого ключа не поддерживается приложением (%s). Используйте ключ GnuPG ky768_cv25519 (ML-KEM-768 + Curve25519)."
+    },
+    {
+      "name": "pgp_key_content_empty",
+      "value": "Содержимое ключа пусто"
+    },
+    {
+      "name": "pgp_import_not_secret",
+      "value": "Это не материал закрытого ключа, он не может использоваться для расшифровки. Экспортируйте закрытый ключ командой `gpg --export-secret-keys --armor <ID ключа>` и импортируйте его."
+    },
+    {
+      "name": "pgp_parse_failed",
+      "value": "Не удалось разобрать ключ (неверный или неподдерживаемый формат)"
+    },
+    {
+      "name": "pgp_warn_algo8",
+      "value": "Подключ шифрования этого ключа — %s (закрытый номер алгоритма GnuPG). Приложение может штатно им шифровать и расшифровывать, но реализации кроме GnuPG могут его не распознать."
+    },
+    {
+      "name": "pgp_warn_algo8_curve",
+      "value": "Подключ шифрования этого ключа — %s; его классическая кривая пока не поддерживается приложением (поддерживаются ky768_cv25519 / ky768_bp256 / ky1024_bp384). Ключ импортирован, его можно просматривать и управлять им, но использовать его для шифрования и расшифровки новых записей нельзя."
+    },
+    {
+      "name": "pgp_warn_enc_unsupported",
+      "value": "Подключ шифрования этого ключа — %s; эта версия не может использовать его для шифрования новых записей. Ключ импортирован и доступен для просмотра и управления, но выберите вместо него ключ RSA или ECC."
+    },
+    {
+      "name": "pgp_key_exists",
+      "value": "Такой ключ уже существует"
+    },
+    {
+      "name": "pgp_import_failed_reason",
+      "value": "Ошибка импорта: %s"
+    },
+    {
+      "name": "pgp_split_parse_failed",
+      "value": "Не удалось разобрать результат разделения ключа"
+    },
+    {
+      "name": "pgp_none_imported",
+      "value": "Ни один ключ не импортирован"
+    },
+    {
+      "name": "pgp_err_unsupported_algo",
+      "value": "Неподдерживаемый алгоритм ключа"
+    },
+    {
+      "name": "pgp_key_missing",
+      "value": "Ключ не существует"
+    },
+    {
+      "name": "pgp_store_new_key_failed",
+      "value": "Не удалось сохранить новый ключ: %s"
+    },
+    {
+      "name": "pgp_unsupported_algo_reason",
+      "value": "Неподдерживаемый алгоритм ключа (%s); используйте вместо него ключ RSA или ECC."
+    },
+    {
+      "name": "ssh_key_content_empty",
+      "value": "Содержимое закрытого ключа пусто"
+    },
+    {
+      "name": "ssh_not_private_key",
+      "value": "Файл не является корректным закрытым ключом (маркер PRIVATE KEY не найден)"
+    },
+    {
+      "name": "ssh_native_unavailable",
+      "value": "Нативная библиотека недоступна; закрытый ключ не может быть разобран"
+    },
+    {
+      "name": "ssh_invalid_key_detailed",
+      "value": "Неверный формат закрытого ключа или файл повреждён; убедитесь, что это полный файл закрытого ключа OpenSSH"
+    },
+    {
+      "name": "ssh_key_encrypted_need_pw",
+      "value": "Этот закрытый ключ зашифрован; введите его пароль"
+    },
+    {
+      "name": "ssh_wrong_passphrase",
+      "value": "Неверный пароль закрытого ключа; введите его снова"
+    },
+    {
+      "name": "ssh_invalid_key",
+      "value": "Неверный формат закрытого ключа или файл повреждён"
+    },
+    {
+      "name": "ssh_seal_failed",
+      "value": "Не удалось зашифровать закрытый ключ; он не сохранён (повторите попытку)"
+    },
+    {
+      "name": "repo_src_entry_missing",
+      "value": "Исходный файл пароля не существует"
+    },
+    {
+      "name": "repo_dst_entry_exists",
+      "value": "В целевом расположении уже есть пароль с таким именем"
+    },
+    {
+      "name": "repo_rename_failed",
+      "value": "Не удалось переместить или переименовать"
+    },
+    {
+      "name": "repo_src_dir_missing",
+      "value": "Исходная папка не существует"
+    },
+    {
+      "name": "repo_dst_dir_exists",
+      "value": "В целевом расположении уже существует папка с таким именем"
+    },
+    {
+      "name": "repo_dir_rename_failed",
+      "value": "Не удалось переименовать папку"
+    },
+    {
+      "name": "repo_invalid_path",
+      "value": "Недопустимый путь (%s): %s"
+    },
+    {
+      "name": "autofill_settings_title",
+      "value": "Автозаполнение"
+    },
+    {
+      "name": "autofill_svc_status",
+      "value": "Статус службы заполнения"
+    },
+    {
+      "name": "autofill_repo_ready",
+      "value": "Хранилище готово"
+    },
+    {
+      "name": "autofill_repo_not_init",
+      "value": "Хранилище не инициализировано"
+    },
+    {
+      "name": "autofill_entry_count_label",
+      "value": "Доступные записи паролей"
+    },
+    {
+      "name": "autofill_entry_count",
+      "value": "Записей: %d"
+    },
+    {
+      "name": "autofill_biometric_cap",
+      "value": "Биометрия"
+    },
+    {
+      "name": "autofill_biometric_support",
+      "value": "Поддерживается: %s"
+    },
+    {
+      "name": "autofill_biometric_unsupported",
+      "value": "Не поддерживается"
+    },
+    {
+      "name": "autofill_howto_title",
+      "value": "Как включить автозаполнение"
+    },
+    {
+      "name": "autofill_howto_step1",
+      "value": "1. Откройте Настройки системы → Дополнительно → Пароли и автозаполнение (или «служба автозаполнения»)"
+    },
+    {
+      "name": "autofill_howto_step2",
+      "value": "2. Выберите «Хранилище паролей (HarmonyPasswordStore)» как службу заполнения"
+    },
+    {
+      "name": "autofill_howto_step3",
+      "value": "3. Нажмите на поле ввода в приложении или браузере — появятся предложения заполнения"
+    },
+    {
+      "name": "autofill_rule_title",
+      "value": "Правила сопоставления"
+    },
+    {
+      "name": "autofill_rule_match",
+      "value": "· Сопоставляет имя пакета запрашивающего приложения или домен сайта с именами/путями записей"
+    },
+    {
+      "name": "autofill_rule_priority",
+      "value": "· Точные совпадения показываются первыми; при равенстве — по недавнему использованию"
+    },
+    {
+      "name": "autofill_rule_nodecrypt",
+      "value": "· Сопоставление не расшифровывает файлы; расшифровка происходит только после вашего выбора"
+    },
+    {
+      "name": "autofill_sec_title",
+      "value": "Примечания по безопасности"
+    },
+    {
+      "name": "autofill_sec_fields",
+      "value": "· Кандидаты заполнения показывают только имя и имя пользователя, но никогда — пароль"
+    },
+    {
+      "name": "autofill_sec_memory",
+      "value": "· Расшифрованный пароль существует в памяти лишь короткое время"
+    },
+    {
+      "name": "autofill_sec_usage",
+      "value": "· При успешном заполнении фиксируется время использования для улучшения порядка кандидатов"
+    }
+  ]
+}

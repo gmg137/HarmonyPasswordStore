@@ -346,6 +346,21 @@ export class ThemeColors {
   /** 是否处于深色模式（由外部在应用启动/切换时同步） */
   @Trace isDark: boolean = false;
 
+  /**
+   * 当前语言（i18n 触发器，取值没有语义）
+   *
+   * `palette()` 故意读取它：页面 build 里都经 `colors` getter 取调色板，
+   * 于是都注册了对这个 @Trace 的依赖——语言切换后 Strings.notifyLocaleChanged()
+   * 改写它，**所有页面整体重建**，`Str.get` 取出的普通字符串（不随 $r 自动
+   * 重解析）随之刷新。
+   */
+  @Trace locale: string = '';
+
+  /** 语言变更后的全局重渲染入口（Strings.applyLanguage 调用） */
+  bumpLocale(): void {
+    this.locale = `${this.locale}·`;
+  }
+
   /** 主题变更回调列表（外部注册，用于同步状态栏颜色等非 UI 侧效果） */
   private changeCallbacks: Array<() => void> = [];
 
@@ -419,6 +434,8 @@ export class ThemeColors {
    * 获取当前调色板
    */
   palette(): Palette {
+    // 读取 locale 纯粹为了在语言切换后触发所有页面的依赖（见字段注释）
+    const _localeSignal: string = this.locale;
     return this.isDark ? DARK_PALETTE : LIGHT_PALETTE;
   }
 }

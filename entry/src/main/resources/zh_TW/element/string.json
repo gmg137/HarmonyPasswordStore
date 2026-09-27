@@ -1,0 +1,2456 @@
+{
+  "string": [
+    {
+      "name": "settings_title",
+      "value": "設定"
+    },
+    {
+      "name": "group_general",
+      "value": "一般"
+    },
+    {
+      "name": "group_security",
+      "value": "安全"
+    },
+    {
+      "name": "group_store",
+      "value": "密碼庫"
+    },
+    {
+      "name": "group_git",
+      "value": "Git 同步"
+    },
+    {
+      "name": "group_crypto",
+      "value": "加密與金鑰"
+    },
+    {
+      "name": "group_about",
+      "value": "關於"
+    },
+    {
+      "name": "settings_theme",
+      "value": "主題"
+    },
+    {
+      "name": "theme_system",
+      "value": "跟隨系統"
+    },
+    {
+      "name": "theme_light",
+      "value": "淺色"
+    },
+    {
+      "name": "theme_dark",
+      "value": "深色"
+    },
+    {
+      "name": "settings_language",
+      "value": "語言"
+    },
+    {
+      "name": "language_system",
+      "value": "系統預設"
+    },
+    {
+      "name": "biometric_title",
+      "value": "生物辨識解鎖"
+    },
+    {
+      "name": "biometric_sub",
+      "value": "使用指紋/臉部快速解鎖應用"
+    },
+    {
+      "name": "clipboard_title",
+      "value": "剪貼簿自動清除"
+    },
+    {
+      "name": "clipboard_sub",
+      "value": "複製密碼後，到點自動清空系統剪貼簿"
+    },
+    {
+      "name": "search_mode_title",
+      "value": "搜尋模式"
+    },
+    {
+      "name": "search_fuzzy",
+      "value": "模糊比對"
+    },
+    {
+      "name": "search_exact",
+      "value": "精確比對"
+    },
+    {
+      "name": "onboarding_row_title",
+      "value": "重新執行初始設定"
+    },
+    {
+      "name": "onboarding_row_sub",
+      "value": "初始化儲存庫 / 複製 / 匯入金鑰"
+    },
+    {
+      "name": "autosync_title",
+      "value": "啟動時自動同步"
+    },
+    {
+      "name": "autosync_sub",
+      "value": "應用啟動時自動執行拉取+推送"
+    },
+    {
+      "name": "repo_row_title",
+      "value": "儲存庫管理"
+    },
+    {
+      "name": "repo_row_sub",
+      "value": "Git 設定 / 拉取變基 / 刪除本地儲存庫"
+    },
+    {
+      "name": "pgp_row_title",
+      "value": "PGP 金鑰管理"
+    },
+    {
+      "name": "pgp_row_sub",
+      "value": "匯入金鑰 / 選擇預設加密金鑰"
+    },
+    {
+      "name": "ssh_row_title",
+      "value": "SSH 金鑰管理"
+    },
+    {
+      "name": "ssh_row_sub",
+      "value": "產生 / 匯入公鑰 / 刪除金鑰"
+    },
+    {
+      "name": "fileformat_title",
+      "value": "密碼檔案格式"
+    },
+    {
+      "name": "fileformat_sub",
+      "value": "僅影響之後新建/編輯的密碼"
+    },
+    {
+      "name": "privacy_row_title",
+      "value": "隱私權政策"
+    },
+    {
+      "name": "privacy_row_sub",
+      "value": "資料儲存與處理說明"
+    },
+    {
+      "name": "about_row_title",
+      "value": "關於本應用"
+    },
+    {
+      "name": "about_row_sub",
+      "value": "版本 / 開源授權條款 / 儲存庫連結"
+    },
+    {
+      "name": "module_desc",
+      "value": "密碼庫模組"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "密碼庫入口"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "密碼庫"
+    },
+    {
+      "name": "search_placeholder",
+      "value": "搜尋密碼"
+    },
+    {
+      "name": "password_create",
+      "value": "新增密碼"
+    },
+    {
+      "name": "passgen",
+      "value": "密碼產生器"
+    },
+    {
+      "name": "settings",
+      "value": "設定"
+    },
+    {
+      "name": "pgp_key_manager",
+      "value": "PGP 金鑰管理"
+    },
+    {
+      "name": "git_config",
+      "value": "Git 設定"
+    },
+    {
+      "name": "AutofillAbility_desc",
+      "value": "密碼庫自動填入服務"
+    },
+    {
+      "name": "sort_recent",
+      "value": "最近"
+    },
+    {
+      "name": "found_results",
+      "value": "找到 %d 筆結果"
+    },
+    {
+      "name": "app_locked",
+      "value": "應用已鎖定"
+    },
+    {
+      "name": "delete",
+      "value": "刪除"
+    },
+    {
+      "name": "refresh",
+      "value": "重新整理"
+    },
+    {
+      "name": "perm_internet_reason",
+      "value": "透過 Git 遠端同步密碼庫（複製/拉取/推送）"
+    },
+    {
+      "name": "perm_pasteboard_reason",
+      "value": "設定 Git 遠端時貼上儲存庫位址"
+    },
+    {
+      "name": "perm_background_reason",
+      "value": "在背景短暫執行以清除剪貼簿中的敏感內容"
+    },
+    {
+      "name": "perm_biometric_reason",
+      "value": "使用指紋或臉部解鎖應用"
+    },
+    {
+      "name": "common_cancel",
+      "value": "取消"
+    },
+    {
+      "name": "common_list_sep",
+      "value": "、"
+    },
+    {
+      "name": "common_configure",
+      "value": "設定"
+    },
+    {
+      "name": "common_apply",
+      "value": "套用"
+    },
+    {
+      "name": "common_confirm",
+      "value": "確認"
+    },
+    {
+      "name": "common_start",
+      "value": "開始"
+    },
+    {
+      "name": "common_got_it",
+      "value": "瞭解了"
+    },
+    {
+      "name": "common_loading",
+      "value": "載入中..."
+    },
+    {
+      "name": "common_passphrase_wrong",
+      "value": "金鑰密碼錯誤，請重試"
+    },
+    {
+      "name": "home_root_title",
+      "value": "密碼庫"
+    },
+    {
+      "name": "home_create_password",
+      "value": "建立新密碼"
+    },
+    {
+      "name": "home_create_folder",
+      "value": "建立新目錄"
+    },
+    {
+      "name": "home_dirkey_menu",
+      "value": "修改此目錄加密金鑰"
+    },
+    {
+      "name": "home_dirkey_panel_title",
+      "value": "修改此目錄的加密金鑰"
+    },
+    {
+      "name": "home_dirkey_current",
+      "value": "目前金鑰：%s"
+    },
+    {
+      "name": "home_dirkey_current_inherit",
+      "value": "目前金鑰：繼承父目錄 / 預設金鑰"
+    },
+    {
+      "name": "home_dirkey_no_keys",
+      "value": "尚無已匯入的私鑰，無法設定加密金鑰"
+    },
+    {
+      "name": "home_dirkey_need_selection",
+      "value": "請至少選擇一把金鑰"
+    },
+    {
+      "name": "home_dirkey_updated_no_reencrypt",
+      "value": "已更新目錄加密金鑰（無需重新加密的項目）"
+    },
+    {
+      "name": "home_dirkey_multiselect_hint",
+      "value": "加密金鑰（可複選，不選則繼承父目錄）"
+    },
+    {
+      "name": "home_folder_name_hint",
+      "value": "目錄名稱"
+    },
+    {
+      "name": "home_creating",
+      "value": "建立中..."
+    },
+    {
+      "name": "home_reencrypting",
+      "value": "正在重新加密…"
+    },
+    {
+      "name": "home_reencrypt_confirm_title",
+      "value": "重新加密此目錄"
+    },
+    {
+      "name": "home_reencrypt_confirm_msg",
+      "value": "將用「%s」重新加密 %d 個項目。"
+    },
+    {
+      "name": "home_reencrypt_skipped_msg",
+      "value": "另有 %d 個項目因缺少對應私鑰將被跳過（保持原樣）。"
+    },
+    {
+      "name": "home_reencrypt_need_passphrase",
+      "value": "需要輸入舊金鑰的口令以解密這些項目。"
+    },
+    {
+      "name": "home_reencrypted_count",
+      "value": "已重新加密 %d 個項目"
+    },
+    {
+      "name": "home_reencrypt_skipped_suffix",
+      "value": "，跳過 %d 個"
+    },
+    {
+      "name": "home_reencrypt_failed",
+      "value": "重新加密未完成：%s"
+    },
+    {
+      "name": "home_reencrypt_first_failure",
+      "value": "首個失敗：%s（%s）"
+    },
+    {
+      "name": "home_reencrypt_error_toast",
+      "value": "重新加密流程出錯，請查看日誌"
+    },
+    {
+      "name": "home_no_recipient_hint",
+      "value": "密文未標註收件人"
+    },
+    {
+      "name": "home_missing_decrypt_key_title",
+      "value": "缺少解密金鑰"
+    },
+    {
+      "name": "home_missing_key_msg",
+      "value": "該條目由未匯入的金鑰加密（Key ID：%s）。"
+    },
+    {
+      "name": "home_missing_key_action",
+      "value": "請在「PGP 金鑰管理」中匯入對應私鑰後重試。"
+    },
+    {
+      "name": "home_a11y_delete_dir",
+      "value": "刪除目錄：%s"
+    },
+    {
+      "name": "home_a11y_delete_entry",
+      "value": "刪除密碼：%s"
+    },
+    {
+      "name": "home_delete_dir_title",
+      "value": "刪除目錄"
+    },
+    {
+      "name": "home_delete_pw_title",
+      "value": "刪除密碼"
+    },
+    {
+      "name": "home_delete_failed",
+      "value": "刪除失敗"
+    },
+    {
+      "name": "home_dir_deleted",
+      "value": "目錄已刪除"
+    },
+    {
+      "name": "home_pw_deleted",
+      "value": "密碼已刪除"
+    },
+    {
+      "name": "home_passphrase_title",
+      "value": "請輸入金鑰密碼"
+    },
+    {
+      "name": "home_passphrase_hint",
+      "value": "金鑰密碼"
+    },
+    {
+      "name": "home_pgp_id_label",
+      "value": "PGP ID: %s"
+    },
+    {
+      "name": "home_verifying",
+      "value": "驗證中..."
+    },
+    {
+      "name": "home_search_no_match",
+      "value": "沒有符合的密碼"
+    },
+    {
+      "name": "home_store_empty",
+      "value": "儲存庫為空"
+    },
+    {
+      "name": "home_search_try_other",
+      "value": "換個關鍵詞試試"
+    },
+    {
+      "name": "home_create_first_hint",
+      "value": "點擊右下角 + 建立第一個密碼"
+    },
+    {
+      "name": "home_sync_all",
+      "value": "一鍵同步"
+    },
+    {
+      "name": "home_sync_repo_menu",
+      "value": "同步儲存庫"
+    },
+    {
+      "name": "home_refresh_list",
+      "value": "重新整理清單"
+    },
+    {
+      "name": "store_root_dir",
+      "value": "儲存庫根目錄"
+    },
+    {
+      "name": "store_delete_dir_confirm",
+      "value": "將刪除目錄「%s」及其中的全部內容（%d 個項目），此操作無法復原。"
+    },
+    {
+      "name": "store_delete_entry_confirm",
+      "value": "將刪除「%s」，此操作無法復原。"
+    },
+    {
+      "name": "sync_no_remote_title",
+      "value": "未設定遠端儲存庫"
+    },
+    {
+      "name": "sync_no_remote_message",
+      "value": "同步功能需要先設定遠端 Git 儲存庫位址。是否現在前往設定？"
+    },
+    {
+      "name": "sync_done",
+      "value": "同步完成"
+    },
+    {
+      "name": "sync_pull_done",
+      "value": "拉取完成"
+    },
+    {
+      "name": "sync_push_done",
+      "value": "推送完成"
+    },
+    {
+      "name": "sync_conflict_message",
+      "value": "偵測到合併衝突，請手動解決後重試"
+    },
+    {
+      "name": "sync_pulling_remote",
+      "value": "正在拉取遠端更新..."
+    },
+    {
+      "name": "sync_pushing_remote",
+      "value": "正在推送到遠端..."
+    },
+    {
+      "name": "sync_committing_changes",
+      "value": "正在提交變更..."
+    },
+    {
+      "name": "sync_pulling",
+      "value": "正在拉取..."
+    },
+    {
+      "name": "sync_committing",
+      "value": "正在提交..."
+    },
+    {
+      "name": "sync_pushing",
+      "value": "正在推送..."
+    },
+    {
+      "name": "sync_op_success",
+      "value": "操作成功"
+    },
+    {
+      "name": "sync_op_exception",
+      "value": "操作發生異常"
+    },
+    {
+      "name": "sync_save_hostkey_failed",
+      "value": "儲存主機金鑰失敗"
+    },
+    {
+      "name": "sync_status_no_repo",
+      "value": "未設定 Git 儲存庫"
+    },
+    {
+      "name": "sync_status_changes",
+      "value": "%d 個變更"
+    },
+    {
+      "name": "sync_status_synced",
+      "value": "已同步"
+    },
+    {
+      "name": "sync_hostkey_mismatch_title",
+      "value": "警告：主機金鑰與已儲存記錄不一致"
+    },
+    {
+      "name": "sync_hostkey_first_type",
+      "value": "首次連線：確認伺服器%s金鑰指紋"
+    },
+    {
+      "name": "sync_hostkey_first",
+      "value": "首次連線：確認伺服器指紋"
+    },
+    {
+      "name": "sync_hostkey_fp_label",
+      "value": "主機 %s:%d 的金鑰指紋："
+    },
+    {
+      "name": "sync_hostkey_new_detail",
+      "value": "該伺服器提供多把不同類型的主機金鑰，這是尚未記錄的一把。確認後追加為本機信任記錄（TOFU）；同類型金鑰的指紋變化仍會被拒絕（防中間人攻擊）。"
+    },
+    {
+      "name": "sync_reject",
+      "value": "拒絕"
+    },
+    {
+      "name": "sync_trust_retry",
+      "value": "信任並重試"
+    },
+    {
+      "name": "sync_trust_retry_mismatch",
+      "value": "仍要信任並重試"
+    },
+    {
+      "name": "sync_pull_btn",
+      "value": "拉取"
+    },
+    {
+      "name": "sync_commit_btn",
+      "value": "提交"
+    },
+    {
+      "name": "sync_push_btn",
+      "value": "推送"
+    },
+    {
+      "name": "git_log_title",
+      "value": "提交歷史"
+    },
+    {
+      "name": "git_log_empty",
+      "value": "暫無提交記錄"
+    },
+    {
+      "name": "folder_name_required",
+      "value": "請輸入資料夾名稱"
+    },
+    {
+      "name": "folder_name_invalid",
+      "value": "資料夾名稱不能包含 ..、\\ 或以 . 開頭"
+    },
+    {
+      "name": "folder_created",
+      "value": "資料夾已建立"
+    },
+    {
+      "name": "folder_create_failed",
+      "value": "建立失敗: %s"
+    },
+    {
+      "name": "move_name_required",
+      "value": "名稱不能為空"
+    },
+    {
+      "name": "move_name_no_slash",
+      "value": "名稱不能包含 /"
+    },
+    {
+      "name": "move_no_change",
+      "value": "位置和名稱未變化"
+    },
+    {
+      "name": "move_missing_key_toast",
+      "value": "已移動；但缺少解密金鑰，未按目標目錄金鑰重新加密"
+    },
+    {
+      "name": "move_saved_default",
+      "value": "已儲存"
+    },
+    {
+      "name": "move_read_ciphertext_failed",
+      "value": "讀取密文失敗"
+    },
+    {
+      "name": "move_decrypt_failed",
+      "value": "解密失敗：%s"
+    },
+    {
+      "name": "move_encrypt_failed",
+      "value": "按目標目錄金鑰加密失敗：%s"
+    },
+    {
+      "name": "move_write_failed",
+      "value": "寫入新位置失敗：%s"
+    },
+    {
+      "name": "move_delete_old_failed",
+      "value": "已寫入新位置，但刪除原檔案失敗：%s"
+    },
+    {
+      "name": "move_reencrypted_toast",
+      "value": "已移動並按目標目錄金鑰重新加密"
+    },
+    {
+      "name": "common_password",
+      "value": "密碼"
+    },
+    {
+      "name": "common_username",
+      "value": "使用者名稱"
+    },
+    {
+      "name": "common_email",
+      "value": "電子郵件"
+    },
+    {
+      "name": "common_phone",
+      "value": "手機號碼"
+    },
+    {
+      "name": "common_notes",
+      "value": "備註"
+    },
+    {
+      "name": "common_extra_content",
+      "value": "額外內容"
+    },
+    {
+      "name": "common_name",
+      "value": "名稱"
+    },
+    {
+      "name": "common_save",
+      "value": "儲存"
+    },
+    {
+      "name": "common_saving",
+      "value": "儲存中..."
+    },
+    {
+      "name": "common_deleting",
+      "value": "刪除中..."
+    },
+    {
+      "name": "common_processing",
+      "value": "處理中..."
+    },
+    {
+      "name": "common_enter_passphrase",
+      "value": "請輸入金鑰密碼"
+    },
+    {
+      "name": "common_passphrase_placeholder",
+      "value": "金鑰密碼"
+    },
+    {
+      "name": "common_copy_username",
+      "value": "複製使用者名稱"
+    },
+    {
+      "name": "common_copy_email",
+      "value": "複製電子郵件"
+    },
+    {
+      "name": "common_copy_phone",
+      "value": "複製手機號碼"
+    },
+    {
+      "name": "common_copy_notes",
+      "value": "複製備註"
+    },
+    {
+      "name": "common_copy_extra",
+      "value": "複製額外內容"
+    },
+    {
+      "name": "common_copy_password",
+      "value": "複製密碼"
+    },
+    {
+      "name": "common_copy_failed",
+      "value": "複製失敗"
+    },
+    {
+      "name": "common_decrypt_failed",
+      "value": "解密失敗"
+    },
+    {
+      "name": "common_strength_weak",
+      "value": "弱"
+    },
+    {
+      "name": "common_strength_fair",
+      "value": "中"
+    },
+    {
+      "name": "common_strength_good",
+      "value": "強"
+    },
+    {
+      "name": "common_strength_strong",
+      "value": "極強"
+    },
+    {
+      "name": "create_edit_title",
+      "value": "編輯密碼"
+    },
+    {
+      "name": "create_dir_label",
+      "value": "目錄"
+    },
+    {
+      "name": "create_name_placeholder",
+      "value": "如: john@example.com"
+    },
+    {
+      "name": "create_password_placeholder",
+      "value": "輸入或產生密碼"
+    },
+    {
+      "name": "create_username_placeholder",
+      "value": "使用者名稱（選填）"
+    },
+    {
+      "name": "create_email_placeholder",
+      "value": "電子郵件（選填）"
+    },
+    {
+      "name": "create_phone_placeholder",
+      "value": "手機號碼（選填）"
+    },
+    {
+      "name": "create_notes_placeholder",
+      "value": "備註（選填）"
+    },
+    {
+      "name": "create_extra_placeholder",
+      "value": "自訂額外內容（選填）"
+    },
+    {
+      "name": "create_generate",
+      "value": "產生密碼"
+    },
+    {
+      "name": "create_gen_upper",
+      "value": "大寫字母 (A-Z)"
+    },
+    {
+      "name": "create_gen_lower",
+      "value": "小寫字母 (a-z)"
+    },
+    {
+      "name": "create_gen_digits",
+      "value": "數字 (0-9)"
+    },
+    {
+      "name": "create_gen_symbols",
+      "value": "特殊符號 (!@#$)"
+    },
+    {
+      "name": "create_read_fail",
+      "value": "讀取密碼失敗"
+    },
+    {
+      "name": "create_err_name_required",
+      "value": "請輸入名稱"
+    },
+    {
+      "name": "create_err_password_required",
+      "value": "請輸入密碼"
+    },
+    {
+      "name": "create_err_name_unsafe",
+      "value": "名稱不能包含 ..、\\ 或以 . 開頭"
+    },
+    {
+      "name": "create_err_dir_conflict",
+      "value": "已存在同名目錄，請更換名稱"
+    },
+    {
+      "name": "create_err_no_key",
+      "value": "未匯入任何 PGP 金鑰，無法加密儲存，請先在設定中匯入金鑰"
+    },
+    {
+      "name": "create_err_write_gpgid",
+      "value": "寫入 .gpg-id 失敗: %s"
+    },
+    {
+      "name": "create_err_gpgid_unimported",
+      "value": "該目錄的 .gpg-id 引用了未匯入的金鑰（%s），無法為全部接收方加密。請先匯入這些金鑰，或用「修改此目錄加密金鑰」明確調整。"
+    },
+    {
+      "name": "create_err_keys_expired",
+      "value": "該目錄的加密金鑰均已過期，無法建立新密碼（請匯入新金鑰或更新金鑰）"
+    },
+    {
+      "name": "detail_decrypting",
+      "value": "正在解密..."
+    },
+    {
+      "name": "detail_passphrase_hint",
+      "value": "該金鑰有密碼保護，請輸入密碼以解密"
+    },
+    {
+      "name": "detail_delete_password",
+      "value": "刪除密碼"
+    },
+    {
+      "name": "detail_delete_confirm",
+      "value": "確定刪除「%s」嗎？此操作無法復原。"
+    },
+    {
+      "name": "detail_err_file_missing",
+      "value": "密碼檔案不存在，可能已被移動或刪除"
+    },
+    {
+      "name": "detail_err_passphrase_required",
+      "value": "解密需要密碼，請輸入金鑰密碼"
+    },
+    {
+      "name": "detail_err_unlock_failed",
+      "value": "金鑰密碼錯誤，解密失敗"
+    },
+    {
+      "name": "detail_err_cancelled",
+      "value": "解密已取消"
+    },
+    {
+      "name": "detail_err_delete_failed",
+      "value": "刪除失敗"
+    },
+    {
+      "name": "detail_copied_password",
+      "value": "密碼已複製"
+    },
+    {
+      "name": "detail_copied_username",
+      "value": "使用者名稱已複製"
+    },
+    {
+      "name": "detail_copied_email",
+      "value": "電子郵件已複製"
+    },
+    {
+      "name": "detail_copied_phone",
+      "value": "手機號碼已複製"
+    },
+    {
+      "name": "detail_copied_notes",
+      "value": "備註已複製"
+    },
+    {
+      "name": "detail_copied_extra",
+      "value": "額外內容已複製"
+    },
+    {
+      "name": "detail_copied_all",
+      "value": "全部內容已複製"
+    },
+    {
+      "name": "move_title",
+      "value": "移動 / 重新命名"
+    },
+    {
+      "name": "move_old_path",
+      "value": "原位置"
+    },
+    {
+      "name": "move_name_placeholder",
+      "value": "輸入新名稱"
+    },
+    {
+      "name": "move_target_dir",
+      "value": "目標目錄"
+    },
+    {
+      "name": "move_unlock_hint_ids",
+      "value": "目標目錄使用其他金鑰，需先用原金鑰解密。PGP ID：%s"
+    },
+    {
+      "name": "move_unlock_hint",
+      "value": "目標目錄使用其他金鑰，需先用原金鑰解密後重新加密"
+    },
+    {
+      "name": "passgen_tap_hint",
+      "value": "點擊下方按鈕產生密碼"
+    },
+    {
+      "name": "passgen_entropy",
+      "value": "熵值"
+    },
+    {
+      "name": "passgen_entropy_estimate",
+      "value": "預計熵值: %d bits — %s"
+    },
+    {
+      "name": "passgen_entropy_hint",
+      "value": "產生後將顯示熵值估算"
+    },
+    {
+      "name": "passgen_generate",
+      "value": "產生"
+    },
+    {
+      "name": "passgen_copied",
+      "value": "已複製"
+    },
+    {
+      "name": "passgen_copy",
+      "value": "複製"
+    },
+    {
+      "name": "passgen_mode_random",
+      "value": "隨機密碼"
+    },
+    {
+      "name": "passgen_mode_diceware",
+      "value": "口令詞組"
+    },
+    {
+      "name": "passgen_length",
+      "value": "長度"
+    },
+    {
+      "name": "passgen_upper",
+      "value": "大寫字母 A-Z"
+    },
+    {
+      "name": "passgen_lower",
+      "value": "小寫字母 a-z"
+    },
+    {
+      "name": "passgen_digits",
+      "value": "數字 0-9"
+    },
+    {
+      "name": "passgen_symbols",
+      "value": "特殊符號 !@#$"
+    },
+    {
+      "name": "passgen_exclude_ambiguous",
+      "value": "排除歧義字元 (0/O, 1/l)"
+    },
+    {
+      "name": "passgen_word_count",
+      "value": "詞組數量"
+    },
+    {
+      "name": "passgen_separator",
+      "value": "分隔符號"
+    },
+    {
+      "name": "passgen_capitalize",
+      "value": "首字母大寫"
+    },
+    {
+      "name": "passgen_insert_digits",
+      "value": "詞間插入數字"
+    },
+    {
+      "name": "passgen_copied_clipboard",
+      "value": "已複製到剪貼簿"
+    },
+    {
+      "name": "folder_create_title",
+      "value": "新增資料夾"
+    },
+    {
+      "name": "folder_name_label",
+      "value": "資料夾名稱"
+    },
+    {
+      "name": "folder_name_placeholder",
+      "value": "輸入資料夾名稱"
+    },
+    {
+      "name": "folder_key_label",
+      "value": "加密金鑰（選填，覆蓋父目錄金鑰）"
+    },
+    {
+      "name": "folder_no_keys",
+      "value": "尚無已匯入的 PGP 金鑰，將使用父目錄金鑰"
+    },
+    {
+      "name": "folder_create_btn",
+      "value": "建立資料夾"
+    },
+    {
+      "name": "autofill_title",
+      "value": "填充建議"
+    },
+    {
+      "name": "autofill_pick_for",
+      "value": "為 %s 選擇憑證"
+    },
+    {
+      "name": "autofill_matching",
+      "value": "比對中..."
+    },
+    {
+      "name": "autofill_no_match",
+      "value": "沒有符合的密碼"
+    },
+    {
+      "name": "autofill_no_match_hint",
+      "value": "可在主介面搜尋後手動複製"
+    },
+    {
+      "name": "autofill_unlocked_prompt",
+      "value": "已解鎖，請選擇操作"
+    },
+    {
+      "name": "autofill_err_load",
+      "value": "載入候選失敗"
+    },
+    {
+      "name": "autofill_fill_applied",
+      "value": "已自動填充 %d 個欄位"
+    },
+    {
+      "name": "autofill_fill_failed",
+      "value": "自動填充失敗，可使用複製"
+    },
+    {
+      "name": "onboarding_hostkey_fp_line",
+      "value": "主機 %s:%d 的金鑰指紋："
+    },
+    {
+      "name": "onboarding_trust_clone",
+      "value": "信任並複製"
+    },
+    {
+      "name": "onboarding_trust_clone_mismatch",
+      "value": "仍要信任並複製"
+    },
+    {
+      "name": "onboarding_local_not_empty",
+      "value": "本機目錄已有內容"
+    },
+    {
+      "name": "onboarding_local_not_empty_msg",
+      "value": "複製要求目標目錄為空，目前目錄中已有檔案（可能是上次複製的殘留或舊儲存庫）。\n\n繼續將刪除該目錄下的全部內容，再從遠端儲存庫重新複製。此操作無法復原。"
+    },
+    {
+      "name": "onboarding_delete_clone",
+      "value": "刪除並複製"
+    },
+    {
+      "name": "onboarding_welcome_title",
+      "value": "歡迎使用 HarmonyPasswordStore"
+    },
+    {
+      "name": "onboarding_welcome_desc",
+      "value": "與 pass 命令列工具完全相容的密碼管理器。密碼以 GPG 加密檔案儲存，可透過 Git 在多裝置間同步。"
+    },
+    {
+      "name": "onboarding_feature_pass",
+      "value": "· 標準 pass 目錄結構與 .gpg 加密檔案"
+    },
+    {
+      "name": "onboarding_feature_huks",
+      "value": "· PGP 加密，金鑰由 HUKS 安全管理"
+    },
+    {
+      "name": "onboarding_feature_git",
+      "value": "· Git 同步，支援 HTTPS 與 SSH"
+    },
+    {
+      "name": "onboarding_feature_passgen",
+      "value": "· 內建密碼產生器與口令詞組"
+    },
+    {
+      "name": "onboarding_repo_title",
+      "value": "初始化密碼儲存庫"
+    },
+    {
+      "name": "onboarding_repo_desc",
+      "value": "建立一個空儲存庫，或從遠端 Git 儲存庫複製既有密碼庫。"
+    },
+    {
+      "name": "onboarding_mode_new",
+      "value": "建立儲存庫"
+    },
+    {
+      "name": "onboarding_mode_clone",
+      "value": "複製遠端"
+    },
+    {
+      "name": "onboarding_url_placeholder",
+      "value": "git@host:使用者名稱/儲存庫.git"
+    },
+    {
+      "name": "onboarding_ssh_not_configured",
+      "value": "未設定SSH金鑰"
+    },
+    {
+      "name": "onboarding_ssh_configure",
+      "value": "設定SSH金鑰"
+    },
+    {
+      "name": "onboarding_pgp_title",
+      "value": "設定 PGP 金鑰"
+    },
+    {
+      "name": "onboarding_pgp_desc",
+      "value": "點擊「瀏覽」進入 PGP 金鑰管理頁，在那裡建立或匯入金鑰（.asc / .pgp 檔案或貼上文字）。私鑰將由系統 HUKS 安全保管，不會明文落盤。"
+    },
+    {
+      "name": "onboarding_pgp_not_set",
+      "value": "尚未設定 PGP 金鑰"
+    },
+    {
+      "name": "onboarding_browse",
+      "value": "瀏覽"
+    },
+    {
+      "name": "onboarding_finish_title",
+      "value": "設定完成"
+    },
+    {
+      "name": "onboarding_finish_desc",
+      "value": "一切就緒！現在可以開始管理您的密碼了。"
+    },
+    {
+      "name": "onboarding_repo_done",
+      "value": "✓ 密碼庫已初始化"
+    },
+    {
+      "name": "onboarding_repo_todo",
+      "value": "· 密碼庫未初始化（可稍後在設定中完成）"
+    },
+    {
+      "name": "onboarding_key_done",
+      "value": "✓ PGP 金鑰已匯入"
+    },
+    {
+      "name": "onboarding_key_todo",
+      "value": "· PGP 金鑰未匯入（可稍後在設定中完成）"
+    },
+    {
+      "name": "onboarding_setup_title",
+      "value": "初始設定"
+    },
+    {
+      "name": "onboarding_skip",
+      "value": "跳過"
+    },
+    {
+      "name": "onboarding_prev",
+      "value": "上一步"
+    },
+    {
+      "name": "onboarding_init_repo",
+      "value": "初始化儲存庫"
+    },
+    {
+      "name": "onboarding_next",
+      "value": "下一步"
+    },
+    {
+      "name": "onboarding_done",
+      "value": "完成"
+    },
+    {
+      "name": "onboarding_overlay_checkout",
+      "value": "正在檢出檔案…"
+    },
+    {
+      "name": "onboarding_overlay_cloning",
+      "value": "正在複製遠端儲存庫…"
+    },
+    {
+      "name": "onboarding_progress_init",
+      "value": "正在初始化本機儲存庫..."
+    },
+    {
+      "name": "onboarding_err_url_required",
+      "value": "請輸入遠端儲存庫位址"
+    },
+    {
+      "name": "onboarding_err_ssh_only",
+      "value": "初始設定只支援 SSH 複製，請填 git@host:使用者名稱/儲存庫.git 或 ssh://git@host[:連接埠]/路徑（HTTPS 儲存庫請先完成初始設定，再到「儲存庫管理 → Git 設定」中設定使用者名稱與權杖）"
+    },
+    {
+      "name": "onboarding_progress_clone",
+      "value": "正在複製遠端儲存庫..."
+    },
+    {
+      "name": "onboarding_err_save_hostkey",
+      "value": "儲存主機指紋失敗，請重試"
+    },
+    {
+      "name": "about_title",
+      "value": "關於"
+    },
+    {
+      "name": "about_app_name",
+      "value": "應用名稱"
+    },
+    {
+      "name": "about_version",
+      "value": "版本"
+    },
+    {
+      "name": "about_license",
+      "value": "授權條款"
+    },
+    {
+      "name": "about_target_os",
+      "value": "目標系統"
+    },
+    {
+      "name": "about_intro_title",
+      "value": "專案簡介"
+    },
+    {
+      "name": "about_intro_body",
+      "value": "HarmonyPasswordStore 是 password-store（pass）的 HarmonyOS 實作，相容標準 GPG 加密的 pass 儲存庫格式。所有密碼以 .gpg 檔案形式本機加密儲存，私鑰透過 HUKS 管理，支援 Git 同步與 SSH/HTTPS 兩種傳輸協定。"
+    },
+    {
+      "name": "about_deps_title",
+      "value": "開源相依套件"
+    },
+    {
+      "name": "about_deps_body",
+      "value": "• libgit2 — Git 儲存庫操作（MPL-2.0）\n• pgp / rpgp — OpenPGP 加解密（MIT 或 Apache-2.0）\n• russh — SSH 協定（MIT）\n• mbedTLS — TLS 加密通道（Apache-2.0）\n• ssh-key — OpenSSH 金鑰格式（MIT or Apache-2.0）\n• 完整相依清單見 Cargo.toml 與 CMakeLists.txt"
+    },
+    {
+      "name": "about_source_title",
+      "value": "原始碼"
+    },
+    {
+      "name": "about_source_body",
+      "value": "本專案完全開源，歡迎審查與貢獻：\n%s"
+    },
+    {
+      "name": "privacy_title",
+      "value": "隱私權政策"
+    },
+    {
+      "name": "privacy_doc_title",
+      "value": "HarmonyPasswordStore 隱私權政策"
+    },
+    {
+      "name": "privacy_updated",
+      "value": "更新日期：2026 年 9 月 16 日"
+    },
+    {
+      "name": "privacy_s1_title",
+      "value": "概述"
+    },
+    {
+      "name": "privacy_s1_body",
+      "value": "HarmonyPasswordStore 是一款開源的密碼管理工具，相容標準 pass 儲存庫格式。本應用以「本機優先、隱私至上」為設計原則：您的密碼資料始終加密儲存在本機裝置，不會上傳至任何第三方伺服器。"
+    },
+    {
+      "name": "privacy_s2_title",
+      "value": "資料儲存"
+    },
+    {
+      "name": "privacy_s2_body",
+      "value": "所有密碼條目以 GPG 加密檔案（.gpg）形式儲存在本機檔案系統中，加密金鑰由您掌握。PGP/SSH 私鑰透過 HarmonyOS HUKS（統一金鑰管理）管理，永不以明文落盤。解密後的明文僅存在於記憶體中，應用進入背景時自動清除敏感快取。"
+    },
+    {
+      "name": "privacy_s3_title",
+      "value": "資料同步"
+    },
+    {
+      "name": "privacy_s3_body",
+      "value": "如需多裝置同步，可透過內建 Git 功能將密碼庫推送至您自有的 Git 伺服器（GitHub/Gitee/自建）。同步通道支援 HTTPS（mbedTLS 加密）與 SSH（russh 加密），認證憑證（權杖/SSH 金鑰）僅儲存在本機，不經過任何中間伺服器。"
+    },
+    {
+      "name": "privacy_s4_title",
+      "value": "生物辨識解鎖"
+    },
+    {
+      "name": "privacy_s4_body",
+      "value": "應用鎖只支援生物辨識（指紋/臉部）：解鎖僅在本機完成身分驗證，生物特徵資料由系統安全模組管理，本應用無法存取原始生物資訊，也不儲存任何 PIN/口令摘要。驗證失敗的次數限制由系統側負責。"
+    },
+    {
+      "name": "privacy_s5_title",
+      "value": "剪貼簿"
+    },
+    {
+      "name": "privacy_s5_body",
+      "value": "複製密碼到剪貼簿後，應用會在可設定的時間（預設 30 秒）後自動清除剪貼簿內容，防止其他應用讀取。"
+    },
+    {
+      "name": "privacy_s6_title",
+      "value": "日誌"
+    },
+    {
+      "name": "privacy_s6_body",
+      "value": "應用日誌（hilog）不記錄任何密碼、金鑰或解密後的明文內容，僅記錄操作狀態與檔案路徑用於除錯。"
+    },
+    {
+      "name": "privacy_s7_title",
+      "value": "不收集的資料"
+    },
+    {
+      "name": "privacy_s7_body",
+      "value": "本應用不收集任何個人身分資訊（PII）、不內嵌分析 SDK、不內嵌廣告 SDK、不上傳任何使用者資料。"
+    },
+    {
+      "name": "privacy_s8_title",
+      "value": "開源授權條款"
+    },
+    {
+      "name": "privacy_s8_body",
+      "value": "本應用基於 GPL-3.0 授權開源，原始碼可在 GitHub 儲存庫審查：\nhttps://github.com/gmg137/HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_verifying",
+      "value": "正在驗證…"
+    },
+    {
+      "name": "lock_touch_retry",
+      "value": "輕觸圖示重新驗證"
+    },
+    {
+      "name": "lock_title",
+      "value": "解鎖"
+    },
+    {
+      "name": "common_trust_connect",
+      "value": "信任並連線"
+    },
+    {
+      "name": "settings_autosync_no_remote",
+      "value": "未設定遠端儲存庫位址，請先在「Git 設定」中填寫"
+    },
+    {
+      "name": "settings_autosync_not_cloned",
+      "value": "本機尚未複製遠端儲存庫，請先在「儲存庫管理」中複製"
+    },
+    {
+      "name": "lock_type_fingerprint",
+      "value": "指紋"
+    },
+    {
+      "name": "lock_type_face",
+      "value": "臉部"
+    },
+    {
+      "name": "lock_reason_not_enrolled",
+      "value": "裝置支援生物辨識，但尚未在系統設定中登錄指紋或臉部，請先註冊"
+    },
+    {
+      "name": "lock_reason_unsupported",
+      "value": "裝置不支援生物辨識"
+    },
+    {
+      "name": "lock_err_unavailable",
+      "value": "裝置不支援或未登錄生物辨識"
+    },
+    {
+      "name": "lock_auth_dialog_title",
+      "value": "解鎖 HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_err_timeout",
+      "value": "驗證逾時"
+    },
+    {
+      "name": "lock_err_cancelled",
+      "value": "驗證已取消"
+    },
+    {
+      "name": "lock_auth_failed_code",
+      "value": "驗證失敗（%d）"
+    },
+    {
+      "name": "lock_err_start_failed",
+      "value": "無法啟動生物辨識"
+    },
+    {
+      "name": "common_import",
+      "value": "匯入"
+    },
+    {
+      "name": "common_import_failed",
+      "value": "匯入失敗"
+    },
+    {
+      "name": "common_ok",
+      "value": "確定"
+    },
+    {
+      "name": "common_delete_key",
+      "value": "刪除金鑰"
+    },
+    {
+      "name": "common_file_read_failed",
+      "value": "檔案讀取失敗: %s"
+    },
+    {
+      "name": "common_copy",
+      "value": "複製"
+    },
+    {
+      "name": "pgp_import_text",
+      "value": "匯入文字金鑰"
+    },
+    {
+      "name": "pgp_import_from_file",
+      "value": "從檔案匯入金鑰"
+    },
+    {
+      "name": "pgp_create_new",
+      "value": "建立新金鑰"
+    },
+    {
+      "name": "pgp_passphrase_optional",
+      "value": "金鑰密碼（選填）"
+    },
+    {
+      "name": "pgp_gen_eddsa_rec",
+      "value": "EdDSA（推薦）"
+    },
+    {
+      "name": "pgp_userid_placeholder",
+      "value": "User ID（如 Name <email@example.com>）"
+    },
+    {
+      "name": "pgp_passphrase_min6",
+      "value": "金鑰密碼（選填，至少 6 位）"
+    },
+    {
+      "name": "pgp_create_btn",
+      "value": "建立"
+    },
+    {
+      "name": "pgp_set_default",
+      "value": "設為預設"
+    },
+    {
+      "name": "pgp_edit_key",
+      "value": "修改金鑰"
+    },
+    {
+      "name": "pgp_export_private",
+      "value": "匯出私鑰"
+    },
+    {
+      "name": "pgp_export_public",
+      "value": "匯出公鑰"
+    },
+    {
+      "name": "pgp_chpw_title",
+      "value": "修改金鑰密碼"
+    },
+    {
+      "name": "pgp_chpw_old_ph",
+      "value": "目前金鑰密碼"
+    },
+    {
+      "name": "pgp_chpw_new_ph",
+      "value": "新密碼（留空則移除密碼）"
+    },
+    {
+      "name": "pgp_chpw_confirm",
+      "value": "確認修改"
+    },
+    {
+      "name": "pgp_import_limited_title",
+      "value": "匯入成功，但有限制"
+    },
+    {
+      "name": "pgp_import_failed_title",
+      "value": "無法匯入金鑰"
+    },
+    {
+      "name": "pgp_export_private_ok",
+      "value": "私鑰已儲存為 .asc 檔案"
+    },
+    {
+      "name": "pgp_export_public_ok",
+      "value": "公鑰已儲存為 .asc 檔案"
+    },
+    {
+      "name": "pgp_delete_key_msg",
+      "value": "確定刪除「%s」？刪除後用它加密的密碼將無法解密，且此操作無法復原。"
+    },
+    {
+      "name": "pgp_root_switch_title",
+      "value": "切換根目錄加密金鑰"
+    },
+    {
+      "name": "pgp_root_switch_msg_needs",
+      "value": "儲存庫根目錄目前用「%s」加密。是否切換為「%s」並重新加密根目錄下的 %d 個項目？"
+    },
+    {
+      "name": "pgp_root_switch_msg_none",
+      "value": "儲存庫根目錄目前用「%s」加密。是否切換為「%s」？（根目錄下沒有需要重新加密的項目）"
+    },
+    {
+      "name": "pgp_root_switch_skip_warn",
+      "value": "注意：%d 個項目因缺少對應私鑰將被跳過。"
+    },
+    {
+      "name": "pgp_root_switch_only_default",
+      "value": "僅設為預設"
+    },
+    {
+      "name": "pgp_root_switch_both",
+      "value": "一併切換"
+    },
+    {
+      "name": "pgp_root_switched",
+      "value": "根目錄加密金鑰已切換"
+    },
+    {
+      "name": "pgp_root_reencrypted",
+      "value": "已切換根目錄加密金鑰，重新加密 %d 個項目"
+    },
+    {
+      "name": "pgp_rootkey_title",
+      "value": "輸入舊金鑰口令"
+    },
+    {
+      "name": "pgp_rootkey_hint",
+      "value": "重新加密需要先解開這些項目的舊金鑰"
+    },
+    {
+      "name": "pgp_rootkey_ph",
+      "value": "舊金鑰口令"
+    },
+    {
+      "name": "pgp_rootkey_start",
+      "value": "開始重新加密"
+    },
+    {
+      "name": "pgp_algo_unknown",
+      "value": "未知演算法"
+    },
+    {
+      "name": "pgp_tag_default",
+      "value": "預設"
+    },
+    {
+      "name": "pgp_tag_expired",
+      "value": "已過期"
+    },
+    {
+      "name": "pgp_tag_secret",
+      "value": "私鑰"
+    },
+    {
+      "name": "pgp_tag_public",
+      "value": "公鑰"
+    },
+    {
+      "name": "pgp_empty_title",
+      "value": "尚未匯入任何金鑰"
+    },
+    {
+      "name": "pgp_empty_hint",
+      "value": "點擊右下角 + 匯入或建立金鑰"
+    },
+    {
+      "name": "pgp_load_failed",
+      "value": "載入金鑰清單失敗"
+    },
+    {
+      "name": "pgp_err_userid_required",
+      "value": "請輸入 User ID（如 Name <email@example.com>）"
+    },
+    {
+      "name": "pgp_err_passphrase_short",
+      "value": "密碼至少 6 位（或留空不設密碼）"
+    },
+    {
+      "name": "pgp_generated",
+      "value": "金鑰已產生"
+    },
+    {
+      "name": "pgp_err_paste_required",
+      "value": "請貼上 ASCII-armored 金鑰文字"
+    },
+    {
+      "name": "pgp_imported_with_limit",
+      "value": "金鑰已匯入（有限制）"
+    },
+    {
+      "name": "pgp_imported_ok",
+      "value": "金鑰匯入成功"
+    },
+    {
+      "name": "pgp_duplicate_key",
+      "value": "該金鑰已存在於本機，無需重複匯入。"
+    },
+    {
+      "name": "pgp_root_switch_failed",
+      "value": "切換根目錄加密金鑰失敗: %s"
+    },
+    {
+      "name": "pgp_file_empty",
+      "value": "檔案為空，未讀取到任何內容"
+    },
+    {
+      "name": "pgp_file_not_pgp",
+      "value": "該檔案不是 PGP 金鑰檔案（既非 armored 文字，也不是二進位 OpenPGP 資料）"
+    },
+    {
+      "name": "pgp_set_default_ok",
+      "value": "已設為預設加密金鑰"
+    },
+    {
+      "name": "pgp_deleted",
+      "value": "金鑰已刪除"
+    },
+    {
+      "name": "pgp_pw_changed",
+      "value": "金鑰密碼已修改"
+    },
+    {
+      "name": "pgp_export_read_private_failed",
+      "value": "讀取私鑰失敗"
+    },
+    {
+      "name": "pgp_export_pub_failed",
+      "value": "匯出公鑰失敗"
+    },
+    {
+      "name": "pgp_export_save_failed",
+      "value": "儲存失敗：%s"
+    },
+    {
+      "name": "pgp_chpw_failed_retry",
+      "value": "修改失敗，請重試"
+    },
+    {
+      "name": "pgp_chpw_wrong_old",
+      "value": "目前金鑰密碼不正確，請重試"
+    },
+    {
+      "name": "pgp_chpw_failed",
+      "value": "修改失敗：%s"
+    },
+    {
+      "name": "ssh_replace_confirm_title",
+      "value": "取代現有的 SSH 金鑰？"
+    },
+    {
+      "name": "ssh_replace_confirm_msg",
+      "value": "您可能會失去對伺服器的存取權限"
+    },
+    {
+      "name": "ssh_replace_btn",
+      "value": "取代"
+    },
+    {
+      "name": "ssh_import_hint",
+      "value": "請在電腦上準備私鑰檔案並傳到手機：\n· 既有金鑰：私鑰即 ~/.ssh/id_ed25519（或 id_rsa）\n· 新建：ssh-keygen -t ed25519 -C \"your@email.com\"\n支援 OpenSSH / PKCS8 / RSA PEM（含加密私鑰）。"
+    },
+    {
+      "name": "ssh_encrypted_key_title",
+      "value": "私鑰已加密"
+    },
+    {
+      "name": "ssh_encrypted_key_msg",
+      "value": "該私鑰已加密，請在「私鑰口令」中輸入口令後再匯入。"
+    },
+    {
+      "name": "ssh_generate_new",
+      "value": "產生新金鑰"
+    },
+    {
+      "name": "ssh_import_key",
+      "value": "匯入金鑰"
+    },
+    {
+      "name": "ssh_comment_ph",
+      "value": "註解（選填，通常為電子郵件）"
+    },
+    {
+      "name": "ssh_generate_btn",
+      "value": "產生"
+    },
+    {
+      "name": "ssh_pick_key_file",
+      "value": "選擇私鑰檔案"
+    },
+    {
+      "name": "ssh_passphrase_ph",
+      "value": "私鑰口令（無口令可留空）"
+    },
+    {
+      "name": "ssh_copy_pub",
+      "value": "複製公鑰"
+    },
+    {
+      "name": "ssh_empty_title",
+      "value": "尚未建立 SSH 金鑰"
+    },
+    {
+      "name": "ssh_empty_hint",
+      "value": "點擊右下角 + 建立或匯入金鑰"
+    },
+    {
+      "name": "ssh_load_failed",
+      "value": "載入金鑰失敗"
+    },
+    {
+      "name": "ssh_gen_failed",
+      "value": "金鑰產生失敗"
+    },
+    {
+      "name": "ssh_replaced",
+      "value": "SSH 金鑰已取代"
+    },
+    {
+      "name": "ssh_generated",
+      "value": "SSH 金鑰已產生"
+    },
+    {
+      "name": "ssh_imported",
+      "value": "SSH 金鑰已匯入"
+    },
+    {
+      "name": "ssh_file_empty",
+      "value": "所選檔案為空"
+    },
+    {
+      "name": "ssh_err_pick_first",
+      "value": "請先選擇私鑰檔案"
+    },
+    {
+      "name": "ssh_import_private_failed",
+      "value": "私鑰匯入失敗"
+    },
+    {
+      "name": "ssh_pub_missing",
+      "value": "公鑰不存在"
+    },
+    {
+      "name": "ssh_pub_copied",
+      "value": "公鑰已複製到剪貼簿"
+    },
+    {
+      "name": "ssh_deleted",
+      "value": "SSH 金鑰已刪除"
+    },
+    {
+      "name": "gitcfg_saved_title",
+      "value": "設定已儲存"
+    },
+    {
+      "name": "gitcfg_clone_after_save_msg",
+      "value": "是否立即複製遠端儲存庫？\n%s"
+    },
+    {
+      "name": "gitcfg_clone_btn",
+      "value": "複製"
+    },
+    {
+      "name": "gitcfg_needs_clean_title",
+      "value": "本機目錄已有內容"
+    },
+    {
+      "name": "gitcfg_needs_clean_msg",
+      "value": "複製要求本機目錄為空。目前目錄可能已有舊儲存庫或殘留檔案，需要先刪除本機儲存庫目錄及其中全部密碼檔案，是否繼續？"
+    },
+    {
+      "name": "gitcfg_delete_and_clone",
+      "value": "刪除並複製"
+    },
+    {
+      "name": "gitcfg_hostkey_fp_typed",
+      "value": "主機 %s:%d 的金鑰指紋（%s）："
+    },
+    {
+      "name": "gitcfg_hostkey_mismatch_explain",
+      "value": "此主機已有信任記錄，但本次同類型金鑰的指紋不同：可能是伺服器更換了金鑰，也可能是中間人攻擊。請與伺服器管理員核對後再決定，確認後將覆蓋該類型記錄。"
+    },
+    {
+      "name": "gitcfg_hostkey_trust_anyway",
+      "value": "仍要信任"
+    },
+    {
+      "name": "gitcfg_hostkey_trust_connect",
+      "value": "信任並連線"
+    },
+    {
+      "name": "gitcfg_clone_done_toast",
+      "value": "複製完成，密碼清單已重新整理"
+    },
+    {
+      "name": "gitcfg_pick_ssh_key",
+      "value": "選擇 SSH 金鑰"
+    },
+    {
+      "name": "gitcfg_section_remote",
+      "value": "遠端儲存庫"
+    },
+    {
+      "name": "gitcfg_auth_mode",
+      "value": "認證方式"
+    },
+    {
+      "name": "gitcfg_auth_ssh",
+      "value": "SSH 金鑰"
+    },
+    {
+      "name": "gitcfg_auth_ssh_tab",
+      "value": "SSH 金鑰"
+    },
+    {
+      "name": "gitcfg_label_url",
+      "value": "遠端位址"
+    },
+    {
+      "name": "gitcfg_ph_username",
+      "value": "使用者名稱 / 電子郵件"
+    },
+    {
+      "name": "gitcfg_ph_password",
+      "value": "密碼 / 存取權杖"
+    },
+    {
+      "name": "gitcfg_token_hint",
+      "value": "Gitee/GitHub 等平台需使用「私人權杖」而非登入密碼"
+    },
+    {
+      "name": "gitcfg_select_ssh_key",
+      "value": "請選擇 SSH 金鑰"
+    },
+    {
+      "name": "gitcfg_no_keys",
+      "value": "尚無金鑰"
+    },
+    {
+      "name": "gitcfg_go_create",
+      "value": "前往建立"
+    },
+    {
+      "name": "gitcfg_label_ssh_port",
+      "value": "SSH 連接埠"
+    },
+    {
+      "name": "gitcfg_ph_ssh_port",
+      "value": "預設 22"
+    },
+    {
+      "name": "gitcfg_label_key_passphrase",
+      "value": "私鑰口令"
+    },
+    {
+      "name": "gitcfg_ph_key_passphrase",
+      "value": "私鑰未加密可留空"
+    },
+    {
+      "name": "gitcfg_section_identity",
+      "value": "提交身分"
+    },
+    {
+      "name": "gitcfg_label_name",
+      "value": "姓名"
+    },
+    {
+      "name": "gitcfg_ph_name",
+      "value": "Git 提交者姓名"
+    },
+    {
+      "name": "gitcfg_ph_email",
+      "value": "Git 提交者電子郵件"
+    },
+    {
+      "name": "gitcfg_section_network",
+      "value": "網路"
+    },
+    {
+      "name": "gitcfg_label_proxy",
+      "value": "代理"
+    },
+    {
+      "name": "gitcfg_ph_proxy",
+      "value": "如 http://127.0.0.1:7890"
+    },
+    {
+      "name": "gitcfg_test_ok",
+      "value": "連線成功"
+    },
+    {
+      "name": "gitcfg_testing",
+      "value": "測試中..."
+    },
+    {
+      "name": "gitcfg_test_btn",
+      "value": "測試連線"
+    },
+    {
+      "name": "gitcfg_checkout_files",
+      "value": "正在檢出檔案…"
+    },
+    {
+      "name": "gitcfg_cloning_overlay",
+      "value": "正在複製遠端儲存庫…"
+    },
+    {
+      "name": "gitcfg_err_key_removed",
+      "value": "原先選擇的 SSH 金鑰已被刪除，請重新選擇"
+    },
+    {
+      "name": "gitcfg_cloning",
+      "value": "正在複製遠端儲存庫..."
+    },
+    {
+      "name": "gitcfg_clone_done",
+      "value": "複製完成"
+    },
+    {
+      "name": "gitcfg_err_url_required",
+      "value": "請輸入遠端儲存庫位址"
+    },
+    {
+      "name": "gitcfg_err_url_scheme",
+      "value": "位址必須以 https:// 或 ssh:// 開頭（或 git@host:path 格式）"
+    },
+    {
+      "name": "gitcfg_save_failed",
+      "value": "儲存失敗"
+    },
+    {
+      "name": "gitcfg_err_parse_ssh",
+      "value": "無法從位址解析 SSH 主機資訊"
+    },
+    {
+      "name": "gitcfg_err_need_tofu",
+      "value": "首次連線需先確認伺服器指紋，請確認後重新儲存"
+    },
+    {
+      "name": "gitcfg_https_err_auth",
+      "value": "認證失敗：請檢查使用者名稱與密碼/權杖（Gitee/GitHub 需使用存取權杖而非登入密碼）"
+    },
+    {
+      "name": "gitcfg_https_err_dns",
+      "value": "無法解析主機位址：請檢查網路與遠端位址是否正確"
+    },
+    {
+      "name": "gitcfg_https_err_notfound",
+      "value": "儲存庫不存在或無權存取：請確認遠端位址與存取權限"
+    },
+    {
+      "name": "gitcfg_https_err_proto",
+      "value": "不支援的協定：HTTPS 測試需要 native TLS 支援"
+    },
+    {
+      "name": "gitcfg_https_err_generic",
+      "value": "連線失敗：%s"
+    },
+    {
+      "name": "gitcfg_clone_cancelled",
+      "value": "已取消複製（主機金鑰未確認）"
+    },
+    {
+      "name": "gitcfg_test_cancelled",
+      "value": "已取消連線（主機金鑰未確認）"
+    },
+    {
+      "name": "repo_section_status",
+      "value": "儲存庫狀態"
+    },
+    {
+      "name": "repo_status_cloned",
+      "value": "已複製遠端儲存庫"
+    },
+    {
+      "name": "repo_status_not_cloned",
+      "value": "未複製遠端儲存庫"
+    },
+    {
+      "name": "repo_no_remote_url",
+      "value": "尚未設定遠端位址"
+    },
+    {
+      "name": "repo_section_sync",
+      "value": "同步行為"
+    },
+    {
+      "name": "repo_pull_rebase_title",
+      "value": "拉取時進行變基"
+    },
+    {
+      "name": "repo_pull_rebase_sub",
+      "value": "拉取遠端更新時使用變基（--rebase）保持線性歷史"
+    },
+    {
+      "name": "repo_section_ops",
+      "value": "儲存庫操作"
+    },
+    {
+      "name": "repo_gitcfg_sub",
+      "value": "遠端位址 / 認證方式 / 提交身分"
+    },
+    {
+      "name": "repo_section_danger",
+      "value": "危險操作"
+    },
+    {
+      "name": "repo_danger_hint",
+      "value": "刪除本機儲存庫目錄及全部密碼檔案，操作無法復原"
+    },
+    {
+      "name": "repo_delete_btn",
+      "value": "刪除本機儲存庫"
+    },
+    {
+      "name": "repo_delete_confirm_msg",
+      "value": "將刪除本機儲存庫目錄及其中全部密碼檔案，此操作無法復原。"
+    },
+    {
+      "name": "repo_err_no_path",
+      "value": "儲存庫路徑未設定"
+    },
+    {
+      "name": "repo_err_delete_failed_dir",
+      "value": "刪除儲存庫失敗：目錄無法刪除"
+    },
+    {
+      "name": "repo_deleted",
+      "value": "本機儲存庫已刪除"
+    },
+    {
+      "name": "repo_err_delete_failed",
+      "value": "刪除儲存庫失敗：%s"
+    },
+    {
+      "name": "gitlog_not_repo",
+      "value": "目前目錄不是 Git 儲存庫"
+    },
+    {
+      "name": "gitlog_load_failed",
+      "value": "載入提交歷史失敗"
+    },
+    {
+      "name": "git_auth_required_hint",
+      "value": "遠端儲存庫要求認證。請在「Git 設定」中填寫使用者名稱與存取權杖（Gitee 私人權杖，需含 projects 寫入權限）後重試"
+    },
+    {
+      "name": "git_remove_repo_dir_failed",
+      "value": "刪除本機儲存庫失敗：目錄無法刪除"
+    },
+    {
+      "name": "git_ssh_no_key_hint",
+      "value": "尚未設定 SSH 金鑰。請先在「SSH 金鑰管理」中產生或匯入金鑰"
+    },
+    {
+      "name": "git_ssh_multi_key_hint",
+      "value": "存在 %d 把 SSH 金鑰，請先在「Git 設定 → SSH 金鑰」中選擇用於認證的那把"
+    },
+    {
+      "name": "git_ssh_key_encrypted",
+      "value": "該 SSH 私鑰已加密，請先在「Git 設定」中填寫私鑰口令"
+    },
+    {
+      "name": "git_ssh_remote_notfound",
+      "value": "遠端儲存庫不存在或路徑錯誤：伺服器已連線、認證已通過，請檢查位址中的儲存庫路徑"
+    },
+    {
+      "name": "git_hostkey_not_trusted",
+      "value": "主機金鑰未被信任或不一致：請先完成指紋確認"
+    },
+    {
+      "name": "git_ssh_auth_failed",
+      "value": "SSH 認證失敗：請確認公鑰已新增到遠端帳號，且私鑰口令正確"
+    },
+    {
+      "name": "git_ssh_url_unparsed_remote",
+      "value": "無法解析遠端 SSH 位址。支援 git@host:path 與 ssh://user@host[:連接埠]/path"
+    },
+    {
+      "name": "git_hostkey_mismatch_short",
+      "value": "伺服器主機金鑰與已儲存指紋不一致（可能存在中間人攻擊）"
+    },
+    {
+      "name": "git_hostkey_first_connect",
+      "value": "首次連線該伺服器，需確認主機金鑰指紋"
+    },
+    {
+      "name": "git_ssh_url_unparsed_clone",
+      "value": "無法解析 SSH 位址。支援 git@host:user/repo.git 與 ssh://git@host[:連接埠]/user/repo.git"
+    },
+    {
+      "name": "git_clone_dir_not_empty",
+      "value": "本機儲存庫目錄非空，無法複製。請先清空該目錄（「儲存庫管理 → 刪除本機儲存庫」）後重試；若在「Git 設定」儲存後觸發複製，可在彈窗中選擇「刪除並複製」"
+    },
+    {
+      "name": "git_err_url_empty",
+      "value": "遠端位址不能為空"
+    },
+    {
+      "name": "git_err_url_scheme",
+      "value": "不支援的 URL 格式。請使用 git@host:user/repo.git（SSH）或 https://host/user/repo.git"
+    },
+    {
+      "name": "git_clone_https_tls_unready",
+      "value": "HTTPS 複製失敗（native TLS 未就緒）。請檢查網路與位址，或改用其他協定"
+    },
+    {
+      "name": "git_clone_ssh_unsupported",
+      "value": "目前版本不支援 SSH 複製（native 層未編入 SSH 傳輸）。請改用 HTTPS 位址 + 存取權杖：例如 https://gitee.com/<使用者名稱>/<儲存庫>.git，並在「Git 設定」中填寫使用者名稱與權杖"
+    },
+    {
+      "name": "git_clone_auth_failed",
+      "value": "認證失敗：請檢查 Git 設定中的使用者名稱與權杖（GitHub/Gitee 需使用權杖而非登入密碼）"
+    },
+    {
+      "name": "git_pull_failed",
+      "value": "拉取失敗：%s"
+    },
+    {
+      "name": "git_push_failed",
+      "value": "推送失敗：%s"
+    },
+    {
+      "name": "common_native_call_failed",
+      "value": "native 呼叫失敗，請重試"
+    },
+    {
+      "name": "common_ssh_pem_read_failed",
+      "value": "無法讀取 SSH 私鑰（%s）。請在「SSH 金鑰管理」中重新產生或匯入金鑰"
+    },
+    {
+      "name": "common_unknown_error",
+      "value": "未知錯誤"
+    },
+    {
+      "name": "ssh_host_required",
+      "value": "主機名稱不能為空"
+    },
+    {
+      "name": "ssh_probe_failed",
+      "value": "取得主機金鑰失敗"
+    },
+    {
+      "name": "ssh_hostkey_mismatch_rejected",
+      "value": "伺服器主機金鑰與已儲存指紋不一致，連線已拒絕（可能存在中間人攻擊）"
+    },
+    {
+      "name": "ssh_tcp_no_key",
+      "value": "TCP 可連線，但未設定 SSH 金鑰，無法驗證認證。請先在「Git 設定 → SSH 金鑰」中選擇私鑰"
+    },
+    {
+      "name": "ssh_tcp_auth_incomplete",
+      "value": "TCP 可連線，但未能完成 SSH 認證，請檢查金鑰與口令"
+    },
+    {
+      "name": "ssh_params_incomplete",
+      "value": "認證參數不完整"
+    },
+    {
+      "name": "ssh_no_key_unverified",
+      "value": "未設定 SSH 金鑰，無法驗證認證。請先在「Git 設定 → SSH 金鑰」中選擇私鑰"
+    },
+    {
+      "name": "ssh_tcp_connect_failed",
+      "value": "連線失敗: %s"
+    },
+    {
+      "name": "reencrypt_no_key_selected",
+      "value": "未選擇加密金鑰"
+    },
+    {
+      "name": "reencrypt_no_enc_subkey",
+      "value": "所選金鑰沒有可用的加密子金鑰，無法作為加密接收方"
+    },
+    {
+      "name": "reencrypt_missing_decrypt_key",
+      "value": "缺少解密金鑰（收件人 Key ID：%s）"
+    },
+    {
+      "name": "reencrypt_keyids_unlabeled",
+      "value": "未標註"
+    },
+    {
+      "name": "reencrypt_encrypt_failed",
+      "value": "重新加密失敗：%s"
+    },
+    {
+      "name": "reencrypt_write_gpgid_failed",
+      "value": "寫入 .gpg-id 失敗：%s"
+    },
+    {
+      "name": "reencrypt_failed_count",
+      "value": "%d 個項目未能重新加密，已保留原 .gpg-id"
+    },
+    {
+      "name": "pgp_no_public_key",
+      "value": "無可用公鑰（請先匯入 PGP 金鑰）"
+    },
+    {
+      "name": "pgp_no_secret_key",
+      "value": "無可用私鑰（請先匯入 PGP 金鑰）"
+    },
+    {
+      "name": "pgp_no_secret_imported",
+      "value": "尚未匯入任何私鑰，請先在「PGP 金鑰管理」中匯入"
+    },
+    {
+      "name": "pgp_key_not_found_reimport",
+      "value": "找不到該金鑰，請重新匯入"
+    },
+    {
+      "name": "pgp_key_file_missing",
+      "value": "金鑰檔案缺失，請重新匯入該金鑰"
+    },
+    {
+      "name": "pgp_verify_no_secret_material",
+      "value": "該金鑰不含私鑰材料（可能是公鑰），無法用於解密。請用 `gpg --export-secret-keys --armor <金鑰ID>` 匯出私鑰後重新匯入。"
+    },
+    {
+      "name": "pgp_verify_no_mlkem_material",
+      "value": "該金鑰不含可用的 GnuPG ML-KEM 私鑰材料，請確認匯出的是私鑰。"
+    },
+    {
+      "name": "pgp_verify_mlkem_unreadable",
+      "value": "金鑰的 ML-KEM 私鑰材料無法讀取（%s）。該段與 ECC 段共用同一口令，故這不是口令問題；請用較新的 gpg 重新匯出該金鑰後重新匯入。"
+    },
+    {
+      "name": "pgp_verify_curve_unsupported",
+      "value": "該金鑰的經典曲線本應用不支援（%s）。請改用 GnuPG 的 ky768_cv25519（ML-KEM-768 + Curve25519）金鑰。"
+    },
+    {
+      "name": "pgp_key_content_empty",
+      "value": "金鑰內容為空"
+    },
+    {
+      "name": "pgp_import_not_secret",
+      "value": "這不是合法的私鑰材料，無法用於解密。請改用 `gpg --export-secret-keys --armor <金鑰ID>` 匯出私鑰後再匯入。"
+    },
+    {
+      "name": "pgp_parse_failed",
+      "value": "金鑰解析失敗（格式不正確或不支援）"
+    },
+    {
+      "name": "pgp_warn_algo8",
+      "value": "該金鑰的加密子金鑰為 %s（GnuPG 私有演算法號），本應用可正常用它加解密新項目，但 GnuPG 之外的實作可能無法識別。"
+    },
+    {
+      "name": "pgp_warn_algo8_curve",
+      "value": "該金鑰的加密子金鑰為 %s，其經典曲線本應用尚未支援（目前支援 ky768_cv25519 / ky768_bp256 / ky1024_bp384）。金鑰已匯入，可檢視與管理，但無法用它加解密新項目。"
+    },
+    {
+      "name": "pgp_warn_enc_unsupported",
+      "value": "該金鑰的加密子金鑰為 %s，目前版本不支援用它加密新項目。金鑰已匯入，可檢視與管理，但請另選一把 RSA 或 ECC 金鑰作為加密金鑰。"
+    },
+    {
+      "name": "pgp_key_exists",
+      "value": "該金鑰已存在"
+    },
+    {
+      "name": "pgp_import_failed_reason",
+      "value": "匯入失敗: %s"
+    },
+    {
+      "name": "pgp_split_parse_failed",
+      "value": "金鑰拆分結果解析失敗"
+    },
+    {
+      "name": "pgp_none_imported",
+      "value": "無金鑰被匯入"
+    },
+    {
+      "name": "pgp_err_unsupported_algo",
+      "value": "不支援的金鑰演算法"
+    },
+    {
+      "name": "pgp_key_missing",
+      "value": "金鑰不存在"
+    },
+    {
+      "name": "pgp_store_new_key_failed",
+      "value": "儲存新金鑰失敗: %s"
+    },
+    {
+      "name": "pgp_unsupported_algo_reason",
+      "value": "不支援的金鑰演算法（%s），請改用 RSA 或 ECC 金鑰。"
+    },
+    {
+      "name": "ssh_key_content_empty",
+      "value": "私鑰內容為空"
+    },
+    {
+      "name": "ssh_not_private_key",
+      "value": "檔案不是有效的私鑰（未找到 PRIVATE KEY 標記）"
+    },
+    {
+      "name": "ssh_native_unavailable",
+      "value": "native 程式庫不可用，無法解析私鑰"
+    },
+    {
+      "name": "ssh_invalid_key_detailed",
+      "value": "私鑰格式無效或檔案已損壞，請確認是完整的 OpenSSH 私鑰檔案"
+    },
+    {
+      "name": "ssh_key_encrypted_need_pw",
+      "value": "該私鑰已加密，請輸入私鑰口令"
+    },
+    {
+      "name": "ssh_wrong_passphrase",
+      "value": "私鑰口令錯誤，請重新輸入"
+    },
+    {
+      "name": "ssh_invalid_key",
+      "value": "私鑰格式無效或檔案已損壞"
+    },
+    {
+      "name": "ssh_seal_failed",
+      "value": "私鑰加密失敗，未能儲存（請重試）"
+    },
+    {
+      "name": "repo_src_entry_missing",
+      "value": "來源密碼檔案不存在"
+    },
+    {
+      "name": "repo_dst_entry_exists",
+      "value": "目標位置已存在同名密碼"
+    },
+    {
+      "name": "repo_rename_failed",
+      "value": "移動/重新命名失敗"
+    },
+    {
+      "name": "repo_src_dir_missing",
+      "value": "來源資料夾不存在"
+    },
+    {
+      "name": "repo_dst_dir_exists",
+      "value": "目標資料夾已存在"
+    },
+    {
+      "name": "repo_dir_rename_failed",
+      "value": "資料夾重新命名失敗"
+    },
+    {
+      "name": "repo_invalid_path",
+      "value": "非法路徑（%s）：%s"
+    },
+    {
+      "name": "autofill_settings_title",
+      "value": "自動填充"
+    },
+    {
+      "name": "autofill_svc_status",
+      "value": "填充服務狀態"
+    },
+    {
+      "name": "autofill_repo_ready",
+      "value": "儲存庫就緒"
+    },
+    {
+      "name": "autofill_repo_not_init",
+      "value": "儲存庫未初始化"
+    },
+    {
+      "name": "autofill_entry_count_label",
+      "value": "可用密碼條目"
+    },
+    {
+      "name": "autofill_entry_count",
+      "value": "%d 條"
+    },
+    {
+      "name": "autofill_biometric_cap",
+      "value": "生物辨識能力"
+    },
+    {
+      "name": "autofill_biometric_support",
+      "value": "支援%s"
+    },
+    {
+      "name": "autofill_biometric_unsupported",
+      "value": "不支援"
+    },
+    {
+      "name": "autofill_howto_title",
+      "value": "如何啟用自動填充"
+    },
+    {
+      "name": "autofill_howto_step1",
+      "value": "1. 開啟系統設定 → 更多設定 → 密碼與填充（或「自動填充服務」）"
+    },
+    {
+      "name": "autofill_howto_step2",
+      "value": "2. 選擇「密碼庫（HarmonyPasswordStore）」作為填充服務"
+    },
+    {
+      "name": "autofill_howto_step3",
+      "value": "3. 在應用或瀏覽器中點擊輸入框時，系統將彈出填充建議"
+    },
+    {
+      "name": "autofill_rule_title",
+      "value": "匹配規則"
+    },
+    {
+      "name": "autofill_rule_match",
+      "value": "· 按請求方應用套件名稱或網頁網域與密碼條目名稱/路徑匹配"
+    },
+    {
+      "name": "autofill_rule_priority",
+      "value": "· 完全匹配的條目優先展示，同分按最近使用排序"
+    },
+    {
+      "name": "autofill_rule_nodecrypt",
+      "value": "· 匹配過程不解密檔案，僅在您選擇後才會解密"
+    },
+    {
+      "name": "autofill_sec_title",
+      "value": "安全說明"
+    },
+    {
+      "name": "autofill_sec_fields",
+      "value": "· 填充候選預設只顯示名稱與使用者名稱，不顯示密碼"
+    },
+    {
+      "name": "autofill_sec_memory",
+      "value": "· 解密後的密碼僅短暫存在於記憶體中"
+    },
+    {
+      "name": "autofill_sec_usage",
+      "value": "· 填充成功會記錄使用時間，用於最佳化候選排序"
+    }
+  ]
+}

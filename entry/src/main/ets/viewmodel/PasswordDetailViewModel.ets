@@ -6,6 +6,7 @@ import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { PgpCrypto, UnlockResult } from '../crypto/PgpCrypto';
 import { PgpKeyManager } from '../crypto/PgpKeyManager';
 import { ClipboardHelper } from '../utils/ClipboardHelper';
+import { Strings } from '../common/Strings';
 import { promptAction } from '@kit.ArkUI';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
@@ -117,7 +118,7 @@ export class PasswordDetailViewModel {
       // 文件不存在（如已被移动/删除）：不弹密码框，仅记录错误
       if (result.error.indexOf('not found') >= 0) {
         this.isDecrypted = false;
-        this.errorMessage = '密码文件不存在，可能已被移动或删除';
+        this.errorMessage = Strings.get('detail_err_file_missing');
         hilog.info(DOMAIN, TAG, 'decrypt failed: file not found');
         return;
       }
@@ -143,7 +144,7 @@ export class PasswordDetailViewModel {
     this.passphraseDialogVisible = false;
     if (this.dialogPassphrase.length === 0) {
       this.isDecrypting = false;
-      this.errorMessage = '解密需要密码，请输入密钥密码';
+      this.errorMessage = Strings.get('detail_err_passphrase_required');
       return;
     }
 
@@ -156,7 +157,7 @@ export class PasswordDetailViewModel {
       : await this.allSecretFingerprints();
     let unlocked: boolean = false;
     // 记录失败原因：只显示「密码错误」会掩盖「导入的是公钥」等可修复问题
-    let failReason: string = '密钥密码错误，解密失败';
+    let failReason: string = Strings.get('detail_err_unlock_failed');
     for (let i: number = 0; i < targets.length; i++) {
       const res: UnlockResult = await pgpCrypto.unlockPassphrase(targets[i], this.dialogPassphrase);
       if (res.success) {
@@ -203,7 +204,7 @@ export class PasswordDetailViewModel {
   cancelPassphraseDialog(): void {
     this.passphraseDialogVisible = false;
     this.dialogPassphrase = '';
-    this.errorMessage = '解密已取消';
+    this.errorMessage = Strings.get('detail_err_cancelled');
   }
 
   /**
@@ -225,7 +226,7 @@ export class PasswordDetailViewModel {
     this.isDeleting = false;
 
     if (!result.success) {
-      this.errorMessage = result.error.length > 0 ? result.error : '删除失败';
+      this.errorMessage = result.error.length > 0 ? result.error : Strings.get('detail_err_delete_failed');
       hilog.error(DOMAIN, TAG, 'delete failed: %{public}s', result.error);
       return;
     }
@@ -239,7 +240,7 @@ export class PasswordDetailViewModel {
    */
   async copyPassword(): Promise<void> {
     if (!this.content) return;
-    await this.copyToClipboard(this.content.password, '密码已复制');
+    await this.copyToClipboard(this.content.password, Strings.get('detail_copied_password'));
   }
 
   /**
@@ -247,7 +248,7 @@ export class PasswordDetailViewModel {
    */
   async copyUsername(): Promise<void> {
     if (!this.content || this.content.username.length === 0) return;
-    await this.copyToClipboard(this.content.username, '用户名已复制');
+    await this.copyToClipboard(this.content.username, Strings.get('detail_copied_username'));
   }
 
   /**
@@ -255,7 +256,7 @@ export class PasswordDetailViewModel {
    */
   async copyEmail(): Promise<void> {
     if (!this.content || this.content.email.length === 0) return;
-    await this.copyToClipboard(this.content.email, '邮箱已复制');
+    await this.copyToClipboard(this.content.email, Strings.get('detail_copied_email'));
   }
 
   /**
@@ -263,7 +264,7 @@ export class PasswordDetailViewModel {
    */
   async copyPhone(): Promise<void> {
     if (!this.content || this.content.phone.length === 0) return;
-    await this.copyToClipboard(this.content.phone, '手机号已复制');
+    await this.copyToClipboard(this.content.phone, Strings.get('detail_copied_phone'));
   }
 
   /**
@@ -271,7 +272,7 @@ export class PasswordDetailViewModel {
    */
   async copyNotes(): Promise<void> {
     if (!this.content || this.content.notes.length === 0) return;
-    await this.copyToClipboard(this.content.notes, '备注已复制');
+    await this.copyToClipboard(this.content.notes, Strings.get('detail_copied_notes'));
   }
 
   /**
@@ -283,7 +284,7 @@ export class PasswordDetailViewModel {
    */
   async copyExtraContent(): Promise<void> {
     if (!this.content || this.content.extraContent.length === 0) return;
-    await this.copyToClipboard(this.content.extraContent, '额外内容已复制');
+    await this.copyToClipboard(this.content.extraContent, Strings.get('detail_copied_extra'));
   }
 
   /**
@@ -291,7 +292,7 @@ export class PasswordDetailViewModel {
    */
   async copyAll(): Promise<void> {
     if (!this.content) return;
-    await this.copyToClipboard(this.content.rawText, '全部内容已复制');
+    await this.copyToClipboard(this.content.rawText, Strings.get('detail_copied_all'));
   }
 
   /**
@@ -303,7 +304,7 @@ export class PasswordDetailViewModel {
     if (ok) {
       this.showToast(toastMessage);
     } else {
-      this.showToast('复制失败');
+      this.showToast(Strings.get('common_copy_failed'));
     }
   }
 

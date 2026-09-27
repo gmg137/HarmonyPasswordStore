@@ -4,6 +4,7 @@ import { CredentialMatch } from '../autofill/CredentialMatcher';
 import { RouteManager } from '../common/RouteManager';
 import { ThemeColors, Palette, ButtonSpec, FontSize, Spacing, Radius, IconSize } from '../common/ThemeColors';
 import { EmptyState } from '../views/EmptyState';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 const DOMAIN: number = 0x0001;
@@ -88,11 +89,11 @@ export struct AutofillFillPage {
   build() {
     NavDestination() {
       Column() {
-        AppTitleBar({ title: '填充建议' })
+        AppTitleBar({ title: $r('app.string.autofill_title') })
 
         // 目标身份提示（页内大标题已由标题栏承担，这里只留副标题）
         if (this.viewModel.identity.length > 0) {
-          Text(`为 ${this.viewModel.identity} 选择凭据`)
+          Text(Strings.fmt('autofill_pick_for', this.viewModel.identity))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textTertiary)
             .width('100%')
@@ -107,7 +108,7 @@ export struct AutofillFillPage {
                 LoadingProgress()
                   .width(IconSize.MD)
                   .height(IconSize.MD)
-                Text('匹配中...')
+                Text($r('app.string.autofill_matching'))
                   .fontSize(FontSize.CAPTION)
                   .fontColor(this.colors.textTertiary)
                   .margin({ left: Spacing.SM })
@@ -119,8 +120,8 @@ export struct AutofillFillPage {
               // 无匹配
               EmptyState({
                 icon: $r('sys.symbol.magnifyingglass'),
-                title: '没有匹配的密码',
-                hint: '可在主界面搜索后手动复制',
+                title: Strings.get('autofill_no_match'),
+                hint: Strings.get('autofill_no_match_hint'),
               })
             } else {
               // 候选列表
@@ -148,13 +149,13 @@ export struct AutofillFillPage {
             // 解密成功后的降级操作（复制）
             if (this.viewModel.result !== null) {
               Column() {
-                Text('已解锁，请选择操作')
+                Text($r('app.string.autofill_unlocked_prompt'))
                   .fontSize(FontSize.CAPTION)
                   .fontColor(this.colors.success)
                   .margin({ bottom: Spacing.SM })
 
                 Row({ space: ButtonSpec.ROW_GAP }) {
-                  Button('复制用户名')
+                  Button($r('app.string.common_copy_username'))
                     .type(ButtonType.Normal)
                     .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                     .layoutWeight(1)
@@ -166,7 +167,7 @@ export struct AutofillFillPage {
                       this.viewModel.copyUsername();
                     })
 
-                  Button('复制密码')
+                  Button($r('app.string.common_copy_password'))
                     .type(ButtonType.Normal)
                     .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                     .layoutWeight(1)

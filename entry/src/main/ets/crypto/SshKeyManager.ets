@@ -6,6 +6,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { util } from '@kit.ArkTS';
 import { fileIo as fs } from '@kit.CoreFileKit';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -318,18 +319,18 @@ export class SshKeyManager {
 
     const trimmed: string = privateKeyText.trim();
     if (trimmed.length === 0) {
-      setError('私钥内容为空');
+      setError(Strings.get('ssh_key_content_empty'));
       return null;
     }
     if (!trimmed.includes('PRIVATE KEY')) {
-      setError('文件不是有效的私钥（未找到 PRIVATE KEY 标记）');
+      setError(Strings.get('ssh_not_private_key'));
       return null;
     }
 
     try {
       const bridge: NativeBridge = NativeBridge.getInstance();
       if (!bridge.isAvailable()) {
-        setError('native 库不可用，无法解析私钥');
+        setError(Strings.get('ssh_native_unavailable'));
         return null;
       }
 
@@ -342,7 +343,7 @@ export class SshKeyManager {
           if (!parsed.valid) {
             // 确认不是有效私钥：格式无效或已损坏
             hilog.warn(DOMAIN, TAG, 'importPrivateKey: invalid key: %{public}s', parsed.error);
-            setError('私钥格式无效或文件已损坏，请确认是完整的 OpenSSH 私钥文件');
+            setError(Strings.get('ssh_invalid_key_detailed'));
             return null;
           }
           isEncrypted = parsed.encrypted;
@@ -353,7 +354,7 @@ export class SshKeyManager {
 
       // 已加密但没输口令：明确提示，而不是报格式错误
       if (isEncrypted && passphrase.length === 0) {
-        setError('该私钥已加密，请输入私钥口令');
+        setError(Strings.get('ssh_key_encrypted_need_pw'));
         return null;
       }
 
@@ -362,7 +363,7 @@ export class SshKeyManager {
       if (!derived.success || derived.data.length === 0) {
         hilog.warn(DOMAIN, TAG, 'importPrivateKey: derive failed: %{public}s', derived.error);
         // 走到这里说明文件有效：已加密即口令错，未加密才是真损坏
-        setError(isEncrypted ? '私钥口令错误，请重新输入' : '私钥格式无效或文件已损坏');
+        setError(isEncrypted ? Strings.get('ssh_wrong_passphrase') : Strings.get('ssh_invalid_key'));
         return null;
       }
       const publicKey: string = derived.data.trim();
@@ -380,7 +381,7 @@ export class SshKeyManager {
       // 私钥加密后落盘（明文私钥会随系统备份外发），公钥为公开信息照常明文存
       const sealedPrivate: string = await SecretStore.getInstance().sealSshPrivateKey(trimmed);
       if (sealedPrivate.length === 0) {
-        setError('私钥加密失败，未能保存（请重试）');
+        setError(Strings.get('ssh_seal_failed'));
         return null;
       }
       FileUtils.writeTextFile(`${keysDir}/${alias}.key`, sealedPrivate);
@@ -400,7 +401,7 @@ export class SshKeyManager {
       };
     } catch (e) {
       hilog.error(DOMAIN, TAG, 'importPrivateKey failed: %{public}s', e instanceof Error ? e.message : String(e));
-      setError('导入失败');
+      setError(Strings.get('common_import_failed'));
       return null;
     }
   }

@@ -1,5 +1,6 @@
 import { AppLockViewModel } from '../viewmodel/AppLockViewModel';
 import { ThemeColors, Palette, Spacing, FontSize, Radius } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /** 应用图标尺寸（vp）——锁屏页的主视觉，居中显示 */
 const APP_ICON_SIZE: number = 96;
@@ -40,7 +41,7 @@ export struct LockPage {
     if (this.viewModel.biometricReason.length > 0) {
       return this.viewModel.biometricReason;
     }
-    return this.viewModel.isVerifying ? '正在验证…' : '轻触图标重新验证';
+    return this.viewModel.isVerifying ? Strings.get('lock_verifying') : Strings.get('lock_touch_retry');
   }
 
   /** 提示是否属于错误（决定配色） */
@@ -97,7 +98,7 @@ export struct LockPage {
       .padding({ left: Spacing.XL, right: Spacing.XL })
       .backgroundColor(this.colors.background)
     }
-    .title('解锁')
+    .title($r('app.string.lock_title'))
     .hideTitleBar(true)
   }
 }

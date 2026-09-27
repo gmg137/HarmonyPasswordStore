@@ -1,6 +1,7 @@
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { ThemeColors } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -220,10 +221,10 @@ export class PasswordGenerator {
    * 获取强度等级文本
    */
   static getStrengthLabel(entropy: number): string {
-    if (entropy < 40) return '弱';
-    if (entropy < 80) return '中';
-    if (entropy < 120) return '强';
-    return '极强';
+    if (entropy < 40) return Strings.get('common_strength_weak');
+    if (entropy < 80) return Strings.get('common_strength_fair');
+    if (entropy < 120) return Strings.get('common_strength_good');
+    return Strings.get('common_strength_strong');
   }
 
   /**

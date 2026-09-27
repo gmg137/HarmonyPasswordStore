@@ -6,6 +6,7 @@ import { NativeBridge } from '../common/NativeBridge';
 import { PgpPacketParser } from './PgpPacketParser';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { Strings } from '../common/Strings';
 
 /**
  * 密钥导入结果
@@ -153,7 +154,7 @@ export class PgpKeyManager {
    */
   async importSecretKey(armoredKey: string, passphrase: string): Promise<KeyImportResult> {
     if (armoredKey.trim().length === 0) {
-      return { success: false, error: '密钥内容为空' };
+      return { success: false, error: Strings.get('pgp_key_content_empty') };
     }
 
     try {
@@ -164,8 +165,7 @@ export class PgpKeyManager {
         hilog.warn(DOMAIN, TAG, 'importSecretKey: no secret material (likely a public key)');
         return {
           success: false,
-          error: '这不是合法的私钥材料，无法用于解密。'
-            + '请改用 `gpg --export-secret-keys --armor <密钥ID>` 导出私钥后再导入。',
+          error: Strings.get('pgp_import_not_secret'),
           needsDialog: true,
         };
       }
@@ -173,7 +173,7 @@ export class PgpKeyManager {
       // 解析 armored 密钥提取元数据
       const keyInfo: GpgKeyId | null = await PgpPacketParser.parseArmoredKey(armoredKey, true);
       if (keyInfo === null) {
-        return { success: false, error: '密钥解析失败（格式不正确或不支持）' };
+        return { success: false, error: Strings.get('pgp_parse_failed') };
       }
 
       // native 无法处理的算法必须在写盘前拒绝：
@@ -193,28 +193,24 @@ export class PgpKeyManager {
       if (keyInfo.gpgPqc && keyInfo.gpgPqcUsable) {
         hilog.info(DOMAIN, TAG, 'importSecretKey: gpg pqc key (algo 8) %{public}s',
           keyInfo.encryptionAlgorithm);
-        warning = `该密钥的加密子密钥为 ${keyInfo.encryptionAlgorithm}（GnuPG 私有算法号），`
-          + `本应用可正常用它加解密新条目，但 GnuPG 之外的实现可能无法识别。`;
+        warning = Strings.fmt('pgp_warn_algo8', keyInfo.encryptionAlgorithm);
       } else if (keyInfo.gpgPqc) {
         // algo 8 但经典曲线未实现：必须明确说不可用。
         // 曾一律提示「可正常加解密」，用户在创建/解密时才失败，
         // 而错误看着像口令问题（本 bug 消耗过多轮排查）。
         hilog.warn(DOMAIN, TAG, 'importSecretKey: gpg pqc curve unsupported: %{public}s',
           keyInfo.encryptionAlgorithm);
-        warning = `该密钥的加密子密钥为 ${keyInfo.encryptionAlgorithm}，`
-          + `其经典曲线本应用尚未支持（当前支持 ky768_cv25519 / ky768_bp256 / ky1024_bp384）。`
-          + `密钥已导入，可查看与管理，但无法用它加解密新条目。`;
+        warning = Strings.fmt('pgp_warn_algo8_curve', keyInfo.encryptionAlgorithm);
       } else if (keyInfo.hasEncryptionKey && !keyInfo.encryptionSupported) {
         hilog.warn(DOMAIN, TAG, 'importSecretKey: encryption key unsupported: %{public}s',
           keyInfo.encryptionAlgorithm);
-        warning = `该密钥的加密子密钥为 ${keyInfo.encryptionAlgorithm}，当前版本不支持用它加密新条目。`
-          + `密钥已导入，可查看与管理，但请另选一把 RSA 或 ECC 密钥作为加密密钥。`;
+        warning = Strings.fmt('pgp_warn_enc_unsupported', keyInfo.encryptionAlgorithm);
       }
 
       // 检查是否已存在同指纹密钥
       const existing: GpgKeyId | null = this.findKey(keyInfo.fingerprint);
       if (existing !== null) {
-        return { success: false, error: '该密钥已存在', alreadyExists: true };
+        return { success: false, error: Strings.get('pgp_key_exists'), alreadyExists: true };
       }
 
       // 写入文件（以指纹命名）并记录路径映射
@@ -239,7 +235,7 @@ export class PgpKeyManager {
     } catch (e) {
       const msg: string = e instanceof Error ? e.message : String(e);
       hilog.error(DOMAIN, TAG, 'importSecretKey failed: %{public}s', msg);
-      return { success: false, error: `导入失败: ${msg}` };
+      return { success: false, error: Strings.fmt('pgp_import_failed_reason', msg) };
     }
   }
 
@@ -255,7 +251,7 @@ export class PgpKeyManager {
    */
   async importSecretKeysFromArmored(armoredKey: string, passphrase: string): Promise<KeyImportResult> {
     if (armoredKey.trim().length === 0) {
-      return { success: false, error: '密钥内容为空' };
+      return { success: false, error: Strings.get('pgp_key_content_empty') };
     }
 
     // native 拆分 keyring 为单密钥 armored 数组；拆分失败时按单密钥回退导入
@@ -270,7 +266,7 @@ export class PgpKeyManager {
     try {
       entries = JSON.parse(splitResult.data) as Array<string>;
     } catch (e) {
-      return { success: false, error: '密钥拆分结果解析失败' };
+      return { success: false, error: Strings.get('pgp_split_parse_failed') };
     }
 
     let imported: number = 0;
@@ -285,7 +281,7 @@ export class PgpKeyManager {
     }
 
     if (imported === 0) {
-      return { success: false, error: firstError.length > 0 ? firstError : '无密钥被导入' };
+      return { success: false, error: firstError.length > 0 ? firstError : Strings.get('pgp_none_imported') };
     }
     hilog.info(DOMAIN, TAG, 'importSecretKeysFromArmored: %{public}d imported, %{public}d failed',
       imported, entries.length - imported);
@@ -303,16 +299,16 @@ export class PgpKeyManager {
    */
   async generateKey(userId: string, keyType: string, passphrase: string): Promise<KeyImportResult> {
     if (userId.trim().length === 0) {
-      return { success: false, error: '请输入 User ID（如 Name <email@example.com>）' };
+      return { success: false, error: Strings.get('pgp_err_userid_required') };
     }
     if (keyType !== 'eddsa' && keyType !== 'rsa4096' && keyType !== 'rsa2048') {
-      return { success: false, error: '不支持的密钥算法' };
+      return { success: false, error: Strings.get('pgp_err_unsupported_algo') };
     }
 
     const result = NativeBridge.getInstance().pgpGenerateKey(userId.trim(), keyType, passphrase);
     if (!result.success || result.data.length === 0) {
       hilog.error(DOMAIN, TAG, 'generateKey failed: %{public}s', result.error);
-      return { success: false, error: result.error.length > 0 ? result.error : '密钥生成失败' };
+      return { success: false, error: result.error.length > 0 ? result.error : Strings.get('ssh_gen_failed') };
     }
 
     const importResult: KeyImportResult = await this.importSecretKey(result.data, passphrase);
@@ -331,7 +327,7 @@ export class PgpKeyManager {
   async changePassphrase(fingerprint: string, oldPassphrase: string, newPassphrase: string): Promise<KeyImportResult> {
     const armored: string = this.getKeyArmored(fingerprint);
     if (armored.length === 0) {
-      return { success: false, error: '密钥不存在' };
+      return { success: false, error: Strings.get('pgp_key_missing') };
     }
 
     const result = NativeBridge.getInstance().pgpChangePassphrase(armored, oldPassphrase, newPassphrase);
@@ -350,7 +346,7 @@ export class PgpKeyManager {
       return { success: true, error: '' };
     } catch (e) {
       const msg: string = e instanceof Error ? e.message : String(e);
-      return { success: false, error: `存储新密钥失败: ${msg}` };
+      return { success: false, error: Strings.fmt('pgp_store_new_key_failed', msg) };
     }
   }
 
@@ -364,17 +360,18 @@ export class PgpKeyManager {
    */
   private static describeChangePassphraseError(raw: string): string {
     if (raw.length === 0) {
-      return '修改失败，请重试';
+      return Strings.get('pgp_chpw_failed_retry');
     }
+    // 英文形态匹配模式不得改动：只把「映射结果中文」换成资源串
     if (raw.includes('old passphrase incorrect') || raw.includes('unlock failed')
       || raw.includes('unlock subkey failed') || raw.includes('invalid input')) {
-      return '当前密钥密码不正确，请重试';
+      return Strings.get('pgp_chpw_wrong_old');
     }
     // 含中日韩字符视为本应用自己的提示，原样返回
     if (/[\u4e00-\u9fa5]/.test(raw)) {
       return raw;
     }
-    return `修改失败：${raw}`;
+    return Strings.fmt('pgp_chpw_failed', raw);
   }
 
   /**

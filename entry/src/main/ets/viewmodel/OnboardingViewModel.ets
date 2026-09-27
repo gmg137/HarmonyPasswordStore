@@ -8,6 +8,7 @@ import { GitAuthMode, SshKeyType } from '../common/Constants';
 import { SshUrlTarget } from '../utils/GitClient';
 import { RouteManager } from '../common/RouteManager';
 import { NativeBridge } from '../common/NativeBridge';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -154,7 +155,7 @@ export class OnboardingViewModel {
     this.errorMessage = '';
 
     if (this.repoMode === 'new') {
-      this.progressText = '正在初始化本地仓库...';
+      this.progressText = Strings.get('onboarding_progress_init');
       const result = this.repo.initStore();
       if (result.success) {
         const storePath: string = result.data ?? '';
@@ -176,7 +177,7 @@ export class OnboardingViewModel {
     // ===== 克隆远程仓库 =====
     const url: string = this.remoteUrl.trim();
     if (url.length === 0) {
-      this.errorMessage = '请输入远程仓库地址';
+      this.errorMessage = Strings.get('onboarding_err_url_required');
       this.isWorking = false;
       this.progressText = '';
       return RepoSetupOutcome.DONE;
@@ -184,8 +185,7 @@ export class OnboardingViewModel {
     // 初始设置只支持 SSH 克隆：HTTPS 需要用户名/令牌，而本流程没有采集这两项的入口
     // （配置页才有），用户填了 https 地址只会在克隆时撞上「请配置用户名密码」。
     if (!url.startsWith('git@') && !url.startsWith('ssh://')) {
-      this.errorMessage = '初始设置只支持 SSH 克隆，请填 git@host:用户名/仓库.git 或 ssh://git@host[:端口]/路径'
-        + '（HTTPS 仓库请先完成初始设置，再到「仓库管理 → Git 配置」中配置用户名与令牌）';
+      this.errorMessage = Strings.get('onboarding_err_ssh_only');
       this.isWorking = false;
       this.progressText = '';
       return RepoSetupOutcome.DONE;
@@ -250,7 +250,7 @@ export class OnboardingViewModel {
    * `isCloning` 覆盖整个网络过程：页面据此显示全模态进度并禁止返回/操作。
    */
   private async cloneIntoStore(url: string): Promise<void> {
-    this.progressText = '正在克隆远程仓库...';
+    this.progressText = Strings.get('onboarding_progress_clone');
     this.isCloning = true;
     this.clonePercent = 0;
     this.startCloneProgressPoll();
@@ -318,7 +318,7 @@ export class OnboardingViewModel {
     const ok: boolean = await this.knownHosts.saveHostKey(host, port,
       { keyType: keyType, fingerprint: fp });
     if (!ok) {
-      this.errorMessage = '保存主机指纹失败，请重试';
+      this.errorMessage = Strings.get('onboarding_err_save_hostkey');
       return RepoSetupOutcome.DONE;
     }
     hilog.info(DOMAIN, TAG, 'host key trusted: %{public}s:%{public}d (%{public}s)', host, port, keyType);

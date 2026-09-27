@@ -1,4 +1,5 @@
 import { ThemeColors, Palette, ComponentSize, IconSize, Spacing } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /**
  * 圆形复制图标按钮（详情页各字段行共用）
@@ -14,8 +15,8 @@ import { ThemeColors, Palette, ComponentSize, IconSize, Spacing } from '../commo
  */
 @ComponentV2
 export struct CopyIconButton {
-  /** 无障碍朗读文本（如「复制用户名」） */
-  @Param label: string = '复制';
+  /** 无障碍朗读文本（如「复制用户名」）；空串时 build 内回退到「复制」（@Param 默认值不能是运行期 Strings.get，见 build 内兜底） */
+  @Param label: string = '';
   @Param onTap: () => void = (): void => {};
 
   private get colors(): Palette {
@@ -32,7 +33,7 @@ export struct CopyIconButton {
     .height(ComponentSize.CONTROL_SMALL)
     .backgroundColor(Color.Transparent)
     .margin({ left: Spacing.SM })
-    .accessibilityText(this.label)
+    .accessibilityText(this.label.length > 0 ? this.label : Strings.get('common_copy'))
     .onClick(() => {
       this.onTap();
     })

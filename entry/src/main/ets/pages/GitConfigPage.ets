@@ -9,6 +9,7 @@ import { AppTitleBar } from '../views/AppTitleBar';
 import { LoadingOverlay } from '../views/LoadingOverlay';
 import { FormRow } from '../views/FormRow';
 import { HostKeyConfirmDialog } from '../views/HostKeyConfirmDialog';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -54,21 +55,21 @@ export struct GitConfigPage {
    */
   private askCloneAfterSave(): void {
     this.getUIContext().showAlertDialog({
-      title: '配置已保存',
-      message: `是否立即克隆远程仓库？\n${this.viewModel.remoteUrl}`,
+      title: $r('app.string.gitcfg_saved_title'),
+      message: Strings.fmt('gitcfg_clone_after_save_msg', this.viewModel.remoteUrl),
       autoCancel: false,
       alignment: DialogAlignment.Center,
       onWillDismiss: (action: DismissDialogAction): void => {
         action.dismiss();
       },
       primaryButton: {
-        value: '取消',
+        value: $r('app.string.common_cancel'),
         action: (): void => {
           RouteManager.getInstance().pop();
         },
       },
       secondaryButton: {
-        value: '克隆',
+        value: $r('app.string.gitcfg_clone_btn'),
         fontColor: this.colors.primary,
         action: (): void => {
           this.startClone();
@@ -86,20 +87,19 @@ export struct GitConfigPage {
       return;
     }
     this.getUIContext().showAlertDialog({
-      title: '本地目录已有内容',
-      message: '克隆要求本地目录为空。当前目录可能已有旧仓库或残留文件，'
-        + '需要先删除本地仓库目录及其中全部密码文件，是否继续？',
+      title: $r('app.string.gitcfg_needs_clean_title'),
+      message: Strings.get('gitcfg_needs_clean_msg'),
       autoCancel: false,
       alignment: DialogAlignment.Center,
       onWillDismiss: (action: DismissDialogAction): void => {
         action.dismiss();
       },
       primaryButton: {
-        value: '取消',
+        value: $r('app.string.common_cancel'),
         action: (): void => {},
       },
       secondaryButton: {
-        value: '删除并克隆',
+        value: $r('app.string.gitcfg_delete_and_clone'),
         fontColor: this.colors.danger,
         action: (): void => {
           this.viewModel.deleteLocalRepoThenClone().then((ok: boolean): void => {
@@ -165,17 +165,17 @@ export struct GitConfigPage {
     const mismatch: boolean = this.viewModel.pendingHostKeyMismatch;
     const keyType: string = this.viewModel.pendingHostKeyType;
     const title: string = mismatch
-      ? '警告：主机密钥与已保存记录不一致'
-      : (keyType.length > 0 ? `首次连接：确认服务器${keyType}密钥指纹` : '首次连接：确认服务器指纹');
-    const hostLine: string = `主机 ${this.viewModel.pendingHost}:${this.viewModel.pendingPort} 的密钥指纹`
-      + (keyType.length > 0 ? `（${keyType}）` : '') + '：';
+      ? Strings.get('sync_hostkey_mismatch_title')
+      : (keyType.length > 0 ? Strings.fmt('sync_hostkey_first_type', keyType) : Strings.get('sync_hostkey_first'));
+    // 指纹取自实际被拒的那次连接；带类型时在「密钥指纹」后插入（类型）
+    const hostLine: string = keyType.length > 0
+      ? Strings.fmt('gitcfg_hostkey_fp_typed', this.viewModel.pendingHost, this.viewModel.pendingPort, keyType)
+      : Strings.fmt('sync_hostkey_fp_label', this.viewModel.pendingHost, this.viewModel.pendingPort);
     const explanation: string = mismatch
-      ? '该主机已有信任记录，但本次同类型密钥的指纹不同：可能是服务器更换了密钥，也可能是中间人攻击。'
-        + '请与服务器管理员核对后再决定，确认后将覆盖该类型记录。'
-      : '服务器提供多把不同类型的主机密钥，这是尚未记录的一把。确认后追加为本机信任记录（TOFU）；'
-        + '同类型密钥的指纹变化仍会被拒绝（防中间人攻击）。';
+      ? Strings.get('gitcfg_hostkey_mismatch_explain')
+      : Strings.get('sync_hostkey_new_detail');
     const fingerprint: string = this.viewModel.pendingHostKeyFp;
-    const confirmLabel: string = mismatch ? '仍要信任' : '信任并连接';
+    const confirmLabel: string = mismatch ? Strings.get('gitcfg_hostkey_trust_anyway') : Strings.get('gitcfg_hostkey_trust_connect');
     try {
       this.getUIContext().getPromptAction().openCustomDialog({
         builder: (): void => {
@@ -220,7 +220,7 @@ export struct GitConfigPage {
       if (ok) {
         // 成功后本页会立即 pop，用 toast 明确告知结果——否则用户只看到页面消失，
         // 不知道到底克隆成功没有（失败时本页会留下红色原因）
-        showToastSafe(this.getUIContext(), '克隆完成，密码列表已刷新', 2500);
+        showToastSafe(this.getUIContext(), Strings.get('gitcfg_clone_done_toast'), 2500);
         RouteManager.getInstance().pop();
       } else {
         // 克隆被主机密钥确认打断时弹指纹弹窗（其余失败已写入 cloneMessage 状态行）
@@ -233,7 +233,7 @@ export struct GitConfigPage {
   @Builder
   sshKeyPickerBuilder() {
     Column() {
-      Text('选择 SSH 密钥')
+      Text($r('app.string.gitcfg_pick_ssh_key'))
         .fontSize(FontSize.TITLE)
         .fontWeight(FontWeight.Medium)
         .fontColor(this.colors.textPrimary)
@@ -381,26 +381,29 @@ export struct GitConfigPage {
     NavDestination() {
       Column() {
         // ===== 自定义标题栏（40vp 圆形返回按钮 + 标题，见 AppTitleBar） =====
-        AppTitleBar({ title: 'Git 配置' })
+        AppTitleBar({ title: $r('app.string.git_config') })
 
         Scroll() {
           Column() {
             // ===== 远程仓库 =====
-            this.sectionTitle('远程仓库', true)
+            this.sectionTitle(Strings.get('gitcfg_section_remote'), true)
 
             Column() {
               // 认证方式在前：它决定「远程地址」该写成哪种形式（https:// 还是 git@host:path），
               // 也让下面的凭据区（HTTPS 用户名/密码 或 SSH 密钥）紧随其后
               Row() {
-                Text('认证方式')
+                Text(Strings.get('gitcfg_auth_mode'))
                   .fontSize(FontSize.BODY)
                   .fontColor(this.colors.textSecondary)
-                  // 与 FormRow 共用同一标签列宽（无对应令牌）
-                  .width(84)
+                  // 与 FormRow 共用同一标签列宽（无对应令牌）；按语言缩放，否则
+                  // 德 `Authentifizierung`、俄 `Аутентификация` 会在 84vp 列里折行
+                  .width(Strings.labelWidth(84))
+                  .maxLines(1)
+                  .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                 Row() {
                   this.authModeTab('HTTPS', GitAuthMode.HTTPS_PASSWORD)
-                  this.authModeTab('SSH 密钥', GitAuthMode.SSH_KEY)
+                  this.authModeTab(Strings.get('gitcfg_auth_ssh_tab'), GitAuthMode.SSH_KEY)
                 }
                 .layoutWeight(1)
                 .backgroundColor(this.colors.inputBackground)
@@ -414,7 +417,7 @@ export struct GitConfigPage {
               this.rowDivider()
 
               FormRow({
-                label: '远程地址',
+                label: Strings.get('gitcfg_label_url'),
                 placeholder: this.viewModel.isHttpsAuth() ? 'https://host/user/repo.git' : 'git@host:user/repo.git',
                 value: this.viewModel.remoteUrl,
                 onInput: (v: string): void => { this.viewModel.remoteUrl = v; },
@@ -424,22 +427,22 @@ export struct GitConfigPage {
               if (this.viewModel.isHttpsAuth()) {
                 this.rowDivider()
                 FormRow({
-                label: '用户名',
-                placeholder: '用户名 / 邮箱',
+                label: Strings.get('common_username'),
+                placeholder: $r('app.string.gitcfg_ph_username'),
                 value: this.viewModel.username,
                 isPassword: false,
                 onInput: (v: string): void => { this.viewModel.username = v; },
               })
                 this.rowDivider()
                 FormRow({
-                label: '密码',
-                placeholder: '密码 / 访问令牌',
+                label: Strings.get('common_password'),
+                placeholder: $r('app.string.gitcfg_ph_password'),
                 value: this.viewModel.password,
                 isPassword: true,
                 onInput: (v: string): void => { this.viewModel.password = v; },
               })
 
-                Text('Gitee/GitHub 等平台需使用「私人令牌」而非登录密码')
+                Text($r('app.string.gitcfg_token_hint'))
                   .fontSize(FontSize.CAPTION)
                   .fontColor(this.colors.textTertiary)
                   .width('100%')
@@ -449,17 +452,19 @@ export struct GitConfigPage {
                 this.rowDivider()
 
                 Row() {
-                  Text('SSH 密钥')
+                  Text(Strings.get('gitcfg_auth_ssh'))
                     .fontSize(FontSize.BODY)
                     .fontColor(this.colors.textSecondary)
-                    // 与 fieldRow 共用同一标签列宽（无对应令牌）
-                    .width(84)
+                    // 与 fieldRow 共用同一标签列宽（无对应令牌）；按语言缩放（同上）
+                    .width(Strings.labelWidth(84))
+                    .maxLines(1)
+                    .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                   if (this.viewModel.sshKeyList.length > 0) {
                     Row() {
                       Text(this.viewModel.sshKeyAlias.length > 0
                         ? this.viewModel.selectedSshKeyDisplayName()
-                        : '请选择 SSH 密钥')
+                        : Strings.get('gitcfg_select_ssh_key'))
                         .fontSize(FontSize.BODY)
                         .fontColor(this.viewModel.sshKeyAlias.length > 0
                           ? this.colors.textPrimary : this.colors.textTertiary)
@@ -483,11 +488,11 @@ export struct GitConfigPage {
                     })
                   } else {
                     Row() {
-                      Text('暂无密钥')
+                      Text($r('app.string.gitcfg_no_keys'))
                         .fontSize(FontSize.BODY)
                         .fontColor(this.colors.textTertiary)
                         .layoutWeight(1)
-                      Text('前往创建')
+                      Text($r('app.string.gitcfg_go_create'))
                         .fontSize(FontSize.CAPTION)
                         .fontColor(this.colors.primary)
                         .padding({ left: Spacing.XS, right: Spacing.XS })
@@ -511,8 +516,8 @@ export struct GitConfigPage {
 
                 this.rowDivider()
                 FormRow({
-                  label: 'SSH 端口',
-                  placeholder: '默认 22',
+                  label: Strings.get('gitcfg_label_ssh_port'),
+                  placeholder: $r('app.string.gitcfg_ph_ssh_port'),
                   value: `${this.viewModel.sshPort}`,
                   onInput: (v: string): void => {
                     const port: number = parseInt(v, 10);
@@ -526,8 +531,8 @@ export struct GitConfigPage {
                 // 私钥本身带口令时必填：导入密钥时的口令不会被保存（私钥文件里仍是加密态），
                 // 而克隆/同步要用到它。与 HTTPS 令牌一样经 HUKS 封装后落盘。
                 FormRow({
-                  label: '私钥口令',
-                  placeholder: '私钥未加密可留空',
+                  label: Strings.get('gitcfg_label_key_passphrase'),
+                  placeholder: $r('app.string.gitcfg_ph_key_passphrase'),
                   value: this.viewModel.sshKeyPassphrase,
                   isPassword: true,
                   onInput: (v: string): void => { this.viewModel.sshKeyPassphrase = v; },
@@ -540,20 +545,20 @@ export struct GitConfigPage {
             .borderRadius(Radius.CARD)
 
             // ===== 提交身份 =====
-            this.sectionTitle('提交身份', false)
+            this.sectionTitle(Strings.get('gitcfg_section_identity'), false)
 
             Column() {
               FormRow({
-                label: '姓名',
-                placeholder: 'Git 提交者姓名',
+                label: Strings.get('gitcfg_label_name'),
+                placeholder: $r('app.string.gitcfg_ph_name'),
                 value: this.viewModel.committerName,
                 isPassword: false,
                 onInput: (v: string): void => { this.viewModel.committerName = v; },
               })
               this.rowDivider()
               FormRow({
-                label: '邮箱',
-                placeholder: 'Git 提交者邮箱',
+                label: Strings.get('common_email'),
+                placeholder: $r('app.string.gitcfg_ph_email'),
                 value: this.viewModel.committerEmail,
                 isPassword: false,
                 onInput: (v: string): void => { this.viewModel.committerEmail = v; },
@@ -566,12 +571,12 @@ export struct GitConfigPage {
 
             // ===== 网络（仅 HTTPS 需要：libgit2 的代理只作用于 HTTP 传输，SSH 传输不读它） =====
             if (this.viewModel.isHttpsAuth()) {
-              this.sectionTitle('网络', false)
+              this.sectionTitle(Strings.get('gitcfg_section_network'), false)
 
               Column() {
                 FormRow({
-                  label: '代理',
-                  placeholder: '如 http://127.0.0.1:7890',
+                  label: Strings.get('gitcfg_label_proxy'),
+                  placeholder: $r('app.string.gitcfg_ph_proxy'),
                   value: this.viewModel.proxyUrl,
                   isPassword: false,
                   onInput: (v: string): void => { this.viewModel.proxyUrl = v; },
@@ -594,8 +599,10 @@ export struct GitConfigPage {
               this.statusRow(this.viewModel.errorMessage, 'error')
             }
             if (this.viewModel.testResult.length > 0) {
+              // 配色按 ViewModel 的成功状态判定，不比较 testResult 文本：
+              // 那是展示文案，改措辞就会让比较恒假（详见 testSucceeded 注释）
               this.statusRow(this.viewModel.testResult,
-                this.viewModel.testResult === '连接成功' ? 'success' : 'warning')
+                this.viewModel.testSucceeded ? 'success' : 'warning')
             }
 
             // TOFU 主机密钥确认已改为原生弹窗（maybeShowHostKeyDialog），不再占页面卡片
@@ -613,7 +620,7 @@ export struct GitConfigPage {
         // （沉浸式布局下内容延伸到导航条下方，只给 16vp 会压在系统手势区上）
         // ===== 操作按钮 =====
         Row({ space: ButtonSpec.ROW_GAP }) {
-          Button(this.viewModel.isTesting ? '测试中...' : '测试连接')
+          Button(this.viewModel.isTesting ? $r('app.string.gitcfg_testing') : $r('app.string.gitcfg_test_btn'))
             .type(ButtonType.Normal)
             .borderRadius(ButtonSpec.SECONDARY_RADIUS)
             .layoutWeight(1)
@@ -629,7 +636,7 @@ export struct GitConfigPage {
               });
             })
 
-          Button(this.viewModel.isSaving ? '验证中...' : '保存')
+          Button(this.viewModel.isSaving ? $r('app.string.home_verifying') : $r('app.string.common_save'))
             .type(ButtonType.Normal)
             .borderRadius(ButtonSpec.PRIMARY_RADIUS)
             .layoutWeight(1)
@@ -672,7 +679,7 @@ export struct GitConfigPage {
           // percent >= 0 时渲染环形进度 + 中心百分比；-1 为不确定态（旋转图标）。
           // 进度到 100% 后仍可能有解包/检出阶段（无回调），故文案在此时换成「正在检出文件…」
           LoadingOverlay({
-            text: this.viewModel.clonePercent >= 100 ? '正在检出文件…' : '正在克隆远程仓库…',
+            text: this.viewModel.clonePercent >= 100 ? Strings.get('gitcfg_checkout_files') : Strings.get('gitcfg_cloning_overlay'),
             percent: this.viewModel.clonePercent,
           })
             .position({ x: 0, y: 0 })

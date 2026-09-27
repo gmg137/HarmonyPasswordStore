@@ -2,6 +2,7 @@ import { PassgenViewModel, GenMode } from '../viewmodel/PassgenViewModel';
 import { AppTitleBar } from '../views/AppTitleBar';
 import { RouteManager } from '../common/RouteManager';
 import { ThemeColors, Palette, ButtonSpec, FontSize, Radius, Spacing, ComponentSize } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /**
  * 密码生成器页
@@ -56,13 +57,13 @@ export struct PassgenPage {
   build() {
     NavDestination() {
       Column() {
-        AppTitleBar({ title: '密码生成器' })
+        AppTitleBar({ title: $r('app.string.passgen') })
 
       Scroll() {
         Column() {
           // 结果显示区
           Column() {
-            Text(this.viewModel.result || '点击下方按钮生成密码')
+            Text(this.viewModel.result || Strings.get('passgen_tap_hint'))
               .fontSize(FontSize.TITLE)
               .fontFamily('monospace')
               .fontColor(this.viewModel.result.length > 0 ? this.colors.textPrimary : this.colors.textTertiary)
@@ -74,7 +75,7 @@ export struct PassgenPage {
 
             if (this.viewModel.result.length > 0) {
               Row() {
-                Text('熵值')
+                Text($r('app.string.passgen_entropy'))
                   .fontSize(FontSize.CAPTION)
                   .fontColor(this.colors.textTertiary)
                 Text(`${this.viewModel.entropy} bits`)
@@ -109,7 +110,7 @@ export struct PassgenPage {
 
           // 生成 + 复制按钮
           Row({ space: ButtonSpec.ROW_GAP }) {
-            Button('生成')
+            Button($r('app.string.passgen_generate'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.PRIMARY_RADIUS)
               .layoutWeight(1)
@@ -122,7 +123,7 @@ export struct PassgenPage {
               })
 
             if (this.viewModel.result.length > 0) {
-              Button(this.viewModel.isCopied ? '已复制' : '复制')
+              Button(this.viewModel.isCopied ? $r('app.string.passgen_copied') : $r('app.string.passgen_copy'))
                 .type(ButtonType.Normal)
                 .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                 .width(100)
@@ -141,8 +142,8 @@ export struct PassgenPage {
 
           // 模式切换 Tab
           Row() {
-            this.modeTab('随机密码', GenMode.RANDOM)
-            this.modeTab('口令词组', GenMode.DICEWARE)
+            this.modeTab(Strings.get('passgen_mode_random'), GenMode.RANDOM)
+            this.modeTab(Strings.get('passgen_mode_diceware'), GenMode.DICEWARE)
           }
           .width('100%')
           .backgroundColor(this.colors.inputBackground)
@@ -154,7 +155,7 @@ export struct PassgenPage {
             Column() {
               // 长度：标题 + 拖动条 + 数字（一行）
               Row() {
-                Text('长度')
+                Text($r('app.string.passgen_length'))
                   .fontSize(FontSize.BODY)
                   .fontColor(this.colors.textSecondary)
                   .width(40)
@@ -180,15 +181,15 @@ export struct PassgenPage {
               .width('100%')
               .padding({ left: Spacing.CARD, right: Spacing.CARD, top: Spacing.MD })
 
-              this.toggleRow('大写字母 A-Z', this.viewModel.randomParams.includeUppercase,
+              this.toggleRow(Strings.get('passgen_upper'), this.viewModel.randomParams.includeUppercase,
                 () => { this.viewModel.updateRandomParam('includeUppercase', !this.viewModel.randomParams.includeUppercase); })
-              this.toggleRow('小写字母 a-z', this.viewModel.randomParams.includeLowercase,
+              this.toggleRow(Strings.get('passgen_lower'), this.viewModel.randomParams.includeLowercase,
                 () => { this.viewModel.updateRandomParam('includeLowercase', !this.viewModel.randomParams.includeLowercase); })
-              this.toggleRow('数字 0-9', this.viewModel.randomParams.includeDigits,
+              this.toggleRow(Strings.get('passgen_digits'), this.viewModel.randomParams.includeDigits,
                 () => { this.viewModel.updateRandomParam('includeDigits', !this.viewModel.randomParams.includeDigits); })
-              this.toggleRow('特殊符号 !@#$', this.viewModel.randomParams.includeSymbols,
+              this.toggleRow(Strings.get('passgen_symbols'), this.viewModel.randomParams.includeSymbols,
                 () => { this.viewModel.updateRandomParam('includeSymbols', !this.viewModel.randomParams.includeSymbols); })
-              this.toggleRow('排除歧义字符 (0/O, 1/l)', this.viewModel.randomParams.excludeAmbiguous,
+              this.toggleRow(Strings.get('passgen_exclude_ambiguous'), this.viewModel.randomParams.excludeAmbiguous,
                 () => { this.viewModel.updateRandomParam('excludeAmbiguous', !this.viewModel.randomParams.excludeAmbiguous); })
             }
             .width('100%')
@@ -202,7 +203,7 @@ export struct PassgenPage {
             Column() {
               // 词组数量
               Row() {
-                Text('词组数量')
+                Text($r('app.string.passgen_word_count'))
                   .fontSize(FontSize.BODY)
                   .layoutWeight(1)
                 Text(`${this.viewModel.dicewareParams.wordCount}`)
@@ -229,7 +230,7 @@ export struct PassgenPage {
 
               // 分隔符
               Row() {
-                Text('分隔符')
+                Text($r('app.string.passgen_separator'))
                   .fontSize(FontSize.BODY)
                   .layoutWeight(1)
                 TextInput({ text: this.viewModel.dicewareParams.separator })
@@ -246,9 +247,9 @@ export struct PassgenPage {
               .width('100%')
               .padding({ left: Spacing.CARD, right: Spacing.CARD, top: Spacing.SM, bottom: Spacing.SM })
 
-              this.toggleRow('首字母大写', this.viewModel.dicewareParams.capitalize,
+              this.toggleRow(Strings.get('passgen_capitalize'), this.viewModel.dicewareParams.capitalize,
                 () => { this.viewModel.updateDicewareParam('capitalize', !this.viewModel.dicewareParams.capitalize); })
-              this.toggleRow('词间插入数字', this.viewModel.dicewareParams.includeDigits,
+              this.toggleRow(Strings.get('passgen_insert_digits'), this.viewModel.dicewareParams.includeDigits,
                 () => { this.viewModel.updateDicewareParam('includeDigits', !this.viewModel.dicewareParams.includeDigits); })
             }
             .width('100%')
@@ -259,12 +260,12 @@ export struct PassgenPage {
 
           // 熵值说明
           if (this.viewModel.entropy > 0) {
-            Text(`预计熵值: ${this.viewModel.entropy} bits — ${this.viewModel.getStrengthLabel()}`)
+            Text(Strings.fmt('passgen_entropy_estimate', this.viewModel.entropy, this.viewModel.getStrengthLabel()))
               .fontSize(FontSize.CAPTION)
               .fontColor(this.colors.textTertiary)
               .margin({ top: Spacing.LG, bottom: Spacing.XL })
           } else {
-            Text('生成后将显示熵值估算')
+            Text($r('app.string.passgen_entropy_hint'))
               .fontSize(FontSize.CAPTION)
               .fontColor(this.colors.textTertiary)
               .margin({ top: Spacing.LG, bottom: Spacing.XL })

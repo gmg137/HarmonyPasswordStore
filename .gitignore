@@ -34,3 +34,5 @@ local.properties
 # AI 工具
 .zcodeignore
 /.codeartsdoer
+# ZCode 会话产物（计划文件等，不入库）
+/.zcode/

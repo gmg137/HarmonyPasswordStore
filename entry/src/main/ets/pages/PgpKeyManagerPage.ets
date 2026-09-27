@@ -13,6 +13,7 @@ import { PasswordRepository } from '../model/PasswordRepository';
 import { PgpCrypto, UnlockResult } from '../crypto/PgpCrypto';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { ReencryptService, ReencryptPlan, ReencryptOutcome } from '../utils/ReencryptService';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -218,7 +219,7 @@ export struct PgpKeyManagerPage {
       if (!this.isImportFormVisible && !this.isGenerateFormVisible) {
         // 菜单态：动作面板
         Column() {
-          this.actionItem($r('sys.symbol.doc_text'), '导入文本密钥', (): void => {
+          this.actionItem($r('sys.symbol.doc_text'), Strings.get('pgp_import_text'), (): void => {
             this.isSwitchingForm = true;
             this.isAddSheetVisible = false;
             setTimeout(() => {
@@ -229,7 +230,7 @@ export struct PgpKeyManagerPage {
           Divider()
             .color(this.colors.divider)
             .margin({ left: Spacing.MD, right: Spacing.MD })
-          this.actionItem($r('sys.symbol.folder'), '从文件导入密钥', (): void => {
+          this.actionItem($r('sys.symbol.folder'), Strings.get('pgp_import_from_file'), (): void => {
             this.isSwitchingForm = true;
             this.isAddSheetVisible = false;
             // 选择器需等菜单 sheet 关闭后再拉起，否则会与半模态窗口互相遮挡
@@ -240,7 +241,7 @@ export struct PgpKeyManagerPage {
           Divider()
             .color(this.colors.divider)
             .margin({ left: Spacing.MD, right: Spacing.MD })
-          this.actionItem($r('sys.symbol.plus'), '创建新密钥', (): void => {
+          this.actionItem($r('sys.symbol.plus'), Strings.get('pgp_create_new'), (): void => {
             this.isSwitchingForm = true;
             this.isAddSheetVisible = false;
             setTimeout(() => {
@@ -256,7 +257,7 @@ export struct PgpKeyManagerPage {
         // 导入文本密钥表单：内容固定不滚动，与 SSH 导入弹窗结构一致
         Column() {
           // 导入文本密钥表单
-          this.formTitle('导入文本密钥')
+          this.formTitle(Strings.get('pgp_import_text'))
 
           TextArea({ text: this.viewModel.armoredKey, placeholder: '-----BEGIN PGP PRIVATE KEY BLOCK-----' })
             .fontSize(FontSize.CAPTION)
@@ -274,7 +275,7 @@ export struct PgpKeyManagerPage {
               this.viewModel.armoredKey = v;
             })
 
-          TextInput({ text: this.viewModel.passphrase, placeholder: '密钥密码（可选）' })
+          TextInput({ text: this.viewModel.passphrase, placeholder: $r('app.string.pgp_passphrase_optional') })
             .type(InputType.Password)
             .fontSize(FontSize.SUBTITLE)
             .fontColor(this.colors.textPrimary)
@@ -304,7 +305,7 @@ export struct PgpKeyManagerPage {
 
         // 按钮行固定在屏幕底部：占位 + 面板 100% 高度共同保证
         SheetFormButtons({
-          confirmLabel: '导入',
+          confirmLabel: Strings.get('common_import'),
           isBusy: this.viewModel.isImporting,
           canConfirm: this.viewModel.armoredKey.trim().length > 0,
           onConfirm: (): void => {
@@ -328,11 +329,11 @@ export struct PgpKeyManagerPage {
         // 创建新密钥表单：内容固定不滚动，与导入表单结构一致
         Column() {
           // 创建新密钥表单
-          this.formTitle('创建新密钥')
+          this.formTitle(Strings.get('pgp_create_new'))
 
           Row({ space: Spacing.SM }) {
             ForEach(['eddsa', 'rsa4096', 'rsa2048'], (kt: string) => {
-              Text(kt === 'eddsa' ? 'EdDSA（推荐）' : (kt === 'rsa4096' ? 'RSA-4096' : 'RSA-2048'))
+              Text(kt === 'eddsa' ? Strings.get('pgp_gen_eddsa_rec') : (kt === 'rsa4096' ? 'RSA-4096' : 'RSA-2048'))
                 .fontSize(FontSize.BODY)
                 .fontColor(this.viewModel.genKeyType === kt ? this.colors.onPrimary : this.colors.textSecondary)
                 .backgroundColor(this.viewModel.genKeyType === kt ? this.colors.primary : this.colors.inputBackground)
@@ -352,7 +353,7 @@ export struct PgpKeyManagerPage {
           .width('100%')
           .margin({ bottom: Spacing.MD })
 
-          TextInput({ text: this.viewModel.genUserId, placeholder: 'User ID（如 Name <email@example.com>）' })
+          TextInput({ text: this.viewModel.genUserId, placeholder: $r('app.string.pgp_userid_placeholder') })
             .fontSize(FontSize.SUBTITLE)
             .fontColor(this.colors.textPrimary)
             .placeholderColor(this.colors.textTertiary)
@@ -366,7 +367,7 @@ export struct PgpKeyManagerPage {
               this.viewModel.genUserId = v;
             })
 
-          TextInput({ text: this.viewModel.genPassphrase, placeholder: '密钥密码（可选，至少 6 位）' })
+          TextInput({ text: this.viewModel.genPassphrase, placeholder: $r('app.string.pgp_passphrase_min6') })
             .type(InputType.Password)
             .fontSize(FontSize.SUBTITLE)
             .fontColor(this.colors.textPrimary)
@@ -403,7 +404,7 @@ export struct PgpKeyManagerPage {
 
         // 按钮行固定在屏幕底部
         SheetFormButtons({
-          confirmLabel: '创建',
+          confirmLabel: Strings.get('pgp_create_btn'),
           isBusy: this.viewModel.isGenerating,
           canConfirm: this.viewModel.genUserId.trim().length > 0,
           onConfirm: (): void => {
@@ -432,7 +433,7 @@ export struct PgpKeyManagerPage {
   editMenuBuilder() {
     Column() {
       if (this.canSetDefault(this.editFingerprint)) {
-        this.actionItem($r('sys.symbol.star'), '设为默认', (): void => {
+        this.actionItem($r('sys.symbol.star'), Strings.get('pgp_set_default'), (): void => {
           const target: string = this.editFingerprint;
           this.viewModel.setDefaultKey(target).then(() => {
             this.showToastIfAny();
@@ -443,7 +444,7 @@ export struct PgpKeyManagerPage {
           .color(this.colors.divider)
           .margin({ left: Spacing.MD, right: Spacing.MD })
       }
-      this.actionItem($r('sys.symbol.lock'), '修改密钥', (): void => {
+      this.actionItem($r('sys.symbol.lock'), Strings.get('pgp_edit_key'), (): void => {
         this.viewModel.errorMessage = '';
         // 口令框每次打开都要清空：半模态内容会被复用，残留的旧值会被当成
         // 本次输入（实测「去除口令」时把上次的新口令又设了一遍）
@@ -455,19 +456,19 @@ export struct PgpKeyManagerPage {
       Divider()
         .color(this.colors.divider)
         .margin({ left: Spacing.MD, right: Spacing.MD })
-      this.actionItem($r('sys.symbol.lock_shield'), '导出私钥', (): void => {
+      this.actionItem($r('sys.symbol.lock_shield'), Strings.get('pgp_export_private'), (): void => {
         this.handleExportPrivateKey();
       })
       Divider()
         .color(this.colors.divider)
         .margin({ left: Spacing.MD, right: Spacing.MD })
-      this.actionItem($r('sys.symbol.key'), '导出公钥', (): void => {
+      this.actionItem($r('sys.symbol.key'), Strings.get('pgp_export_public'), (): void => {
         this.handleExportPublicKey();
       })
       Divider()
         .color(this.colors.divider)
         .margin({ left: Spacing.MD, right: Spacing.MD })
-      this.dangerActionItem($r('sys.symbol.trash'), '删除密钥', (): void => {
+      this.dangerActionItem($r('sys.symbol.trash'), Strings.get('common_delete_key'), (): void => {
         this.handleDeleteKey();
       })
     }
@@ -487,12 +488,12 @@ export struct PgpKeyManagerPage {
       // 字段必须直接排布，**不要**包进 Scroll + layoutWeight(1)：键盘弹起时
       // 面板被压缩，系统滚动容器会让内容高度失去约束，实测面板塌陷到约 199px、
       // 两个输入框被完全裁出布局树（连节点都不存在），用户根本无法输入。
-      this.formTitle('修改密钥密码')
+      this.formTitle(Strings.get('pgp_chpw_title'))
 
       // 两个输入框都**绑定 text**（旧/新口令）：半模态内容会被复用，
       // 不绑定的话上一次输入的文字会留在框里（实测「去除口令」时把上次的新口令
       // 又设了一遍），状态与界面必须由同一份数据驱动
-      TextInput({ text: this.oldPw, placeholder: '当前密钥密码' })
+      TextInput({ text: this.oldPw, placeholder: $r('app.string.pgp_chpw_old_ph') })
         .type(InputType.Password)
         .fontSize(FontSize.SUBTITLE)
         .fontColor(this.colors.textPrimary)
@@ -508,7 +509,7 @@ export struct PgpKeyManagerPage {
           this.viewModel.errorMessage = '';
         })
 
-      TextInput({ text: this.newPw, placeholder: '新密码（留空则去除密码）' })
+      TextInput({ text: this.newPw, placeholder: $r('app.string.pgp_chpw_new_ph') })
         .type(InputType.Password)
         .fontSize(FontSize.SUBTITLE)
         .fontColor(this.colors.textPrimary)
@@ -539,7 +540,7 @@ export struct PgpKeyManagerPage {
 
       // 按钮行
       SheetFormButtons({
-        confirmLabel: '确认修改',
+        confirmLabel: Strings.get('pgp_chpw_confirm'),
         canConfirm: true,
         onConfirm: (): void => {
           this.viewModel.changePassphrase(this.editFingerprint, this.oldPw, this.newPw).then((ok: boolean) => {
@@ -590,14 +591,14 @@ export struct PgpKeyManagerPage {
   /** 导入失败提示（原生弹窗，与 SSH 密钥页保持一致） */
   private showImportError(message: string): void {
     this.getUIContext().showAlertDialog({
-      title: '导入失败',
+      title: $r('app.string.common_import_failed'),
       message: message,
       autoCancel: true,
       onWillDismiss: (action: DismissDialogAction): void => {
         action.dismiss();
       },
       confirm: {
-        value: '确定',
+        value: $r('app.string.common_ok'),
         action: (): void => {
           this.viewModel.errorMessage = '';
         }
@@ -618,14 +619,14 @@ export struct PgpKeyManagerPage {
     }
     this.viewModel.pendingWarning = '';
     this.getUIContext().showAlertDialog({
-      title: '导入成功，但有限制',
+      title: $r('app.string.pgp_import_limited_title'),
       message: warning,
       autoCancel: true,
       onWillDismiss: (action: DismissDialogAction): void => {
         action.dismiss();
       },
       confirm: {
-        value: '知道了',
+        value: $r('app.string.common_got_it'),
         action: (): void => {
         }
       }
@@ -652,14 +653,14 @@ export struct PgpKeyManagerPage {
     this.isAddSheetVisible = false;
     setTimeout((): void => {
       this.getUIContext().showAlertDialog({
-        title: '无法导入密钥',
+        title: $r('app.string.pgp_import_failed_title'),
         message: message,
         autoCancel: true,
         onWillDismiss: (action: DismissDialogAction): void => {
           action.dismiss();
         },
         confirm: {
-          value: '知道了',
+          value: $r('app.string.common_got_it'),
           action: (): void => {
           }
         }
@@ -678,7 +679,7 @@ export struct PgpKeyManagerPage {
       if (r.cancelled) {
         return;
       }
-      showToastSafe(this.getUIContext(), r.ok ? '私钥已保存为 .asc 文件' : r.error, 2500);
+      showToastSafe(this.getUIContext(), r.ok ? Strings.get('pgp_export_private_ok') : r.error, 2500);
     });
   }
 
@@ -688,7 +689,7 @@ export struct PgpKeyManagerPage {
       if (r.cancelled) {
         return;
       }
-      showToastSafe(this.getUIContext(), r.ok ? '公钥已保存为 .asc 文件' : r.error, 2500);
+      showToastSafe(this.getUIContext(), r.ok ? Strings.get('pgp_export_public_ok') : r.error, 2500);
     });
   }
 
@@ -719,11 +720,11 @@ export struct PgpKeyManagerPage {
     const label: string = key !== undefined && key.userId.length > 0 ? key.userId : this.editFingerprint;
     try {
       this.getUIContext().getPromptAction().showDialog({
-        title: '删除密钥',
-        message: `确定删除「${label}」？删除后用它加密的密码将无法解密，且此操作不可撤销。`,
+        title: $r('app.string.common_delete_key'),
+        message: Strings.fmt('pgp_delete_key_msg', label),
         buttons: [
-          { text: '取消', color: this.colors.textSecondary },
-          { text: '删除', color: this.colors.danger },
+          { text: $r('app.string.common_cancel'), color: this.colors.textSecondary },
+          { text: $r('app.string.delete'), color: this.colors.danger },
         ],
         // 状态栏沉浸补偿：遮罩展示期间调暗，消失（按钮/点遮罩/返回）后还原
         onWillAppear: (): void => {
@@ -775,20 +776,18 @@ export struct PgpKeyManagerPage {
     }
     const currentLabel: string = this.viewModel.keyLabel(current);
     const targetLabel: string = this.viewModel.keyLabel(fingerprint);
-    let message: string = `仓库根目录当前用「${currentLabel}」加密。是否切换为「${targetLabel}」`
-      + `并重新加密根目录下的 ${plan.needsCount} 个条目？`;
+    let message: string = Strings.fmt('pgp_root_switch_msg_needs', currentLabel, targetLabel, plan.needsCount);
     if (plan.needsCount === 0) {
-      message = `仓库根目录当前用「${currentLabel}」加密。是否切换为「${targetLabel}」？`
-        + `（根目录下没有需要重新加密的条目）`;
+      message = Strings.fmt('pgp_root_switch_msg_none', currentLabel, targetLabel);
     }
     if (plan.missingKeyCount > 0) {
-      message += `\n注意：${plan.missingKeyCount} 个条目因缺少对应私钥将被跳过。`;
+      message += '\n' + Strings.fmt('pgp_root_switch_skip_warn', plan.missingKeyCount);
     }
     if (plan.needsCount > 0 && plan.requiredKeys.length > 0) {
-      message += '\n需要输入旧密钥的口令。';
+      message += '\n' + Strings.get('home_reencrypt_need_passphrase');
     }
     this.getUIContext().showAlertDialog({
-      title: '切换根目录加密密钥',
+      title: $r('app.string.pgp_root_switch_title'),
       message: message,
       autoCancel: true,
       alignment: DialogAlignment.Center,
@@ -796,11 +795,11 @@ export struct PgpKeyManagerPage {
         action.dismiss();
       },
       primaryButton: {
-        value: '仅设为默认',
+        value: $r('app.string.pgp_root_switch_only_default'),
         action: (): void => {},
       },
       secondaryButton: {
-        value: '一并切换',
+        value: $r('app.string.pgp_root_switch_both'),
         fontColor: this.colors.primary,
         action: (): void => {
           this.proceedRootKeySwitch(fingerprint, plan);
@@ -816,7 +815,7 @@ export struct PgpKeyManagerPage {
     if (plan.needsCount === 0) {
       // 没有条目需要换：只写 .gpg-id
       const written = PasswordRepository.getInstance().setGpgIdForDir('', [fingerprint]);
-      showToastSafe(this.getUIContext(), written.success ? '根目录加密密钥已切换' : written.error, 2500);
+      showToastSafe(this.getUIContext(), written.success ? Strings.get('pgp_root_switched') : written.error, 2500);
       if (written.success) {
         RepoChangeNotifier.connect().bump();
       }
@@ -849,7 +848,7 @@ export struct PgpKeyManagerPage {
     this.rootKeyBusy = true;
     this.rootKeyError = '';
     let unlocked: boolean = false;
-    let failReason: string = '密钥密码错误，请重试';
+    let failReason: string = Strings.get('common_passphrase_wrong');
     for (let i: number = 0; i < plan.requiredKeys.length; i++) {
       const res: UnlockResult = await PgpCrypto.getInstance().unlockPassphrase(
         plan.requiredKeys[i], this.rootKeyPassphrase);
@@ -882,12 +881,13 @@ export struct PgpKeyManagerPage {
     this.rootKeyBusy = false;
     let message: string;
     if (outcome.success) {
-      message = `已切换根目录加密密钥，重加密 ${outcome.reencrypted} 个条目`
-        + (outcome.skipped > 0 ? `，跳过 ${outcome.skipped} 个` : '');
+      message = Strings.fmt('pgp_root_reencrypted', outcome.reencrypted)
+        + (outcome.skipped > 0 ? Strings.fmt('home_reencrypt_skipped_suffix', outcome.skipped) : '');
     } else {
-      message = `重加密未完成：${outcome.error}`;
+      message = Strings.fmt('home_reencrypt_failed', outcome.error);
       if (outcome.failures.length > 0) {
-        message += `\n首个失败：${outcome.failures[0].relativePath}（${outcome.failures[0].error}）`;
+        message += '\n' + Strings.fmt('home_reencrypt_first_failure',
+          outcome.failures[0].relativePath, outcome.failures[0].error);
       }
     }
     showToastSafe(this.getUIContext(), message, 3500);
@@ -897,19 +897,19 @@ export struct PgpKeyManagerPage {
   @Builder
   rootKeySheetBuilder() {
     Column() {
-      Text('输入旧密钥口令')
+      Text($r('app.string.pgp_rootkey_title'))
         .fontSize(FontSize.SUBTITLE)
         .fontWeight(FontWeight.Medium)
         .fontColor(this.colors.textPrimary)
         .width('100%')
 
-      Text('重新加密需要先解开这些条目的旧密钥')
+      Text($r('app.string.pgp_rootkey_hint'))
         .fontSize(FontSize.CAPTION)
         .fontColor(this.colors.textTertiary)
         .width('100%')
         .margin({ top: Spacing.XS, bottom: Spacing.LG })
 
-      TextInput({ placeholder: '旧密钥口令', text: this.rootKeyPassphrase })
+      TextInput({ placeholder: $r('app.string.pgp_rootkey_ph'), text: this.rootKeyPassphrase })
         .type(InputType.Password)
         .height(ComponentSize.CONTROL)
         .borderRadius(Radius.MD)
@@ -936,7 +936,7 @@ export struct PgpKeyManagerPage {
         .layoutWeight(1)
 
       SheetFormButtons({
-        confirmLabel: '开始重加密',
+        confirmLabel: Strings.get('pgp_rootkey_start'),
         isBusy: this.rootKeyBusy,
         canConfirm: this.rootKeyPassphrase.length > 0,
         onCancel: (): void => {
@@ -967,10 +967,10 @@ export struct PgpKeyManagerPage {
       ? key.encryptionAlgorithm
       : key.algorithm;
     if (raw.length === 0) {
-      return '未知算法';
+      return Strings.get('pgp_algo_unknown');
     }
     const text: string = raw.replace(/_/g, ' ').trim();
-    return text.length > 0 ? text : '未知算法';
+    return text.length > 0 ? text : Strings.get('pgp_algo_unknown');
   }
 
   @Builder
@@ -986,7 +986,7 @@ export struct PgpKeyManagerPage {
             .textOverflow({ overflow: TextOverflow.Ellipsis })
 
           if (this.viewModel.isDefaultKey(key.fingerprint)) {
-            Text('默认')
+            Text($r('app.string.pgp_tag_default'))
               .fontSize(FontSize.OVERLINE)
               .fontColor(this.colors.onPrimary)
               .backgroundColor(this.colors.primary)
@@ -996,7 +996,7 @@ export struct PgpKeyManagerPage {
           }
 
           if (this.viewModel.isExpired(key)) {
-            Text('已过期')
+            Text($r('app.string.pgp_tag_expired'))
               .fontSize(FontSize.OVERLINE)
               .fontColor(this.colors.onPrimary)
               .backgroundColor(this.colors.danger)
@@ -1006,7 +1006,7 @@ export struct PgpKeyManagerPage {
           }
 
           // 私钥/公钥改为标签：第三行让位给加密方式
-          Text(key.isSecret ? '私钥' : '公钥')
+          Text(key.isSecret ? $r('app.string.pgp_tag_secret') : $r('app.string.pgp_tag_public'))
             .fontSize(FontSize.OVERLINE)
             .fontColor(this.colors.textSecondary)
             .borderRadius(Radius.SM)
@@ -1059,7 +1059,7 @@ export struct PgpKeyManagerPage {
     NavDestination() {
       Column() {
         // ===== 自定义标题栏（40vp 圆形返回按钮 + 标题，见 AppTitleBar） =====
-        AppTitleBar({ title: 'PGP 密钥管理' })
+        AppTitleBar({ title: $r('app.string.pgp_key_manager') })
 
         // ===== 列表区：标题栏下顶置排列 =====
         Scroll() {
@@ -1069,7 +1069,7 @@ export struct PgpKeyManagerPage {
                 LoadingProgress()
                   .width(IconSize.MD)
                   .height(IconSize.MD)
-                Text('加载中...')
+                Text($r('app.string.common_loading'))
                   .fontSize(FontSize.CAPTION)
                   .fontColor(this.colors.textTertiary)
                   .margin({ left: Spacing.SM })
@@ -1080,8 +1080,8 @@ export struct PgpKeyManagerPage {
             } else if (this.viewModel.keys.length === 0) {
               EmptyState({
                 icon: $r('sys.symbol.key'),
-                title: '尚未导入任何密钥',
-                hint: '点击右下角 + 导入或创建密钥',
+                title: Strings.get('pgp_empty_title'),
+                hint: Strings.get('pgp_empty_hint'),
               })
             } else {
               ForEach(this.viewModel.keys, (key: GpgKeyId) => {

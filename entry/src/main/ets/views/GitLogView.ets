@@ -32,14 +32,14 @@ export struct GitLogView {
     Column() {
       // 标题行
       Row() {
-        Text('提交历史')
+        Text($r('app.string.git_log_title'))
           .fontSize(FontSize.SUBTITLE)
           .fontWeight(FontWeight.Bold)
           .fontColor(this.colors.textPrimary)
           .layoutWeight(1)
 
         // 可点文字：补足 40vp 可点区域并给按压态（纯 Text 默认无任何反馈）
-        Text('刷新')
+        Text($r('app.string.refresh'))
           .fontSize(FontSize.BODY)
           .fontColor(this.colors.primary)
           .textAlign(TextAlign.Center)
@@ -62,7 +62,7 @@ export struct GitLogView {
           LoadingProgress()
             .width(IconSize.MD)
             .height(IconSize.MD)
-          Text('加载中...')
+          Text($r('app.string.common_loading'))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textTertiary)
             .margin({ left: Spacing.SM })
@@ -80,7 +80,7 @@ export struct GitLogView {
           .padding(Spacing.XL)
       } else if (this.viewModel.commits.length === 0) {
         // 空历史
-        Text('暂无提交记录')
+        Text($r('app.string.git_log_empty'))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.colors.textTertiary)
           .width('100%')

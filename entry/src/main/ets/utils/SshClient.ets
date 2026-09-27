@@ -6,6 +6,7 @@ import { invokeNativeGit, NativeGitRequest, NativeGitReply } from './NativeGitTa
 import { taskpool } from '@kit.ArkTS';
 import { SshKeyManager } from '../crypto/SshKeyManager';
 import { KnownHostsStore, KnownHostKey } from './KnownHostsStore';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -110,7 +111,7 @@ export class SshClient {
     try {
       return JSON.stringify(e);
     } catch (jsonErr) {
-      return '未知错误';
+      return Strings.get('common_unknown_error');
     }
   }
 
@@ -197,13 +198,13 @@ export class SshClient {
       // 与 GitClient.callNativeGit 同款：execute 本身失败时转成失败结果，不让异常上抛
       hilog.error(DOMAIN, TAG, 'callNativeSsh(%{public}s) failed: %{public}s', fn,
         e instanceof Error ? `${e.name}: ${e.message}` : String(e));
-      return { success: false, error: 'native 调用失败，请重试', data: '' };
+      return { success: false, error: Strings.get('common_native_call_failed'), data: '' };
     }
   }
 
   async testConnection(params: SshConnectParams): Promise<SshConnectResult> {
     if (params.host.length === 0) {
-      return { success: false, error: '主机名不能为空' };
+      return { success: false, error: Strings.get('ssh_host_required') };
     }
 
     const native: NativeBridge = NativeBridge.getInstance();
@@ -215,7 +216,7 @@ export class SshClient {
       if (knownKeys.length > 0) {
         const probe = await this.probeFingerprint(params);
         if (probe === null) {
-          return { success: false, error: '获取主机密钥失败' };
+          return { success: false, error: Strings.get('ssh_probe_failed') };
         }
         const state: string = await knownHosts.hostKeyState(params.host, params.port,
           probe.keyType, probe.fingerprint);
@@ -227,7 +228,7 @@ export class SshClient {
           hilog.warn(DOMAIN, TAG, 'testConnection: HOST KEY MISMATCH for %{public}s', params.host);
           return {
             success: false,
-            error: '服务器主机密钥与已保存指纹不一致，连接已拒绝（可能存在中间人攻击）',
+            error: Strings.get('ssh_hostkey_mismatch_rejected'),
             hostKeyState: 'mismatch',
           };
         }
@@ -248,7 +249,7 @@ export class SshClient {
       // 无任何记录：探测指纹返回给 UI 确认（TOFU）
       const probe = await this.probeFingerprint(params);
       if (probe === null) {
-        return { success: false, error: '获取主机密钥失败' };
+        return { success: false, error: Strings.get('ssh_probe_failed') };
       }
       hilog.info(DOMAIN, TAG, 'testConnection: unknown host, fingerprint=%{public}s (%{public}s)',
         probe.fingerprint, probe.keyType);
@@ -274,8 +275,8 @@ export class SshClient {
     return {
       success: false,
       error: params.keyAlias.length === 0
-        ? 'TCP 可连通，但未配置 SSH 密钥，无法验证认证。请先在「Git 配置 → SSH 密钥」中选择私钥'
-        : 'TCP 可连通，但未能完成 SSH 认证，请检查密钥与口令',
+        ? Strings.get('ssh_tcp_no_key')
+        : Strings.get('ssh_tcp_auth_incomplete'),
     };
   }
 
@@ -317,7 +318,7 @@ export class SshClient {
       }
       if (result.error.includes('host key mismatch')) {
         hilog.warn(DOMAIN, TAG, 'testConnection: HOST KEY MISMATCH for %{public}s', params.host);
-        return { success: false, error: '服务器主机密钥与已保存指纹不一致，连接已拒绝（可能存在中间人攻击）', hostKeyState: 'mismatch' };
+        return { success: false, error: Strings.get('ssh_hostkey_mismatch_rejected'), hostKeyState: 'mismatch' };
       }
       hilog.warn(DOMAIN, TAG, 'testConnection: native password auth failed: %{public}s', result.error);
       return { success: false, error: result.error };
@@ -335,7 +336,7 @@ export class SshClient {
         }
         if (result.error.includes('host key mismatch')) {
           hilog.warn(DOMAIN, TAG, 'testConnection: HOST KEY MISMATCH for %{public}s', params.host);
-          return { success: false, error: '服务器主机密钥与已保存指纹不一致，连接已拒绝（可能存在中间人攻击）', hostKeyState: 'mismatch' };
+          return { success: false, error: Strings.get('ssh_hostkey_mismatch_rejected'), hostKeyState: 'mismatch' };
         }
         hilog.warn(DOMAIN, TAG, 'testConnection: native publickey auth failed: %{public}s', result.error);
         return { success: false, error: result.error };
@@ -345,15 +346,15 @@ export class SshClient {
         params.keyAlias);
       return {
         success: false,
-        error: `无法读取 SSH 私钥（${params.keyAlias}）。请在「SSH 密钥管理」中重新生成或导入密钥`,
+        error: Strings.fmt('common_ssh_pem_read_failed', params.keyAlias),
       };
     }
 
     return {
       success: false,
       error: params.password !== undefined && params.password.length > 0
-        ? '认证参数不完整'
-        : '未配置 SSH 密钥，无法验证认证。请先在「Git 配置 → SSH 密钥」中选择私钥',
+        ? Strings.get('ssh_params_incomplete')
+        : Strings.get('ssh_no_key_unverified'),
     };
   }
 
@@ -378,7 +379,7 @@ export class SshClient {
    */
   async checkHostReachable(host: string, port: number): Promise<SshConnectResult> {
     if (host.length === 0) {
-      return { success: false, error: '主机名不能为空' };
+      return { success: false, error: Strings.get('ssh_host_required') };
     }
 
     const normalizedPort: number = port > 0 ? port : 22;
@@ -403,7 +404,7 @@ export class SshClient {
       // String(e) 只会得到 "[object Object]"，必须显式取 message/code
       const msg: string = SshClient.formatError(e);
       hilog.warn(DOMAIN, TAG, 'checkHostReachable failed: %{public}s', msg);
-      return { success: false, error: `连接失败: ${msg}` };
+      return { success: false, error: Strings.fmt('ssh_tcp_connect_failed', msg) };
     }
   }
 }

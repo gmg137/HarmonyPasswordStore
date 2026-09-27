@@ -5,7 +5,7 @@ import { FolderCreateViewModel } from '../viewmodel/FolderCreateViewModel';
 import { SyncSheet } from '../views/SyncSheet';
 import { PasswordItemView } from '../views/PasswordItemView';
 import { RouteManager } from '../common/RouteManager';
-import { RouteNames, SortMode } from '../common/Constants';
+import { RouteNames } from '../common/Constants';
 import { ThemeColors, Palette, Radius, Spacing, FontSize, IconSize, ButtonSpec, ComponentSize, DividerSpec } from '../common/ThemeColors';
 import { AppFab } from '../views/AppFab';
 import { EmptyState } from '../views/EmptyState';
@@ -20,6 +20,7 @@ import { GitConfig } from '../model/GitConfig';
 import { GitClient } from '../utils/GitClient';
 import { formSheetOptions, menuSheetHeight, panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
 import { ReencryptService, ReencryptPlan, ReencryptOutcome } from '../utils/ReencryptService';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** 待执行的目录密钥变更（旧密钥口令在弹窗里解锁后继续） */
@@ -69,7 +70,6 @@ export struct PasswordListPage {
   @Local isCreateDirFormVisible: boolean = false;
   /** 创建目录 VM（sheet 内复用 FolderCreateViewModel 逻辑） */
   folderCreateVM: FolderCreateViewModel = new FolderCreateViewModel();
-  @Local sortModeLabel: string = 'A-Z';
   /** 搜索模式：顶栏应用名隐藏、显示搜索框 */
   @Local isSearchBarVisible: boolean = false;
   /** 设置下拉菜单可见 */
@@ -103,7 +103,6 @@ export struct PasswordListPage {
   aboutToAppear(): void {
 
     this.viewModel.loadEntries();
-    this.refreshSortLabel();
     // 根内容非 NavDestination：返回键经 Index.onBackPress 转发到此
     BackHandler.set((): boolean => {
       if (this.viewModel.currentDir.length > 0) {
@@ -125,14 +124,6 @@ export struct PasswordListPage {
   @Monitor('notifier.nonce')
   onRepoChange(): void {
     this.viewModel.loadEntries();
-    this.refreshSortLabel();
-  }
-
-  /**
-   * 刷新排序标签（VM 的 sortMode 持久化在 Settings，页面本地镜像驱动 UI）
-   */
-  refreshSortLabel(): void {
-    this.sortModeLabel = this.viewModel.getSortMode() === SortMode.ALPHABETICAL ? 'A-Z' : '最近';
   }
 
   /**
@@ -149,8 +140,8 @@ export struct PasswordListPage {
     }
 
     this.getUIContext().showAlertDialog({
-      title: '未配置远程仓库',
-      message: '同步功能需要先配置远程 Git 仓库地址。是否现在前往配置？',
+      title: $r('app.string.sync_no_remote_title'),
+      message: $r('app.string.sync_no_remote_message'),
       autoCancel: true,
       alignment: DialogAlignment.Center,
       onWillDismiss: (action: DismissDialogAction): void => {
@@ -158,11 +149,11 @@ export struct PasswordListPage {
       },
       // primaryButton 在左、secondaryButton 在右 → 取消 / 配置
       primaryButton: {
-        value: '取消',
+        value: $r('app.string.common_cancel'),
         action: (): void => {},
       },
       secondaryButton: {
-        value: '配置',
+        value: $r('app.string.common_configure'),
         fontColor: this.colors.primary,
         action: (): void => {
           RouteManager.getInstance().pushPath(RouteNames.GIT_CONFIG);
@@ -199,7 +190,8 @@ export struct PasswordListPage {
       await this.syncViewModel.push();
     }
     const ok: boolean = this.syncViewModel.lastOperationSuccess;
-    const doneLabel: string = kind === 'sync' ? '同步完成' : (kind === 'pull' ? '拉取完成' : '推送完成');
+    const doneLabel: string = kind === 'sync' ? Strings.get('sync_done')
+      : (kind === 'pull' ? Strings.get('sync_pull_done') : Strings.get('sync_push_done'));
     showToastSafe(this.getUIContext(), ok ? doneLabel : this.syncViewModel.resultToast, 2500);
   }
 
@@ -302,28 +294,28 @@ export struct PasswordListPage {
       if (this.dirKeyMode) {
         // 修改此目录的加密密钥：列出已导入私钥供选择；选定后预扫→确认→重加密
         Column() {
-          Text('修改此目录的加密密钥')
+          Text($r('app.string.home_dirkey_panel_title'))
             .fontSize(FontSize.TITLE)
             .fontWeight(FontWeight.Medium)
             .fontColor(this.colors.textPrimary)
             .width('100%')
 
-          Text(this.viewModel.currentDir.length > 0 ? this.viewModel.currentDir : '仓库根目录')
+          Text(this.viewModel.currentDir.length > 0 ? this.viewModel.currentDir : $r('app.string.store_root_dir'))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textTertiary)
             .width('100%')
             .margin({ top: Spacing.XS })
 
           Text(this.dirKeyCurrent.length > 0
-            ? `当前密钥：${this.dirKeyCurrent}`
-            : '当前密钥：继承父目录 / 默认密钥')
+            ? Strings.fmt('home_dirkey_current', this.dirKeyCurrent)
+            : Strings.get('home_dirkey_current_inherit'))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textTertiary)
             .width('100%')
             .margin({ top: Spacing.XS, bottom: Spacing.LG })
 
           if (this.dirKeyCandidates.length === 0) {
-            Text('暂无已导入的私钥，无法设置加密密钥')
+            Text($r('app.string.home_dirkey_no_keys'))
               .fontSize(FontSize.CAPTION)
               .fontColor(this.colors.textTertiary)
               .padding({ top: Spacing.MD, bottom: Spacing.MD })
@@ -382,7 +374,7 @@ export struct PasswordListPage {
           }
 
           Row({ space: ButtonSpec.ROW_GAP }) {
-            Button(this.reencryptBusy ? '正在重加密…' : '取消')
+            Button(this.reencryptBusy ? Strings.get('home_reencrypting') : Strings.get('common_cancel'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
               .layoutWeight(1)
@@ -396,7 +388,7 @@ export struct PasswordListPage {
                 this.isCreateSheetVisible = false;
               })
 
-            Button('应用')
+            Button($r('app.string.common_apply'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.PRIMARY_RADIUS)
               .layoutWeight(1)
@@ -423,14 +415,14 @@ export struct PasswordListPage {
         // 鸿蒙动作面板：圆角 16vp 分组卡片，行高 56，图标+文字左对齐
         Column() {
           // 顺序：最常用的新建密码在最上，其次建目录，最后是密钥维护
-          this.createActionItem($r('sys.symbol.plus'), '创建新密码', (): void => {
+          this.createActionItem($r('sys.symbol.plus'), Strings.get('home_create_password'), (): void => {
             this.isCreateSheetVisible = false;
             // 以当前浏览目录为父目录，目录内新建不再落到根目录
             const param: PasswordCreateNavParam = { parentDir: this.viewModel.currentDir, editPath: '' };
             RouteManager.getInstance().pushPath(RouteNames.PASSWORD_CREATE, param);
           })
           this.menuDivider()
-          this.createActionItem($r('sys.symbol.folder_badge_plus'), '创建新目录', (): void => {
+          this.createActionItem($r('sys.symbol.folder_badge_plus'), Strings.get('home_create_folder'), (): void => {
             // 切换 options 会触发 sheet 重建关闭：先关闭，动画结束后以表单态重开
             this.isSwitchingToForm = true;
             this.isCreateSheetVisible = false;
@@ -445,7 +437,7 @@ export struct PasswordListPage {
             }, 350);
           })
           this.menuDivider()
-          this.createActionItem($r('sys.symbol.key'), '修改此目录加密密钥', (): void => {
+          this.createActionItem($r('sys.symbol.key'), Strings.get('home_dirkey_menu'), (): void => {
             this.openDirKeyMode();
           })
         }
@@ -458,7 +450,7 @@ export struct PasswordListPage {
         // 实测面板塌陷到约 161px、输入框被完全裁出布局树（连节点都不存在），
         // 按钮行也随之塌陷。表单内容本身很短，直接顺序排布即可。
         // 创建新目录表单（鸿蒙弹窗规范：标题 20fp Medium，输入框 44vp/圆角 12）
-        Text('创建新目录')
+        Text($r('app.string.home_create_folder'))
           .fontSize(FontSize.TITLE)
           .fontWeight(FontWeight.Medium)
           .fontColor(this.colors.textPrimary)
@@ -466,7 +458,7 @@ export struct PasswordListPage {
           .textAlign(TextAlign.Center)
           .margin({ bottom: Spacing.LG })
 
-        TextInput({ text: this.folderCreateVM.folderName, placeholder: '目录名称' })
+        TextInput({ text: this.folderCreateVM.folderName, placeholder: $r('app.string.home_folder_name_hint') })
           .fontSize(FontSize.SUBTITLE)
           .fontColor(this.colors.textPrimary)
           .placeholderColor(this.colors.textTertiary)
@@ -484,7 +476,7 @@ export struct PasswordListPage {
         // 用**固定高度**的 List 而不是让它自适应：键盘弹起时面板被压缩，
         // 高度自适应的列表会把按钮行挤出面板（见 AGENTS.md 的 bindSheet 键盘避让），
         // 固定高度 + 内部滚动则不受密钥数量影响。
-        Text('加密密钥（可多选，不选则继承父目录）')
+        Text($r('app.string.home_dirkey_multiselect_hint'))
           .fontSize(FontSize.BODY)
           .fontColor(this.colors.textSecondary)
           .width('100%')
@@ -550,7 +542,7 @@ export struct PasswordListPage {
         // 按钮行
         Row({ space: ButtonSpec.ROW_GAP }) {
           // 次操作：中性底 + 强调色文字
-          Button('取消')
+          Button($r('app.string.common_cancel'))
             .type(ButtonType.Normal)
             .borderRadius(ButtonSpec.SECONDARY_RADIUS)
             .layoutWeight(1)
@@ -564,7 +556,7 @@ export struct PasswordListPage {
             })
 
           // 主操作：强调色底 + onPrimary 文字
-          Button(this.folderCreateVM.isSaving ? '创建中...' : '确认')
+          Button(this.folderCreateVM.isSaving ? Strings.get('home_creating') : Strings.get('common_confirm'))
             .type(ButtonType.Normal)
             .borderRadius(ButtonSpec.PRIMARY_RADIUS)
             .layoutWeight(1)
@@ -719,7 +711,7 @@ export struct PasswordListPage {
       }
     }
     // 标签按解析出的标准指纹统一生成：同名密钥会带指纹后缀，避免两把 gmg137 无法区分
-    this.dirKeyCurrent = this.keyLabelsFor(selected).join('、');
+    this.dirKeyCurrent = this.keyLabelsFor(selected).join(Strings.get('common_list_sep'));
     this.dirKeySelectedFps = selected;
     this.dirKeyCandidates = keys;
     this.isSwitchingToForm = true;
@@ -792,7 +784,7 @@ export struct PasswordListPage {
     } catch (e) {
       hilog.error(DOMAIN, TAG, 'onApplyDirKeys failed: %{public}s',
         e instanceof Error ? `${e.name}: ${e.message}` : JSON.stringify(e));
-      showToastSafe(this.getUIContext(), '重加密流程出错，请查看日志', 2500);
+      showToastSafe(this.getUIContext(), Strings.get('home_reencrypt_error_toast'), 2500);
     }
   }
 
@@ -801,7 +793,7 @@ export struct PasswordListPage {
       return;
     }
     if (fingerprints.length === 0) {
-      showToastSafe(this.getUIContext(), '请至少选择一把密钥', 2500);
+      showToastSafe(this.getUIContext(), Strings.get('home_dirkey_need_selection'), 2500);
       return;
     }
     const dirPath: string = this.viewModel.currentDir;
@@ -813,7 +805,7 @@ export struct PasswordListPage {
     if (plan.needsCount === 0) {
       // 该目录下没有需要换的条目：直接写 .gpg-id 即可
       const written = PasswordRepository.getInstance().setGpgIdForDir(dirPath, fingerprints);
-      showToastSafe(this.getUIContext(), written.success ? '已更新目录加密密钥（无需重加密的条目）' : written.error, 2500);
+      showToastSafe(this.getUIContext(), written.success ? Strings.get('home_dirkey_updated_no_reencrypt') : written.error, 2500);
       if (written.success) {
         RepoChangeNotifier.connect().bump();
         this.isCreateSheetVisible = false;
@@ -834,16 +826,16 @@ export struct PasswordListPage {
   /** 重加密确认框（面板关闭后再弹，避免被面板遮挡） */
   private showReencryptConfirm(dirPath: string, fingerprints: string[],
     plan: ReencryptPlan): void {
-    const label: string = this.keyLabelsFor(fingerprints).join('、');
-    let message: string = `将用「${label}」重新加密 ${plan.needsCount} 个条目。`;
+    const label: string = this.keyLabelsFor(fingerprints).join(Strings.get('common_list_sep'));
+    let message: string = Strings.fmt('home_reencrypt_confirm_msg', label, plan.needsCount);
     if (plan.missingKeyCount > 0) {
-      message += `\n另有 ${plan.missingKeyCount} 个条目因缺少对应私钥将被跳过（保持原样）。`;
+      message += '\n' + Strings.fmt('home_reencrypt_skipped_msg', plan.missingKeyCount);
     }
     if (plan.requiredKeys.length > 0) {
-      message += '\n需要输入旧密钥的口令以解密这些条目。';
+      message += '\n' + Strings.get('home_reencrypt_need_passphrase');
     }
     this.getUIContext().showAlertDialog({
-      title: '重新加密此目录',
+      title: $r('app.string.home_reencrypt_confirm_title'),
       message: message,
       autoCancel: true,
       alignment: DialogAlignment.Center,
@@ -851,11 +843,11 @@ export struct PasswordListPage {
         action.dismiss();
       },
       primaryButton: {
-        value: '取消',
+        value: $r('app.string.common_cancel'),
         action: (): void => {},
       },
       secondaryButton: {
-        value: '开始',
+        value: $r('app.string.common_start'),
         fontColor: this.colors.primary,
         action: (): void => {
           this.proceedReencrypt(dirPath, fingerprints, plan);
@@ -882,7 +874,7 @@ export struct PasswordListPage {
       this.dialogPassphrase = '';
       this.dialogError = '';
       // 多接收方条目任一把密钥的口令都能解开，故列出全部候选而不是只写第一把
-      this.dialogKeyId = this.keyLabelsFor(plan.requiredKeys).join('、');
+      this.dialogKeyId = this.keyLabelsFor(plan.requiredKeys).join(Strings.get('common_list_sep'));
       this.isPassphraseDialogVisible = true;
       this.openPassphraseDialog();
       this.reencryptBusy = false;
@@ -901,12 +893,13 @@ export struct PasswordListPage {
 
     let message: string;
     if (outcome.success) {
-      message = `已重加密 ${outcome.reencrypted} 个条目`
-        + (outcome.skipped > 0 ? `，跳过 ${outcome.skipped} 个` : '');
+      message = Strings.fmt('home_reencrypted_count', outcome.reencrypted)
+        + (outcome.skipped > 0 ? Strings.fmt('home_reencrypt_skipped_suffix', outcome.skipped) : '');
     } else {
-      message = `重加密未完成：${outcome.error}`;
+      message = Strings.fmt('home_reencrypt_failed', outcome.error);
       if (outcome.failures.length > 0) {
-        message += `\n首个失败：${outcome.failures[0].relativePath}（${outcome.failures[0].error}）`;
+        message += '\n' + Strings.fmt('home_reencrypt_first_failure',
+          outcome.failures[0].relativePath, outcome.failures[0].error);
       }
     }
     showToastSafe(this.getUIContext(), message, 3500);
@@ -938,17 +931,17 @@ export struct PasswordListPage {
       // （对齐 agrahn fork 的 no_decryption_keys 提示语义）
       const ciphertext: string = PasswordRepository.getInstance().readCiphertext(entry.relativePath);
       const ids: string[] = crypto.recipientKeyIds(ciphertext);
-      const idText: string = ids.length > 0 ? ids.join('、') : '（密文未标注收件人）';
+      const idText: string = ids.length > 0 ? ids.join(Strings.get('common_list_sep')) : Strings.get('home_no_recipient_hint');
       this.getUIContext().showAlertDialog({
-        title: '缺少解密密钥',
-        message: `该条目由未导入的密钥加密（Key ID：${idText}）。\n请在「PGP 密钥管理」中导入对应私钥后重试。`,
+        title: $r('app.string.home_missing_decrypt_key_title'),
+        message: Strings.fmt('home_missing_key_msg', idText) + '\n' + Strings.get('home_missing_key_action'),
         autoCancel: true,
         alignment: DialogAlignment.Center,
         onWillDismiss: (action: DismissDialogAction): void => {
           action.dismiss();
         },
         confirm: {
-          value: '知道了',
+          value: $r('app.string.common_got_it'),
           fontColor: this.colors.primary,
           action: (): void => {},
         },
@@ -987,7 +980,7 @@ export struct PasswordListPage {
         emails.push(key.email.length > 0 ? key.email : key.userId);
       }
     }
-    return emails.length > 0 ? emails.join('、') : '****@***';
+    return emails.length > 0 ? emails.join(Strings.get('common_list_sep')) : '****@***';
   }
 
   /**
@@ -1011,7 +1004,9 @@ export struct PasswordListPage {
       .justifyContent(FlexAlign.Center)
       .backgroundColor(this.colors.danger)
       // 按钮只剩图标，读屏需要文字说明
-      .accessibilityText(`删除${entry.isDirectory ? '目录' : '密码'}：${entry.name}`)
+      .accessibilityText(entry.isDirectory
+        ? Strings.fmt('home_a11y_delete_dir', entry.name)
+        : Strings.fmt('home_a11y_delete_entry', entry.name))
       .onClick(() => {
         // 先收起已展开的滑动项：否则确认框弹出时按钮仍停在展开态，返回后误触
         this.listScroller.closeAllSwipeActions();
@@ -1033,10 +1028,10 @@ export struct PasswordListPage {
   private confirmSwipeDelete(entry: PasswordEntryVM): void {
     const isDir: boolean = entry.isDirectory;
     const message: string = isDir
-      ? `将删除目录「${entry.name}」及其中的全部内容（${entry.childCount} 个条目），此操作不可撤销。`
-      : `将删除「${entry.name}」，此操作不可撤销。`;
+      ? Strings.fmt('store_delete_dir_confirm', entry.name, entry.childCount)
+      : Strings.fmt('store_delete_entry_confirm', entry.name);
     this.getUIContext().showAlertDialog({
-      title: isDir ? '删除目录' : '删除密码',
+      title: isDir ? $r('app.string.home_delete_dir_title') : $r('app.string.home_delete_pw_title'),
       message: message,
       autoCancel: true,
       alignment: DialogAlignment.Center,
@@ -1044,11 +1039,11 @@ export struct PasswordListPage {
         action.dismiss();
       },
       primaryButton: {
-        value: '取消',
+        value: $r('app.string.common_cancel'),
         action: (): void => {},
       },
       secondaryButton: {
-        value: '删除',
+        value: $r('app.string.delete'),
         fontColor: this.colors.danger,
         action: (): void => {
           this.executeSwipeDelete(entry);
@@ -1068,14 +1063,14 @@ export struct PasswordListPage {
       ? repo.deleteDirectory(entry.relativePath)
       : repo.deletePassword(entry.relativePath);
     if (!result.success) {
-      showToastSafe(this.getUIContext(), result.error.length > 0 ? result.error : '删除失败', 2500);
+      showToastSafe(this.getUIContext(), result.error.length > 0 ? result.error : Strings.get('home_delete_failed'), 2500);
       return;
     }
     hilog.info(DOMAIN, TAG, 'swipe delete: %{public}s (dir=%{public}s)',
       entry.relativePath, entry.isDirectory ? 'yes' : 'no');
     RepoChangeNotifier.connect().bump();
     this.viewModel.loadEntries();
-    showToastSafe(this.getUIContext(), entry.isDirectory ? '目录已删除' : '密码已删除', 2000);
+    showToastSafe(this.getUIContext(), entry.isDirectory ? Strings.get('home_dir_deleted') : Strings.get('home_pw_deleted'), 2000);
   }
 
   private navigateToDetail(entry: PasswordEntryVM): void {
@@ -1163,7 +1158,7 @@ export struct PasswordListPage {
       : (candidates.length > 0 ? candidates : await this.allSecretFingerprints());
     let unlocked: boolean = false;
     // 记录失败原因：只显示「密码错误」会掩盖「导入的是公钥」等可修复问题
-    let failReason: string = '密钥密码错误，请重试';
+    let failReason: string = Strings.get('common_passphrase_wrong');
     for (let i: number = 0; i < targets.length; i++) {
       const res: UnlockResult = await PgpCrypto.getInstance().unlockPassphrase(
         targets[i], this.dialogPassphrase);
@@ -1203,17 +1198,17 @@ export struct PasswordListPage {
   @Builder
   passphraseDialogBuilder() {
     Column() {
-      Text('请输入密钥密码')
+      Text($r('app.string.home_passphrase_title'))
         .fontSize(FontSize.TITLE)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textPrimary)
 
-      Text(`PGP ID: ${this.dialogKeyId}`)
+      Text(Strings.fmt('home_pgp_id_label', this.dialogKeyId))
         .fontSize(FontSize.CAPTION)
         .fontColor(this.colors.textTertiary)
         .margin({ top: Spacing.SM })
 
-      TextInput({ text: this.dialogPassphrase, placeholder: '密钥密码' })
+      TextInput({ text: this.dialogPassphrase, placeholder: $r('app.string.home_passphrase_hint') })
         .type(InputType.Password)
         .fontSize(FontSize.SUBTITLE)
         .width('100%')
@@ -1239,7 +1234,7 @@ export struct PasswordListPage {
       }
 
       Row({ space: ButtonSpec.ROW_GAP }) {
-        Button('取消')
+        Button($r('app.string.common_cancel'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
@@ -1254,7 +1249,7 @@ export struct PasswordListPage {
             this.pendingEntry = null;
           })
 
-        Button(this.isUnlocking ? '验证中...' : '确认')
+        Button(this.isUnlocking ? Strings.get('home_verifying') : Strings.get('common_confirm'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.PRIMARY_RADIUS)
           .layoutWeight(1)
@@ -1306,7 +1301,7 @@ export struct PasswordListPage {
               .fontColor([this.colors.textTertiary])
               .margin({ right: Spacing.SM })
 
-            TextInput({ text: this.viewModel.searchKeyword, placeholder: '搜索密码' })
+            TextInput({ text: this.viewModel.searchKeyword, placeholder: $r('app.string.search_placeholder') })
               .id(SEARCH_INPUT_ID)
               .fontSize(FontSize.BODY)
               .fontColor(this.colors.textPrimary)
@@ -1345,7 +1340,9 @@ export struct PasswordListPage {
           .alignItems(VerticalAlign.Center)
         } else {
           // 标题模式：目录名，根目录显示应用名
-          Text(this.viewModel.currentDir.length > 0 ? this.viewModel.currentDir : '密码仓库')
+          // 根目录回退标题为「仓库名」语义（home_root_title），目录名保持字符串变量；
+          // Text 内容为 ResourceStr，两分支混用允许
+          Text(this.viewModel.currentDir.length > 0 ? this.viewModel.currentDir : $r('app.string.home_root_title'))
             .fontSize(FontSize.DISPLAY_MD)
             .fontWeight(FontWeight.Bold)
             .fontColor(this.colors.textPrimary)
@@ -1399,13 +1396,14 @@ export struct PasswordListPage {
       // ===== 搜索结果计数（目录导航已上移至顶栏） =====
       if (this.viewModel.searchKeyword.length > 0) {
         Row() {
-          Text(`找到 ${this.viewModel.filteredEntries.length} 条结果`)
+          Text(Strings.fmt('found_results', this.viewModel.filteredEntries.length))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textSecondary)
             .layoutWeight(1)
         }
         .width('100%')
-        .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H, bottom: Spacing.XS })
+        // 与列表卡片的水平留白（XL）对齐，计数文字跟卡片左缘平齐
+        .padding({ left: Spacing.XL, right: Spacing.XL, bottom: Spacing.XS })
       }
 
       // ===== 列表区 =====
@@ -1413,8 +1411,10 @@ export struct PasswordListPage {
         Column() {
           EmptyState({
             icon: $r('sys.symbol.lock'),
-            title: this.viewModel.searchKeyword.length > 0 ? '没有匹配的密码' : '仓库为空',
-            hint: this.viewModel.searchKeyword.length > 0 ? '换个关键词试试' : '点击右下角 + 创建第一个密码',
+            title: this.viewModel.searchKeyword.length > 0
+              ? Strings.get('home_search_no_match') : Strings.get('home_store_empty'),
+            hint: this.viewModel.searchKeyword.length > 0
+              ? Strings.get('home_search_try_other') : Strings.get('home_create_first_hint'),
           })
         }
         .width('100%')
@@ -1445,8 +1445,10 @@ export struct PasswordListPage {
         .layoutWeight(1)
         .scrollBar(BarState.Off)
         .width('100%')
-        // 底部留出 FAB 的高度 + 呼吸间距，避免最后一项被浮动按钮压住
-        .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.XS, bottom: IconSize.FAB + Spacing.XL })
+        // 水平留白用 XL：与搜索结果计数行同值，卡片左缘和计数文字平齐
+        // （计数行上方同为 XL，见其注释）；底部留出 FAB 的高度 + 呼吸间距，
+        // 避免最后一项被浮动按钮压住。
+        .padding({ left: Spacing.XL, right: Spacing.XL, top: Spacing.XS, bottom: IconSize.FAB + Spacing.XL })
         .onClick(() => this.collapseSearchBar())
       }
 
@@ -1476,20 +1478,20 @@ export struct PasswordListPage {
           })
 
         Column() {
-          this.menuItem('一键同步', (): void => {
+          this.menuItem(Strings.get('home_sync_all'), (): void => {
             this.isMenuVisible = false;
             this.runSyncOperation('sync');
           })
-          this.menuItem('同步存储库', (): void => {
+          this.menuItem(Strings.get('home_sync_repo_menu'), (): void => {
             this.isMenuVisible = false;
             this.openSyncSheet();
           })
-          this.menuItem('刷新列表', (): void => {
+          this.menuItem(Strings.get('home_refresh_list'), (): void => {
             this.isMenuVisible = false;
             this.viewModel.loadEntries();
           })
           this.menuDivider()
-          this.menuItem('设置', (): void => {
+          this.menuItem(Strings.get('settings'), (): void => {
             this.isMenuVisible = false;
             RouteManager.getInstance().pushPath(RouteNames.SETTINGS);
           })

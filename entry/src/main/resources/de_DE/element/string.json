@@ -1,0 +1,2456 @@
+{
+  "string": [
+    {
+      "name": "settings_title",
+      "value": "Einstellungen"
+    },
+    {
+      "name": "group_general",
+      "value": "Allgemein"
+    },
+    {
+      "name": "group_security",
+      "value": "Sicherheit"
+    },
+    {
+      "name": "group_store",
+      "value": "Passwortspeicher"
+    },
+    {
+      "name": "group_git",
+      "value": "Git-Synchronisierung"
+    },
+    {
+      "name": "group_crypto",
+      "value": "Verschlüsselung & Zugangsdaten"
+    },
+    {
+      "name": "group_about",
+      "value": "Über"
+    },
+    {
+      "name": "settings_theme",
+      "value": "Erscheinungsbild"
+    },
+    {
+      "name": "theme_system",
+      "value": "System"
+    },
+    {
+      "name": "theme_light",
+      "value": "Hell"
+    },
+    {
+      "name": "theme_dark",
+      "value": "Dunkel"
+    },
+    {
+      "name": "settings_language",
+      "value": "Sprache"
+    },
+    {
+      "name": "language_system",
+      "value": "Systemsprache"
+    },
+    {
+      "name": "biometric_title",
+      "value": "Biometrisches Entsperren"
+    },
+    {
+      "name": "biometric_sub",
+      "value": "App schnell mit Fingerabdruck oder Gesicht entsperren"
+    },
+    {
+      "name": "clipboard_title",
+      "value": "Zwischenablage leeren"
+    },
+    {
+      "name": "clipboard_sub",
+      "value": "Leert die Systemzwischenablage nach dem Kopieren eines Passworts automatisch"
+    },
+    {
+      "name": "search_mode_title",
+      "value": "Suchmodus"
+    },
+    {
+      "name": "search_fuzzy",
+      "value": "Unscharfe Suche"
+    },
+    {
+      "name": "search_exact",
+      "value": "Exakte Suche"
+    },
+    {
+      "name": "onboarding_row_title",
+      "value": "Einrichtung erneut ausführen"
+    },
+    {
+      "name": "onboarding_row_sub",
+      "value": "Passwortspeicher initialisieren / klonen / Schlüssel importieren"
+    },
+    {
+      "name": "autosync_title",
+      "value": "Beim Start synchronisieren"
+    },
+    {
+      "name": "autosync_sub",
+      "value": "Führt beim Start automatisch Pull und Push aus"
+    },
+    {
+      "name": "repo_row_title",
+      "value": "Repository-Verwaltung"
+    },
+    {
+      "name": "repo_row_sub",
+      "value": "Git-Konfiguration / Pull mit Rebase / lokales Repository löschen"
+    },
+    {
+      "name": "pgp_row_title",
+      "value": "PGP-Schlüsselverwaltung"
+    },
+    {
+      "name": "pgp_row_sub",
+      "value": "Schlüssel importieren / Standardschlüssel wählen"
+    },
+    {
+      "name": "ssh_row_title",
+      "value": "SSH-Schlüsselverwaltung"
+    },
+    {
+      "name": "ssh_row_sub",
+      "value": "Erzeugen / öffentlichen Schlüssel importieren / löschen"
+    },
+    {
+      "name": "fileformat_title",
+      "value": "Passwort-Dateiformat"
+    },
+    {
+      "name": "fileformat_sub",
+      "value": "Betrifft nur später erstellte oder bearbeitete Passwörter"
+    },
+    {
+      "name": "privacy_row_title",
+      "value": "Datenschutzerklärung"
+    },
+    {
+      "name": "privacy_row_sub",
+      "value": "Wie deine Daten gespeichert und verarbeitet werden"
+    },
+    {
+      "name": "about_row_title",
+      "value": "Über die App"
+    },
+    {
+      "name": "about_row_sub",
+      "value": "Version / Open-Source-Lizenz / Repository-Link"
+    },
+    {
+      "name": "module_desc",
+      "value": "Modul des Passwortspeichers"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Einstiegspunkt des Passwortspeichers"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "Passwortspeicher"
+    },
+    {
+      "name": "search_placeholder",
+      "value": "Passwörter suchen"
+    },
+    {
+      "name": "password_create",
+      "value": "Neues Passwort"
+    },
+    {
+      "name": "passgen",
+      "value": "Passwort-Generator"
+    },
+    {
+      "name": "settings",
+      "value": "Einstellungen"
+    },
+    {
+      "name": "pgp_key_manager",
+      "value": "PGP-Schlüsselverwaltung"
+    },
+    {
+      "name": "git_config",
+      "value": "Git-Konfiguration"
+    },
+    {
+      "name": "AutofillAbility_desc",
+      "value": "AutoFill-Dienst des Passwortspeichers"
+    },
+    {
+      "name": "sort_recent",
+      "value": "Zuletzt"
+    },
+    {
+      "name": "found_results",
+      "value": "%d Ergebnisse gefunden"
+    },
+    {
+      "name": "app_locked",
+      "value": "App gesperrt"
+    },
+    {
+      "name": "delete",
+      "value": "Löschen"
+    },
+    {
+      "name": "refresh",
+      "value": "Aktualisieren"
+    },
+    {
+      "name": "perm_internet_reason",
+      "value": "Synchronisierung des Passwortspeichers über ein Git-Remote (Klonen/Pull/Push)"
+    },
+    {
+      "name": "perm_pasteboard_reason",
+      "value": "Einfügen der Repository-URL beim Konfigurieren des Git-Remotes"
+    },
+    {
+      "name": "perm_background_reason",
+      "value": "Kurze Ausführung im Hintergrund, um vertrauliche Inhalte der Zwischenablage zu löschen"
+    },
+    {
+      "name": "perm_biometric_reason",
+      "value": "Entsperren der App per Fingerabdruck oder Gesichtserkennung"
+    },
+    {
+      "name": "common_cancel",
+      "value": "Abbrechen"
+    },
+    {
+      "name": "common_list_sep",
+      "value": ", "
+    },
+    {
+      "name": "common_configure",
+      "value": "Konfigurieren"
+    },
+    {
+      "name": "common_apply",
+      "value": "Anwenden"
+    },
+    {
+      "name": "common_confirm",
+      "value": "Bestätigen"
+    },
+    {
+      "name": "common_start",
+      "value": "Starten"
+    },
+    {
+      "name": "common_got_it",
+      "value": "Verstanden"
+    },
+    {
+      "name": "common_loading",
+      "value": "Wird geladen…"
+    },
+    {
+      "name": "common_passphrase_wrong",
+      "value": "Falsches Schlüssel-Passwort, bitte erneut versuchen"
+    },
+    {
+      "name": "home_root_title",
+      "value": "Passwortspeicher"
+    },
+    {
+      "name": "home_create_password",
+      "value": "Neues Passwort erstellen"
+    },
+    {
+      "name": "home_create_folder",
+      "value": "Neuen Ordner erstellen"
+    },
+    {
+      "name": "home_dirkey_menu",
+      "value": "Verschlüsselungsschlüssel des Ordners ändern"
+    },
+    {
+      "name": "home_dirkey_panel_title",
+      "value": "Verschlüsselungsschlüssel dieses Ordners ändern"
+    },
+    {
+      "name": "home_dirkey_current",
+      "value": "Aktuelle Schlüssel: %s"
+    },
+    {
+      "name": "home_dirkey_current_inherit",
+      "value": "Aktuelle Schlüssel: vom übergeordneten Ordner / Standard übernommen"
+    },
+    {
+      "name": "home_dirkey_no_keys",
+      "value": "Keine importierten privaten Schlüssel; Verschlüsselungsschlüssel können nicht festgelegt werden"
+    },
+    {
+      "name": "home_dirkey_need_selection",
+      "value": "Bitte mindestens einen Schlüssel auswählen"
+    },
+    {
+      "name": "home_dirkey_updated_no_reencrypt",
+      "value": "Verschlüsselungsschlüssel des Ordners aktualisiert (keine Einträge mussten neu verschlüsselt werden)"
+    },
+    {
+      "name": "home_dirkey_multiselect_hint",
+      "value": "Verschlüsselungsschlüssel (Mehrfachauswahl; ohne Auswahl wird vom übergeordneten Ordner geerbt)"
+    },
+    {
+      "name": "home_folder_name_hint",
+      "value": "Ordnername"
+    },
+    {
+      "name": "home_creating",
+      "value": "Wird erstellt…"
+    },
+    {
+      "name": "home_reencrypting",
+      "value": "Wird neu verschlüsselt…"
+    },
+    {
+      "name": "home_reencrypt_confirm_title",
+      "value": "Diesen Ordner neu verschlüsseln"
+    },
+    {
+      "name": "home_reencrypt_confirm_msg",
+      "value": "„%s“ wird verwendet, um %d Einträge neu zu verschlüsseln."
+    },
+    {
+      "name": "home_reencrypt_skipped_msg",
+      "value": "%d weitere Einträge werden übersprungen, weil der passende private Schlüssel fehlt (bleiben unverändert)."
+    },
+    {
+      "name": "home_reencrypt_need_passphrase",
+      "value": "Zum Entschlüsseln dieser Einträge wird das Passwort des alten Schlüssels benötigt."
+    },
+    {
+      "name": "home_reencrypted_count",
+      "value": "%d Einträge neu verschlüsselt"
+    },
+    {
+      "name": "home_reencrypt_skipped_suffix",
+      "value": ", %d übersprungen"
+    },
+    {
+      "name": "home_reencrypt_failed",
+      "value": "Neuverschlüsselung unvollständig: %s"
+    },
+    {
+      "name": "home_reencrypt_first_failure",
+      "value": "Erster Fehler: %s (%s)"
+    },
+    {
+      "name": "home_reencrypt_error_toast",
+      "value": "Fehler im Neuverschlüsselungsprozess, Details im Protokoll"
+    },
+    {
+      "name": "home_no_recipient_hint",
+      "value": "kein Empfänger im Chiffretext angegeben"
+    },
+    {
+      "name": "home_missing_decrypt_key_title",
+      "value": "Fehlender Entschlüsselungsschlüssel"
+    },
+    {
+      "name": "home_missing_key_msg",
+      "value": "Dieser Eintrag ist für einen nicht importierten Schlüssel verschlüsselt (Key-ID: %s)."
+    },
+    {
+      "name": "home_missing_key_action",
+      "value": "Importiere den passenden privaten Schlüssel in der „PGP-Schlüsselverwaltung“ und versuche es erneut."
+    },
+    {
+      "name": "home_a11y_delete_dir",
+      "value": "Ordner löschen: %s"
+    },
+    {
+      "name": "home_a11y_delete_entry",
+      "value": "Passwort löschen: %s"
+    },
+    {
+      "name": "home_delete_dir_title",
+      "value": "Ordner löschen"
+    },
+    {
+      "name": "home_delete_pw_title",
+      "value": "Passwort löschen"
+    },
+    {
+      "name": "home_delete_failed",
+      "value": "Löschen fehlgeschlagen"
+    },
+    {
+      "name": "home_dir_deleted",
+      "value": "Ordner gelöscht"
+    },
+    {
+      "name": "home_pw_deleted",
+      "value": "Passwort gelöscht"
+    },
+    {
+      "name": "home_passphrase_title",
+      "value": "Schlüssel-Passwort eingeben"
+    },
+    {
+      "name": "home_passphrase_hint",
+      "value": "Schlüssel-Passwort"
+    },
+    {
+      "name": "home_pgp_id_label",
+      "value": "PGP-ID: %s"
+    },
+    {
+      "name": "home_verifying",
+      "value": "Wird überprüft…"
+    },
+    {
+      "name": "home_search_no_match",
+      "value": "Keine passenden Passwörter"
+    },
+    {
+      "name": "home_store_empty",
+      "value": "Passwortspeicher ist leer"
+    },
+    {
+      "name": "home_search_try_other",
+      "value": "Versuche ein anderes Stichwort"
+    },
+    {
+      "name": "home_create_first_hint",
+      "value": "Tippe unten rechts auf +, um dein erstes Passwort zu erstellen"
+    },
+    {
+      "name": "home_sync_all",
+      "value": "Jetzt synchronisieren"
+    },
+    {
+      "name": "home_sync_repo_menu",
+      "value": "Passwortspeicher synchronisieren"
+    },
+    {
+      "name": "home_refresh_list",
+      "value": "Liste aktualisieren"
+    },
+    {
+      "name": "store_root_dir",
+      "value": "Stammordner des Passwortspeichers"
+    },
+    {
+      "name": "store_delete_dir_confirm",
+      "value": "Ordner „%s“ und sein gesamter Inhalt (%d Einträge) werden gelöscht. Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "store_delete_entry_confirm",
+      "value": "„%s“ wird gelöscht. Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "sync_no_remote_title",
+      "value": "Kein Remote-Repository konfiguriert"
+    },
+    {
+      "name": "sync_no_remote_message",
+      "value": "Für die Synchronisierung ist eine Adresse eines Remote-Git-Repositorys erforderlich. Jetzt konfigurieren?"
+    },
+    {
+      "name": "sync_done",
+      "value": "Synchronisierung abgeschlossen"
+    },
+    {
+      "name": "sync_pull_done",
+      "value": "Pull abgeschlossen"
+    },
+    {
+      "name": "sync_push_done",
+      "value": "Push abgeschlossen"
+    },
+    {
+      "name": "sync_conflict_message",
+      "value": "Merge-Konflikt erkannt. Bitte manuell beheben und erneut versuchen."
+    },
+    {
+      "name": "sync_pulling_remote",
+      "value": "Wird vom Remote-Repository abgerufen…"
+    },
+    {
+      "name": "sync_pushing_remote",
+      "value": "Wird zum Remote-Repository übertragen…"
+    },
+    {
+      "name": "sync_committing_changes",
+      "value": "Änderungen werden committet…"
+    },
+    {
+      "name": "sync_pulling",
+      "value": "Pull läuft…"
+    },
+    {
+      "name": "sync_committing",
+      "value": "Commit läuft…"
+    },
+    {
+      "name": "sync_pushing",
+      "value": "Push läuft…"
+    },
+    {
+      "name": "sync_op_success",
+      "value": "Vorgang erfolgreich"
+    },
+    {
+      "name": "sync_op_exception",
+      "value": "Beim Vorgang ist ein Fehler aufgetreten"
+    },
+    {
+      "name": "sync_save_hostkey_failed",
+      "value": "Host-Schlüssel konnte nicht gespeichert werden"
+    },
+    {
+      "name": "sync_status_no_repo",
+      "value": "Kein Git-Repository"
+    },
+    {
+      "name": "sync_status_changes",
+      "value": "%d Änderungen"
+    },
+    {
+      "name": "sync_status_synced",
+      "value": "Synchronisiert"
+    },
+    {
+      "name": "sync_hostkey_mismatch_title",
+      "value": "Warnung: Host-Schlüssel weicht vom gespeicherten Eintrag ab"
+    },
+    {
+      "name": "sync_hostkey_first_type",
+      "value": "Erste Verbindung: Fingerabdruck des %s-Schlüssels des Servers bestätigen"
+    },
+    {
+      "name": "sync_hostkey_first",
+      "value": "Erste Verbindung: Server-Fingerabdruck bestätigen"
+    },
+    {
+      "name": "sync_hostkey_fp_label",
+      "value": "Fingerabdruck des Schlüssels des Hosts %s:%d:"
+    },
+    {
+      "name": "sync_hostkey_new_detail",
+      "value": "Der Server bietet mehrere Host-Schlüssel unterschiedlicher Typen an; dieser ist noch nicht erfasst. Nach der Bestätigung wird er den Vertrauenseinträgen dieses Geräts hinzugefügt (TOFU); Fingerabdruckänderungen desselben Schlüsseltyps werden weiterhin abgelehnt (Schutz vor Man-in-the-middle-Angriffen)."
+    },
+    {
+      "name": "sync_reject",
+      "value": "Ablehnen"
+    },
+    {
+      "name": "sync_trust_retry",
+      "value": "Vertrauen und erneut versuchen"
+    },
+    {
+      "name": "sync_trust_retry_mismatch",
+      "value": "Trotzdem vertrauen und erneut versuchen"
+    },
+    {
+      "name": "sync_pull_btn",
+      "value": "Pull"
+    },
+    {
+      "name": "sync_commit_btn",
+      "value": "Commit"
+    },
+    {
+      "name": "sync_push_btn",
+      "value": "Push"
+    },
+    {
+      "name": "git_log_title",
+      "value": "Commit-Verlauf"
+    },
+    {
+      "name": "git_log_empty",
+      "value": "Noch keine Commits"
+    },
+    {
+      "name": "folder_name_required",
+      "value": "Bitte Ordnernamen eingeben"
+    },
+    {
+      "name": "folder_name_invalid",
+      "value": "Der Ordnername darf .., \\ nicht enthalten und nicht mit . beginnen."
+    },
+    {
+      "name": "folder_created",
+      "value": "Ordner erstellt"
+    },
+    {
+      "name": "folder_create_failed",
+      "value": "Erstellen fehlgeschlagen: %s"
+    },
+    {
+      "name": "move_name_required",
+      "value": "Der Name darf nicht leer sein"
+    },
+    {
+      "name": "move_name_no_slash",
+      "value": "Der Name darf kein / enthalten"
+    },
+    {
+      "name": "move_no_change",
+      "value": "Speicherort und Name unverändert"
+    },
+    {
+      "name": "move_missing_key_toast",
+      "value": "Verschoben; aber der Entschlüsselungsschlüssel fehlt — nicht mit dem Schlüssel des Zielordners neu verschlüsselt"
+    },
+    {
+      "name": "move_saved_default",
+      "value": "Gespeichert"
+    },
+    {
+      "name": "move_read_ciphertext_failed",
+      "value": "Chiffretext konnte nicht gelesen werden"
+    },
+    {
+      "name": "move_decrypt_failed",
+      "value": "Entschlüsselung fehlgeschlagen: %s"
+    },
+    {
+      "name": "move_encrypt_failed",
+      "value": "Verschlüsselung mit dem Schlüssel des Zielordners fehlgeschlagen: %s"
+    },
+    {
+      "name": "move_write_failed",
+      "value": "Schreiben am neuen Speicherort fehlgeschlagen: %s"
+    },
+    {
+      "name": "move_delete_old_failed",
+      "value": "Am neuen Speicherort geschrieben, aber Löschen der ursprünglichen Datei fehlgeschlagen: %s"
+    },
+    {
+      "name": "move_reencrypted_toast",
+      "value": "Verschoben und mit dem Schlüssel des Zielordners neu verschlüsselt"
+    },
+    {
+      "name": "common_password",
+      "value": "Passwort"
+    },
+    {
+      "name": "common_username",
+      "value": "Benutzername"
+    },
+    {
+      "name": "common_email",
+      "value": "E-Mail"
+    },
+    {
+      "name": "common_phone",
+      "value": "Telefonnummer"
+    },
+    {
+      "name": "common_notes",
+      "value": "Notizen"
+    },
+    {
+      "name": "common_extra_content",
+      "value": "Zusätzlicher Inhalt"
+    },
+    {
+      "name": "common_name",
+      "value": "Name"
+    },
+    {
+      "name": "common_save",
+      "value": "Speichern"
+    },
+    {
+      "name": "common_saving",
+      "value": "Wird gespeichert…"
+    },
+    {
+      "name": "common_deleting",
+      "value": "Wird gelöscht…"
+    },
+    {
+      "name": "common_processing",
+      "value": "Wird verarbeitet…"
+    },
+    {
+      "name": "common_enter_passphrase",
+      "value": "Schlüssel-Passwort eingeben"
+    },
+    {
+      "name": "common_passphrase_placeholder",
+      "value": "Schlüssel-Passwort"
+    },
+    {
+      "name": "common_copy_username",
+      "value": "Benutzernamen kopieren"
+    },
+    {
+      "name": "common_copy_email",
+      "value": "E-Mail kopieren"
+    },
+    {
+      "name": "common_copy_phone",
+      "value": "Telefonnummer kopieren"
+    },
+    {
+      "name": "common_copy_notes",
+      "value": "Notizen kopieren"
+    },
+    {
+      "name": "common_copy_extra",
+      "value": "Zusätzlichen Inhalt kopieren"
+    },
+    {
+      "name": "common_copy_password",
+      "value": "Passwort kopieren"
+    },
+    {
+      "name": "common_copy_failed",
+      "value": "Kopieren fehlgeschlagen"
+    },
+    {
+      "name": "common_decrypt_failed",
+      "value": "Entschlüsselung fehlgeschlagen"
+    },
+    {
+      "name": "common_strength_weak",
+      "value": "Schwach"
+    },
+    {
+      "name": "common_strength_fair",
+      "value": "Mittel"
+    },
+    {
+      "name": "common_strength_good",
+      "value": "Stark"
+    },
+    {
+      "name": "common_strength_strong",
+      "value": "Sehr stark"
+    },
+    {
+      "name": "create_edit_title",
+      "value": "Passwort bearbeiten"
+    },
+    {
+      "name": "create_dir_label",
+      "value": "Ordner"
+    },
+    {
+      "name": "create_name_placeholder",
+      "value": "z. B. john@example.com"
+    },
+    {
+      "name": "create_password_placeholder",
+      "value": "Passwort eingeben oder generieren"
+    },
+    {
+      "name": "create_username_placeholder",
+      "value": "Benutzername (optional)"
+    },
+    {
+      "name": "create_email_placeholder",
+      "value": "E-Mail (optional)"
+    },
+    {
+      "name": "create_phone_placeholder",
+      "value": "Telefonnummer (optional)"
+    },
+    {
+      "name": "create_notes_placeholder",
+      "value": "Notizen (optional)"
+    },
+    {
+      "name": "create_extra_placeholder",
+      "value": "Eigene zusätzliche Inhalte (optional)"
+    },
+    {
+      "name": "create_generate",
+      "value": "Passwort generieren"
+    },
+    {
+      "name": "create_gen_upper",
+      "value": "Großbuchstaben (A-Z)"
+    },
+    {
+      "name": "create_gen_lower",
+      "value": "Kleinbuchstaben (a-z)"
+    },
+    {
+      "name": "create_gen_digits",
+      "value": "Ziffern (0-9)"
+    },
+    {
+      "name": "create_gen_symbols",
+      "value": "Sonderzeichen (!@#$)"
+    },
+    {
+      "name": "create_read_fail",
+      "value": "Passwort konnte nicht gelesen werden"
+    },
+    {
+      "name": "create_err_name_required",
+      "value": "Bitte einen Namen eingeben"
+    },
+    {
+      "name": "create_err_password_required",
+      "value": "Bitte ein Passwort eingeben"
+    },
+    {
+      "name": "create_err_name_unsafe",
+      "value": "Der Name darf .., \\ nicht enthalten und nicht mit . beginnen."
+    },
+    {
+      "name": "create_err_dir_conflict",
+      "value": "Ein Ordner mit diesem Namen existiert bereits; bitte einen anderen Namen wählen"
+    },
+    {
+      "name": "create_err_no_key",
+      "value": "Kein PGP-Schlüssel importiert; verschlüsseltes Speichern nicht möglich. Bitte zuerst in den Einstellungen einen Schlüssel importieren"
+    },
+    {
+      "name": "create_err_write_gpgid",
+      "value": ".gpg-id konnte nicht geschrieben werden: %s"
+    },
+    {
+      "name": "create_err_gpgid_unimported",
+      "value": "Die .gpg-id dieses Ordners verweist auf nicht importierte Schlüssel (%s); eine Verschlüsselung für alle Empfänger ist nicht möglich. Importiere diese Schlüssel zuerst oder passe sie über „Verschlüsselungsschlüssel des Ordners ändern“ an."
+    },
+    {
+      "name": "create_err_keys_expired",
+      "value": "Alle Verschlüsselungsschlüssel dieses Ordners sind abgelaufen; ein neues Passwort kann nicht erstellt werden (neue Schlüssel importieren oder aktualisieren)"
+    },
+    {
+      "name": "detail_decrypting",
+      "value": "Wird entschlüsselt…"
+    },
+    {
+      "name": "detail_passphrase_hint",
+      "value": "Dieser Schlüssel ist passwortgeschützt; gib das Passwort zum Entschlüsseln ein"
+    },
+    {
+      "name": "detail_delete_password",
+      "value": "Passwort löschen"
+    },
+    {
+      "name": "detail_delete_confirm",
+      "value": "„%s“ löschen? Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "detail_err_file_missing",
+      "value": "Die Passwortdatei existiert nicht; sie wurde vielleicht verschoben oder gelöscht"
+    },
+    {
+      "name": "detail_err_passphrase_required",
+      "value": "Zum Entschlüsseln wird das Passwort benötigt; gib das Schlüssel-Passwort ein"
+    },
+    {
+      "name": "detail_err_unlock_failed",
+      "value": "Falsches Schlüssel-Passwort; Entschlüsselung fehlgeschlagen"
+    },
+    {
+      "name": "detail_err_cancelled",
+      "value": "Entschlüsselung abgebrochen"
+    },
+    {
+      "name": "detail_err_delete_failed",
+      "value": "Löschen fehlgeschlagen"
+    },
+    {
+      "name": "detail_copied_password",
+      "value": "Passwort kopiert"
+    },
+    {
+      "name": "detail_copied_username",
+      "value": "Benutzername kopiert"
+    },
+    {
+      "name": "detail_copied_email",
+      "value": "E-Mail kopiert"
+    },
+    {
+      "name": "detail_copied_phone",
+      "value": "Telefonnummer kopiert"
+    },
+    {
+      "name": "detail_copied_notes",
+      "value": "Notizen kopiert"
+    },
+    {
+      "name": "detail_copied_extra",
+      "value": "Zusätzlicher Inhalt kopiert"
+    },
+    {
+      "name": "detail_copied_all",
+      "value": "Alle Inhalte kopiert"
+    },
+    {
+      "name": "move_title",
+      "value": "Verschieben / Umbenennen"
+    },
+    {
+      "name": "move_old_path",
+      "value": "Aktueller Pfad"
+    },
+    {
+      "name": "move_name_placeholder",
+      "value": "Neuen Namen eingeben"
+    },
+    {
+      "name": "move_target_dir",
+      "value": "Zielordner"
+    },
+    {
+      "name": "move_unlock_hint_ids",
+      "value": "Der Zielordner verwendet einen anderen Schlüssel; zuerst mit dem ursprünglichen Schlüssel entschlüsseln. PGP-ID: %s"
+    },
+    {
+      "name": "move_unlock_hint",
+      "value": "Der Zielordner verwendet einen anderen Schlüssel; zuerst mit dem ursprünglichen Schlüssel entschlüsseln, dann neu verschlüsseln"
+    },
+    {
+      "name": "passgen_tap_hint",
+      "value": "Tippe auf die Schaltfläche unten, um ein Passwort zu generieren"
+    },
+    {
+      "name": "passgen_entropy",
+      "value": "Entropie"
+    },
+    {
+      "name": "passgen_entropy_estimate",
+      "value": "Geschätzte Entropie: %d Bit — %s"
+    },
+    {
+      "name": "passgen_entropy_hint",
+      "value": "Die Entropieschätzung erscheint nach dem Generieren"
+    },
+    {
+      "name": "passgen_generate",
+      "value": "Generieren"
+    },
+    {
+      "name": "passgen_copied",
+      "value": "Kopiert"
+    },
+    {
+      "name": "passgen_copy",
+      "value": "Kopieren"
+    },
+    {
+      "name": "passgen_mode_random",
+      "value": "Zufälliges Passwort"
+    },
+    {
+      "name": "passgen_mode_diceware",
+      "value": "Passphrase"
+    },
+    {
+      "name": "passgen_length",
+      "value": "Länge"
+    },
+    {
+      "name": "passgen_upper",
+      "value": "Großbuchstaben A-Z"
+    },
+    {
+      "name": "passgen_lower",
+      "value": "Kleinbuchstaben a-z"
+    },
+    {
+      "name": "passgen_digits",
+      "value": "Ziffern 0-9"
+    },
+    {
+      "name": "passgen_symbols",
+      "value": "Sonderzeichen !@#$"
+    },
+    {
+      "name": "passgen_exclude_ambiguous",
+      "value": "Mehrdeutige Zeichen ausschließen (0/O, 1/l)"
+    },
+    {
+      "name": "passgen_word_count",
+      "value": "Wortanzahl"
+    },
+    {
+      "name": "passgen_separator",
+      "value": "Trennzeichen"
+    },
+    {
+      "name": "passgen_capitalize",
+      "value": "Wörter großschreiben"
+    },
+    {
+      "name": "passgen_insert_digits",
+      "value": "Ziffern zwischen Wörtern einfügen"
+    },
+    {
+      "name": "passgen_copied_clipboard",
+      "value": "In die Zwischenablage kopiert"
+    },
+    {
+      "name": "folder_create_title",
+      "value": "Neuer Ordner"
+    },
+    {
+      "name": "folder_name_label",
+      "value": "Ordnername"
+    },
+    {
+      "name": "folder_name_placeholder",
+      "value": "Ordnernamen eingeben"
+    },
+    {
+      "name": "folder_key_label",
+      "value": "Verschlüsselungsschlüssel (optional; überschreibt die Schlüssel des übergeordneten Ordners)"
+    },
+    {
+      "name": "folder_no_keys",
+      "value": "Noch keine PGP-Schlüssel importiert; der Schlüssel des übergeordneten Ordners wird verwendet"
+    },
+    {
+      "name": "folder_create_btn",
+      "value": "Ordner erstellen"
+    },
+    {
+      "name": "autofill_title",
+      "value": "AutoFill-Vorschläge"
+    },
+    {
+      "name": "autofill_pick_for",
+      "value": "Zugangsdaten für %s auswählen"
+    },
+    {
+      "name": "autofill_matching",
+      "value": "Abgleich läuft…"
+    },
+    {
+      "name": "autofill_no_match",
+      "value": "Keine passenden Passwörter"
+    },
+    {
+      "name": "autofill_no_match_hint",
+      "value": "Du kannst auf dem Hauptbildschirm suchen und manuell kopieren"
+    },
+    {
+      "name": "autofill_unlocked_prompt",
+      "value": "Entsperrt. Aktion auswählen"
+    },
+    {
+      "name": "autofill_err_load",
+      "value": "Kandidaten konnten nicht geladen werden"
+    },
+    {
+      "name": "autofill_fill_applied",
+      "value": "%d Felder automatisch ausgefüllt"
+    },
+    {
+      "name": "autofill_fill_failed",
+      "value": "AutoFill fehlgeschlagen; kopiere stattdessen manuell"
+    },
+    {
+      "name": "onboarding_hostkey_fp_line",
+      "value": "Fingerabdruck des Schlüssels des Hosts %s:%d:"
+    },
+    {
+      "name": "onboarding_trust_clone",
+      "value": "Vertrauen und klonen"
+    },
+    {
+      "name": "onboarding_trust_clone_mismatch",
+      "value": "Trotzdem vertrauen und klonen"
+    },
+    {
+      "name": "onboarding_local_not_empty",
+      "value": "Lokaler Ordner ist nicht leer"
+    },
+    {
+      "name": "onboarding_local_not_empty_msg",
+      "value": "Zum Klonen muss der Zielordner leer sein, doch der aktuelle Ordner enthält bereits Dateien (möglicherweise Reste eines früheren Klons oder ein altes Repository).\n\nWenn du fortfährst, wird der gesamte Inhalt dieses Ordners gelöscht und erneut aus dem Remote-Repository geklont. Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "onboarding_delete_clone",
+      "value": "Löschen und klonen"
+    },
+    {
+      "name": "onboarding_welcome_title",
+      "value": "Willkommen bei HarmonyPasswordStore"
+    },
+    {
+      "name": "onboarding_welcome_desc",
+      "value": "Ein Passwort-Manager, vollständig kompatibel mit dem pass-Kommandozeilenwerkzeug. Passwörter werden als GPG-verschlüsselte Dateien gespeichert und lassen sich per Git geräteübergreifend synchronisieren."
+    },
+    {
+      "name": "onboarding_feature_pass",
+      "value": "· Standard-Pass-Ordnerstruktur und .gpg-verschlüsselte Dateien"
+    },
+    {
+      "name": "onboarding_feature_huks",
+      "value": "· PGP-Verschlüsselung, Schlüssel sicher von HUKS verwaltet"
+    },
+    {
+      "name": "onboarding_feature_git",
+      "value": "· Git-Synchronisierung über HTTPS und SSH"
+    },
+    {
+      "name": "onboarding_feature_passgen",
+      "value": "· Integrierter Passwort-Generator und Passphrasen"
+    },
+    {
+      "name": "onboarding_repo_title",
+      "value": "Passwortspeicher einrichten"
+    },
+    {
+      "name": "onboarding_repo_desc",
+      "value": "Lege einen neuen leeren Passwortspeicher an oder klone einen bestehenden aus einem Remote-Git-Repository."
+    },
+    {
+      "name": "onboarding_mode_new",
+      "value": "Neuer Speicher"
+    },
+    {
+      "name": "onboarding_mode_clone",
+      "value": "Remote klonen"
+    },
+    {
+      "name": "onboarding_url_placeholder",
+      "value": "git@host:benutzer/repo.git"
+    },
+    {
+      "name": "onboarding_ssh_not_configured",
+      "value": "Kein SSH-Schlüssel konfiguriert"
+    },
+    {
+      "name": "onboarding_ssh_configure",
+      "value": "SSH-Schlüssel konfigurieren"
+    },
+    {
+      "name": "onboarding_pgp_title",
+      "value": "PGP-Schlüssel einrichten"
+    },
+    {
+      "name": "onboarding_pgp_desc",
+      "value": "Tippe auf „Durchsuchen“, um die PGP-Schlüsselverwaltung zu öffnen und dort Schlüssel zu erstellen oder zu importieren (.asc-/.pgp-Dateien oder eingefügter Text). Private Schlüssel werden sicher vom System-HUKS verwaltet und nie im Klartext gespeichert."
+    },
+    {
+      "name": "onboarding_pgp_not_set",
+      "value": "Noch kein PGP-Schlüssel eingerichtet"
+    },
+    {
+      "name": "onboarding_browse",
+      "value": "Durchsuchen"
+    },
+    {
+      "name": "onboarding_finish_title",
+      "value": "Einrichtung abgeschlossen"
+    },
+    {
+      "name": "onboarding_finish_desc",
+      "value": "Alles bereit! Du kannst jetzt mit der Verwaltung deiner Passwörter beginnen."
+    },
+    {
+      "name": "onboarding_repo_done",
+      "value": "✓ Passwortspeicher initialisiert"
+    },
+    {
+      "name": "onboarding_repo_todo",
+      "value": "· Passwortspeicher nicht initialisiert (kann später in den Einstellungen erledigt werden)"
+    },
+    {
+      "name": "onboarding_key_done",
+      "value": "✓ PGP-Schlüssel importiert"
+    },
+    {
+      "name": "onboarding_key_todo",
+      "value": "· PGP-Schlüssel nicht importiert (kann später in den Einstellungen erledigt werden)"
+    },
+    {
+      "name": "onboarding_setup_title",
+      "value": "Ersteinrichtung"
+    },
+    {
+      "name": "onboarding_skip",
+      "value": "Überspringen"
+    },
+    {
+      "name": "onboarding_prev",
+      "value": "Zurück"
+    },
+    {
+      "name": "onboarding_init_repo",
+      "value": "Initialisieren"
+    },
+    {
+      "name": "onboarding_next",
+      "value": "Weiter"
+    },
+    {
+      "name": "onboarding_done",
+      "value": "Fertig"
+    },
+    {
+      "name": "onboarding_overlay_checkout",
+      "value": "Dateien werden ausgecheckt…"
+    },
+    {
+      "name": "onboarding_overlay_cloning",
+      "value": "Remote-Repository wird geklont…"
+    },
+    {
+      "name": "onboarding_progress_init",
+      "value": "Lokales Repository wird initialisiert…"
+    },
+    {
+      "name": "onboarding_err_url_required",
+      "value": "Bitte die Remote-Repository-Adresse eingeben"
+    },
+    {
+      "name": "onboarding_err_ssh_only",
+      "value": "Die Ersteinrichtung unterstützt nur SSH-Klonen. Verwende git@host:benutzer/repo.git oder ssh://git@host[:port]/pfad (für HTTPS-Repositorys: Ersteinrichtung abschließen, dann Benutzername und Zugriffstoken unter „Repository-Verwaltung → Git-Konfiguration“ hinterlegen)"
+    },
+    {
+      "name": "onboarding_progress_clone",
+      "value": "Remote-Repository wird geklont…"
+    },
+    {
+      "name": "onboarding_err_save_hostkey",
+      "value": "Speichern des Host-Fingerabdrucks fehlgeschlagen, bitte erneut versuchen"
+    },
+    {
+      "name": "about_title",
+      "value": "Über"
+    },
+    {
+      "name": "about_app_name",
+      "value": "App-Name"
+    },
+    {
+      "name": "about_version",
+      "value": "Version"
+    },
+    {
+      "name": "about_license",
+      "value": "Lizenz"
+    },
+    {
+      "name": "about_target_os",
+      "value": "Zielsystem"
+    },
+    {
+      "name": "about_intro_title",
+      "value": "Über das Projekt"
+    },
+    {
+      "name": "about_intro_body",
+      "value": "HarmonyPasswordStore ist eine HarmonyOS-Implementierung von password-store (pass) und kompatibel mit dem standardmäßigen pass-Speicherformat mit GPG-Verschlüsselung. Alle Passwörter werden lokal verschlüsselt als .gpg-Dateien gespeichert, private Schlüssel werden über HUKS verwaltet; Git-Synchronisierung über SSH und HTTPS wird unterstützt."
+    },
+    {
+      "name": "about_deps_title",
+      "value": "Open-Source-Abhängigkeiten"
+    },
+    {
+      "name": "about_deps_body",
+      "value": "• libgit2 — Git-Repository-Operationen (MPL-2.0)\n• pgp / rpgp — OpenPGP-Verschlüsselung (MIT oder Apache-2.0)\n• russh — SSH-Protokoll (MIT)\n• mbedTLS — TLS-verschlüsselter Kanal (Apache-2.0)\n• ssh-key — OpenSSH-Schlüsselformat (MIT oder Apache-2.0)\n• Die vollständige Abhängigkeitsliste findet sich in Cargo.toml und CMakeLists.txt"
+    },
+    {
+      "name": "about_source_title",
+      "value": "Quellcode"
+    },
+    {
+      "name": "about_source_body",
+      "value": "Dieses Projekt ist vollständig quelloffen; Reviews und Beiträge sind willkommen:\n%s"
+    },
+    {
+      "name": "privacy_title",
+      "value": "Datenschutzerklärung"
+    },
+    {
+      "name": "privacy_doc_title",
+      "value": "Datenschutzerklärung von HarmonyPasswordStore"
+    },
+    {
+      "name": "privacy_updated",
+      "value": "Stand: 16. September 2026"
+    },
+    {
+      "name": "privacy_s1_title",
+      "value": "Überblick"
+    },
+    {
+      "name": "privacy_s1_body",
+      "value": "HarmonyPasswordStore ist ein Open-Source-Passwort-Manager, kompatibel mit dem standardmäßigen pass-Speicherformat. Die App folgt dem Prinzip „lokal zuerst, Datenschutz über alles“: Ihre Passwortdaten werden stets verschlüsselt auf dem lokalen Gerät gespeichert und nie an einen Drittanbieter-Server übertragen."
+    },
+    {
+      "name": "privacy_s2_title",
+      "value": "Datenspeicherung"
+    },
+    {
+      "name": "privacy_s2_body",
+      "value": "Alle Passworteinträge werden als GPG-verschlüsselte Dateien (.gpg) im lokalen Dateisystem gespeichert; die Verschlüsselungsschlüssel liegen allein bei Ihnen. PGP/SSH-private Schlüssel werden über HarmonyOS HUKS (einheitliche Schlüsselverwaltung) verwaltet und niemals im Klartext abgelegt. Entschlüsselter Klartext existiert nur im Arbeitsspeicher; vertrauliche Caches werden automatisch gelöscht, wenn die App in den Hintergrund wechselt."
+    },
+    {
+      "name": "privacy_s3_title",
+      "value": "Datensynchronisierung"
+    },
+    {
+      "name": "privacy_s3_body",
+      "value": "Für die Multi-Geräte-Synchronisierung kann der integrierte Git-Support den Passwortspeicher auf Ihren eigenen Git-Server pushen (GitHub/Gitee/selbst gehostet). Synchronisierungskanäle unterstützen HTTPS (verschlüsselt über mbedTLS) und SSH (verschlüsselt über russh); Anmeldeinformationen (Token/SSH-Schlüssel) werden ausschließlich lokal gespeichert und passieren keinen Zwischenserver."
+    },
+    {
+      "name": "privacy_s4_title",
+      "value": "Biometrisches Entsperren"
+    },
+    {
+      "name": "privacy_s4_body",
+      "value": "Die App-Sperre unterstützt ausschließlich Biometrie (Fingerabdruck/Gesicht): Die Entsperrung verifiziert die Identität lokal auf dem Gerät, biometrische Daten werden vom Sicherheitsmodul des Systems verwaltet, die App kann nicht auf rohe biometrische Informationen zugreifen und speichert keine PIN-/Passwort-Hashes. Die Begrenzung fehlgeschlagener Versuche obliegt dem System."
+    },
+    {
+      "name": "privacy_s5_title",
+      "value": "Zwischenablage"
+    },
+    {
+      "name": "privacy_s5_body",
+      "value": "Nach dem Kopieren eines Passworts in die Zwischenablage leert die App diese automatisch nach einer konfigurierbaren Zeit (standardmäßig 30 Sekunden), damit andere Apps sie nicht auslesen können."
+    },
+    {
+      "name": "privacy_s6_title",
+      "value": "Protokolle"
+    },
+    {
+      "name": "privacy_s6_body",
+      "value": "App-Protokolle (hilog) zeichnen niemals Passwörter, Schlüssel oder entschlüsselten Klartext auf; sie enthalten nur Betriebsstatus und Dateipfade zur Fehlerdiagnose."
+    },
+    {
+      "name": "privacy_s7_title",
+      "value": "Nicht erhobene Daten"
+    },
+    {
+      "name": "privacy_s7_body",
+      "value": "Diese App erhebt keine personenbezogenen Daten (PII), bindet keine Analyse- oder Werbe-SDKs ein und lädt keine Nutzerdaten hoch."
+    },
+    {
+      "name": "privacy_s8_title",
+      "value": "Open-Source-Lizenz"
+    },
+    {
+      "name": "privacy_s8_body",
+      "value": "Diese App ist unter der GPL-3.0-Lizenz quelloffen; der Quellcode kann im GitHub-Repository eingesehen werden:\nhttps://github.com/gmg137/HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_verifying",
+      "value": "Wird überprüft…"
+    },
+    {
+      "name": "lock_touch_retry",
+      "value": "Zum erneuten Prüfen auf das Symbol tippen"
+    },
+    {
+      "name": "lock_title",
+      "value": "Entsperren"
+    },
+    {
+      "name": "common_trust_connect",
+      "value": "Vertrauen und verbinden"
+    },
+    {
+      "name": "settings_autosync_no_remote",
+      "value": "Keine Remote-Repository-Adresse konfiguriert; bitte zuerst in der „Git-Konfiguration“ eintragen"
+    },
+    {
+      "name": "settings_autosync_not_cloned",
+      "value": "Das Remote-Repository wurde lokal noch nicht geklont; bitte zuerst in der „Repository-Verwaltung“ klonen"
+    },
+    {
+      "name": "lock_type_fingerprint",
+      "value": "Fingerabdruck"
+    },
+    {
+      "name": "lock_type_face",
+      "value": "Gesicht"
+    },
+    {
+      "name": "lock_reason_not_enrolled",
+      "value": "Das Gerät unterstützt Biometrie, es ist jedoch noch kein Fingerabdruck oder Gesicht in den Systemeinstellungen erfasst. Bitte zuerst registrieren"
+    },
+    {
+      "name": "lock_reason_unsupported",
+      "value": "Das Gerät unterstützt keine Biometrie"
+    },
+    {
+      "name": "lock_err_unavailable",
+      "value": "Biometrie nicht verfügbar: nicht unterstützt oder nicht erfasst"
+    },
+    {
+      "name": "lock_auth_dialog_title",
+      "value": "HarmonyPasswordStore entsperren"
+    },
+    {
+      "name": "lock_err_timeout",
+      "value": "Zeitüberschreitung bei der Authentifizierung"
+    },
+    {
+      "name": "lock_err_cancelled",
+      "value": "Authentifizierung abgebrochen"
+    },
+    {
+      "name": "lock_auth_failed_code",
+      "value": "Authentifizierung fehlgeschlagen (%d)"
+    },
+    {
+      "name": "lock_err_start_failed",
+      "value": "Biometrische Authentifizierung kann nicht gestartet werden"
+    },
+    {
+      "name": "common_import",
+      "value": "Importieren"
+    },
+    {
+      "name": "common_import_failed",
+      "value": "Import fehlgeschlagen"
+    },
+    {
+      "name": "common_ok",
+      "value": "OK"
+    },
+    {
+      "name": "common_delete_key",
+      "value": "Schlüssel löschen"
+    },
+    {
+      "name": "common_file_read_failed",
+      "value": "Datei konnte nicht gelesen werden: %s"
+    },
+    {
+      "name": "common_copy",
+      "value": "Kopieren"
+    },
+    {
+      "name": "pgp_import_text",
+      "value": "Schlüssel aus Text importieren"
+    },
+    {
+      "name": "pgp_import_from_file",
+      "value": "Schlüssel aus Datei importieren"
+    },
+    {
+      "name": "pgp_create_new",
+      "value": "Neuen Schlüssel erstellen"
+    },
+    {
+      "name": "pgp_passphrase_optional",
+      "value": "Schlüssel-Passwort (optional)"
+    },
+    {
+      "name": "pgp_gen_eddsa_rec",
+      "value": "EdDSA (empfohlen)"
+    },
+    {
+      "name": "pgp_userid_placeholder",
+      "value": "User-ID (z. B. Name <email@example.com>)"
+    },
+    {
+      "name": "pgp_passphrase_min6",
+      "value": "Schlüssel-Passwort (optional, mindestens 6 Zeichen)"
+    },
+    {
+      "name": "pgp_create_btn",
+      "value": "Erstellen"
+    },
+    {
+      "name": "pgp_set_default",
+      "value": "Als Standard festlegen"
+    },
+    {
+      "name": "pgp_edit_key",
+      "value": "Schlüssel bearbeiten"
+    },
+    {
+      "name": "pgp_export_private",
+      "value": "Privaten Schlüssel exportieren"
+    },
+    {
+      "name": "pgp_export_public",
+      "value": "Öffentlichen Schlüssel exportieren"
+    },
+    {
+      "name": "pgp_chpw_title",
+      "value": "Schlüssel-Passwort ändern"
+    },
+    {
+      "name": "pgp_chpw_old_ph",
+      "value": "Aktuelles Schlüssel-Passwort"
+    },
+    {
+      "name": "pgp_chpw_new_ph",
+      "value": "Neues Passwort (leer lassen, um es zu entfernen)"
+    },
+    {
+      "name": "pgp_chpw_confirm",
+      "value": "Änderung bestätigen"
+    },
+    {
+      "name": "pgp_import_limited_title",
+      "value": "Importiert, mit Einschränkungen"
+    },
+    {
+      "name": "pgp_import_failed_title",
+      "value": "Schlüssel konnte nicht importiert werden"
+    },
+    {
+      "name": "pgp_export_private_ok",
+      "value": "Privater Schlüssel als .asc-Datei gespeichert"
+    },
+    {
+      "name": "pgp_export_public_ok",
+      "value": "Öffentlicher Schlüssel als .asc-Datei gespeichert"
+    },
+    {
+      "name": "pgp_delete_key_msg",
+      "value": "„%s“ löschen? Mit ihm verschlüsselte Passwörter können dann nicht mehr entschlüsselt werden; dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "pgp_root_switch_title",
+      "value": "Verschlüsselungsschlüssel des Passwortspeicher-Stammordners wechseln"
+    },
+    {
+      "name": "pgp_root_switch_msg_needs",
+      "value": "Der Passwortspeicher-Stammordner ist aktuell mit „%s“ verschlüsselt. Auf „%s“ wechseln und die %d Einträge im Stammordner neu verschlüsseln?"
+    },
+    {
+      "name": "pgp_root_switch_msg_none",
+      "value": "Der Passwortspeicher-Stammordner ist aktuell mit „%s“ verschlüsselt. Auf „%s“ wechseln? (Im Stammordner gibt es keine zu neu verschlüsselnden Einträge.)"
+    },
+    {
+      "name": "pgp_root_switch_skip_warn",
+      "value": "Hinweis: %d Einträge werden übersprungen, weil der passende private Schlüssel fehlt."
+    },
+    {
+      "name": "pgp_root_switch_only_default",
+      "value": "Nur als Standard setzen"
+    },
+    {
+      "name": "pgp_root_switch_both",
+      "value": "Ebenfalls wechseln"
+    },
+    {
+      "name": "pgp_root_switched",
+      "value": "Verschlüsselungsschlüssel des Stammordners gewechselt"
+    },
+    {
+      "name": "pgp_root_reencrypted",
+      "value": "Schlüssel des Stammordners gewechselt; %d Einträge neu verschlüsselt"
+    },
+    {
+      "name": "pgp_rootkey_title",
+      "value": "Passwort des alten Schlüssels eingeben"
+    },
+    {
+      "name": "pgp_rootkey_hint",
+      "value": "Zum Neuverschlüsseln müssen diese Einträge zuerst mit dem alten Schlüssel entsperrt werden"
+    },
+    {
+      "name": "pgp_rootkey_ph",
+      "value": "Altes Schlüssel-Passwort"
+    },
+    {
+      "name": "pgp_rootkey_start",
+      "value": "Neuverschlüsselung starten"
+    },
+    {
+      "name": "pgp_algo_unknown",
+      "value": "Unbekannter Algorithmus"
+    },
+    {
+      "name": "pgp_tag_default",
+      "value": "Standard"
+    },
+    {
+      "name": "pgp_tag_expired",
+      "value": "Abgelaufen"
+    },
+    {
+      "name": "pgp_tag_secret",
+      "value": "Privat"
+    },
+    {
+      "name": "pgp_tag_public",
+      "value": "Öffentlich"
+    },
+    {
+      "name": "pgp_empty_title",
+      "value": "Noch keine Schlüssel importiert"
+    },
+    {
+      "name": "pgp_empty_hint",
+      "value": "Tippe unten rechts auf +, um Schlüssel zu importieren oder zu erstellen"
+    },
+    {
+      "name": "pgp_load_failed",
+      "value": "Schlüsselliste konnte nicht geladen werden"
+    },
+    {
+      "name": "pgp_err_userid_required",
+      "value": "Bitte eine User-ID eingeben (z. B. Name <email@example.com>)"
+    },
+    {
+      "name": "pgp_err_passphrase_short",
+      "value": "Das Passwort muss mindestens 6 Zeichen haben (oder leer lassen, um kein Passwort zu setzen)"
+    },
+    {
+      "name": "pgp_generated",
+      "value": "Schlüssel generiert"
+    },
+    {
+      "name": "pgp_err_paste_required",
+      "value": "Bitte einen ASCII-armored Schlüsseltext einfügen"
+    },
+    {
+      "name": "pgp_imported_with_limit",
+      "value": "Schlüssel importiert (mit Einschränkungen)"
+    },
+    {
+      "name": "pgp_imported_ok",
+      "value": "Schlüssel importiert"
+    },
+    {
+      "name": "pgp_duplicate_key",
+      "value": "Dieser Schlüssel existiert auf diesem Gerät bereits; ein erneuter Import ist nicht nötig."
+    },
+    {
+      "name": "pgp_root_switch_failed",
+      "value": "Wechsel des Stammordner-Schlüssels fehlgeschlagen: %s"
+    },
+    {
+      "name": "pgp_file_empty",
+      "value": "Die Datei ist leer; es wurde nichts gelesen"
+    },
+    {
+      "name": "pgp_file_not_pgp",
+      "value": "Diese Datei ist keine PGP-Schlüsseldatei (weder Armored-Text noch binäre OpenPGP-Daten)"
+    },
+    {
+      "name": "pgp_set_default_ok",
+      "value": "Als Standard-Verschlüsselungsschlüssel festgelegt"
+    },
+    {
+      "name": "pgp_deleted",
+      "value": "Schlüssel gelöscht"
+    },
+    {
+      "name": "pgp_pw_changed",
+      "value": "Schlüssel-Passwort geändert"
+    },
+    {
+      "name": "pgp_export_read_private_failed",
+      "value": "Privater Schlüssel konnte nicht gelesen werden"
+    },
+    {
+      "name": "pgp_export_pub_failed",
+      "value": "Export des öffentlichen Schlüssels fehlgeschlagen"
+    },
+    {
+      "name": "pgp_export_save_failed",
+      "value": "Speichern fehlgeschlagen: %s"
+    },
+    {
+      "name": "pgp_chpw_failed_retry",
+      "value": "Änderung fehlgeschlagen, bitte erneut versuchen"
+    },
+    {
+      "name": "pgp_chpw_wrong_old",
+      "value": "Aktuelles Schlüssel-Passwort ist falsch, bitte erneut versuchen"
+    },
+    {
+      "name": "pgp_chpw_failed",
+      "value": "Änderung fehlgeschlagen: %s"
+    },
+    {
+      "name": "ssh_replace_confirm_title",
+      "value": "Vorhandenen SSH-Schlüssel ersetzen?"
+    },
+    {
+      "name": "ssh_replace_confirm_msg",
+      "value": "Du kannst den Zugriff auf deine Server verlieren"
+    },
+    {
+      "name": "ssh_replace_btn",
+      "value": "Ersetzen"
+    },
+    {
+      "name": "ssh_import_hint",
+      "value": "Bereite die private Schlüsseldatei am Computer vor und übertrage sie auf das Telefon:\n· Vorhandener Schlüssel: der private Schlüssel ist ~/.ssh/id_ed25519 (oder id_rsa)\n· Neu: ssh-keygen -t ed25519 -C \"your@email.com\"\nOpenSSH / PKCS8 / RSA PEM (auch verschlüsselte Schlüssel) werden unterstützt."
+    },
+    {
+      "name": "ssh_encrypted_key_title",
+      "value": "Privater Schlüssel ist verschlüsselt"
+    },
+    {
+      "name": "ssh_encrypted_key_msg",
+      "value": "Dieser private Schlüssel ist verschlüsselt; gib das Passwort vor dem Import unter „Schlüssel-Passwort“ ein."
+    },
+    {
+      "name": "ssh_generate_new",
+      "value": "Neuen Schlüssel generieren"
+    },
+    {
+      "name": "ssh_import_key",
+      "value": "Schlüssel importieren"
+    },
+    {
+      "name": "ssh_comment_ph",
+      "value": "Kommentar (optional, meist die E-Mail-Adresse)"
+    },
+    {
+      "name": "ssh_generate_btn",
+      "value": "Generieren"
+    },
+    {
+      "name": "ssh_pick_key_file",
+      "value": "Private Schlüsseldatei auswählen"
+    },
+    {
+      "name": "ssh_passphrase_ph",
+      "value": "Schlüssel-Passwort (leer lassen, wenn kein Passwort gesetzt ist)"
+    },
+    {
+      "name": "ssh_copy_pub",
+      "value": "Öffentlichen Schlüssel kopieren"
+    },
+    {
+      "name": "ssh_empty_title",
+      "value": "Noch kein SSH-Schlüssel vorhanden"
+    },
+    {
+      "name": "ssh_empty_hint",
+      "value": "Tippe unten rechts auf +, um einen Schlüssel zu erstellen oder zu importieren"
+    },
+    {
+      "name": "ssh_load_failed",
+      "value": "Schlüssel konnte nicht geladen werden"
+    },
+    {
+      "name": "ssh_gen_failed",
+      "value": "Schlüsselerzeugung fehlgeschlagen"
+    },
+    {
+      "name": "ssh_replaced",
+      "value": "SSH-Schlüssel ersetzt"
+    },
+    {
+      "name": "ssh_generated",
+      "value": "SSH-Schlüssel generiert"
+    },
+    {
+      "name": "ssh_imported",
+      "value": "SSH-Schlüssel importiert"
+    },
+    {
+      "name": "ssh_file_empty",
+      "value": "Die ausgewählte Datei ist leer"
+    },
+    {
+      "name": "ssh_err_pick_first",
+      "value": "Bitte zuerst eine private Schlüsseldatei auswählen"
+    },
+    {
+      "name": "ssh_import_private_failed",
+      "value": "Import des privaten Schlüssels fehlgeschlagen"
+    },
+    {
+      "name": "ssh_pub_missing",
+      "value": "Öffentlicher Schlüssel existiert nicht"
+    },
+    {
+      "name": "ssh_pub_copied",
+      "value": "Öffentlicher Schlüssel in die Zwischenablage kopiert"
+    },
+    {
+      "name": "ssh_deleted",
+      "value": "SSH-Schlüssel gelöscht"
+    },
+    {
+      "name": "gitcfg_saved_title",
+      "value": "Konfiguration gespeichert"
+    },
+    {
+      "name": "gitcfg_clone_after_save_msg",
+      "value": "Remote-Repository jetzt klonen?\n%s"
+    },
+    {
+      "name": "gitcfg_clone_btn",
+      "value": "Klonen"
+    },
+    {
+      "name": "gitcfg_needs_clean_title",
+      "value": "Lokaler Ordner ist nicht leer"
+    },
+    {
+      "name": "gitcfg_needs_clean_msg",
+      "value": "Zum Klonen muss der lokale Ordner leer sein. Im aktuellen Ordner befinden sich möglicherweise ein altes Repository oder Restdateien; der lokale Repository-Ordner und alle Passwortdateien darin müssen zuerst gelöscht werden. Fortfahren?"
+    },
+    {
+      "name": "gitcfg_delete_and_clone",
+      "value": "Löschen und klonen"
+    },
+    {
+      "name": "gitcfg_hostkey_fp_typed",
+      "value": "Fingerabdruck des Schlüssels des Hosts %s:%d (%s):"
+    },
+    {
+      "name": "gitcfg_hostkey_mismatch_explain",
+      "value": "Für diesen Host existiert bereits ein Vertrauenseintrag, doch der Fingerabdruck dieses Schlüsseltyps weicht ab: Der Server hat möglicherweise den Schlüssel gewechselt, oder es ist ein Man-in-the-middle-Angriff. Stimme dich mit dem Serveradministrator ab, bevor du entscheidest; nach der Bestätigung wird der Eintrag für diesen Schlüsseltyp überschrieben."
+    },
+    {
+      "name": "gitcfg_hostkey_trust_anyway",
+      "value": "Trotzdem vertrauen"
+    },
+    {
+      "name": "gitcfg_hostkey_trust_connect",
+      "value": "Vertrauen und verbinden"
+    },
+    {
+      "name": "gitcfg_clone_done_toast",
+      "value": "Klonen abgeschlossen; die Passwortliste wurde aktualisiert"
+    },
+    {
+      "name": "gitcfg_pick_ssh_key",
+      "value": "SSH-Schlüssel auswählen"
+    },
+    {
+      "name": "gitcfg_section_remote",
+      "value": "Remote-Repository"
+    },
+    {
+      "name": "gitcfg_auth_mode",
+      "value": "Authentifizierung"
+    },
+    {
+      "name": "gitcfg_auth_ssh",
+      "value": "SSH-Schlüssel"
+    },
+    {
+      "name": "gitcfg_auth_ssh_tab",
+      "value": "SSH"
+    },
+    {
+      "name": "gitcfg_label_url",
+      "value": "Remote-Adresse"
+    },
+    {
+      "name": "gitcfg_ph_username",
+      "value": "Benutzername / E-Mail"
+    },
+    {
+      "name": "gitcfg_ph_password",
+      "value": "Passwort / Zugriffstoken"
+    },
+    {
+      "name": "gitcfg_token_hint",
+      "value": "Plattformen wie Gitee/GitHub benötigen ein „persönliches Zugriffstoken“ statt des Login-Passworts"
+    },
+    {
+      "name": "gitcfg_select_ssh_key",
+      "value": "Bitte einen SSH-Schlüssel auswählen"
+    },
+    {
+      "name": "gitcfg_no_keys",
+      "value": "Noch keine Schlüssel"
+    },
+    {
+      "name": "gitcfg_go_create",
+      "value": "Erstellen"
+    },
+    {
+      "name": "gitcfg_label_ssh_port",
+      "value": "SSH-Port"
+    },
+    {
+      "name": "gitcfg_ph_ssh_port",
+      "value": "Standard 22"
+    },
+    {
+      "name": "gitcfg_label_key_passphrase",
+      "value": "Schlüssel-Passwort"
+    },
+    {
+      "name": "gitcfg_ph_key_passphrase",
+      "value": "Leer lassen, wenn der Schlüssel unverschlüsselt ist"
+    },
+    {
+      "name": "gitcfg_section_identity",
+      "value": "Commit-Identität"
+    },
+    {
+      "name": "gitcfg_label_name",
+      "value": "Name"
+    },
+    {
+      "name": "gitcfg_ph_name",
+      "value": "Git-Committer-Name"
+    },
+    {
+      "name": "gitcfg_ph_email",
+      "value": "Git-Committer-E-Mail"
+    },
+    {
+      "name": "gitcfg_section_network",
+      "value": "Netzwerk"
+    },
+    {
+      "name": "gitcfg_label_proxy",
+      "value": "Proxy"
+    },
+    {
+      "name": "gitcfg_ph_proxy",
+      "value": "z. B. http://127.0.0.1:7890"
+    },
+    {
+      "name": "gitcfg_test_ok",
+      "value": "Verbindung erfolgreich"
+    },
+    {
+      "name": "gitcfg_testing",
+      "value": "Wird getestet…"
+    },
+    {
+      "name": "gitcfg_test_btn",
+      "value": "Testen"
+    },
+    {
+      "name": "gitcfg_checkout_files",
+      "value": "Dateien werden ausgecheckt…"
+    },
+    {
+      "name": "gitcfg_cloning_overlay",
+      "value": "Remote-Repository wird geklont…"
+    },
+    {
+      "name": "gitcfg_err_key_removed",
+      "value": "Der zuvor gewählte SSH-Schlüssel wurde gelöscht; bitte erneut auswählen"
+    },
+    {
+      "name": "gitcfg_cloning",
+      "value": "Remote-Repository wird geklont…"
+    },
+    {
+      "name": "gitcfg_clone_done",
+      "value": "Klonen abgeschlossen"
+    },
+    {
+      "name": "gitcfg_err_url_required",
+      "value": "Bitte die Remote-Repository-Adresse eingeben"
+    },
+    {
+      "name": "gitcfg_err_url_scheme",
+      "value": "Die Adresse muss mit https:// oder ssh:// beginnen (oder im Format git@host:path)"
+    },
+    {
+      "name": "gitcfg_save_failed",
+      "value": "Speichern fehlgeschlagen"
+    },
+    {
+      "name": "gitcfg_err_parse_ssh",
+      "value": "SSH-Host-Informationen konnten nicht aus der Adresse gelesen werden"
+    },
+    {
+      "name": "gitcfg_err_need_tofu",
+      "value": "Bei der ersten Verbindung muss der Server-Fingerabdruck bestätigt werden; bitte bestätigen und erneut speichern"
+    },
+    {
+      "name": "gitcfg_https_err_auth",
+      "value": "Authentifizierung fehlgeschlagen: Benutzername und Passwort/Zugriffstoken prüfen (Gitee/GitHub benötigen ein Zugriffstoken statt des Login-Passworts)"
+    },
+    {
+      "name": "gitcfg_https_err_dns",
+      "value": "Host-Adresse konnte nicht aufgelöst werden: Netzwerk und Remote-Adresse prüfen"
+    },
+    {
+      "name": "gitcfg_https_err_notfound",
+      "value": "Repository nicht gefunden oder kein Zugriff: Remote-Adresse und Berechtigungen prüfen"
+    },
+    {
+      "name": "gitcfg_https_err_proto",
+      "value": "Nicht unterstütztes Protokoll: der HTTPS-Test benötigt native TLS-Unterstützung"
+    },
+    {
+      "name": "gitcfg_https_err_generic",
+      "value": "Verbindung fehlgeschlagen: %s"
+    },
+    {
+      "name": "gitcfg_clone_cancelled",
+      "value": "Klonen abgebrochen (Host-Schlüssel nicht bestätigt)"
+    },
+    {
+      "name": "gitcfg_test_cancelled",
+      "value": "Verbindung abgebrochen (Host-Schlüssel nicht bestätigt)"
+    },
+    {
+      "name": "repo_section_status",
+      "value": "Repository-Status"
+    },
+    {
+      "name": "repo_status_cloned",
+      "value": "Remote-Repository geklont"
+    },
+    {
+      "name": "repo_status_not_cloned",
+      "value": "Remote-Repository nicht geklont"
+    },
+    {
+      "name": "repo_no_remote_url",
+      "value": "Remote-Adresse noch nicht konfiguriert"
+    },
+    {
+      "name": "repo_section_sync",
+      "value": "Synchronisierungsverhalten"
+    },
+    {
+      "name": "repo_pull_rebase_title",
+      "value": "Rebase beim Pull"
+    },
+    {
+      "name": "repo_pull_rebase_sub",
+      "value": "Beim Abrufen entfernter Änderungen Rebase (--rebase) verwenden, um eine lineare Historie zu erhalten"
+    },
+    {
+      "name": "repo_section_ops",
+      "value": "Repository-Vorgänge"
+    },
+    {
+      "name": "repo_gitcfg_sub",
+      "value": "Remote-Adresse / Authentifizierung / Commit-Identität"
+    },
+    {
+      "name": "repo_section_danger",
+      "value": "Gefahrenzone"
+    },
+    {
+      "name": "repo_danger_hint",
+      "value": "Löscht den lokalen Repository-Ordner und alle Passwortdateien. Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "repo_delete_btn",
+      "value": "Lokales Repository löschen"
+    },
+    {
+      "name": "repo_delete_confirm_msg",
+      "value": "Der lokale Repository-Ordner und alle Passwortdateien darin werden gelöscht. Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "repo_err_no_path",
+      "value": "Repository-Pfad nicht konfiguriert"
+    },
+    {
+      "name": "repo_err_delete_failed_dir",
+      "value": "Repository konnte nicht gelöscht werden: der Ordner kann nicht entfernt werden"
+    },
+    {
+      "name": "repo_deleted",
+      "value": "Lokales Repository gelöscht"
+    },
+    {
+      "name": "repo_err_delete_failed",
+      "value": "Repository konnte nicht gelöscht werden: %s"
+    },
+    {
+      "name": "gitlog_not_repo",
+      "value": "Der aktuelle Ordner ist kein Git-Repository"
+    },
+    {
+      "name": "gitlog_load_failed",
+      "value": "Commit-Verlauf konnte nicht geladen werden"
+    },
+    {
+      "name": "git_auth_required_hint",
+      "value": "Das Remote-Repository verlangt Authentifizierung. Trage Benutzername und Zugriffstoken (Gitee-Personaltoken mit projects-Schreibrecht) in der „Git-Konfiguration“ ein und versuche es erneut"
+    },
+    {
+      "name": "git_remove_repo_dir_failed",
+      "value": "Lokales Repository konnte nicht gelöscht werden: der Ordner kann nicht entfernt werden"
+    },
+    {
+      "name": "git_ssh_no_key_hint",
+      "value": "Kein SSH-Schlüssel konfiguriert. Bitte zuerst in der „SSH-Schlüsselverwaltung“ generieren oder importieren"
+    },
+    {
+      "name": "git_ssh_multi_key_hint",
+      "value": "Es gibt %d SSH-Schlüssel; wähle zuerst in „Git-Konfiguration → SSH-Schlüssel“ den für die Authentifizierung aus"
+    },
+    {
+      "name": "git_ssh_key_encrypted",
+      "value": "Dieser private SSH-Schlüssel ist verschlüsselt; gib sein Passwort zuerst in der „Git-Konfiguration“ ein"
+    },
+    {
+      "name": "git_ssh_remote_notfound",
+      "value": "Repository nicht gefunden oder Pfad falsch: der Server ist erreichbar und die Authentifizierung war erfolgreich; prüfe den Repository-Pfad in der Adresse"
+    },
+    {
+      "name": "git_hostkey_not_trusted",
+      "value": "Host-Schlüssel nicht vertrauenswürdig oder abweichend: bitte zuerst den Fingerabdruck bestätigen"
+    },
+    {
+      "name": "git_ssh_auth_failed",
+      "value": "SSH-Authentifizierung fehlgeschlagen: prüfe, ob der öffentliche Schlüssel beim Remote-Konto hinterlegt ist und das Schlüssel-Passwort stimmt"
+    },
+    {
+      "name": "git_ssh_url_unparsed_remote",
+      "value": "Die Remote-SSH-Adresse konnte nicht gelesen werden. Unterstützt: git@host:path und ssh://user@host[:port]/path"
+    },
+    {
+      "name": "git_hostkey_mismatch_short",
+      "value": "Der Host-Schlüssel des Servers weicht vom gespeicherten Fingerabdruck ab (möglicher Man-in-the-middle-Angriff)"
+    },
+    {
+      "name": "git_hostkey_first_connect",
+      "value": "Erste Verbindung zu diesem Server: der Host-Schlüssel-Fingerabdruck muss bestätigt werden"
+    },
+    {
+      "name": "git_ssh_url_unparsed_clone",
+      "value": "SSH-Adresse konnte nicht gelesen werden. Unterstützt: git@host:user/repo.git und ssh://git@host[:port]/user/repo.git"
+    },
+    {
+      "name": "git_clone_dir_not_empty",
+      "value": "Der lokale Repository-Ordner ist nicht leer; Klonen nicht möglich. Leere ihn zuerst („Repository-Verwaltung → Lokales Repository löschen“) und versuche es erneut; wurde das Klonen nach dem Speichern in der „Git-Konfiguration“ ausgelöst, wähle im Dialog „Löschen und klonen“"
+    },
+    {
+      "name": "git_err_url_empty",
+      "value": "Die Remote-Adresse darf nicht leer sein"
+    },
+    {
+      "name": "git_err_url_scheme",
+      "value": "Nicht unterstütztes URL-Format. Verwende git@host:user/repo.git (SSH) oder https://host/user/repo.git"
+    },
+    {
+      "name": "git_clone_https_tls_unready",
+      "value": "HTTPS-Klonen fehlgeschlagen (native TLS nicht bereit). Netzwerk und Adresse prüfen oder ein anderes Protokoll verwenden"
+    },
+    {
+      "name": "git_clone_ssh_unsupported",
+      "value": "SSH-Klonen wird in dieser Version nicht unterstützt (SSH-Transport nicht integriert). Verwende stattdessen eine HTTPS-Adresse mit Zugriffstoken, z. B. https://gitee.com/<benutzer>/<repo>.git, und hinterlege Benutzername und Zugriffstoken in der „Git-Konfiguration“"
+    },
+    {
+      "name": "git_clone_auth_failed",
+      "value": "Authentifizierung fehlgeschlagen: Benutzername und Zugriffstoken in der Git-Konfiguration prüfen (GitHub/Gitee benötigen ein Zugriffstoken statt des Login-Passworts)"
+    },
+    {
+      "name": "git_pull_failed",
+      "value": "Pull fehlgeschlagen: %s"
+    },
+    {
+      "name": "git_push_failed",
+      "value": "Push fehlgeschlagen: %s"
+    },
+    {
+      "name": "common_native_call_failed",
+      "value": "Nativer Aufruf fehlgeschlagen, bitte erneut versuchen"
+    },
+    {
+      "name": "common_ssh_pem_read_failed",
+      "value": "Der private SSH-Schlüssel kann nicht gelesen werden (%s). Generiere ihn in der „SSH-Schlüsselverwaltung“ neu oder importiere ihn erneut"
+    },
+    {
+      "name": "common_unknown_error",
+      "value": "Unbekannter Fehler"
+    },
+    {
+      "name": "ssh_host_required",
+      "value": "Der Hostname darf nicht leer sein"
+    },
+    {
+      "name": "ssh_probe_failed",
+      "value": "Host-Schlüssel konnte nicht abgerufen werden"
+    },
+    {
+      "name": "ssh_hostkey_mismatch_rejected",
+      "value": "Der Host-Schlüssel des Servers weicht vom gespeicherten Fingerabdruck ab; die Verbindung wurde abgelehnt (möglicher Man-in-the-middle-Angriff)"
+    },
+    {
+      "name": "ssh_tcp_no_key",
+      "value": "TCP ist erreichbar, aber kein SSH-Schlüssel ist konfiguriert; die Authentifizierung kann nicht geprüft werden. Wähle zuerst in „Git-Konfiguration → SSH-Schlüssel“ einen privaten Schlüssel"
+    },
+    {
+      "name": "ssh_tcp_auth_incomplete",
+      "value": "TCP ist erreichbar, aber die SSH-Authentifizierung konnte nicht abgeschlossen werden; Schlüssel und Passwort prüfen"
+    },
+    {
+      "name": "ssh_params_incomplete",
+      "value": "Authentifizierungsparameter sind unvollständig"
+    },
+    {
+      "name": "ssh_no_key_unverified",
+      "value": "Kein SSH-Schlüssel konfiguriert; die Authentifizierung kann nicht geprüft werden. Wähle zuerst in „Git-Konfiguration → SSH-Schlüssel“ einen privaten Schlüssel"
+    },
+    {
+      "name": "ssh_tcp_connect_failed",
+      "value": "Verbindung fehlgeschlagen: %s"
+    },
+    {
+      "name": "reencrypt_no_key_selected",
+      "value": "Kein Verschlüsselungsschlüssel ausgewählt"
+    },
+    {
+      "name": "reencrypt_no_enc_subkey",
+      "value": "Der gewählte Schlüssel hat keinen nutzbaren Verschlüsselungs-Unterschlüssel; er kann kein Verschlüsselungsempfänger sein"
+    },
+    {
+      "name": "reencrypt_missing_decrypt_key",
+      "value": "Entschlüsselungsschlüssel fehlt (Key-ID des Empfängers: %s)"
+    },
+    {
+      "name": "reencrypt_keyids_unlabeled",
+      "value": "unbeschriftet"
+    },
+    {
+      "name": "reencrypt_encrypt_failed",
+      "value": "Neuverschlüsselung fehlgeschlagen: %s"
+    },
+    {
+      "name": "reencrypt_write_gpgid_failed",
+      "value": ".gpg-id konnte nicht geschrieben werden: %s"
+    },
+    {
+      "name": "reencrypt_failed_count",
+      "value": "%d Einträge konnten nicht neu verschlüsselt werden; die ursprüngliche .gpg-id wurde beibehalten"
+    },
+    {
+      "name": "pgp_no_public_key",
+      "value": "Kein öffentlicher Schlüssel verfügbar (bitte zuerst einen PGP-Schlüssel importieren)"
+    },
+    {
+      "name": "pgp_no_secret_key",
+      "value": "Kein privater Schlüssel verfügbar (bitte zuerst einen PGP-Schlüssel importieren)"
+    },
+    {
+      "name": "pgp_no_secret_imported",
+      "value": "Noch keine privaten Schlüssel importiert; bitte zuerst in der „PGP-Schlüsselverwaltung“ importieren"
+    },
+    {
+      "name": "pgp_key_not_found_reimport",
+      "value": "Der Schlüssel wurde nicht gefunden; bitte erneut importieren"
+    },
+    {
+      "name": "pgp_key_file_missing",
+      "value": "Die Schlüsseldatei fehlt; bitte diesen Schlüssel erneut importieren"
+    },
+    {
+      "name": "pgp_verify_no_secret_material",
+      "value": "Dieser Schlüssel enthält kein Material eines privaten Schlüssels (evtl. ein öffentlicher) und kann nicht entschlüsseln. Exportiere den privaten Schlüssel mit `gpg --export-secret-keys --armor <key-id>` und importiere ihn erneut."
+    },
+    {
+      "name": "pgp_verify_no_mlkem_material",
+      "value": "Dieser Schlüssel enthält kein verwendbares GnuPG-ML-KEM-Material eines privaten Schlüssels; stelle sicher, dass der private Schlüssel exportiert wurde."
+    },
+    {
+      "name": "pgp_verify_mlkem_unreadable",
+      "value": "Das ML-KEM-Material des privaten Schlüssels kann nicht gelesen werden (%s). Dieser Teil verwendet dasselbe Passwort wie der ECC-Teil, daher ist es kein Passwortproblem; exportiere den Schlüssel mit einem neueren gpg erneut und importiere ihn wieder."
+    },
+    {
+      "name": "pgp_verify_curve_unsupported",
+      "value": "Die klassische Kurve dieses Schlüssels wird von der App nicht unterstützt (%s). Verwende stattdessen einen GnuPG-Schlüssel ky768_cv25519 (ML-KEM-768 + Curve25519)."
+    },
+    {
+      "name": "pgp_key_content_empty",
+      "value": "Der Schlüsselinhalt ist leer"
+    },
+    {
+      "name": "pgp_import_not_secret",
+      "value": "Dies ist kein gültiges Material eines privaten Schlüssels und kann nicht entschlüsseln. Exportiere zuerst den privaten Schlüssel mit `gpg --export-secret-keys --armor <key-id>` und importiere ihn dann."
+    },
+    {
+      "name": "pgp_parse_failed",
+      "value": "Schlüssel konnte nicht gelesen werden (ungültiges oder nicht unterstütztes Format)"
+    },
+    {
+      "name": "pgp_warn_algo8",
+      "value": "Der Verschlüsselungs-Unterschlüssel dieses Schlüssels ist %s (eine private GnuPG-Algorithmusnummer). Die App kann damit normal ver- und entschlüsseln, aber Implementierungen außerhalb von GnuPG erkennen ihn möglicherweise nicht."
+    },
+    {
+      "name": "pgp_warn_algo8_curve",
+      "value": "Der Verschlüsselungs-Unterschlüssel dieses Schlüssels ist %s; seine klassische Kurve wird von der App noch nicht unterstützt (aktuell unterstützt: ky768_cv25519 / ky768_bp256 / ky1024_bp384). Der Schlüssel wurde importiert und kann angezeigt und verwaltet werden, aber er kann nicht zum Ver- und Entschlüsseln neuer Einträge verwendet werden."
+    },
+    {
+      "name": "pgp_warn_enc_unsupported",
+      "value": "Der Verschlüsselungs-Unterschlüssel dieses Schlüssels ist %s; diese Version kann damit keine neuen Einträge verschlüsseln. Der Schlüssel wurde importiert und kann angezeigt und verwaltet werden, wähle aber als Verschlüsselungsschlüssel einen RSA- oder ECC-Schlüssel."
+    },
+    {
+      "name": "pgp_key_exists",
+      "value": "Dieser Schlüssel existiert bereits"
+    },
+    {
+      "name": "pgp_import_failed_reason",
+      "value": "Import fehlgeschlagen: %s"
+    },
+    {
+      "name": "pgp_split_parse_failed",
+      "value": "Ergebnis der Schlüsselaufteilung konnte nicht gelesen werden"
+    },
+    {
+      "name": "pgp_none_imported",
+      "value": "Es wurden keine Schlüssel importiert"
+    },
+    {
+      "name": "pgp_err_unsupported_algo",
+      "value": "Nicht unterstützter Schlüsselalgorithmus"
+    },
+    {
+      "name": "pgp_key_missing",
+      "value": "Schlüssel existiert nicht"
+    },
+    {
+      "name": "pgp_store_new_key_failed",
+      "value": "Neuer Schlüssel konnte nicht gespeichert werden: %s"
+    },
+    {
+      "name": "pgp_unsupported_algo_reason",
+      "value": "Nicht unterstützter Schlüsselalgorithmus (%s); verwende stattdessen einen RSA- oder ECC-Schlüssel."
+    },
+    {
+      "name": "ssh_key_content_empty",
+      "value": "Der Inhalt des privaten Schlüssels ist leer"
+    },
+    {
+      "name": "ssh_not_private_key",
+      "value": "Die Datei ist kein gültiger privater Schlüssel (keine PRIVATE KEY-Markierung gefunden)"
+    },
+    {
+      "name": "ssh_native_unavailable",
+      "value": "Die native Bibliothek ist nicht verfügbar; der private Schlüssel kann nicht verarbeitet werden"
+    },
+    {
+      "name": "ssh_invalid_key_detailed",
+      "value": "Das Format des privaten Schlüssels ist ungültig oder die Datei beschädigt; stelle sicher, dass es eine vollständige private OpenSSH-Schlüsseldatei ist"
+    },
+    {
+      "name": "ssh_key_encrypted_need_pw",
+      "value": "Dieser private Schlüssel ist verschlüsselt; gib sein Passwort ein"
+    },
+    {
+      "name": "ssh_wrong_passphrase",
+      "value": "Falsches Schlüssel-Passwort; bitte erneut eingeben"
+    },
+    {
+      "name": "ssh_invalid_key",
+      "value": "Das Format des privaten Schlüssels ist ungültig oder die Datei ist beschädigt"
+    },
+    {
+      "name": "ssh_seal_failed",
+      "value": "Verschlüsselung des privaten Schlüssels fehlgeschlagen; er wurde nicht gespeichert (bitte erneut versuchen)"
+    },
+    {
+      "name": "repo_src_entry_missing",
+      "value": "Die Quell-Passwortdatei existiert nicht"
+    },
+    {
+      "name": "repo_dst_entry_exists",
+      "value": "Am Zielort existiert bereits ein Passwort mit diesem Namen"
+    },
+    {
+      "name": "repo_rename_failed",
+      "value": "Verschieben/Umbenennen fehlgeschlagen"
+    },
+    {
+      "name": "repo_src_dir_missing",
+      "value": "Der Quellordner existiert nicht"
+    },
+    {
+      "name": "repo_dst_dir_exists",
+      "value": "Am Zielort existiert bereits ein Ordner mit diesem Namen"
+    },
+    {
+      "name": "repo_dir_rename_failed",
+      "value": "Umbenennen des Ordners fehlgeschlagen"
+    },
+    {
+      "name": "repo_invalid_path",
+      "value": "Ungültiger Pfad (%s): %s"
+    },
+    {
+      "name": "autofill_settings_title",
+      "value": "AutoFill"
+    },
+    {
+      "name": "autofill_svc_status",
+      "value": "Status des AutoFill-Dienstes"
+    },
+    {
+      "name": "autofill_repo_ready",
+      "value": "Passwortspeicher bereit"
+    },
+    {
+      "name": "autofill_repo_not_init",
+      "value": "Passwortspeicher nicht initialisiert"
+    },
+    {
+      "name": "autofill_entry_count_label",
+      "value": "Verfügbare Passworteinträge"
+    },
+    {
+      "name": "autofill_entry_count",
+      "value": "%d Einträge"
+    },
+    {
+      "name": "autofill_biometric_cap",
+      "value": "Biometrie-Fähigkeit"
+    },
+    {
+      "name": "autofill_biometric_support",
+      "value": "Unterstützt: %s"
+    },
+    {
+      "name": "autofill_biometric_unsupported",
+      "value": "Nicht unterstützt"
+    },
+    {
+      "name": "autofill_howto_title",
+      "value": "So aktivierst du AutoFill"
+    },
+    {
+      "name": "autofill_howto_step1",
+      "value": "1. Öffne Systemeinstellungen → Weitere Einstellungen → Passwörter & AutoFill (oder „AutoFill-Dienst“)"
+    },
+    {
+      "name": "autofill_howto_step2",
+      "value": "2. Wähle „Passwortspeicher (HarmonyPasswordStore)“ als AutoFill-Dienst"
+    },
+    {
+      "name": "autofill_howto_step3",
+      "value": "3. Tippe in einer App oder im Browser auf ein Eingabefeld, dann erscheinen die AutoFill-Vorschläge"
+    },
+    {
+      "name": "autofill_rule_title",
+      "value": "Abgleichregeln"
+    },
+    {
+      "name": "autofill_rule_match",
+      "value": "· Gleicht den Paketnamen der anfragenden App oder Webdomäne mit Eintragsnamen/Pfaden ab"
+    },
+    {
+      "name": "autofill_rule_priority",
+      "value": "· Exakte Treffer zuerst; bei Gleichstand nach letzter Verwendung sortiert"
+    },
+    {
+      "name": "autofill_rule_nodecrypt",
+      "value": "· Der Abgleich entschlüsselt keine Dateien; Entschlüsselung erst nach deiner Auswahl"
+    },
+    {
+      "name": "autofill_sec_title",
+      "value": "Sicherheitshinweise"
+    },
+    {
+      "name": "autofill_sec_fields",
+      "value": "· Kandidaten zeigen standardmäßig nur den Namen und Benutzernamen, niemals das Passwort"
+    },
+    {
+      "name": "autofill_sec_memory",
+      "value": "· Das entschlüsselte Passwort existiert nur kurz im Speicher"
+    },
+    {
+      "name": "autofill_sec_usage",
+      "value": "· Erfolgreiche Füllvorgänge protokollieren die Nutzungszeit zur Verbesserung der Kandidatenreihenfolge"
+    }
+  ]
+}

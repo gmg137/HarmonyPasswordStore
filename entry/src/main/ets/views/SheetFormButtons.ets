@@ -1,4 +1,5 @@
 import { ThemeColors, Palette, Spacing, ButtonSpec } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /**
  * 半模态表单底部按钮行（取消 / 确认）
@@ -24,7 +25,7 @@ export struct SheetFormButtons {
   build() {
     Row({ space: ButtonSpec.ROW_GAP }) {
       // 次操作：中性底 + 强调色文字（鸿蒙规范里 TEXTUAL/NORMAL 两种都可，此处用 NORMAL）
-      Button('取消')
+      Button($r('app.string.common_cancel'))
         .type(ButtonType.Normal)
         .borderRadius(ButtonSpec.SECONDARY_RADIUS)
         .layoutWeight(1)
@@ -38,7 +39,7 @@ export struct SheetFormButtons {
         })
 
       // 主操作：强调色底 + onPrimary 文字（不要用 Color.White：深色主题下需随调色板走）
-      Button(this.isBusy ? '处理中...' : this.confirmLabel)
+      Button(this.isBusy ? Strings.get('common_processing') : this.confirmLabel)
         .type(ButtonType.Normal)
         .borderRadius(ButtonSpec.PRIMARY_RADIUS)
         .layoutWeight(1)

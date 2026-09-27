@@ -1,4 +1,5 @@
 import { ThemeColors, Palette, FontSize, Radius, ComponentSize } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /**
  * 卡片内表单行：左标签 + 右输入框
@@ -17,8 +18,8 @@ import { ThemeColors, Palette, FontSize, Radius, ComponentSize } from '../common
  */
 @ComponentV2
 export struct FormRow {
-  @Param label: string = '';
-  @Param placeholder: string = '';
+  @Param label: ResourceStr = '';
+  @Param placeholder: ResourceStr = '';
   @Param value: string = '';
   @Param isPassword: boolean = false;
   /** 标签列宽（默认容纳「远程地址」「SSH 密钥」等 4 字标签；无对应宽度令牌） */
@@ -29,12 +30,25 @@ export struct FormRow {
     return ThemeColors.getInstance().palette();
   }
 
+  /**
+   * 实际标签列宽：按当前语言缩放
+   *
+   * 传进来的基准值按汉字定（4 字 ≈ 84vp），而拉丁/西里尔字母同字数约占 1.5 倍宽
+   * ——不缩放时 `Benutzername`、`Имя пользователя` 这类标签会在列里折行、把整行撑高。
+   */
+  private get resolvedLabelWidth(): number {
+    return Strings.labelWidth(this.labelWidth);
+  }
+
   build() {
     Row() {
       Text(this.label)
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textSecondary)
-        .width(this.labelWidth)
+        .width(this.resolvedLabelWidth)
+        // 兜底：极端长词（如俄语复合词）宁可省略号，也不要折行撑高整行
+        .maxLines(1)
+        .textOverflow({ overflow: TextOverflow.Ellipsis })
 
       TextInput({ text: this.value, placeholder: this.placeholder })
         .type(this.isPassword ? InputType.Password : InputType.Normal)

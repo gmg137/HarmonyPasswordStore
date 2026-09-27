@@ -5,6 +5,7 @@ import { GpgKeyId } from '../model/GpgKeyId';
 import { ReencryptService } from '../utils/ReencryptService';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { RouteManager } from '../common/RouteManager';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -156,17 +157,17 @@ export class MoveEntryViewModel {
   async save(): Promise<void> {
     const name: string = this.newName.trim();
     if (name.length === 0) {
-      this.errorMessage = '名称不能为空';
+      this.errorMessage = Strings.get('move_name_required');
       return;
     }
     if (name.includes('/')) {
-      this.errorMessage = '名称不能包含 /';
+      this.errorMessage = Strings.get('move_name_no_slash');
       return;
     }
 
     const newPath: string = this.buildNewPath();
     if (newPath === this.oldPath) {
-      this.errorMessage = '位置和名称未变化';
+      this.errorMessage = Strings.get('move_no_change');
       return;
     }
 
@@ -186,7 +187,7 @@ export class MoveEntryViewModel {
     if (ctx.decryptKeys.length === 0) {
       // 没有能解开该条目的私钥：无法重加密，移动照做（对齐 pass mv）但明确告知
       await this.finish(this.plainMove(ctx.newPath,
-        '已移动；但缺少解密密钥，未按目标目录密钥重新加密'), ctx.newPath);
+        Strings.get('move_missing_key_toast')), ctx.newPath);
       return;
     }
 
@@ -215,7 +216,7 @@ export class MoveEntryViewModel {
       return { success: false, error: result.error, toast: '' };
     }
     hilog.info(DOMAIN, TAG, 'moved (no re-encrypt) %{public}s -> %{public}s', this.oldPath, newPath);
-    return { success: true, error: '', toast: toast.length > 0 ? toast : '已保存' };
+    return { success: true, error: '', toast: toast.length > 0 ? toast : Strings.get('move_saved_default') };
   }
 
   /**
@@ -225,28 +226,28 @@ export class MoveEntryViewModel {
     const crypto: PgpCrypto = PgpCrypto.getInstance();
     const ciphertext: string = this.repo.readCiphertext(this.oldPath);
     if (ciphertext.length === 0) {
-      return { success: false, error: '读取密文失败', toast: '' };
+      return { success: false, error: Strings.get('move_read_ciphertext_failed'), toast: '' };
     }
     const decrypted = await crypto.decrypt(ciphertext, ctx.decryptKeys);
     if (!decrypted.success) {
-      return { success: false, error: `解密失败：${decrypted.error}`, toast: '' };
+      return { success: false, error: Strings.fmt('move_decrypt_failed', decrypted.error), toast: '' };
     }
     const encrypted = await crypto.encrypt(decrypted.data, ctx.targetFingerprints);
     if (!encrypted.success) {
-      return { success: false, error: `按目标目录密钥加密失败：${encrypted.error}`, toast: '' };
+      return { success: false, error: Strings.fmt('move_encrypt_failed', encrypted.error), toast: '' };
     }
     // **先写新位置、再删旧文件**：任一步失败都不会两头空
     const written = this.repo.writeCiphertextAt(ctx.newPath, encrypted.data);
     if (!written.success) {
-      return { success: false, error: `写入新位置失败：${written.error}`, toast: '' };
+      return { success: false, error: Strings.fmt('move_write_failed', written.error), toast: '' };
     }
     const deleted = this.repo.deletePassword(this.oldPath);
     if (!deleted.success) {
-      return { success: false, error: `已写入新位置，但删除原文件失败：${deleted.error}`, toast: '' };
+      return { success: false, error: Strings.fmt('move_delete_old_failed', deleted.error), toast: '' };
     }
     hilog.info(DOMAIN, TAG, 'moved with re-encrypt %{public}s -> %{public}s',
       this.oldPath, ctx.newPath);
-    return { success: true, error: '', toast: '已移动并按目标目录密钥重新加密' };
+    return { success: true, error: '', toast: Strings.get('move_reencrypted_toast') };
   }
 
   /**
@@ -287,7 +288,7 @@ export class MoveEntryViewModel {
 
     const crypto: PgpCrypto = PgpCrypto.getInstance();
     let unlocked: boolean = false;
-    let failReason: string = '密钥密码错误，请重试';
+    let failReason: string = Strings.get('common_passphrase_wrong');
     for (let i: number = 0; i < ctx.decryptKeys.length; i++) {
       const res: UnlockResult = await crypto.unlockPassphrase(ctx.decryptKeys[i], this.dialogPassphrase);
       if (res.success) {
@@ -335,7 +336,7 @@ export class MoveEntryViewModel {
         labels.push(label);
       }
     }
-    return labels.join('、');
+    return labels.join(Strings.get('common_list_sep'));
   }
 
   /**

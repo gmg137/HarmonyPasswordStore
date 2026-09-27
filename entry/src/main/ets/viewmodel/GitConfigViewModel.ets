@@ -7,6 +7,7 @@ import { NativeBridge, NativeResult } from '../common/NativeBridge';
 import { SshClient, SshConnectParams } from '../utils/SshClient';
 import { SshKeyManager, SshKeyInfo } from '../crypto/SshKeyManager';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -52,6 +53,14 @@ export class GitConfigViewModel {
   @Trace isTesting: boolean = false;
   /** 连接测试结果提示 */
   @Trace testResult: string = '';
+  /**
+   * 最近一次连接测试是否成功
+   *
+   * 页面按它选提示配色（success / warning）。**不要拿 testResult 与成功文案比较**：
+   * testResult 是展示文本，改一次措辞、加个标点或换成复数形态，比较就恒假、
+   * 状态色静默退化成 warning。成功与否是状态，与文案分开存。
+   */
+  @Trace testSucceeded: boolean = false;
   /** 错误信息 */
   @Trace errorMessage: string = '';
   /** SSH 密钥管理页面已创建的密钥列表 */
@@ -104,7 +113,7 @@ export class GitConfigViewModel {
       hilog.warn(DOMAIN, TAG, 'load: saved sshKeyAlias %{public}s no longer exists, cleared',
         this.sshKeyAlias);
       this.sshKeyAlias = '';
-      this.errorMessage = '原先选择的 SSH 密钥已被删除，请重新选择';
+      this.errorMessage = Strings.get('gitcfg_err_key_removed');
     }
   }
 
@@ -199,7 +208,7 @@ export class GitConfigViewModel {
     }
     this.isCloning = true;
     this.cloneFailed = false;
-    this.cloneMessage = '正在克隆远程仓库...';
+    this.cloneMessage = Strings.get('gitcfg_cloning');
     // 进度轮询：进度回调跑在 TaskPool 工作线程（native 侧写原子变量），
     // UI 只能定时去读。读的是纯内存，不涉及网络/IO。
     this.clonePercent = 0;
@@ -208,7 +217,7 @@ export class GitConfigViewModel {
     this.stopCloneProgressPoll();
     this.isCloning = false;
     if (result.success) {
-      this.cloneMessage = '克隆完成';
+      this.cloneMessage = Strings.get('gitcfg_clone_done');
       // 克隆下来的条目要立刻出现在列表里（根页面在导航栈里一直活着）
       RepoChangeNotifier.connect().bump();
       return true;
@@ -286,12 +295,12 @@ export class GitConfigViewModel {
    */
   private validate(): string {
     if (this.remoteUrl.trim().length === 0) {
-      return '请输入远程仓库地址';
+      return Strings.get('gitcfg_err_url_required');
     }
     const url: string = this.remoteUrl.trim();
     const isSsh: boolean = url.startsWith('ssh://') || /^\S+@\S+:/.test(url);
     if (!url.startsWith('https://') && !url.startsWith('http://') && !isSsh) {
-      return '地址必须以 https:// 或 ssh:// 开头（或 git@host:path 格式）';
+      return Strings.get('gitcfg_err_url_scheme');
     }
     return '';
   }
@@ -322,6 +331,7 @@ export class GitConfigViewModel {
     this.isSaving = true;
     this.errorMessage = '';
     this.testResult = '';
+    this.testSucceeded = false;
 
     // 先测连接：失败直接返回，不保存
     const ok: boolean = await this.testRemote();
@@ -335,7 +345,7 @@ export class GitConfigViewModel {
       this.isSaved = true;
       hilog.info(DOMAIN, TAG, 'Git config saved');
     } catch (e) {
-      this.errorMessage = '保存失败';
+      this.errorMessage = Strings.get('gitcfg_save_failed');
       hilog.error(DOMAIN, TAG, 'save failed: %{public}s', JSON.stringify(e));
     }
     this.isSaving = false;
@@ -352,7 +362,8 @@ export class GitConfigViewModel {
     if (this.authMode === GitAuthMode.SSH_KEY) {
       const params: SshConnectParams | null = SshClient.parseSshUrl(url);
       if (params === null) {
-        this.testResult = '无法从地址解析 SSH 主机信息';
+        this.testResult = Strings.get('gitcfg_err_parse_ssh');
+        this.testSucceeded = false;
         return false;
       }
       // 地址自带端口时以地址为准：表单里的「SSH 端口」只是地址没写端口时的补充，
@@ -372,11 +383,13 @@ export class GitConfigViewModel {
         this.pendingHostKeyFp = result.hostKeyFingerprint;
         this.pendingHostKeyType = result.hostKeyType ?? '';
         this.pendingHostKeyMismatch = result.hostKeyMismatch === true;
-        this.testResult = '首次连接需先确认服务器指纹，请确认后重新保存';
+        this.testResult = Strings.get('gitcfg_err_need_tofu');
+        this.testSucceeded = false;
         return false;
       }
       if (result.hostKeyState === 'mismatch') {
         this.testResult = result.error;
+        this.testSucceeded = false;
         return false;
       }
       if (result.success) {
@@ -384,13 +397,16 @@ export class GitConfigViewModel {
         // 这里再用 libgit2 对同一地址做一次 ls-remote，把「仓库不存在」在测试连接时就暴露出来。
         const ls: GitResult = await GitClient.getInstance().testSshRemote(url);
         if (ls.success) {
-          this.testResult = '连接成功';
+          this.testResult = Strings.get('gitcfg_test_ok');
+          this.testSucceeded = true;
           return true;
         }
         this.testResult = ls.error;
+        this.testSucceeded = false;
         return false;
       }
       this.testResult = result.error;
+      this.testSucceeded = false;
       return false;
     }
 
@@ -401,11 +417,13 @@ export class GitConfigViewModel {
     const result: NativeResult =
       await GitClient.getInstance().testHttpsRemote(url, this.username.trim(), this.password, this.proxyUrl.trim());
     if (result.success) {
-      this.testResult = '连接成功';
+      this.testResult = Strings.get('gitcfg_test_ok');
+      this.testSucceeded = true;
       return true;
     }
     hilog.warn(DOMAIN, TAG, 'gitTestRemote raw error: %{public}s', result.error);
     this.testResult = this.friendlyHttpsError(result.error);
+    this.testSucceeded = false;
     return false;
   }
 
@@ -415,19 +433,19 @@ export class GitConfigViewModel {
   private friendlyHttpsError(raw: string): string {
     if (raw.includes('401') || raw.includes('authentication') || raw.includes('credential')
       || raw.includes('too many redirects')) {
-      return '认证失败：请检查用户名与密码/Token（Gitee/GitHub 需使用访问令牌而非登录密码）';
+      return Strings.get('gitcfg_https_err_auth');
     }
     if (raw.includes('failed to resolve address') || raw.includes('Could not resolve host')
       || raw.includes('resolve')) {
-      return '无法解析主机地址：请检查网络与远程地址是否正确';
+      return Strings.get('gitcfg_https_err_dns');
     }
     if (raw.includes('not found') || raw.includes('repository not found')) {
-      return '仓库不存在或无权访问：请确认远程地址与访问权限';
+      return Strings.get('gitcfg_https_err_notfound');
     }
     if (raw.includes('unsupported URL protocol') || raw.includes('unsupported protocol')) {
-      return '不支持的协议：HTTPS 测试需要 native TLS 支持';
+      return Strings.get('gitcfg_https_err_proto');
     }
-    return `连接失败：${raw}`;
+    return Strings.fmt('gitcfg_https_err_generic', raw);
   }
 
   /**
@@ -437,11 +455,13 @@ export class GitConfigViewModel {
     const err: string = this.validate();
     if (err.length > 0) {
       this.testResult = err;
+      this.testSucceeded = false;
       return;
     }
 
     this.isTesting = true;
     this.testResult = '';
+    this.testSucceeded = false;
     await this.testRemote();
     this.isTesting = false;
   }
@@ -459,7 +479,8 @@ export class GitConfigViewModel {
     const saved: boolean = await SshClient.getInstance().confirmHostKey(
       this.pendingHost, this.pendingPort, fp, keyType);
     if (!saved) {
-      this.testResult = '保存主机密钥失败';
+      this.testResult = Strings.get('sync_save_hostkey_failed');
+      this.testSucceeded = false;
       return;
     }
     // 信任已建立：若本次确认是为克隆而来，继续克隆；否则重试连接测试
@@ -483,10 +504,11 @@ export class GitConfigViewModel {
     if (this.confirmThenClone) {
       this.confirmThenClone = false;
       this.cloneFailed = true;
-      this.cloneMessage = '已取消克隆（主机密钥未确认）';
+      this.cloneMessage = Strings.get('gitcfg_clone_cancelled');
       return;
     }
-    this.testResult = '已取消连接（主机密钥未确认）';
+    this.testResult = Strings.get('gitcfg_test_cancelled');
+    this.testSucceeded = false;
   }
 
   /**

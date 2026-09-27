@@ -1,4 +1,5 @@
 import { ThemeColors, Palette, Radius, Spacing, FontSize, IconSize, ButtonSpec } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /**
  * 主机密钥指纹确认弹窗（TOFU）
@@ -22,8 +23,14 @@ export struct HostKeyConfirmDialog {
   @Param explanation: string = '';
   /** 指纹与已有记录不一致（可能中间人）：警示色更重、确认按钮用危险色 */
   @Param mismatch: boolean = false;
-  /** 确认按钮文案（克隆流程与测试连接流程的后续动作不同，文案要各自贴合） */
-  @Param confirmLabel: string = '信任并连接';
+  /**
+   * 确认按钮文案（克隆流程与测试连接流程的后续动作不同，文案要各自贴合）
+   *
+   * 默认值必须是**空串**、兜底放在 build 里：`@Param` 默认值是字段初始化器，只在
+   * 构造时求值一次，写成 `Strings.get(...)` 会把当时的语言永久捕获（与 `SheetOptions`
+   * 字段初始化器捕获过期颜色是同一类坑）。空串时回退到「信任并连接」。
+   */
+  @Param confirmLabel: string = '';
   /** 拒绝（放弃本次连接） */
   @Param onReject: () => void = (): void => {};
   /** 确认（追加/覆盖信任记录后继续连接） */
@@ -73,7 +80,7 @@ export struct HostKeyConfirmDialog {
         .margin({ top: Spacing.SM })
 
       Row({ space: ButtonSpec.ROW_GAP }) {
-        Button('拒绝')
+        Button($r('app.string.sync_reject'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
@@ -87,7 +94,7 @@ export struct HostKeyConfirmDialog {
             this.onReject();
           })
 
-        Button(this.confirmLabel)
+        Button(this.confirmLabel.length > 0 ? this.confirmLabel : Strings.get('common_trust_connect'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.PRIMARY_RADIUS)
           .layoutWeight(1)

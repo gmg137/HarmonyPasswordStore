@@ -4,6 +4,7 @@ import { PasswordContent } from '../model/PasswordEntry';
 import { AutofillBridge, FillApplyResult } from '../autofill/AutofillBridge';
 import { autoFillManager } from '@kit.AbilityKit';
 import { ClipboardHelper } from '../utils/ClipboardHelper';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -57,7 +58,7 @@ export class AutofillFillViewModel {
     try {
       this.candidates = this.matcher.match(identity);
     } catch (e) {
-      this.errorMessage = '加载候选失败';
+      this.errorMessage = Strings.get('autofill_err_load');
       hilog.error(DOMAIN, TAG, 'load failed: %{public}s', JSON.stringify(e));
     }
     this.isLoading = false;
@@ -88,7 +89,7 @@ export class AutofillFillViewModel {
     this.isDecrypting = false;
 
     if (!result.success || !result.data) {
-      this.errorMessage = result.error.length > 0 ? result.error : '解密失败';
+      this.errorMessage = result.error.length > 0 ? result.error : Strings.get('common_decrypt_failed');
       this.selectedPath = '';
       return false;
     }
@@ -105,10 +106,10 @@ export class AutofillFillViewModel {
       const applied: FillApplyResult = this.bridge.applyCredentials(this.pendingViewData, username, password);
       this.pendingViewData = null;
       if (applied.success) {
-        this.fillAppliedMessage = `已自动填充 ${applied.filledCount} 个字段`;
+        this.fillAppliedMessage = Strings.fmt('autofill_fill_applied', applied.filledCount);
         hilog.info(DOMAIN, TAG, 'fill applied: %{public}d fields', applied.filledCount);
       } else {
-        this.errorMessage = '自动填充失败，可使用复制';
+        this.errorMessage = Strings.get('autofill_fill_failed');
         hilog.warn(DOMAIN, TAG, 'fill apply failed: %{public}s', applied.error);
       }
     }

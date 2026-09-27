@@ -4,6 +4,7 @@ import { RouteNames } from '../common/Constants';
 import { ThemeColors, Palette, ButtonSpec, Spacing, FontSize, Radius, IconSize } from '../common/ThemeColors';
 import { panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
 import { AppTitleBar } from '../views/AppTitleBar';
+import { Strings } from '../common/Strings';
 
 /**
  * 仓库管理页
@@ -76,20 +77,20 @@ export struct RepoManagePage {
     NavDestination() {
       Column() {
         // ===== 自定义标题栏（40vp 圆形返回按钮 + 标题，见 AppTitleBar） =====
-        AppTitleBar({ title: '仓库管理' })
+        AppTitleBar({ title: $r('app.string.repo_row_title') })
 
         Scroll() {
           Column() {
             // ===== 仓库状态 =====
-            this.sectionTitle('仓库状态', true)
+            this.sectionTitle(Strings.get('repo_section_status'), true)
 
             Column() {
               Row() {
                 Column() {
-                  Text(this.viewModel.isGitRepo ? '已克隆远程仓库' : '未克隆远程仓库')
+                  Text(this.viewModel.isGitRepo ? $r('app.string.repo_status_cloned') : $r('app.string.repo_status_not_cloned'))
                     .fontSize(FontSize.SUBTITLE)
                     .fontColor(this.colors.textPrimary)
-                  Text(this.viewModel.remoteUrl.length > 0 ? this.viewModel.remoteUrl : '尚未配置远程地址')
+                  Text(this.viewModel.remoteUrl.length > 0 ? this.viewModel.remoteUrl : Strings.get('repo_no_remote_url'))
                     .fontSize(FontSize.CAPTION)
                     .fontColor(this.colors.textTertiary)
                     .maxLines(1)
@@ -113,15 +114,15 @@ export struct RepoManagePage {
             .borderRadius(Radius.CARD)
 
             // ===== 同步行为 =====
-            this.sectionTitle('同步行为', false)
+            this.sectionTitle(Strings.get('repo_section_sync'), false)
 
             Column() {
               Row() {
                 Column() {
-                  Text('拉取时进行变基')
+                  Text(Strings.get('repo_pull_rebase_title'))
                     .fontSize(FontSize.SUBTITLE)
                     .fontColor(this.colors.textPrimary)
-                  Text('拉取远程更新时使用变基（--rebase）保持线性历史')
+                  Text($r('app.string.repo_pull_rebase_sub'))
                     .fontSize(FontSize.CAPTION)
                     .fontColor(this.colors.textTertiary)
                     .margin({ top: Spacing.XS })
@@ -145,15 +146,15 @@ export struct RepoManagePage {
             .borderRadius(Radius.CARD)
 
             // ===== 仓库操作 =====
-            this.sectionTitle('仓库操作', false)
+            this.sectionTitle(Strings.get('repo_section_ops'), false)
 
             Column() {
               Row() {
                 Column() {
-                  Text('Git 配置')
+                  Text($r('app.string.git_config'))
                     .fontSize(FontSize.SUBTITLE)
                     .fontColor(this.colors.textPrimary)
-                  Text('远程地址 / 认证方式 / 提交身份')
+                  Text($r('app.string.repo_gitcfg_sub'))
                     .fontSize(FontSize.CAPTION)
                     .fontColor(this.colors.textTertiary)
                     .margin({ top: Spacing.XS })
@@ -182,12 +183,12 @@ export struct RepoManagePage {
             .borderRadius(Radius.CARD)
 
             // ===== 危险操作 =====
-            this.sectionTitle('危险操作', false)
+            this.sectionTitle(Strings.get('repo_section_danger'), false)
 
             Column() {
               Row() {
                 Column() {
-                  Text('删除本地仓库目录及全部密码文件，操作不可撤销')
+                  Text($r('app.string.repo_danger_hint'))
                     .fontSize(FontSize.CAPTION)
                     .fontColor(this.colors.textTertiary)
                 }
@@ -197,7 +198,7 @@ export struct RepoManagePage {
               .width('100%')
               .padding({ top: Spacing.MD, bottom: Spacing.MD })
 
-              Button(this.viewModel.isBusy ? '处理中...' : '删除本地仓库')
+              Button(this.viewModel.isBusy ? $r('app.string.common_processing') : $r('app.string.repo_delete_btn'))
                 .type(ButtonType.Normal)
                 .borderRadius(ButtonSpec.DANGER_RADIUS)
                 .width('100%')
@@ -249,14 +250,14 @@ export struct RepoManagePage {
   @Builder
   deleteConfirmBuilder() {
     Column() {
-      Text('删除本地仓库')
+      Text($r('app.string.repo_delete_btn'))
         .fontSize(FontSize.SUBTITLE)
         .fontWeight(FontWeight.Medium)
         .fontColor(this.colors.textPrimary)
         .width('100%')
         .textAlign(TextAlign.Center)
 
-      Text('将删除本地仓库目录及其中全部密码文件，此操作不可撤销。')
+      Text($r('app.string.repo_delete_confirm_msg'))
         .fontSize(FontSize.CAPTION)
         .fontColor(this.colors.textSecondary)
         .width('100%')
@@ -268,7 +269,7 @@ export struct RepoManagePage {
         .layoutWeight(1)
 
       Row({ space: ButtonSpec.ROW_GAP }) {
-        Button('取消')
+        Button($r('app.string.common_cancel'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
@@ -280,7 +281,7 @@ export struct RepoManagePage {
             this.viewModel.setDeleteDialogVisible(false);
           })
 
-        Button('删除')
+        Button($r('app.string.delete'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.DANGER_RADIUS)
           .layoutWeight(1)

@@ -1,6 +1,150 @@
 {
   "string": [
     {
+      "name": "settings_title",
+      "value": "Settings"
+    },
+    {
+      "name": "group_general",
+      "value": "General"
+    },
+    {
+      "name": "group_security",
+      "value": "Security"
+    },
+    {
+      "name": "group_store",
+      "value": "Password store"
+    },
+    {
+      "name": "group_git",
+      "value": "Git sync"
+    },
+    {
+      "name": "group_crypto",
+      "value": "Encryption & credentials"
+    },
+    {
+      "name": "group_about",
+      "value": "About"
+    },
+    {
+      "name": "settings_theme",
+      "value": "Theme"
+    },
+    {
+      "name": "theme_system",
+      "value": "Follow system"
+    },
+    {
+      "name": "theme_light",
+      "value": "Light"
+    },
+    {
+      "name": "theme_dark",
+      "value": "Dark"
+    },
+    {
+      "name": "settings_language",
+      "value": "Language"
+    },
+    {
+      "name": "language_system",
+      "value": "System default"
+    },
+    {
+      "name": "biometric_title",
+      "value": "Biometric unlock"
+    },
+    {
+      "name": "biometric_sub",
+      "value": "Unlock quickly with fingerprint or face"
+    },
+    {
+      "name": "clipboard_title",
+      "value": "Auto-clear clipboard"
+    },
+    {
+      "name": "clipboard_sub",
+      "value": "Clears the system clipboard automatically after a password is copied"
+    },
+    {
+      "name": "search_mode_title",
+      "value": "Search mode"
+    },
+    {
+      "name": "search_fuzzy",
+      "value": "Fuzzy match"
+    },
+    {
+      "name": "search_exact",
+      "value": "Exact match"
+    },
+    {
+      "name": "onboarding_row_title",
+      "value": "Run setup again"
+    },
+    {
+      "name": "onboarding_row_sub",
+      "value": "Initialize store / clone / import keys"
+    },
+    {
+      "name": "autosync_title",
+      "value": "Auto-sync on launch"
+    },
+    {
+      "name": "autosync_sub",
+      "value": "Automatically pulls and pushes when the app starts"
+    },
+    {
+      "name": "repo_row_title",
+      "value": "Repository management"
+    },
+    {
+      "name": "repo_row_sub",
+      "value": "Git config / pull with rebase / delete local repository"
+    },
+    {
+      "name": "pgp_row_title",
+      "value": "PGP key management"
+    },
+    {
+      "name": "pgp_row_sub",
+      "value": "Import keys / set default encryption key"
+    },
+    {
+      "name": "ssh_row_title",
+      "value": "SSH key management"
+    },
+    {
+      "name": "ssh_row_sub",
+      "value": "Generate / import public key / delete keys"
+    },
+    {
+      "name": "fileformat_title",
+      "value": "Password file format"
+    },
+    {
+      "name": "fileformat_sub",
+      "value": "Only affects passwords created or edited later"
+    },
+    {
+      "name": "privacy_row_title",
+      "value": "Privacy policy"
+    },
+    {
+      "name": "privacy_row_sub",
+      "value": "How your data is stored and processed"
+    },
+    {
+      "name": "about_row_title",
+      "value": "About this app"
+    },
+    {
+      "name": "about_row_sub",
+      "value": "Version / open source license / repository link"
+    },
+    {
       "name": "module_desc",
       "value": "Password Store module"
     },
@@ -17,24 +161,12 @@
       "value": "Search passwords"
     },
     {
-      "name": "empty_store_hint",
-      "value": "No passwords yet. Tap + to create one."
-    },
-    {
-      "name": "add_password",
-      "value": "Add"
-    },
-    {
-      "name": "password_detail",
-      "value": "Password Detail"
-    },
-    {
       "name": "password_create",
-      "value": "New Password"
+      "value": "New password"
     },
     {
       "name": "passgen",
-      "value": "Password Generator"
+      "value": "Password generator"
     },
     {
       "name": "settings",
@@ -42,35 +174,19 @@
     },
     {
       "name": "pgp_key_manager",
-      "value": "PGP Key Manager"
+      "value": "PGP key management"
     },
     {
       "name": "git_config",
-      "value": "Git Configuration"
-    },
-    {
-      "name": "git_clone",
-      "value": "Clone Repository"
-    },
-    {
-      "name": "onboarding",
-      "value": "Welcome"
+      "value": "Git configuration"
     },
     {
       "name": "AutofillAbility_desc",
       "value": "Password Store autofill service"
     },
     {
-      "name": "sync",
-      "value": "Sync"
-    },
-    {
       "name": "sort_recent",
       "value": "Recent"
-    },
-    {
-      "name": "search_clear",
-      "value": "Clear"
     },
     {
       "name": "found_results",
@@ -78,15 +194,7 @@
     },
     {
       "name": "app_locked",
-      "value": "App Locked"
-    },
-    {
-      "name": "verify_to_continue",
-      "value": "Verify your identity to continue"
-    },
-    {
-      "name": "unlock_with_biometric",
-      "value": "Unlock with %s"
+      "value": "App locked"
     },
     {
       "name": "delete",
@@ -98,19 +206,2251 @@
     },
     {
       "name": "perm_internet_reason",
-      "value": "Sync password repository over Git remote (clone/pull/push)"
+      "value": "Sync the password store over a Git remote (clone/pull/push)"
     },
     {
       "name": "perm_pasteboard_reason",
-      "value": "Paste repository URL when configuring Git remote"
+      "value": "Paste the repository URL when configuring the Git remote"
     },
     {
       "name": "perm_background_reason",
-      "value": "Keep running briefly in background to clear sensitive clipboard content"
+      "value": "Run briefly in the background to clear sensitive clipboard content"
     },
     {
       "name": "perm_biometric_reason",
       "value": "Unlock the app with fingerprint or face recognition"
+    },
+    {
+      "name": "common_cancel",
+      "value": "Cancel"
+    },
+    {
+      "name": "common_list_sep",
+      "value": ", "
+    },
+    {
+      "name": "common_configure",
+      "value": "Configure"
+    },
+    {
+      "name": "common_apply",
+      "value": "Apply"
+    },
+    {
+      "name": "common_confirm",
+      "value": "Confirm"
+    },
+    {
+      "name": "common_start",
+      "value": "Start"
+    },
+    {
+      "name": "common_got_it",
+      "value": "Got it"
+    },
+    {
+      "name": "common_loading",
+      "value": "Loading…"
+    },
+    {
+      "name": "common_passphrase_wrong",
+      "value": "Key passphrase incorrect, please retry"
+    },
+    {
+      "name": "home_root_title",
+      "value": "Password store"
+    },
+    {
+      "name": "home_create_password",
+      "value": "Create new password"
+    },
+    {
+      "name": "home_create_folder",
+      "value": "Create new folder"
+    },
+    {
+      "name": "home_dirkey_menu",
+      "value": "Change folder encryption keys"
+    },
+    {
+      "name": "home_dirkey_panel_title",
+      "value": "Change this folder's encryption keys"
+    },
+    {
+      "name": "home_dirkey_current",
+      "value": "Current keys: %s"
+    },
+    {
+      "name": "home_dirkey_current_inherit",
+      "value": "Current keys: inherit from parent / default"
+    },
+    {
+      "name": "home_dirkey_no_keys",
+      "value": "No imported private keys; cannot set encryption keys"
+    },
+    {
+      "name": "home_dirkey_need_selection",
+      "value": "Select at least one key"
+    },
+    {
+      "name": "home_dirkey_updated_no_reencrypt",
+      "value": "Folder encryption keys updated (nothing needed re-encryption)"
+    },
+    {
+      "name": "home_dirkey_multiselect_hint",
+      "value": "Encryption keys (multiple allowed; none selected = inherit from parent)"
+    },
+    {
+      "name": "home_folder_name_hint",
+      "value": "Folder name"
+    },
+    {
+      "name": "home_creating",
+      "value": "Creating…"
+    },
+    {
+      "name": "home_reencrypting",
+      "value": "Re-encrypting…"
+    },
+    {
+      "name": "home_reencrypt_confirm_title",
+      "value": "Re-encrypt this folder"
+    },
+    {
+      "name": "home_reencrypt_confirm_msg",
+      "value": "“%s” will be used to re-encrypt %d entries."
+    },
+    {
+      "name": "home_reencrypt_skipped_msg",
+      "value": "%d more entries will be skipped because the matching private key is missing (kept as is)."
+    },
+    {
+      "name": "home_reencrypt_need_passphrase",
+      "value": "The old key's passphrase is required to decrypt these entries."
+    },
+    {
+      "name": "home_reencrypted_count",
+      "value": "Re-encrypted %d entries"
+    },
+    {
+      "name": "home_reencrypt_skipped_suffix",
+      "value": ", skipped %d"
+    },
+    {
+      "name": "home_reencrypt_failed",
+      "value": "Re-encryption incomplete: %s"
+    },
+    {
+      "name": "home_reencrypt_first_failure",
+      "value": "First failure: %s (%s)"
+    },
+    {
+      "name": "home_reencrypt_error_toast",
+      "value": "Re-encryption failed, see logs for details"
+    },
+    {
+      "name": "home_no_recipient_hint",
+      "value": "no recipient recorded in ciphertext"
+    },
+    {
+      "name": "home_missing_decrypt_key_title",
+      "value": "Missing decryption key"
+    },
+    {
+      "name": "home_missing_key_msg",
+      "value": "This entry is encrypted for a key that is not imported (Key ID: %s)."
+    },
+    {
+      "name": "home_missing_key_action",
+      "value": "Import the matching private key in “PGP key management” and retry."
+    },
+    {
+      "name": "home_a11y_delete_dir",
+      "value": "Delete folder: %s"
+    },
+    {
+      "name": "home_a11y_delete_entry",
+      "value": "Delete password: %s"
+    },
+    {
+      "name": "home_delete_dir_title",
+      "value": "Delete folder"
+    },
+    {
+      "name": "home_delete_pw_title",
+      "value": "Delete password"
+    },
+    {
+      "name": "home_delete_failed",
+      "value": "Delete failed"
+    },
+    {
+      "name": "home_dir_deleted",
+      "value": "Folder deleted"
+    },
+    {
+      "name": "home_pw_deleted",
+      "value": "Password deleted"
+    },
+    {
+      "name": "home_passphrase_title",
+      "value": "Enter key passphrase"
+    },
+    {
+      "name": "home_passphrase_hint",
+      "value": "Key passphrase"
+    },
+    {
+      "name": "home_pgp_id_label",
+      "value": "PGP ID: %s"
+    },
+    {
+      "name": "home_verifying",
+      "value": "Verifying…"
+    },
+    {
+      "name": "home_search_no_match",
+      "value": "No matching passwords"
+    },
+    {
+      "name": "home_store_empty",
+      "value": "Store is empty"
+    },
+    {
+      "name": "home_search_try_other",
+      "value": "Try a different keyword"
+    },
+    {
+      "name": "home_create_first_hint",
+      "value": "Tap + in the bottom-right corner to create your first password"
+    },
+    {
+      "name": "home_sync_all",
+      "value": "One-tap sync"
+    },
+    {
+      "name": "home_sync_repo_menu",
+      "value": "Sync repository"
+    },
+    {
+      "name": "home_refresh_list",
+      "value": "Refresh list"
+    },
+    {
+      "name": "store_root_dir",
+      "value": "Store root folder"
+    },
+    {
+      "name": "store_delete_dir_confirm",
+      "value": "Folder “%s” and all of its contents (%d entries) will be deleted. This cannot be undone."
+    },
+    {
+      "name": "store_delete_entry_confirm",
+      "value": "“%s” will be deleted. This cannot be undone."
+    },
+    {
+      "name": "sync_no_remote_title",
+      "value": "No remote configured"
+    },
+    {
+      "name": "sync_no_remote_message",
+      "value": "Syncing requires a remote Git repository URL. Configure it now?"
+    },
+    {
+      "name": "sync_done",
+      "value": "Sync complete"
+    },
+    {
+      "name": "sync_pull_done",
+      "value": "Pull complete"
+    },
+    {
+      "name": "sync_push_done",
+      "value": "Push complete"
+    },
+    {
+      "name": "sync_conflict_message",
+      "value": "Merge conflict detected. Resolve it manually and retry."
+    },
+    {
+      "name": "sync_pulling_remote",
+      "value": "Pulling from remote…"
+    },
+    {
+      "name": "sync_pushing_remote",
+      "value": "Pushing to remote…"
+    },
+    {
+      "name": "sync_committing_changes",
+      "value": "Committing changes…"
+    },
+    {
+      "name": "sync_pulling",
+      "value": "Pulling…"
+    },
+    {
+      "name": "sync_committing",
+      "value": "Committing…"
+    },
+    {
+      "name": "sync_pushing",
+      "value": "Pushing…"
+    },
+    {
+      "name": "sync_op_success",
+      "value": "Operation succeeded"
+    },
+    {
+      "name": "sync_op_exception",
+      "value": "Operation failed with an exception"
+    },
+    {
+      "name": "sync_save_hostkey_failed",
+      "value": "Failed to save the host key"
+    },
+    {
+      "name": "sync_status_no_repo",
+      "value": "No Git repository"
+    },
+    {
+      "name": "sync_status_changes",
+      "value": "%d changes"
+    },
+    {
+      "name": "sync_status_synced",
+      "value": "Synced"
+    },
+    {
+      "name": "sync_hostkey_mismatch_title",
+      "value": "Warning: host key differs from the saved record"
+    },
+    {
+      "name": "sync_hostkey_first_type",
+      "value": "First connection: confirm the server's %s key fingerprint"
+    },
+    {
+      "name": "sync_hostkey_first",
+      "value": "First connection: confirm the server fingerprint"
+    },
+    {
+      "name": "sync_hostkey_fp_label",
+      "value": "Key fingerprint of host %s:%d:"
+    },
+    {
+      "name": "sync_hostkey_new_detail",
+      "value": "The server offers several host keys of different types; this one is not recorded yet. Confirming adds it to this device's trusted records (TOFU); fingerprint changes of the same key type are still rejected (protection against man-in-the-middle attacks)."
+    },
+    {
+      "name": "sync_reject",
+      "value": "Reject"
+    },
+    {
+      "name": "sync_trust_retry",
+      "value": "Trust and retry"
+    },
+    {
+      "name": "sync_trust_retry_mismatch",
+      "value": "Still trust and retry"
+    },
+    {
+      "name": "sync_pull_btn",
+      "value": "Pull"
+    },
+    {
+      "name": "sync_commit_btn",
+      "value": "Commit"
+    },
+    {
+      "name": "sync_push_btn",
+      "value": "Push"
+    },
+    {
+      "name": "git_log_title",
+      "value": "Commit history"
+    },
+    {
+      "name": "git_log_empty",
+      "value": "No commits yet"
+    },
+    {
+      "name": "folder_name_required",
+      "value": "Enter a folder name"
+    },
+    {
+      "name": "folder_name_invalid",
+      "value": "Folder name cannot contain .., \\ or start with ."
+    },
+    {
+      "name": "folder_created",
+      "value": "Folder created"
+    },
+    {
+      "name": "folder_create_failed",
+      "value": "Create failed: %s"
+    },
+    {
+      "name": "move_name_required",
+      "value": "Name cannot be empty"
+    },
+    {
+      "name": "move_name_no_slash",
+      "value": "Name cannot contain /"
+    },
+    {
+      "name": "move_no_change",
+      "value": "Location and name unchanged"
+    },
+    {
+      "name": "move_missing_key_toast",
+      "value": "Moved, but the decryption key is missing, so it was not re-encrypted with the target folder's key"
+    },
+    {
+      "name": "move_saved_default",
+      "value": "Saved"
+    },
+    {
+      "name": "move_read_ciphertext_failed",
+      "value": "Failed to read the ciphertext"
+    },
+    {
+      "name": "move_decrypt_failed",
+      "value": "Decryption failed: %s"
+    },
+    {
+      "name": "move_encrypt_failed",
+      "value": "Encryption with the target folder's key failed: %s"
+    },
+    {
+      "name": "move_write_failed",
+      "value": "Failed to write to the new location: %s"
+    },
+    {
+      "name": "move_delete_old_failed",
+      "value": "Written to the new location, but deleting the original file failed: %s"
+    },
+    {
+      "name": "move_reencrypted_toast",
+      "value": "Moved and re-encrypted with the target folder's key"
+    },
+    {
+      "name": "common_password",
+      "value": "Password"
+    },
+    {
+      "name": "common_username",
+      "value": "Username"
+    },
+    {
+      "name": "common_email",
+      "value": "Email"
+    },
+    {
+      "name": "common_phone",
+      "value": "Phone number"
+    },
+    {
+      "name": "common_notes",
+      "value": "Notes"
+    },
+    {
+      "name": "common_extra_content",
+      "value": "Extra content"
+    },
+    {
+      "name": "common_name",
+      "value": "Name"
+    },
+    {
+      "name": "common_save",
+      "value": "Save"
+    },
+    {
+      "name": "common_saving",
+      "value": "Saving…"
+    },
+    {
+      "name": "common_deleting",
+      "value": "Deleting…"
+    },
+    {
+      "name": "common_processing",
+      "value": "Processing…"
+    },
+    {
+      "name": "common_enter_passphrase",
+      "value": "Enter key passphrase"
+    },
+    {
+      "name": "common_passphrase_placeholder",
+      "value": "Key passphrase"
+    },
+    {
+      "name": "common_copy_username",
+      "value": "Copy username"
+    },
+    {
+      "name": "common_copy_email",
+      "value": "Copy email"
+    },
+    {
+      "name": "common_copy_phone",
+      "value": "Copy phone number"
+    },
+    {
+      "name": "common_copy_notes",
+      "value": "Copy notes"
+    },
+    {
+      "name": "common_copy_extra",
+      "value": "Copy extra content"
+    },
+    {
+      "name": "common_copy_password",
+      "value": "Copy password"
+    },
+    {
+      "name": "common_copy_failed",
+      "value": "Copy failed"
+    },
+    {
+      "name": "common_decrypt_failed",
+      "value": "Decryption failed"
+    },
+    {
+      "name": "common_strength_weak",
+      "value": "Weak"
+    },
+    {
+      "name": "common_strength_fair",
+      "value": "Fair"
+    },
+    {
+      "name": "common_strength_good",
+      "value": "Strong"
+    },
+    {
+      "name": "common_strength_strong",
+      "value": "Very strong"
+    },
+    {
+      "name": "create_edit_title",
+      "value": "Edit password"
+    },
+    {
+      "name": "create_dir_label",
+      "value": "Folder"
+    },
+    {
+      "name": "create_name_placeholder",
+      "value": "e.g. john@example.com"
+    },
+    {
+      "name": "create_password_placeholder",
+      "value": "Enter or generate a password"
+    },
+    {
+      "name": "create_username_placeholder",
+      "value": "Username (optional)"
+    },
+    {
+      "name": "create_email_placeholder",
+      "value": "Email (optional)"
+    },
+    {
+      "name": "create_phone_placeholder",
+      "value": "Phone number (optional)"
+    },
+    {
+      "name": "create_notes_placeholder",
+      "value": "Notes (optional)"
+    },
+    {
+      "name": "create_extra_placeholder",
+      "value": "Custom extra content (optional)"
+    },
+    {
+      "name": "create_generate",
+      "value": "Generate password"
+    },
+    {
+      "name": "create_gen_upper",
+      "value": "Uppercase letters (A-Z)"
+    },
+    {
+      "name": "create_gen_lower",
+      "value": "Lowercase letters (a-z)"
+    },
+    {
+      "name": "create_gen_digits",
+      "value": "Digits (0-9)"
+    },
+    {
+      "name": "create_gen_symbols",
+      "value": "Symbols (!@#$)"
+    },
+    {
+      "name": "create_read_fail",
+      "value": "Failed to read the password"
+    },
+    {
+      "name": "create_err_name_required",
+      "value": "Enter a name"
+    },
+    {
+      "name": "create_err_password_required",
+      "value": "Enter a password"
+    },
+    {
+      "name": "create_err_name_unsafe",
+      "value": "Name cannot contain .., \\ or start with ."
+    },
+    {
+      "name": "create_err_dir_conflict",
+      "value": "A folder with the same name already exists; choose a different name"
+    },
+    {
+      "name": "create_err_no_key",
+      "value": "No PGP key imported; cannot encrypt and save. Import a key in Settings first"
+    },
+    {
+      "name": "create_err_write_gpgid",
+      "value": "Failed to write .gpg-id: %s"
+    },
+    {
+      "name": "create_err_gpgid_unimported",
+      "value": "The folder's .gpg-id references unimported keys (%s); cannot encrypt for all recipients. Import these keys first, or adjust explicitly via “Change folder encryption keys”."
+    },
+    {
+      "name": "create_err_keys_expired",
+      "value": "All encryption keys of this folder are expired; cannot create a new password (import new keys or update them)"
+    },
+    {
+      "name": "detail_decrypting",
+      "value": "Decrypting…"
+    },
+    {
+      "name": "detail_passphrase_hint",
+      "value": "This key is passphrase-protected; enter the passphrase to decrypt"
+    },
+    {
+      "name": "detail_delete_password",
+      "value": "Delete password"
+    },
+    {
+      "name": "detail_delete_confirm",
+      "value": "Delete “%s”? This cannot be undone."
+    },
+    {
+      "name": "detail_err_file_missing",
+      "value": "The password file does not exist; it may have been moved or deleted"
+    },
+    {
+      "name": "detail_err_passphrase_required",
+      "value": "Decryption requires the passphrase; enter the key passphrase"
+    },
+    {
+      "name": "detail_err_unlock_failed",
+      "value": "Incorrect key passphrase; decryption failed"
+    },
+    {
+      "name": "detail_err_cancelled",
+      "value": "Decryption cancelled"
+    },
+    {
+      "name": "detail_err_delete_failed",
+      "value": "Delete failed"
+    },
+    {
+      "name": "detail_copied_password",
+      "value": "Password copied"
+    },
+    {
+      "name": "detail_copied_username",
+      "value": "Username copied"
+    },
+    {
+      "name": "detail_copied_email",
+      "value": "Email copied"
+    },
+    {
+      "name": "detail_copied_phone",
+      "value": "Phone number copied"
+    },
+    {
+      "name": "detail_copied_notes",
+      "value": "Notes copied"
+    },
+    {
+      "name": "detail_copied_extra",
+      "value": "Extra content copied"
+    },
+    {
+      "name": "detail_copied_all",
+      "value": "All content copied"
+    },
+    {
+      "name": "move_title",
+      "value": "Move / Rename"
+    },
+    {
+      "name": "move_old_path",
+      "value": "Current path"
+    },
+    {
+      "name": "move_name_placeholder",
+      "value": "Enter a new name"
+    },
+    {
+      "name": "move_target_dir",
+      "value": "Target folder"
+    },
+    {
+      "name": "move_unlock_hint_ids",
+      "value": "The target folder uses a different key; decrypt with the original key first. PGP ID: %s"
+    },
+    {
+      "name": "move_unlock_hint",
+      "value": "The target folder uses a different key; decrypt with the original key first, then re-encrypt"
+    },
+    {
+      "name": "passgen_tap_hint",
+      "value": "Tap the button below to generate a password"
+    },
+    {
+      "name": "passgen_entropy",
+      "value": "Entropy"
+    },
+    {
+      "name": "passgen_entropy_estimate",
+      "value": "Estimated entropy: %d bits — %s"
+    },
+    {
+      "name": "passgen_entropy_hint",
+      "value": "The entropy estimate will appear after generating"
+    },
+    {
+      "name": "passgen_generate",
+      "value": "Generate"
+    },
+    {
+      "name": "passgen_copied",
+      "value": "Copied"
+    },
+    {
+      "name": "passgen_copy",
+      "value": "Copy"
+    },
+    {
+      "name": "passgen_mode_random",
+      "value": "Random password"
+    },
+    {
+      "name": "passgen_mode_diceware",
+      "value": "Passphrase words"
+    },
+    {
+      "name": "passgen_length",
+      "value": "Length"
+    },
+    {
+      "name": "passgen_upper",
+      "value": "Uppercase A-Z"
+    },
+    {
+      "name": "passgen_lower",
+      "value": "Lowercase a-z"
+    },
+    {
+      "name": "passgen_digits",
+      "value": "Digits 0-9"
+    },
+    {
+      "name": "passgen_symbols",
+      "value": "Symbols !@#$"
+    },
+    {
+      "name": "passgen_exclude_ambiguous",
+      "value": "Exclude ambiguous characters (0/O, 1/l)"
+    },
+    {
+      "name": "passgen_word_count",
+      "value": "Word count"
+    },
+    {
+      "name": "passgen_separator",
+      "value": "Separator"
+    },
+    {
+      "name": "passgen_capitalize",
+      "value": "Capitalize words"
+    },
+    {
+      "name": "passgen_insert_digits",
+      "value": "Insert digits between words"
+    },
+    {
+      "name": "passgen_copied_clipboard",
+      "value": "Copied to clipboard"
+    },
+    {
+      "name": "folder_create_title",
+      "value": "New folder"
+    },
+    {
+      "name": "folder_name_label",
+      "value": "Folder name"
+    },
+    {
+      "name": "folder_name_placeholder",
+      "value": "Enter a folder name"
+    },
+    {
+      "name": "folder_key_label",
+      "value": "Encryption keys (optional, overrides the parent folder's keys)"
+    },
+    {
+      "name": "folder_no_keys",
+      "value": "No PGP keys imported yet; the parent folder's key will be used"
+    },
+    {
+      "name": "folder_create_btn",
+      "value": "Create folder"
+    },
+    {
+      "name": "autofill_title",
+      "value": "Autofill suggestions"
+    },
+    {
+      "name": "autofill_pick_for",
+      "value": "Choose credentials for %s"
+    },
+    {
+      "name": "autofill_matching",
+      "value": "Matching…"
+    },
+    {
+      "name": "autofill_no_match",
+      "value": "No matching passwords"
+    },
+    {
+      "name": "autofill_no_match_hint",
+      "value": "You can search on the main screen and copy manually"
+    },
+    {
+      "name": "autofill_unlocked_prompt",
+      "value": "Unlocked. Choose an action"
+    },
+    {
+      "name": "autofill_err_load",
+      "value": "Failed to load candidates"
+    },
+    {
+      "name": "autofill_fill_applied",
+      "value": "Autofilled %d fields"
+    },
+    {
+      "name": "autofill_fill_failed",
+      "value": "Autofill failed; use copy instead"
+    },
+    {
+      "name": "onboarding_hostkey_fp_line",
+      "value": "Key fingerprint of host %s:%d:"
+    },
+    {
+      "name": "onboarding_trust_clone",
+      "value": "Trust and clone"
+    },
+    {
+      "name": "onboarding_trust_clone_mismatch",
+      "value": "Still trust and clone"
+    },
+    {
+      "name": "onboarding_local_not_empty",
+      "value": "Local folder is not empty"
+    },
+    {
+      "name": "onboarding_local_not_empty_msg",
+      "value": "Cloning requires an empty target folder, but the current folder already contains files (leftovers from a previous clone or an old repository).\n\nContinuing will delete everything in this folder and clone again from the remote repository. This cannot be undone."
+    },
+    {
+      "name": "onboarding_delete_clone",
+      "value": "Delete and clone"
+    },
+    {
+      "name": "onboarding_welcome_title",
+      "value": "Welcome to HarmonyPasswordStore"
+    },
+    {
+      "name": "onboarding_welcome_desc",
+      "value": "A password manager fully compatible with the pass command-line tool. Passwords are stored as GPG-encrypted files and can be synced across devices via Git."
+    },
+    {
+      "name": "onboarding_feature_pass",
+      "value": "· Standard pass folder structure and .gpg encrypted files"
+    },
+    {
+      "name": "onboarding_feature_huks",
+      "value": "· PGP encryption with keys securely managed by HUKS"
+    },
+    {
+      "name": "onboarding_feature_git",
+      "value": "· Git sync over HTTPS and SSH"
+    },
+    {
+      "name": "onboarding_feature_passgen",
+      "value": "· Built-in password generator and passphrases"
+    },
+    {
+      "name": "onboarding_repo_title",
+      "value": "Set up the password store"
+    },
+    {
+      "name": "onboarding_repo_desc",
+      "value": "Create a new empty store, or clone an existing password store from a remote Git repository."
+    },
+    {
+      "name": "onboarding_mode_new",
+      "value": "New store"
+    },
+    {
+      "name": "onboarding_mode_clone",
+      "value": "Clone remote"
+    },
+    {
+      "name": "onboarding_url_placeholder",
+      "value": "git@host:user/repo.git"
+    },
+    {
+      "name": "onboarding_ssh_not_configured",
+      "value": "No SSH key configured"
+    },
+    {
+      "name": "onboarding_ssh_configure",
+      "value": "Configure SSH key"
+    },
+    {
+      "name": "onboarding_pgp_title",
+      "value": "Set up PGP keys"
+    },
+    {
+      "name": "onboarding_pgp_desc",
+      "value": "Tap “Browse” to open the PGP key manager, where you can create or import keys (.asc / .pgp files or pasted text). Private keys are kept secure by the system HUKS and never stored in plain text."
+    },
+    {
+      "name": "onboarding_pgp_not_set",
+      "value": "No PGP key set up yet"
+    },
+    {
+      "name": "onboarding_browse",
+      "value": "Browse"
+    },
+    {
+      "name": "onboarding_finish_title",
+      "value": "Setup complete"
+    },
+    {
+      "name": "onboarding_finish_desc",
+      "value": "All set! You can start managing your passwords now."
+    },
+    {
+      "name": "onboarding_repo_done",
+      "value": "✓ Password store initialized"
+    },
+    {
+      "name": "onboarding_repo_todo",
+      "value": "· Password store not initialized (can be done later in Settings)"
+    },
+    {
+      "name": "onboarding_key_done",
+      "value": "✓ PGP key imported"
+    },
+    {
+      "name": "onboarding_key_todo",
+      "value": "· PGP key not imported (can be done later in Settings)"
+    },
+    {
+      "name": "onboarding_setup_title",
+      "value": "Setup"
+    },
+    {
+      "name": "onboarding_skip",
+      "value": "Skip"
+    },
+    {
+      "name": "onboarding_prev",
+      "value": "Back"
+    },
+    {
+      "name": "onboarding_init_repo",
+      "value": "Initialize store"
+    },
+    {
+      "name": "onboarding_next",
+      "value": "Next"
+    },
+    {
+      "name": "onboarding_done",
+      "value": "Done"
+    },
+    {
+      "name": "onboarding_overlay_checkout",
+      "value": "Checking out files…"
+    },
+    {
+      "name": "onboarding_overlay_cloning",
+      "value": "Cloning remote repository…"
+    },
+    {
+      "name": "onboarding_progress_init",
+      "value": "Initializing local repository…"
+    },
+    {
+      "name": "onboarding_err_url_required",
+      "value": "Enter the remote repository URL"
+    },
+    {
+      "name": "onboarding_err_ssh_only",
+      "value": "Setup supports SSH cloning only. Use git@host:user/repo.git or ssh://git@host[:port]/path (for HTTPS repositories, finish setup first, then configure username and token in “Repository management → Git configuration”)"
+    },
+    {
+      "name": "onboarding_progress_clone",
+      "value": "Cloning remote repository…"
+    },
+    {
+      "name": "onboarding_err_save_hostkey",
+      "value": "Failed to save the host fingerprint, please retry"
+    },
+    {
+      "name": "about_title",
+      "value": "About"
+    },
+    {
+      "name": "about_app_name",
+      "value": "App name"
+    },
+    {
+      "name": "about_version",
+      "value": "Version"
+    },
+    {
+      "name": "about_license",
+      "value": "License"
+    },
+    {
+      "name": "about_target_os",
+      "value": "Target OS"
+    },
+    {
+      "name": "about_intro_title",
+      "value": "About the project"
+    },
+    {
+      "name": "about_intro_body",
+      "value": "HarmonyPasswordStore is a HarmonyOS implementation of password-store (pass), compatible with the standard GPG-encrypted pass store format. All passwords are stored locally encrypted as .gpg files, private keys are managed via HUKS, and Git sync over SSH and HTTPS is supported."
+    },
+    {
+      "name": "about_deps_title",
+      "value": "Open-source dependencies"
+    },
+    {
+      "name": "about_deps_body",
+      "value": "• libgit2 — Git repository operations (MPL-2.0)\n• pgp / rpgp — OpenPGP encryption (MIT or Apache-2.0)\n• russh — SSH protocol (MIT)\n• mbedTLS — TLS encrypted channel (Apache-2.0)\n• ssh-key — OpenSSH key format (MIT or Apache-2.0)\n• See Cargo.toml and CMakeLists.txt for the full dependency list"
+    },
+    {
+      "name": "about_source_title",
+      "value": "Source code"
+    },
+    {
+      "name": "about_source_body",
+      "value": "This project is fully open source; reviews and contributions are welcome:\n%s"
+    },
+    {
+      "name": "privacy_title",
+      "value": "Privacy policy"
+    },
+    {
+      "name": "privacy_doc_title",
+      "value": "HarmonyPasswordStore Privacy Policy"
+    },
+    {
+      "name": "privacy_updated",
+      "value": "Last updated: September 16, 2026"
+    },
+    {
+      "name": "privacy_s1_title",
+      "value": "Overview"
+    },
+    {
+      "name": "privacy_s1_body",
+      "value": "HarmonyPasswordStore is an open-source password manager compatible with the standard pass store format. The app follows the principles of \"local first, privacy above all\": your password data is always stored encrypted on your local device and is never uploaded to any third-party server."
+    },
+    {
+      "name": "privacy_s2_title",
+      "value": "Data storage"
+    },
+    {
+      "name": "privacy_s2_body",
+      "value": "All password entries are stored on the local file system as GPG-encrypted files (.gpg); the encryption keys are yours alone. PGP/SSH private keys are managed by HarmonyOS HUKS (unified key management) and never stored in plain text. Decrypted plaintext exists only in working memory; sensitive caches are cleared automatically when the app goes to the background."
+    },
+    {
+      "name": "privacy_s3_title",
+      "value": "Data sync"
+    },
+    {
+      "name": "privacy_s3_body",
+      "value": "For multi-device sync, the built-in Git support can push the password store to your own Git server (GitHub/Gitee/self-hosted). Sync channels support HTTPS (encrypted via mbedTLS) and SSH (encrypted via russh); authentication credentials (token/SSH keys) are stored only locally and never pass through any intermediary server."
+    },
+    {
+      "name": "privacy_s4_title",
+      "value": "Biometric unlock"
+    },
+    {
+      "name": "privacy_s4_body",
+      "value": "The app lock supports biometrics only (fingerprint/face): unlocking verifies identity on the device itself, biometric data is managed by the system security module, this app cannot access raw biometric information, and no PIN/passphrase digests are stored. Failed-attempt limits are enforced by the system."
+    },
+    {
+      "name": "privacy_s5_title",
+      "value": "Clipboard"
+    },
+    {
+      "name": "privacy_s5_body",
+      "value": "After a password is copied to the clipboard, the app automatically clears the clipboard after a configurable time (30 seconds by default) to prevent other apps from reading it."
+    },
+    {
+      "name": "privacy_s6_title",
+      "value": "Logs"
+    },
+    {
+      "name": "privacy_s6_body",
+      "value": "App logs (hilog) never record passwords, keys or decrypted plaintext; they only record operation status and file paths for debugging."
+    },
+    {
+      "name": "privacy_s7_title",
+      "value": "Data we do not collect"
+    },
+    {
+      "name": "privacy_s7_body",
+      "value": "This app collects no personally identifiable information (PII), embeds no analytics SDK, embeds no advertising SDK, and uploads no user data."
+    },
+    {
+      "name": "privacy_s8_title",
+      "value": "Open-source license"
+    },
+    {
+      "name": "privacy_s8_body",
+      "value": "This app is open source under the GPL-3.0 license; the source code can be reviewed in the GitHub repository:\nhttps://github.com/gmg137/HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_verifying",
+      "value": "Verifying…"
+    },
+    {
+      "name": "lock_touch_retry",
+      "value": "Tap the icon to verify again"
+    },
+    {
+      "name": "lock_title",
+      "value": "Unlock"
+    },
+    {
+      "name": "common_trust_connect",
+      "value": "Trust and connect"
+    },
+    {
+      "name": "settings_autosync_no_remote",
+      "value": "No remote repository URL configured; set one in “Git configuration” first"
+    },
+    {
+      "name": "settings_autosync_not_cloned",
+      "value": "The remote repository has not been cloned locally yet; clone it in “Repository management” first"
+    },
+    {
+      "name": "lock_type_fingerprint",
+      "value": "fingerprint"
+    },
+    {
+      "name": "lock_type_face",
+      "value": "face"
+    },
+    {
+      "name": "lock_reason_not_enrolled",
+      "value": "The device supports biometrics, but no fingerprint or face is enrolled in system settings. Register one first"
+    },
+    {
+      "name": "lock_reason_unsupported",
+      "value": "This device does not support biometrics"
+    },
+    {
+      "name": "lock_err_unavailable",
+      "value": "Biometrics unavailable: not supported or not enrolled"
+    },
+    {
+      "name": "lock_auth_dialog_title",
+      "value": "Unlock HarmonyPasswordStore"
+    },
+    {
+      "name": "lock_err_timeout",
+      "value": "Authentication timed out"
+    },
+    {
+      "name": "lock_err_cancelled",
+      "value": "Authentication cancelled"
+    },
+    {
+      "name": "lock_auth_failed_code",
+      "value": "Authentication failed (%d)"
+    },
+    {
+      "name": "lock_err_start_failed",
+      "value": "Cannot start biometric authentication"
+    },
+    {
+      "name": "common_import",
+      "value": "Import"
+    },
+    {
+      "name": "common_import_failed",
+      "value": "Import failed"
+    },
+    {
+      "name": "common_ok",
+      "value": "OK"
+    },
+    {
+      "name": "common_delete_key",
+      "value": "Delete key"
+    },
+    {
+      "name": "common_file_read_failed",
+      "value": "Failed to read file: %s"
+    },
+    {
+      "name": "common_copy",
+      "value": "Copy"
+    },
+    {
+      "name": "pgp_import_text",
+      "value": "Import key from text"
+    },
+    {
+      "name": "pgp_import_from_file",
+      "value": "Import key from file"
+    },
+    {
+      "name": "pgp_create_new",
+      "value": "Create new key"
+    },
+    {
+      "name": "pgp_passphrase_optional",
+      "value": "Passphrase (optional)"
+    },
+    {
+      "name": "pgp_gen_eddsa_rec",
+      "value": "EdDSA (recommended)"
+    },
+    {
+      "name": "pgp_userid_placeholder",
+      "value": "User ID (e.g. Name <email@example.com>)"
+    },
+    {
+      "name": "pgp_passphrase_min6",
+      "value": "Passphrase (optional, at least 6 characters)"
+    },
+    {
+      "name": "pgp_create_btn",
+      "value": "Create"
+    },
+    {
+      "name": "pgp_set_default",
+      "value": "Set as default"
+    },
+    {
+      "name": "pgp_edit_key",
+      "value": "Edit key"
+    },
+    {
+      "name": "pgp_export_private",
+      "value": "Export private key"
+    },
+    {
+      "name": "pgp_export_public",
+      "value": "Export public key"
+    },
+    {
+      "name": "pgp_chpw_title",
+      "value": "Change key passphrase"
+    },
+    {
+      "name": "pgp_chpw_old_ph",
+      "value": "Current key passphrase"
+    },
+    {
+      "name": "pgp_chpw_new_ph",
+      "value": "New passphrase (leave empty to remove the passphrase)"
+    },
+    {
+      "name": "pgp_chpw_confirm",
+      "value": "Confirm change"
+    },
+    {
+      "name": "pgp_import_limited_title",
+      "value": "Imported, with limitations"
+    },
+    {
+      "name": "pgp_import_failed_title",
+      "value": "Cannot import key"
+    },
+    {
+      "name": "pgp_export_private_ok",
+      "value": "Private key saved as an .asc file"
+    },
+    {
+      "name": "pgp_export_public_ok",
+      "value": "Public key saved as an .asc file"
+    },
+    {
+      "name": "pgp_delete_key_msg",
+      "value": "Delete “%s”? Passwords encrypted with it can no longer be decrypted, and this cannot be undone."
+    },
+    {
+      "name": "pgp_root_switch_title",
+      "value": "Switch the store root's encryption key"
+    },
+    {
+      "name": "pgp_root_switch_msg_needs",
+      "value": "The store root is currently encrypted with “%s”. Switch to “%s” and re-encrypt the %d entries under the root?"
+    },
+    {
+      "name": "pgp_root_switch_msg_none",
+      "value": "The store root is currently encrypted with “%s”. Switch to “%s”? (No entries under the root need re-encryption.)"
+    },
+    {
+      "name": "pgp_root_switch_skip_warn",
+      "value": "Note: %d entries will be skipped because the matching private key is missing."
+    },
+    {
+      "name": "pgp_root_switch_only_default",
+      "value": "Set as default only"
+    },
+    {
+      "name": "pgp_root_switch_both",
+      "value": "Switch as well"
+    },
+    {
+      "name": "pgp_root_switched",
+      "value": "Root encryption key switched"
+    },
+    {
+      "name": "pgp_root_reencrypted",
+      "value": "Root encryption key switched; %d entries re-encrypted"
+    },
+    {
+      "name": "pgp_rootkey_title",
+      "value": "Enter the old key passphrase"
+    },
+    {
+      "name": "pgp_rootkey_hint",
+      "value": "Re-encryption first requires unlocking these entries with the old key"
+    },
+    {
+      "name": "pgp_rootkey_ph",
+      "value": "Old key passphrase"
+    },
+    {
+      "name": "pgp_rootkey_start",
+      "value": "Start re-encryption"
+    },
+    {
+      "name": "pgp_algo_unknown",
+      "value": "Unknown algorithm"
+    },
+    {
+      "name": "pgp_tag_default",
+      "value": "Default"
+    },
+    {
+      "name": "pgp_tag_expired",
+      "value": "Expired"
+    },
+    {
+      "name": "pgp_tag_secret",
+      "value": "Private"
+    },
+    {
+      "name": "pgp_tag_public",
+      "value": "Public"
+    },
+    {
+      "name": "pgp_empty_title",
+      "value": "No keys imported yet"
+    },
+    {
+      "name": "pgp_empty_hint",
+      "value": "Tap + in the bottom-right corner to import or create keys"
+    },
+    {
+      "name": "pgp_load_failed",
+      "value": "Failed to load the key list"
+    },
+    {
+      "name": "pgp_err_userid_required",
+      "value": "Enter a User ID (e.g. Name <email@example.com>)"
+    },
+    {
+      "name": "pgp_err_passphrase_short",
+      "value": "Passphrase must be at least 6 characters (or leave empty for none)"
+    },
+    {
+      "name": "pgp_generated",
+      "value": "Key generated"
+    },
+    {
+      "name": "pgp_err_paste_required",
+      "value": "Paste ASCII-armored key text first"
+    },
+    {
+      "name": "pgp_imported_with_limit",
+      "value": "Key imported (with limitations)"
+    },
+    {
+      "name": "pgp_imported_ok",
+      "value": "Key imported"
+    },
+    {
+      "name": "pgp_duplicate_key",
+      "value": "This key already exists on this device; no need to import it again."
+    },
+    {
+      "name": "pgp_root_switch_failed",
+      "value": "Failed to switch the root encryption key: %s"
+    },
+    {
+      "name": "pgp_file_empty",
+      "value": "The file is empty; nothing was read"
+    },
+    {
+      "name": "pgp_file_not_pgp",
+      "value": "This file is not a PGP key file (neither armored text nor binary OpenPGP data)"
+    },
+    {
+      "name": "pgp_set_default_ok",
+      "value": "Set as the default encryption key"
+    },
+    {
+      "name": "pgp_deleted",
+      "value": "Key deleted"
+    },
+    {
+      "name": "pgp_pw_changed",
+      "value": "Key passphrase changed"
+    },
+    {
+      "name": "pgp_export_read_private_failed",
+      "value": "Failed to read the private key"
+    },
+    {
+      "name": "pgp_export_pub_failed",
+      "value": "Failed to export the public key"
+    },
+    {
+      "name": "pgp_export_save_failed",
+      "value": "Save failed: %s"
+    },
+    {
+      "name": "pgp_chpw_failed_retry",
+      "value": "Change failed, please retry"
+    },
+    {
+      "name": "pgp_chpw_wrong_old",
+      "value": "Current key passphrase is incorrect, please retry"
+    },
+    {
+      "name": "pgp_chpw_failed",
+      "value": "Change failed: %s"
+    },
+    {
+      "name": "ssh_replace_confirm_title",
+      "value": "Replace the existing SSH key?"
+    },
+    {
+      "name": "ssh_replace_confirm_msg",
+      "value": "You may lose access to the server"
+    },
+    {
+      "name": "ssh_replace_btn",
+      "value": "Replace"
+    },
+    {
+      "name": "ssh_import_hint",
+      "value": "Prepare the private key file on your computer and transfer it to the phone:\n· Existing key: the private key is ~/.ssh/id_ed25519 (or id_rsa)\n· New key: ssh-keygen -t ed25519 -C \"your@email.com\"\nOpenSSH / PKCS8 / RSA PEM (including encrypted keys) are supported."
+    },
+    {
+      "name": "ssh_encrypted_key_title",
+      "value": "Private key is encrypted"
+    },
+    {
+      "name": "ssh_encrypted_key_msg",
+      "value": "This private key is encrypted; enter its passphrase in “Key passphrase” before importing."
+    },
+    {
+      "name": "ssh_generate_new",
+      "value": "Generate new key"
+    },
+    {
+      "name": "ssh_import_key",
+      "value": "Import key"
+    },
+    {
+      "name": "ssh_comment_ph",
+      "value": "Comment (optional, usually your email)"
+    },
+    {
+      "name": "ssh_generate_btn",
+      "value": "Generate"
+    },
+    {
+      "name": "ssh_pick_key_file",
+      "value": "Choose a private key file"
+    },
+    {
+      "name": "ssh_passphrase_ph",
+      "value": "Key passphrase (leave empty if none)"
+    },
+    {
+      "name": "ssh_copy_pub",
+      "value": "Copy public key"
+    },
+    {
+      "name": "ssh_empty_title",
+      "value": "No SSH key yet"
+    },
+    {
+      "name": "ssh_empty_hint",
+      "value": "Tap + in the bottom-right corner to create or import a key"
+    },
+    {
+      "name": "ssh_load_failed",
+      "value": "Failed to load the key"
+    },
+    {
+      "name": "ssh_gen_failed",
+      "value": "Key generation failed"
+    },
+    {
+      "name": "ssh_replaced",
+      "value": "SSH key replaced"
+    },
+    {
+      "name": "ssh_generated",
+      "value": "SSH key generated"
+    },
+    {
+      "name": "ssh_imported",
+      "value": "SSH key imported"
+    },
+    {
+      "name": "ssh_file_empty",
+      "value": "The selected file is empty"
+    },
+    {
+      "name": "ssh_err_pick_first",
+      "value": "Choose a private key file first"
+    },
+    {
+      "name": "ssh_import_private_failed",
+      "value": "Failed to import the private key"
+    },
+    {
+      "name": "ssh_pub_missing",
+      "value": "Public key does not exist"
+    },
+    {
+      "name": "ssh_pub_copied",
+      "value": "Public key copied to clipboard"
+    },
+    {
+      "name": "ssh_deleted",
+      "value": "SSH key deleted"
+    },
+    {
+      "name": "gitcfg_saved_title",
+      "value": "Configuration saved"
+    },
+    {
+      "name": "gitcfg_clone_after_save_msg",
+      "value": "Clone the remote repository now?\n%s"
+    },
+    {
+      "name": "gitcfg_clone_btn",
+      "value": "Clone"
+    },
+    {
+      "name": "gitcfg_needs_clean_title",
+      "value": "Local folder is not empty"
+    },
+    {
+      "name": "gitcfg_needs_clean_msg",
+      "value": "Cloning requires an empty local folder. The current folder may contain an old repository or leftover files; the local repository folder and all password files in it must be deleted first. Continue?"
+    },
+    {
+      "name": "gitcfg_delete_and_clone",
+      "value": "Delete and clone"
+    },
+    {
+      "name": "gitcfg_hostkey_fp_typed",
+      "value": "Key fingerprint of host %s:%d (%s):"
+    },
+    {
+      "name": "gitcfg_hostkey_mismatch_explain",
+      "value": "This host already has a trusted record, but the fingerprint of this key type differs: the server may have rotated its key, or this could be a man-in-the-middle attack. Verify with the server administrator before deciding; confirming will overwrite the record for this key type."
+    },
+    {
+      "name": "gitcfg_hostkey_trust_anyway",
+      "value": "Still trust"
+    },
+    {
+      "name": "gitcfg_hostkey_trust_connect",
+      "value": "Trust and connect"
+    },
+    {
+      "name": "gitcfg_clone_done_toast",
+      "value": "Clone complete; the password list has been refreshed"
+    },
+    {
+      "name": "gitcfg_pick_ssh_key",
+      "value": "Choose the SSH key"
+    },
+    {
+      "name": "gitcfg_section_remote",
+      "value": "Remote repository"
+    },
+    {
+      "name": "gitcfg_auth_mode",
+      "value": "Authentication"
+    },
+    {
+      "name": "gitcfg_auth_ssh",
+      "value": "SSH key"
+    },
+    {
+      "name": "gitcfg_auth_ssh_tab",
+      "value": "SSH key"
+    },
+    {
+      "name": "gitcfg_label_url",
+      "value": "Remote URL"
+    },
+    {
+      "name": "gitcfg_ph_username",
+      "value": "Username / email"
+    },
+    {
+      "name": "gitcfg_ph_password",
+      "value": "Password / access token"
+    },
+    {
+      "name": "gitcfg_token_hint",
+      "value": "Platforms like Gitee/GitHub require a “personal access token” instead of the login password"
+    },
+    {
+      "name": "gitcfg_select_ssh_key",
+      "value": "Choose an SSH key"
+    },
+    {
+      "name": "gitcfg_no_keys",
+      "value": "No keys yet"
+    },
+    {
+      "name": "gitcfg_go_create",
+      "value": "Create one"
+    },
+    {
+      "name": "gitcfg_label_ssh_port",
+      "value": "SSH port"
+    },
+    {
+      "name": "gitcfg_ph_ssh_port",
+      "value": "Default 22"
+    },
+    {
+      "name": "gitcfg_label_key_passphrase",
+      "value": "Key passphrase"
+    },
+    {
+      "name": "gitcfg_ph_key_passphrase",
+      "value": "Leave empty if the key is unencrypted"
+    },
+    {
+      "name": "gitcfg_section_identity",
+      "value": "Commit identity"
+    },
+    {
+      "name": "gitcfg_label_name",
+      "value": "Name"
+    },
+    {
+      "name": "gitcfg_ph_name",
+      "value": "Git committer name"
+    },
+    {
+      "name": "gitcfg_ph_email",
+      "value": "Git committer email"
+    },
+    {
+      "name": "gitcfg_section_network",
+      "value": "Network"
+    },
+    {
+      "name": "gitcfg_label_proxy",
+      "value": "Proxy"
+    },
+    {
+      "name": "gitcfg_ph_proxy",
+      "value": "e.g. http://127.0.0.1:7890"
+    },
+    {
+      "name": "gitcfg_test_ok",
+      "value": "Connection successful"
+    },
+    {
+      "name": "gitcfg_testing",
+      "value": "Testing…"
+    },
+    {
+      "name": "gitcfg_test_btn",
+      "value": "Test connection"
+    },
+    {
+      "name": "gitcfg_checkout_files",
+      "value": "Checking out files…"
+    },
+    {
+      "name": "gitcfg_cloning_overlay",
+      "value": "Cloning remote repository…"
+    },
+    {
+      "name": "gitcfg_err_key_removed",
+      "value": "The previously selected SSH key has been deleted; choose one again"
+    },
+    {
+      "name": "gitcfg_cloning",
+      "value": "Cloning remote repository…"
+    },
+    {
+      "name": "gitcfg_clone_done",
+      "value": "Clone complete"
+    },
+    {
+      "name": "gitcfg_err_url_required",
+      "value": "Enter the remote repository URL"
+    },
+    {
+      "name": "gitcfg_err_url_scheme",
+      "value": "The URL must start with https:// or ssh:// (or use the git@host:path form)"
+    },
+    {
+      "name": "gitcfg_save_failed",
+      "value": "Save failed"
+    },
+    {
+      "name": "gitcfg_err_parse_ssh",
+      "value": "Cannot parse SSH host information from the URL"
+    },
+    {
+      "name": "gitcfg_err_need_tofu",
+      "value": "First connection requires confirming the server fingerprint; confirm and save again"
+    },
+    {
+      "name": "gitcfg_https_err_auth",
+      "value": "Authentication failed: check the username and password/token (Gitee/GitHub require an access token, not the login password)"
+    },
+    {
+      "name": "gitcfg_https_err_dns",
+      "value": "Cannot resolve the host address: check the network and the remote URL"
+    },
+    {
+      "name": "gitcfg_https_err_notfound",
+      "value": "Repository not found or access denied: check the remote URL and your permissions"
+    },
+    {
+      "name": "gitcfg_https_err_proto",
+      "value": "Unsupported protocol: the HTTPS test requires native TLS support"
+    },
+    {
+      "name": "gitcfg_https_err_generic",
+      "value": "Connection failed: %s"
+    },
+    {
+      "name": "gitcfg_clone_cancelled",
+      "value": "Clone cancelled (host key not confirmed)"
+    },
+    {
+      "name": "gitcfg_test_cancelled",
+      "value": "Connection cancelled (host key not confirmed)"
+    },
+    {
+      "name": "repo_section_status",
+      "value": "Repository status"
+    },
+    {
+      "name": "repo_status_cloned",
+      "value": "Remote repository cloned"
+    },
+    {
+      "name": "repo_status_not_cloned",
+      "value": "Remote repository not cloned"
+    },
+    {
+      "name": "repo_no_remote_url",
+      "value": "No remote URL configured yet"
+    },
+    {
+      "name": "repo_section_sync",
+      "value": "Sync behavior"
+    },
+    {
+      "name": "repo_pull_rebase_title",
+      "value": "Rebase on pull"
+    },
+    {
+      "name": "repo_pull_rebase_sub",
+      "value": "Use rebase (--rebase) when pulling remote updates to keep a linear history"
+    },
+    {
+      "name": "repo_section_ops",
+      "value": "Repository operations"
+    },
+    {
+      "name": "repo_gitcfg_sub",
+      "value": "Remote URL / authentication / commit identity"
+    },
+    {
+      "name": "repo_section_danger",
+      "value": "Danger zone"
+    },
+    {
+      "name": "repo_danger_hint",
+      "value": "Deletes the local repository folder and all password files. This cannot be undone."
+    },
+    {
+      "name": "repo_delete_btn",
+      "value": "Delete local repository"
+    },
+    {
+      "name": "repo_delete_confirm_msg",
+      "value": "The local repository folder and all password files in it will be deleted. This cannot be undone."
+    },
+    {
+      "name": "repo_err_no_path",
+      "value": "Repository path not configured"
+    },
+    {
+      "name": "repo_err_delete_failed_dir",
+      "value": "Failed to delete the repository: the folder cannot be removed"
+    },
+    {
+      "name": "repo_deleted",
+      "value": "Local repository deleted"
+    },
+    {
+      "name": "repo_err_delete_failed",
+      "value": "Failed to delete the repository: %s"
+    },
+    {
+      "name": "gitlog_not_repo",
+      "value": "The current folder is not a Git repository"
+    },
+    {
+      "name": "gitlog_load_failed",
+      "value": "Failed to load the commit history"
+    },
+    {
+      "name": "git_auth_required_hint",
+      "value": "The remote repository requires authentication. Enter the username and access token (Gitee personal token with projects write permission) in “Git configuration” and retry"
+    },
+    {
+      "name": "git_remove_repo_dir_failed",
+      "value": "Failed to delete the local repository: the folder cannot be removed"
+    },
+    {
+      "name": "git_ssh_no_key_hint",
+      "value": "No SSH key configured. Generate or import one in “SSH key management” first"
+    },
+    {
+      "name": "git_ssh_multi_key_hint",
+      "value": "There are %d SSH keys; choose the one for authentication in “Git configuration → SSH key” first"
+    },
+    {
+      "name": "git_ssh_key_encrypted",
+      "value": "This SSH private key is encrypted; enter its passphrase in “Git configuration” first"
+    },
+    {
+      "name": "git_ssh_remote_notfound",
+      "value": "Repository not found or wrong path: the server is reachable and authentication passed, check the repository path in the URL"
+    },
+    {
+      "name": "git_hostkey_not_trusted",
+      "value": "Host key not trusted or mismatched: complete the fingerprint confirmation first"
+    },
+    {
+      "name": "git_ssh_auth_failed",
+      "value": "SSH authentication failed: check that the public key is added to the remote account and the key passphrase is correct"
+    },
+    {
+      "name": "git_ssh_url_unparsed_remote",
+      "value": "Cannot parse the remote SSH URL. Supported: git@host:path and ssh://user@host[:port]/path"
+    },
+    {
+      "name": "git_hostkey_mismatch_short",
+      "value": "Server host key differs from the saved fingerprint (possible man-in-the-middle attack)"
+    },
+    {
+      "name": "git_hostkey_first_connect",
+      "value": "First connection to this server: the host key fingerprint must be confirmed"
+    },
+    {
+      "name": "git_ssh_url_unparsed_clone",
+      "value": "Cannot parse the SSH URL. Supported: git@host:user/repo.git and ssh://git@host[:port]/user/repo.git"
+    },
+    {
+      "name": "git_clone_dir_not_empty",
+      "value": "The local repository folder is not empty; cannot clone. Empty it first (“Repository management → Delete local repository”) and retry; if cloning was triggered after saving in “Git configuration”, choose “Delete and clone” in the dialog"
+    },
+    {
+      "name": "git_err_url_empty",
+      "value": "The remote URL cannot be empty"
+    },
+    {
+      "name": "git_err_url_scheme",
+      "value": "Unsupported URL format. Use git@host:user/repo.git (SSH) or https://host/user/repo.git"
+    },
+    {
+      "name": "git_clone_https_tls_unready",
+      "value": "HTTPS clone failed (native TLS not ready). Check the network and URL, or switch to another protocol"
+    },
+    {
+      "name": "git_clone_ssh_unsupported",
+      "value": "SSH cloning is not supported in this build (no SSH transport compiled in). Use an HTTPS URL with an access token instead, e.g. https://gitee.com/<user>/<repo>.git, and enter the username and token in “Git configuration”"
+    },
+    {
+      "name": "git_clone_auth_failed",
+      "value": "Authentication failed: check the username and token in the Git configuration (GitHub/Gitee require a token, not the login password)"
+    },
+    {
+      "name": "git_pull_failed",
+      "value": "Pull failed: %s"
+    },
+    {
+      "name": "git_push_failed",
+      "value": "Push failed: %s"
+    },
+    {
+      "name": "common_native_call_failed",
+      "value": "Native call failed, please retry"
+    },
+    {
+      "name": "common_ssh_pem_read_failed",
+      "value": "Cannot read the SSH private key (%s). Re-generate or re-import the key in “SSH key management”"
+    },
+    {
+      "name": "common_unknown_error",
+      "value": "Unknown error"
+    },
+    {
+      "name": "ssh_host_required",
+      "value": "The host name cannot be empty"
+    },
+    {
+      "name": "ssh_probe_failed",
+      "value": "Failed to get the host key"
+    },
+    {
+      "name": "ssh_hostkey_mismatch_rejected",
+      "value": "The server host key differs from the saved fingerprint; the connection was rejected (possible man-in-the-middle attack)"
+    },
+    {
+      "name": "ssh_tcp_no_key",
+      "value": "TCP is reachable, but no SSH key is configured, so authentication cannot be verified. Choose a private key in “Git configuration → SSH key” first"
+    },
+    {
+      "name": "ssh_tcp_auth_incomplete",
+      "value": "TCP is reachable, but SSH authentication could not be completed; check the key and passphrase"
+    },
+    {
+      "name": "ssh_params_incomplete",
+      "value": "Authentication parameters are incomplete"
+    },
+    {
+      "name": "ssh_no_key_unverified",
+      "value": "No SSH key configured, so authentication cannot be verified. Choose a private key in “Git configuration → SSH key” first"
+    },
+    {
+      "name": "ssh_tcp_connect_failed",
+      "value": "Connection failed: %s"
+    },
+    {
+      "name": "reencrypt_no_key_selected",
+      "value": "No encryption key selected"
+    },
+    {
+      "name": "reencrypt_no_enc_subkey",
+      "value": "The selected key has no usable encryption subkey; it cannot be an encryption recipient"
+    },
+    {
+      "name": "reencrypt_missing_decrypt_key",
+      "value": "Missing decryption key (recipient Key ID: %s)"
+    },
+    {
+      "name": "reencrypt_keyids_unlabeled",
+      "value": "unlabeled"
+    },
+    {
+      "name": "reencrypt_encrypt_failed",
+      "value": "Re-encryption failed: %s"
+    },
+    {
+      "name": "reencrypt_write_gpgid_failed",
+      "value": "Failed to write .gpg-id: %s"
+    },
+    {
+      "name": "reencrypt_failed_count",
+      "value": "%d entries could not be re-encrypted; the original .gpg-id was kept"
+    },
+    {
+      "name": "pgp_no_public_key",
+      "value": "No public key available (import a PGP key first)"
+    },
+    {
+      "name": "pgp_no_secret_key",
+      "value": "No private key available (import a PGP key first)"
+    },
+    {
+      "name": "pgp_no_secret_imported",
+      "value": "No private keys imported yet; import one in “PGP key management” first"
+    },
+    {
+      "name": "pgp_key_not_found_reimport",
+      "value": "The key cannot be found; import it again"
+    },
+    {
+      "name": "pgp_key_file_missing",
+      "value": "The key file is missing; import this key again"
+    },
+    {
+      "name": "pgp_verify_no_secret_material",
+      "value": "This key contains no private key material (it may be a public key) and cannot decrypt. Export the private key with `gpg --export-secret-keys --armor <key-id>` and import it again."
+    },
+    {
+      "name": "pgp_verify_no_mlkem_material",
+      "value": "This key contains no usable GnuPG ML-KEM private key material; make sure a private key was exported."
+    },
+    {
+      "name": "pgp_verify_mlkem_unreadable",
+      "value": "The key's ML-KEM private key material cannot be read (%s). It shares the passphrase with the ECC part, so this is not a passphrase problem; re-export the key with a newer gpg and import it again."
+    },
+    {
+      "name": "pgp_verify_curve_unsupported",
+      "value": "This key's classic curve is not supported by the app (%s). Use a GnuPG ky768_cv25519 key (ML-KEM-768 + Curve25519) instead."
+    },
+    {
+      "name": "pgp_key_content_empty",
+      "value": "The key content is empty"
+    },
+    {
+      "name": "pgp_import_not_secret",
+      "value": "This is not valid private key material and cannot decrypt. Export the private key with `gpg --export-secret-keys --armor <key-id>` first, then import it."
+    },
+    {
+      "name": "pgp_parse_failed",
+      "value": "Key parsing failed (invalid or unsupported format)"
+    },
+    {
+      "name": "pgp_warn_algo8",
+      "value": "This key's encryption subkey is %s (a GnuPG private algorithm number). The app can use it to encrypt and decrypt normally, but implementations other than GnuPG may not recognize it."
+    },
+    {
+      "name": "pgp_warn_algo8_curve",
+      "value": "This key's encryption subkey is %s; its classic curve is not yet supported by the app (currently supported: ky768_cv25519 / ky768_bp256 / ky1024_bp384). The key was imported and can be viewed and managed, but it cannot be used to encrypt or decrypt new entries."
+    },
+    {
+      "name": "pgp_warn_enc_unsupported",
+      "value": "This key's encryption subkey is %s, which this version cannot use to encrypt new entries. The key was imported and can be viewed and managed, but choose an RSA or ECC key as the encryption key instead."
+    },
+    {
+      "name": "pgp_key_exists",
+      "value": "This key already exists"
+    },
+    {
+      "name": "pgp_import_failed_reason",
+      "value": "Import failed: %s"
+    },
+    {
+      "name": "pgp_split_parse_failed",
+      "value": "Failed to parse the split key result"
+    },
+    {
+      "name": "pgp_none_imported",
+      "value": "No keys were imported"
+    },
+    {
+      "name": "pgp_err_unsupported_algo",
+      "value": "Unsupported key algorithm"
+    },
+    {
+      "name": "pgp_key_missing",
+      "value": "The key does not exist"
+    },
+    {
+      "name": "pgp_store_new_key_failed",
+      "value": "Failed to store the new key: %s"
+    },
+    {
+      "name": "pgp_unsupported_algo_reason",
+      "value": "Unsupported key algorithm (%s); use an RSA or ECC key instead."
+    },
+    {
+      "name": "ssh_key_content_empty",
+      "value": "The private key content is empty"
+    },
+    {
+      "name": "ssh_not_private_key",
+      "value": "The file is not a valid private key (no PRIVATE KEY marker found)"
+    },
+    {
+      "name": "ssh_native_unavailable",
+      "value": "The native library is unavailable; the private key cannot be parsed"
+    },
+    {
+      "name": "ssh_invalid_key_detailed",
+      "value": "The private key format is invalid or the file is corrupted; make sure it is a complete OpenSSH private key file"
+    },
+    {
+      "name": "ssh_key_encrypted_need_pw",
+      "value": "This private key is encrypted; enter its passphrase"
+    },
+    {
+      "name": "ssh_wrong_passphrase",
+      "value": "Incorrect key passphrase; enter it again"
+    },
+    {
+      "name": "ssh_invalid_key",
+      "value": "The private key format is invalid or the file is corrupted"
+    },
+    {
+      "name": "ssh_seal_failed",
+      "value": "Failed to encrypt the private key; it was not saved (please retry)"
+    },
+    {
+      "name": "repo_src_entry_missing",
+      "value": "The source password file does not exist"
+    },
+    {
+      "name": "repo_dst_entry_exists",
+      "value": "A password with the same name already exists at the destination"
+    },
+    {
+      "name": "repo_rename_failed",
+      "value": "Move/rename failed"
+    },
+    {
+      "name": "repo_src_dir_missing",
+      "value": "The source folder does not exist"
+    },
+    {
+      "name": "repo_dst_dir_exists",
+      "value": "A folder with the same name already exists at the destination"
+    },
+    {
+      "name": "repo_dir_rename_failed",
+      "value": "Folder rename failed"
+    },
+    {
+      "name": "repo_invalid_path",
+      "value": "Invalid path (%s): %s"
+    },
+    {
+      "name": "autofill_settings_title",
+      "value": "Autofill"
+    },
+    {
+      "name": "autofill_svc_status",
+      "value": "Autofill service status"
+    },
+    {
+      "name": "autofill_repo_ready",
+      "value": "Store ready"
+    },
+    {
+      "name": "autofill_repo_not_init",
+      "value": "Store not initialized"
+    },
+    {
+      "name": "autofill_entry_count_label",
+      "value": "Available password entries"
+    },
+    {
+      "name": "autofill_entry_count",
+      "value": "%d entries"
+    },
+    {
+      "name": "autofill_biometric_cap",
+      "value": "Biometric capability"
+    },
+    {
+      "name": "autofill_biometric_support",
+      "value": "Supported: %s"
+    },
+    {
+      "name": "autofill_biometric_unsupported",
+      "value": "Not supported"
+    },
+    {
+      "name": "autofill_howto_title",
+      "value": "How to enable autofill"
+    },
+    {
+      "name": "autofill_howto_step1",
+      "value": "1. Open system Settings → More settings → Passwords & autofill (or \"autofill service\")"
+    },
+    {
+      "name": "autofill_howto_step2",
+      "value": "2. Choose \"Password Store (HarmonyPasswordStore)\" as the autofill service"
+    },
+    {
+      "name": "autofill_howto_step3",
+      "value": "3. Tap an input field in an app or browser and the fill suggestions will appear"
+    },
+    {
+      "name": "autofill_rule_title",
+      "value": "Matching rules"
+    },
+    {
+      "name": "autofill_rule_match",
+      "value": "· Matches the requesting app's package name or web domain against entry names/paths"
+    },
+    {
+      "name": "autofill_rule_priority",
+      "value": "· Exact matches are shown first; ties are ordered by last used"
+    },
+    {
+      "name": "autofill_rule_nodecrypt",
+      "value": "· Matching never decrypts files; decryption happens only after you choose"
+    },
+    {
+      "name": "autofill_sec_title",
+      "value": "Security notes"
+    },
+    {
+      "name": "autofill_sec_fields",
+      "value": "· Fill candidates show only the name and username, never the password"
+    },
+    {
+      "name": "autofill_sec_memory",
+      "value": "· The decrypted password exists only briefly in memory"
+    },
+    {
+      "name": "autofill_sec_usage",
+      "value": "· Successful fills record usage time to improve candidate ordering"
     }
   ]
 }

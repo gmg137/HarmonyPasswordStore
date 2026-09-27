@@ -1,5 +1,6 @@
 import { userAuth } from '@kit.UserAuthenticationKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -87,15 +88,15 @@ export class BiometricHelper {
       }
     }
 
-    if (hasFingerprintSupport && !fingerprintNotEnrolled) return { type: '指纹', reason: '' };
-    if (hasFaceSupport && !faceNotEnrolled) return { type: '面容', reason: '' };
+    if (hasFingerprintSupport && !fingerprintNotEnrolled) return { type: Strings.get('lock_type_fingerprint'), reason: '' };
+    if (hasFaceSupport && !faceNotEnrolled) return { type: Strings.get('lock_type_face'), reason: '' };
 
     // 设备支持但未注册
     if (hasFingerprintSupport || hasFaceSupport) {
-      return { type: '', reason: '设备支持生物识别，但尚未在系统设置中录入指纹或面容，请先注册' };
+      return { type: '', reason: Strings.get('lock_reason_not_enrolled') };
     }
 
-    return { type: '', reason: '设备不支持生物识别' };
+    return { type: '', reason: Strings.get('lock_reason_unsupported') };
   }
 
   /**
@@ -136,7 +137,7 @@ export class BiometricHelper {
   async authenticate(): Promise<BiometricResult> {
     const types: userAuth.UserAuthType[] = this.availableAuthTypes();
     if (types.length === 0) {
-      return { success: false, error: '设备不支持或未录入生物识别' };
+      return { success: false, error: Strings.get('lock_err_unavailable') };
     }
     const authParam: userAuth.AuthParam = {
       challenge: new Uint8Array([0, 1, 2, 3, 4]),
@@ -144,7 +145,7 @@ export class BiometricHelper {
       authTrustLevel: userAuth.AuthTrustLevel.ATL1,
     };
     const widgetParam: userAuth.WidgetParam = {
-      title: '解锁 HarmonyPasswordStore',
+      title: Strings.get('lock_auth_dialog_title'),
     };
 
     return await new Promise<BiometricResult>((resolve: (r: BiometricResult) => void) => {
@@ -173,7 +174,7 @@ export class BiometricHelper {
         instance = userAuth.getUserAuthInstance(authParam, widgetParam);
         timer = setTimeout(() => {
           hilog.info(DOMAIN, TAG, 'authenticate timeout');
-          finish({ success: false, error: '认证超时' });
+          finish({ success: false, error: Strings.get('lock_err_timeout') });
         }, 60000) as number;
         instance.on('result', {
           onResult: (result: userAuth.UserAuthResult) => {
@@ -183,16 +184,16 @@ export class BiometricHelper {
               finish({ success: true, error: '' });
             } else if (code === userAuth.UserAuthResultCode.CANCELED
               || code === userAuth.UserAuthResultCode.TYPE_NOT_SUPPORT) {
-              finish({ success: false, error: '认证已取消' });
+              finish({ success: false, error: Strings.get('lock_err_cancelled') });
             } else {
-              finish({ success: false, error: `认证失败（${code}）` });
+              finish({ success: false, error: Strings.fmt('lock_auth_failed_code', code) });
             }
           },
         });
         instance.start();
       } catch (e) {
         hilog.error(DOMAIN, TAG, 'authenticate start failed: %{public}s', JSON.stringify(e));
-        finish({ success: false, error: '无法启动生物识别' });
+        finish({ success: false, error: Strings.get('lock_err_start_failed') });
       }
     });
   }

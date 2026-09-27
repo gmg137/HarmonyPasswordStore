@@ -1,6 +1,7 @@
 import { describe, it, expect } from '@ohos/hypium';
 import { PasswordGenerator, PasswordGenParams } from '../../main/ets/passgen/PasswordGenerator';
 import { DicewareGenerator, DicewareGenParams } from '../../main/ets/passgen/DicewareGenerator';
+import { Strings } from '../../main/ets/common/Strings';
 
 /**
  * 密码生成器单元测试
@@ -81,10 +82,13 @@ export default function generatorTest() {
     });
 
     it('strength_label_boundaries', 0, () => {
-      expect(PasswordGenerator.getStrengthLabel(30)).assertEqual('弱');
-      expect(PasswordGenerator.getStrengthLabel(60)).assertEqual('中');
-      expect(PasswordGenerator.getStrengthLabel(100)).assertEqual('强');
-      expect(PasswordGenerator.getStrengthLabel(130)).assertEqual('极强');
+      // 强度文案已走 Strings（资源串）：断言与实现取同一来源——LocalUnit 环境
+      // Strings.appContext 为 null 时两侧都返回 key 本身，设备上则同为本地化文案，
+      // 因此该断言与运行环境/设备语言无关，只校验阈值分档
+      expect(PasswordGenerator.getStrengthLabel(30)).assertEqual(Strings.get('common_strength_weak'));
+      expect(PasswordGenerator.getStrengthLabel(60)).assertEqual(Strings.get('common_strength_fair'));
+      expect(PasswordGenerator.getStrengthLabel(100)).assertEqual(Strings.get('common_strength_good'));
+      expect(PasswordGenerator.getStrengthLabel(130)).assertEqual(Strings.get('common_strength_strong'));
     });
   });
 

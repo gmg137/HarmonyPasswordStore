@@ -1,6 +1,7 @@
 import { PasswordGenerator, PasswordGenParams, createDefaultPasswordGenParams } from '../passgen/PasswordGenerator';
 import { DicewareGenerator, DicewareGenParams, createDefaultDicewareParams } from '../passgen/DicewareGenerator';
 import { ClipboardHelper } from '../utils/ClipboardHelper';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -128,15 +129,21 @@ export class PassgenViewModel {
     // 走 ClipboardHelper：生成的密码是敏感数据，复制后必须排定自动清除
     const ok: boolean = await ClipboardHelper.getInstance().copy(this.result);
     this.isCopied = ok;
-    this.copyToast = ok ? '已复制到剪贴板' : '复制失败';
+    this.copyToast = ok ? Strings.get('passgen_copied_clipboard') : Strings.get('common_copy_failed');
     setTimeout(() => { this.copyToast = ''; }, 2000);
   }
 
   /**
    * 获取强度文本
+   *
+   * 阈值与 PasswordGenerator.getStrengthLabel 保持一致（<40 弱 / <80 中 / <120 强）：
+   * 两处都经 Strings.get('common_strength_*') 取本地化文案，改阈值时须两处同步。
    */
   getStrengthLabel(): string {
-    return PasswordGenerator.getStrengthLabel(this.entropy);
+    if (this.entropy < 40) return Strings.get('common_strength_weak');
+    if (this.entropy < 80) return Strings.get('common_strength_fair');
+    if (this.entropy < 120) return Strings.get('common_strength_good');
+    return Strings.get('common_strength_strong');
   }
 
   /**

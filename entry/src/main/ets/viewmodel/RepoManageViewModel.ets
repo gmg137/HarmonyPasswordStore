@@ -4,6 +4,7 @@ import { GitClient, GitRepoStatus } from '../utils/GitClient';
 import { GitConfig } from '../model/GitConfig';
 import { FileUtils } from '../utils/FileUtils';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -61,20 +62,20 @@ export class RepoManageViewModel {
    */
   async refreshStatus(): Promise<void> {
     if (!this.isGitRepo) {
-      this.statusSummary = '未克隆远程仓库';
+      this.statusSummary = Strings.get('repo_status_not_cloned');
       return;
     }
     const status: GitRepoStatus = await this.git.status();
     if (!status.isRepo) {
-      this.statusSummary = '未克隆远程仓库';
+      this.statusSummary = Strings.get('repo_status_not_cloned');
       return;
     }
     const parts: string[] = [];
     if (status.branch.length > 0) parts.push(status.branch);
-    if (status.changedCount > 0) parts.push(`${status.changedCount} 个变更`);
+    if (status.changedCount > 0) parts.push(Strings.fmt('sync_status_changes', status.changedCount));
     if (status.aheadCount > 0) parts.push(`↑${status.aheadCount}`);
     if (status.behindCount > 0) parts.push(`↓${status.behindCount}`);
-    this.statusSummary = parts.length > 0 ? parts.join(' · ') : '已同步';
+    this.statusSummary = parts.length > 0 ? parts.join(' · ') : Strings.get('sync_status_synced');
   }
 
   /**
@@ -105,14 +106,14 @@ export class RepoManageViewModel {
 
     const storePath: string = this.settings.getStorePath();
     if (storePath.length === 0) {
-      this.finish(false, '仓库路径未配置');
+      this.finish(false, Strings.get('repo_err_no_path'));
       return;
     }
 
     try {
       const deleted: boolean = FileUtils.deleteDir(storePath);
       if (!deleted) {
-        this.finish(false, '删除仓库失败：目录无法删除');
+        this.finish(false, Strings.get('repo_err_delete_failed_dir'));
         return;
       }
       // 重置初始化标记与远程地址，回到未初始化状态
@@ -124,13 +125,13 @@ export class RepoManageViewModel {
       this.isGitRepo = false;
       this.hasRemote = false;
       this.remoteUrl = '';
-      this.statusSummary = '未克隆远程仓库';
+      this.statusSummary = Strings.get('repo_status_not_cloned');
       hilog.info(DOMAIN, TAG, 'local repo deleted: %{public}s', storePath);
-      this.finish(true, '本地仓库已删除');
+      this.finish(true, Strings.get('repo_deleted'));
     } catch (e) {
       const msg: string = e instanceof Error ? e.message : String(e);
       hilog.error(DOMAIN, TAG, 'deleteRepo failed: %{public}s', msg);
-      this.finish(false, `删除仓库失败：${msg}`);
+      this.finish(false, Strings.fmt('repo_err_delete_failed', msg));
     }
   }
 

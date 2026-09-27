@@ -7,6 +7,7 @@ import { hilog } from '@kit.PerformanceAnalysisKit';
 import { picker } from '@kit.CoreFileKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -90,7 +91,7 @@ export class PgpKeyManagerViewModel {
       this.keys = await this.keyManager.listKeys(true);
       this.defaultFingerprint = this.keyManager.getDefaultKeyFingerprint();
     } catch (e) {
-      this.errorMessage = '加载密钥列表失败';
+      this.errorMessage = Strings.get('pgp_load_failed');
       hilog.error(DOMAIN, TAG, 'load failed: %{public}s', JSON.stringify(e));
     }
     this.isLoading = false;
@@ -127,11 +128,11 @@ export class PgpKeyManagerViewModel {
    */
   async generateKey(): Promise<void> {
     if (this.genUserId.trim().length === 0) {
-      this.errorMessage = '请输入 User ID（如 Name <email@example.com>）';
+      this.errorMessage = Strings.get('pgp_err_userid_required');
       return;
     }
     if (this.genPassphrase.length > 0 && this.genPassphrase.length < 6) {
-      this.errorMessage = '密码至少 6 位（或留空不设密码）';
+      this.errorMessage = Strings.get('pgp_err_passphrase_short');
       return;
     }
 
@@ -142,7 +143,7 @@ export class PgpKeyManagerViewModel {
     this.isGenerating = false;
 
     if (result.success) {
-      this.toast = '密钥已生成';
+      this.toast = Strings.get('pgp_generated');
       this.genUserId = '';
       this.genPassphrase = '';
       this.isGenerateVisible = false;
@@ -159,7 +160,7 @@ export class PgpKeyManagerViewModel {
    */
   async importKey(): Promise<void> {
     if (this.armoredKey.trim().length === 0) {
-      this.errorMessage = '请粘贴 ASCII-armored 密钥文本';
+      this.errorMessage = Strings.get('pgp_err_paste_required');
       return;
     }
     this.isImporting = true;
@@ -171,7 +172,7 @@ export class PgpKeyManagerViewModel {
     if (result.success) {
       // 导入成功但存在限制（如加密子密钥算法不受支持）时，用弹窗明确告知
       const warning: string = result.warning !== undefined ? result.warning : '';
-      this.toast = warning.length > 0 ? '密钥已导入（有限制）' : '密钥导入成功';
+      this.toast = warning.length > 0 ? Strings.get('pgp_imported_with_limit') : Strings.get('pgp_imported_ok');
       this.armoredKey = '';
       this.passphrase = '';
       this.isImportVisible = false;
@@ -189,7 +190,7 @@ export class PgpKeyManagerViewModel {
       // 不写 errorMessage（那是表单底部的小红字，容易被忽略）：
       // 这两类都不是改输入就能通过的错误，交由页面弹窗提示
       this.pendingDuplicate = result.alreadyExists === true
-        ? '该密钥已存在于本机，无需重复导入。'
+        ? Strings.get('pgp_duplicate_key')
         : result.error;
       this.errorMessage = '';
     } else {
@@ -243,7 +244,7 @@ export class PgpKeyManagerViewModel {
   async switchRootGpgId(fingerprint: string): Promise<boolean> {
     const result = PasswordRepository.getInstance().setGpgIdForDir('', [fingerprint]);
     if (!result.success) {
-      this.errorMessage = '切换根目录加密密钥失败: ' + result.error;
+      this.errorMessage = Strings.fmt('pgp_root_switch_failed', result.error);
     }
     return result.success;
   }
@@ -290,7 +291,7 @@ export class PgpKeyManagerViewModel {
       try {
         const stat: fs.Stat = fs.statSync(file.fd);
         if (stat.size <= 0) {
-          this.errorMessage = '文件为空，未读取到任何内容';
+          this.errorMessage = Strings.get('pgp_file_empty');
           return false;
         }
         const buf: ArrayBuffer = new ArrayBuffer(stat.size);
@@ -312,13 +313,13 @@ export class PgpKeyManagerViewModel {
 
       // armored 文本必须含 PGP 头，否则后续解析只会得到含糊的「解析失败」
       if (!this.armoredKey.includes('BEGIN PGP')) {
-        this.errorMessage = '该文件不是 PGP 密钥文件（既非 armored 文本，也不是二进制 OpenPGP 数据）';
+        this.errorMessage = Strings.get('pgp_file_not_pgp');
         return false;
       }
 
       return true;
     } catch (e) {
-      this.errorMessage = `文件读取失败: ${e instanceof Error ? e.message : JSON.stringify(e)}`;
+      this.errorMessage = Strings.fmt('common_file_read_failed', e instanceof Error ? e.message : JSON.stringify(e));
       hilog.error(DOMAIN, TAG, 'importKeyFromFile failed: %{public}s', JSON.stringify(e));
       return false;
     }
@@ -330,7 +331,7 @@ export class PgpKeyManagerViewModel {
   async setDefaultKey(fingerprint: string): Promise<void> {
     await this.keyManager.setDefaultKey(fingerprint);
     this.defaultFingerprint = fingerprint;
-    this.toast = '已设为默认加密密钥';
+    this.toast = Strings.get('pgp_set_default_ok');
     this.scheduleToastClear();
   }
 
@@ -340,10 +341,10 @@ export class PgpKeyManagerViewModel {
   async deleteKey(fingerprint: string): Promise<void> {
     const success: boolean = await this.keyManager.deleteKey(fingerprint);
     if (success) {
-      this.toast = '密钥已删除';
+      this.toast = Strings.get('pgp_deleted');
       await this.load();
     } else {
-      this.toast = '删除失败';
+      this.toast = Strings.get('home_delete_failed');
     }
     this.scheduleToastClear();
   }
@@ -356,7 +357,7 @@ export class PgpKeyManagerViewModel {
     if (result.success) {
       // 旧口令缓存必须作废：留着它，改完口令的解密会反复拿失效的钥匙去试
       PgpCrypto.getInstance().forgetPassphrase(fingerprint);
-      this.toast = '密钥密码已修改';
+      this.toast = Strings.get('pgp_pw_changed');
       this.scheduleToastClear();
       await this.load();
       return true;
@@ -382,7 +383,7 @@ export class PgpKeyManagerViewModel {
       ? this.keyManager.getKeyArmored(fingerprint)
       : await this.keyManager.exportPublicKey(fingerprint);
     if (armored.length === 0) {
-      return { ok: false, cancelled: false, error: isPrivate ? '读取私钥失败' : '导出公钥失败' };
+      return { ok: false, cancelled: false, error: isPrivate ? Strings.get('pgp_export_read_private_failed') : Strings.get('pgp_export_pub_failed') };
     }
     try {
       const docPicker: picker.DocumentViewPicker = new picker.DocumentViewPicker();
@@ -409,7 +410,7 @@ export class PgpKeyManagerViewModel {
     } catch (e) {
       const msg: string = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
       hilog.error(DOMAIN, TAG, 'exportKeyToFile failed: %{public}s', msg);
-      return { ok: false, cancelled: false, error: `保存失败：${msg}` };
+      return { ok: false, cancelled: false, error: Strings.fmt('pgp_export_save_failed', msg) };
     }
   }
 

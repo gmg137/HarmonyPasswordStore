@@ -9,6 +9,7 @@ import { AppTitleBar } from '../views/AppTitleBar';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { CopyIconButton } from '../views/CopyIconButton';
 import { panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
+import { Strings } from '../common/Strings';
 
 /** 详情行标签列宽度（固定列宽让值列左缘对齐，不随标签字数跳动） */
 const DETAIL_LABEL_W: number = 72;
@@ -40,6 +41,16 @@ export struct PasswordDetailPage {
   /** 当前调色板（getter 每次构建求值，深浅色切换自动刷新） */
   private get colors(): Palette {
     return ThemeColors.getInstance().palette();
+  }
+
+  /**
+   * 标签列宽：按当前语言缩放
+   *
+   * 基准值按汉字定（3 字 ≈ 72vp），拉丁/西里尔字母同字数约占 1.5 倍宽，
+   * 不缩放时 `Benutzername`、`Телефон` 这类标签会折行撑高整行（见 Strings.labelWidth）。
+   */
+  private get labelW(): number {
+    return Strings.labelWidth(DETAIL_LABEL_W);
   }
 
   /** 删除确认面板配置：getter + themedSheetOptions（backgroundColor 随主题刷新，防上拉露旧色） */
@@ -167,7 +178,7 @@ export struct PasswordDetailPage {
             LoadingProgress()
               .width(IconSize.XL)
               .height(IconSize.XL)
-            Text('正在解密...')
+            Text($r('app.string.detail_decrypting'))
               .fontSize(FontSize.BODY)
               .fontColor(this.colors.textTertiary)
               .margin({ top: Spacing.MD })
@@ -181,18 +192,18 @@ export struct PasswordDetailPage {
           Column() {
             if (this.viewModel.passphraseDialogVisible) {
               // 密钥密码输入弹窗
-              Text('请输入密钥密码')
+              Text($r('app.string.common_enter_passphrase'))
                 .fontSize(FontSize.SUBTITLE)
                 .fontWeight(FontWeight.Bold)
                 .fontColor(this.colors.textPrimary)
                 .margin({ bottom: Spacing.MD })
 
-              Text('该密钥有密码保护，请输入密码以解密')
+              Text($r('app.string.detail_passphrase_hint'))
                 .fontSize(FontSize.CAPTION)
                 .fontColor(this.colors.textTertiary)
                 .margin({ bottom: Spacing.LG })
 
-              TextInput({ placeholder: '密钥密码' })
+              TextInput({ placeholder: $r('app.string.common_passphrase_placeholder') })
                 .type(InputType.Password)
                 .fontSize(FontSize.BODY)
                 .width('100%')
@@ -204,7 +215,7 @@ export struct PasswordDetailPage {
                 })
 
               Row() {
-                Button('取消')
+                Button($r('app.string.common_cancel'))
                   .type(ButtonType.Normal)
                   .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                   .layoutWeight(1)
@@ -216,7 +227,7 @@ export struct PasswordDetailPage {
                     this.viewModel.cancelPassphraseDialog();
                   })
 
-                Button('确认')
+                Button($r('app.string.common_confirm'))
                   .type(ButtonType.Normal)
                   .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                   .layoutWeight(1)
@@ -230,7 +241,7 @@ export struct PasswordDetailPage {
               .width('100%')
               .margin({ top: Spacing.LG })
             } else {
-              Text('解密失败')
+              Text($r('app.string.common_decrypt_failed'))
                 .fontSize(FontSize.SUBTITLE)
                 .fontWeight(FontWeight.Bold)
                 .fontColor(this.colors.danger)
@@ -254,10 +265,10 @@ export struct PasswordDetailPage {
             Column() {
               // 密码行
               Row() {
-                Text('密码')
+                Text($r('app.string.common_password'))
                   .fontSize(FontSize.BODY)
                   .fontColor(this.colors.textSecondary)
-                  .width(DETAIL_LABEL_W)
+                  .width(this.labelW)
 
                 if (this.viewModel.isPasswordVisible) {
                   Text(this.viewModel.content.password)
@@ -300,10 +311,10 @@ export struct PasswordDetailPage {
               // 用户名
               if (this.viewModel.content.username.length > 0) {
                 Row() {
-                  Text('用户名')
+                  Text($r('app.string.common_username'))
                     .fontSize(FontSize.BODY)
                     .fontColor(this.colors.textSecondary)
-                    .width(DETAIL_LABEL_W)
+                    .width(this.labelW)
                   Text(this.viewModel.content.username)
                     .fontSize(FontSize.SUBTITLE)
                     .layoutWeight(1)
@@ -311,7 +322,7 @@ export struct PasswordDetailPage {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                   CopyIconButton({
-                    label: '复制用户名',
+                    label: Strings.get('common_copy_username'),
                     onTap: (): void => {
                       this.viewModel.copyUsername();
                     },
@@ -329,10 +340,10 @@ export struct PasswordDetailPage {
               // 邮箱
               if (this.viewModel.content.email.length > 0) {
                 Row() {
-                  Text('邮箱')
+                  Text($r('app.string.common_email'))
                     .fontSize(FontSize.BODY)
                     .fontColor(this.colors.textSecondary)
-                    .width(DETAIL_LABEL_W)
+                    .width(this.labelW)
                   Text(this.viewModel.content.email)
                     .fontSize(FontSize.SUBTITLE)
                     .layoutWeight(1)
@@ -340,7 +351,7 @@ export struct PasswordDetailPage {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                   CopyIconButton({
-                    label: '复制邮箱',
+                    label: Strings.get('common_copy_email'),
                     onTap: (): void => {
                       this.viewModel.copyEmail();
                     },
@@ -358,10 +369,10 @@ export struct PasswordDetailPage {
               // 手机号
               if (this.viewModel.content.phone.length > 0) {
                 Row() {
-                  Text('手机号')
+                  Text($r('app.string.common_phone'))
                     .fontSize(FontSize.BODY)
                     .fontColor(this.colors.textSecondary)
-                    .width(DETAIL_LABEL_W)
+                    .width(this.labelW)
                   Text(this.viewModel.content.phone)
                     .fontSize(FontSize.SUBTITLE)
                     .layoutWeight(1)
@@ -369,7 +380,7 @@ export struct PasswordDetailPage {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                   CopyIconButton({
-                    label: '复制手机号',
+                    label: Strings.get('common_copy_phone'),
                     onTap: (): void => {
                       this.viewModel.copyPhone();
                     },
@@ -388,10 +399,10 @@ export struct PasswordDetailPage {
               // 遮起来反而妨碍阅读与核对）
               if (this.viewModel.content.notes.length > 0) {
                 Row() {
-                  Text('备注')
+                  Text($r('app.string.common_notes'))
                     .fontSize(FontSize.BODY)
                     .fontColor(this.colors.textSecondary)
-                    .width(DETAIL_LABEL_W)
+                    .width(this.labelW)
                   Text(this.viewModel.content.notes)
                     .fontSize(FontSize.SUBTITLE)
                     .layoutWeight(1)
@@ -401,7 +412,7 @@ export struct PasswordDetailPage {
                     .textOverflow({ overflow: TextOverflow.Ellipsis })
 
                   CopyIconButton({
-                    label: '复制备注',
+                    label: Strings.get('common_copy_notes'),
                     onTap: (): void => {
                       this.viewModel.copyNotes();
                     },
@@ -420,13 +431,13 @@ export struct PasswordDetailPage {
               if (this.viewModel.content.extraContent.trim().length > 0) {
                 Column() {
                   Row() {
-                    Text('额外内容')
+                    Text($r('app.string.common_extra_content'))
                       .fontSize(FontSize.BODY)
                       .fontColor(this.colors.textSecondary)
                       .layoutWeight(1)
 
                     CopyIconButton({
-                      label: '复制额外内容',
+                      label: Strings.get('common_copy_extra'),
                       onTap: (): void => {
                         this.viewModel.copyExtraContent();
                       },
@@ -464,7 +475,7 @@ export struct PasswordDetailPage {
         // ===== 固定底部操作栏（不随列表滚动，仅解密成功后显示） =====
         if (this.viewModel.isDecrypted && this.viewModel.content) {
           Row() {
-            Button('移动 / 重命名')
+            Button($r('app.string.move_title'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
               .layoutWeight(1)
@@ -478,7 +489,7 @@ export struct PasswordDetailPage {
                 RouteManager.getInstance().pushPath(RouteNames.MOVE_ENTRY, param);
               })
 
-            Button('删除密码')
+            Button($r('app.string.detail_delete_password'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
               .layoutWeight(1)
@@ -518,12 +529,12 @@ export struct PasswordDetailPage {
   @Builder
   deleteConfirmBuilder() {
     Column() {
-      Text('删除密码')
+      Text($r('app.string.detail_delete_password'))
         .fontSize(FontSize.SUBTITLE)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textPrimary)
 
-      Text(`确定删除「${this.viewModel.displayName}」吗？此操作不可撤销。`)
+      Text(Strings.fmt('detail_delete_confirm', this.viewModel.displayName))
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textSecondary)
         .lineHeight(20)
@@ -534,7 +545,7 @@ export struct PasswordDetailPage {
         .layoutWeight(1)
 
       Row() {
-        Button('取消')
+        Button($r('app.string.common_cancel'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)
@@ -547,7 +558,7 @@ export struct PasswordDetailPage {
             this.isDeleteDialogVisible = false;
           })
 
-        Button(this.viewModel.isDeleting ? '删除中...' : '删除')
+        Button(this.viewModel.isDeleting ? $r('app.string.common_deleting') : $r('app.string.delete'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SECONDARY_RADIUS)
           .layoutWeight(1)

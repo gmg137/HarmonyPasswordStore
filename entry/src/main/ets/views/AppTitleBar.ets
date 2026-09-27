@@ -17,8 +17,8 @@ import { RouteManager } from '../common/RouteManager';
  */
 @ComponentV2
 export struct AppTitleBar {
-  /** 标题文字 */
-  @Param title: string = '';
+  /** 标题文字（支持资源串：i18n 页面传 $r('app.string.xxx')） */
+  @Param title: ResourceStr = '';
   /** 右侧动作区（可选，不传则不渲染） */
   @BuilderParam actions: () => void = this.noActions;
 

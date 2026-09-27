@@ -6,6 +6,7 @@ import { fileIo as fs } from '@kit.CoreFileKit';
 import { util } from '@kit.ArkTS';
 import { NativeBridge, NativeResult } from '../common/NativeBridge';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -69,7 +70,7 @@ export class SshKeyManagerViewModel {
     try {
       this.keys = this.manager.listKeys();
     } catch (e) {
-      this.errorMessage = '加载密钥失败';
+      this.errorMessage = Strings.get('ssh_load_failed');
       hilog.error(DOMAIN, TAG, 'load failed: %{public}s', e instanceof Error ? e.message : String(e));
     }
     this.isLoading = false;
@@ -132,9 +133,9 @@ export class SshKeyManagerViewModel {
       const hadKey: boolean = this.hasKey();
       const info: SshKeyInfo | null = await this.manager.generateKeyPair(this.selectedKeyType, this.comment);
       if (info === null) {
-        this.errorMessage = '密钥生成失败';
+        this.errorMessage = Strings.get('ssh_gen_failed');
       } else {
-        this.toast = hadKey ? 'SSH 密钥已替换' : 'SSH 密钥已生成';
+        this.toast = hadKey ? Strings.get('ssh_replaced') : Strings.get('ssh_generated');
         this.isAddSheetVisible = false;
         this.isGenerateFormVisible = false;
         this.comment = '';
@@ -142,7 +143,7 @@ export class SshKeyManagerViewModel {
         this.scheduleToastClear();
       }
     } catch (e) {
-      this.errorMessage = e instanceof Error ? e.message : '密钥生成失败';
+      this.errorMessage = e instanceof Error ? e.message : Strings.get('ssh_gen_failed');
     }
     this.isGenerating = false;
   }
@@ -177,7 +178,7 @@ export class SshKeyManagerViewModel {
 
       const text: string = new util.TextDecoder('utf-8').decodeToString(new Uint8Array(buf));
       if (text.trim().length === 0) {
-        this.errorMessage = '所选文件为空';
+        this.errorMessage = Strings.get('ssh_file_empty');
         return false;
       }
 
@@ -191,7 +192,7 @@ export class SshKeyManagerViewModel {
       this.detectEncrypted();
       return true;
     } catch (e) {
-      this.errorMessage = `文件读取失败: ${e instanceof Error ? e.message : String(e)}`;
+      this.errorMessage = Strings.fmt('common_file_read_failed', e instanceof Error ? e.message : String(e));
       hilog.error(DOMAIN, TAG, 'pickPrivateKeyFile failed: %{public}s',
         e instanceof Error ? e.message : String(e));
       return false;
@@ -236,7 +237,7 @@ export class SshKeyManagerViewModel {
    */
   async importPrivateKey(): Promise<void> {
     if (this.privateKeyText.trim().length === 0) {
-      this.errorMessage = '请先选择私钥文件';
+      this.errorMessage = Strings.get('ssh_err_pick_first');
       return;
     }
     this.isImporting = true;
@@ -248,9 +249,9 @@ export class SshKeyManagerViewModel {
       const info: SshKeyInfo | null = await this.manager
         .importPrivateKey(this.privateKeyText, this.passphrase, errOut);
       if (info === null) {
-        this.errorMessage = errOut.length > 0 ? errOut[0] : '私钥导入失败';
+        this.errorMessage = errOut.length > 0 ? errOut[0] : Strings.get('ssh_import_private_failed');
       } else {
-        this.toast = hadKey ? 'SSH 密钥已替换' : 'SSH 密钥已导入';
+        this.toast = hadKey ? Strings.get('ssh_replaced') : Strings.get('ssh_imported');
         this.isAddSheetVisible = false;
         this.isImportFormVisible = false;
         this.privateKeyText = '';
@@ -261,7 +262,7 @@ export class SshKeyManagerViewModel {
         this.scheduleToastClear();
       }
     } catch (e) {
-      this.errorMessage = e instanceof Error ? e.message : '导入失败';
+      this.errorMessage = e instanceof Error ? e.message : Strings.get('common_import_failed');
     }
     this.isImporting = false;
   }
@@ -280,16 +281,16 @@ export class SshKeyManagerViewModel {
   async copyPublicKey(alias: string): Promise<string> {
     const pub: string = this.manager.getPublicKey(alias);
     if (pub.length === 0) {
-      return '公钥不存在';
+      return Strings.get('ssh_pub_missing');
     }
     try {
       const pasteData: pasteboard.PasteData =
         pasteboard.createData(pasteboard.MIMETYPE_TEXT_PLAIN, pub.trim());
       await pasteboard.getSystemPasteboard().setData(pasteData);
-      return '公钥已复制到剪贴板';
+      return Strings.get('ssh_pub_copied');
     } catch (e) {
       hilog.error(DOMAIN, TAG, 'copyPublicKey failed: %{public}s', e instanceof Error ? e.message : String(e));
-      return '复制失败';
+      return Strings.get('common_copy_failed');
     }
   }
 
@@ -301,10 +302,10 @@ export class SshKeyManagerViewModel {
     const result: SshKeyResult = await this.manager.deleteKey(alias);
     if (result.success) {
       await this.load();
-      return 'SSH 密钥已删除';
+      return Strings.get('ssh_deleted');
     }
-    this.errorMessage = result.error.length > 0 ? result.error : '删除失败';
-    return '删除失败';
+    this.errorMessage = result.error.length > 0 ? result.error : Strings.get('home_delete_failed');
+    return Strings.get('home_delete_failed');
   }
 
   /**

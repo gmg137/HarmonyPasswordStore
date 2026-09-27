@@ -9,6 +9,7 @@ import { SHEET_MASK_COLOR } from '../common/SheetStyles';
 import {
   ThemeColors, Palette, Radius, Spacing, FontSize, ButtonSpec, ComponentSize,
 } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 
 /** 卡片内标签列宽（与密码详情页的字段行同口径，保证跨页观感一致） */
 const MOVE_LABEL_W: number = 72;
@@ -44,17 +45,17 @@ export struct MoveEntryPage {
     NavDestination() {
       Stack() {
         Column() {
-          AppTitleBar({ title: '移动 / 重命名' })
+          AppTitleBar({ title: $r('app.string.move_title') })
 
         Scroll() {
           Column() {
             // 原位置（只读卡片：高度与「名称」卡片一致 = ROW，
             // 值用灰色字体现不可编辑；同时是 ROW_TWO_LINE 会高出一截）
             Row() {
-              Text('原位置')
+              Text($r('app.string.move_old_path'))
                 .fontSize(FontSize.BODY)
                 .fontColor(this.colors.textSecondary)
-                .width(MOVE_LABEL_W)
+                .width(Strings.labelWidth(MOVE_LABEL_W))
               Text(this.viewModel.oldPath)
                 .fontSize(FontSize.SUBTITLE)
                 .fontColor(this.colors.textTertiary)
@@ -73,8 +74,8 @@ export struct MoveEntryPage {
             // 后者在 init() 异步填入原名称后不会刷新，输入框会显示空白
             Column() {
               FormRow({
-                label: '名称',
-                placeholder: '输入新名称',
+                label: Strings.get('common_name'),
+                placeholder: Strings.get('move_name_placeholder'),
                 value: this.viewModel.newName,
                 labelWidth: MOVE_LABEL_W,
                 onInput: (v: string): void => {
@@ -89,7 +90,7 @@ export struct MoveEntryPage {
             .margin({ top: Spacing.CARD_GAP })
 
             // 目标目录
-            Text('目标目录')
+            Text($r('app.string.move_target_dir'))
               .fontSize(FontSize.CAPTION)
               .fontColor(this.colors.textSecondary)
               .margin({ top: Spacing.SECTION_TOP, bottom: Spacing.SM })
@@ -134,7 +135,7 @@ export struct MoveEntryPage {
               .margin({ bottom: Spacing.SM })
           }
 
-          Button(this.viewModel.isSaving ? '保存中...' : '保存')
+          Button(this.viewModel.isSaving ? $r('app.string.common_saving') : $r('app.string.common_save'))
             .width('100%')
             .height(ButtonSpec.PRIMARY_HEIGHT)
             .type(ButtonType.Normal)
@@ -166,19 +167,19 @@ export struct MoveEntryPage {
         if (this.viewModel.passphraseVisible) {
           Column() {
             Column() {
-              Text('请输入密钥密码')
+              Text($r('app.string.common_enter_passphrase'))
                 .fontSize(FontSize.SUBTITLE)
                 .fontWeight(FontWeight.Bold)
                 .fontColor(this.colors.textPrimary)
 
               Text(this.viewModel.candidateLabels.length > 0
-                ? `目标目录使用其他密钥，需先用原密钥解密。PGP ID：${this.viewModel.candidateLabels}`
-                : '目标目录使用其他密钥，需先用原密钥解密后重新加密')
+                ? Strings.fmt('move_unlock_hint_ids', this.viewModel.candidateLabels)
+                : Strings.get('move_unlock_hint'))
                 .fontSize(FontSize.CAPTION)
                 .fontColor(this.colors.textTertiary)
                 .margin({ top: Spacing.SM })
 
-              TextInput({ placeholder: '密钥密码' })
+              TextInput({ placeholder: $r('app.string.common_passphrase_placeholder') })
                 .type(InputType.Password)
                 .fontSize(FontSize.BODY)
                 .width('100%')
@@ -199,7 +200,7 @@ export struct MoveEntryPage {
               }
 
               Row({ space: Spacing.SM }) {
-                Button('取消')
+                Button($r('app.string.common_cancel'))
                   .type(ButtonType.Normal)
                   .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                   .layoutWeight(1)
@@ -211,7 +212,7 @@ export struct MoveEntryPage {
                     this.viewModel.cancelPassphrase();
                   })
 
-                Button(this.viewModel.isUnlocking ? '处理中...' : '确认')
+                Button(this.viewModel.isUnlocking ? $r('app.string.common_processing') : $r('app.string.common_confirm'))
                   .type(ButtonType.Normal)
                   .borderRadius(ButtonSpec.PRIMARY_RADIUS)
                   .layoutWeight(1)

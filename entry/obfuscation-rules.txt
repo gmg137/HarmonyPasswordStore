@@ -47,6 +47,7 @@ gitConfig
 git_config_json
 defaultKeyFingerprint
 usageMap
+appLanguage
 
 # - Native 层按名字取字段：hps_napi.cpp 构造的 JSON 键名，
 #   ArkTS 侧按同名属性读取（如 native 状态 JSON 的 hasConflicts）。

@@ -14,6 +14,7 @@ import {
   CLIPBOARD_CLEAR_TIMEOUT,
 } from '../common/Constants';
 import { GitConfig, createDefaultGitConfig, normalizeGitConfig } from '../model/GitConfig';
+import { AppLanguage } from '../common/AppLanguage';
 
 /**
  * 应用设置数据结构
@@ -47,6 +48,8 @@ export interface AppSettings {
   defaultKeyFingerprint: string;
   /** 是否完成引导 */
   onboardingCompleted: boolean;
+  /** 应用语言（AppLanguage 常量；`system` = 跟随系统） */
+  appLanguage: string;
 }
 
 /**
@@ -67,6 +70,7 @@ export function createDefaultSettings(): AppSettings {
     gitPullRebase: false,
     defaultKeyFingerprint: '',
     onboardingCompleted: false,
+    appLanguage: AppLanguage.SYSTEM,
     // 默认二进制：与桌面 pass 的输出一致，体积也小约 1/4
     passwordFileFormat: PasswordFileFormat.BIN,
   };
@@ -90,6 +94,7 @@ class PrefKeys {
   static readonly GIT_PULL_REBASE = 'git_pull_rebase';
   static readonly DEFAULT_KEY_FP = 'default_key_fingerprint';
   static readonly ONBOARDING_DONE = 'onboarding_completed';
+  static readonly APP_LANGUAGE = 'app_language';
   static readonly GIT_CONFIG = 'git_config_json';
   static readonly USAGE_MAP = 'entry_usage_map';
 }
@@ -182,6 +187,7 @@ export class SettingsRepository {
       this.cache.gitPullRebase = await this.prefStore.get(PrefKeys.GIT_PULL_REBASE, defaults.gitPullRebase) as boolean;
       this.cache.defaultKeyFingerprint = await this.prefStore.get(PrefKeys.DEFAULT_KEY_FP, defaults.defaultKeyFingerprint) as string;
       this.cache.onboardingCompleted = await this.prefStore.get(PrefKeys.ONBOARDING_DONE, defaults.onboardingCompleted) as boolean;
+      this.cache.appLanguage = await this.prefStore.get(PrefKeys.APP_LANGUAGE, defaults.appLanguage) as string;
     } catch (e) {
       // 读取失败时保留默认值，不中断应用启动
       hilog.error(0x0000, 'SettingsRepo', 'loadSettings failed: %{public}s', JSON.stringify(e));
@@ -217,6 +223,7 @@ export class SettingsRepository {
       await this.prefStore.put(PrefKeys.GIT_PULL_REBASE, settings.gitPullRebase);
       await this.prefStore.put(PrefKeys.DEFAULT_KEY_FP, settings.defaultKeyFingerprint);
       await this.prefStore.put(PrefKeys.ONBOARDING_DONE, settings.onboardingCompleted);
+      await this.prefStore.put(PrefKeys.APP_LANGUAGE, settings.appLanguage);
       await this.prefStore.flush();
     } catch (e) {
       hilog.error(0x0000, 'SettingsRepo', 'saveSettings failed: %{public}s', JSON.stringify(e));
@@ -269,6 +276,9 @@ export class SettingsRepository {
         break;
       case 'onboardingCompleted':
         this.cache.onboardingCompleted = value as boolean;
+        break;
+      case 'appLanguage':
+        this.cache.appLanguage = value as string;
         break;
       default:
         return;
@@ -513,6 +523,7 @@ export class SettingsRepository {
       'gitPullRebase': PrefKeys.GIT_PULL_REBASE,
       'defaultKeyFingerprint': PrefKeys.DEFAULT_KEY_FP,
       'onboardingCompleted': PrefKeys.ONBOARDING_DONE,
+      'appLanguage': PrefKeys.APP_LANGUAGE,
     };
     return map[key] ?? key;
   }

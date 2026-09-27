@@ -1,5 +1,7 @@
 import { SettingsRepository, AppSettings } from '../model/SettingsRepository';
 import { ThemeColors } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
+import { AppLanguage } from '../common/AppLanguage';
 import { PasswordFileFormat, ThemeMode, SearchMode, SortMode } from '../common/Constants';
 import { RouteManager } from '../common/RouteManager';
 import { RouteNames } from '../common/Constants';
@@ -30,6 +32,8 @@ export class SettingsViewModel {
   /** 不可用时的原因（可用时为空串） */
   @Trace autoSyncDisabledReason: string = '';
   @Trace searchMode: SearchMode = SearchMode.FUZZY;
+  /** 应用语言偏好（AppLanguage 常量；system = 跟随系统） */
+  @Trace appLanguage: string = AppLanguage.SYSTEM;
   /** 新写入密码文件的密文格式（bin / armor） */
   @Trace passwordFileFormat: PasswordFileFormat = PasswordFileFormat.BIN;
   @Trace sortMode: SortMode = SortMode.ALPHABETICAL;
@@ -56,6 +60,7 @@ export class SettingsViewModel {
     this.biometricReason = detail.reason;
     this.autoSyncOnLaunch = s.autoSyncOnLaunch;
     this.searchMode = s.searchMode;
+    this.appLanguage = s.appLanguage;
     this.passwordFileFormat = s.passwordFileFormat;
     this.sortMode = s.sortMode;
     this.storeInitialized = s.storeInitialized;
@@ -114,9 +119,9 @@ export class SettingsViewModel {
     const isRepo: boolean = GitClient.getInstance().isGitRepo();
     this.autoSyncAvailable = remoteUrl.length > 0 && isRepo;
     if (remoteUrl.length === 0) {
-      this.autoSyncDisabledReason = '未配置远程仓库地址，请先在「Git 配置」中填写';
+      this.autoSyncDisabledReason = Strings.get('settings_autosync_no_remote');
     } else if (!isRepo) {
-      this.autoSyncDisabledReason = '本地尚未克隆远程仓库，请先在「仓库管理」中克隆';
+      this.autoSyncDisabledReason = Strings.get('settings_autosync_not_cloned');
     } else {
       this.autoSyncDisabledReason = '';
     }
@@ -131,6 +136,19 @@ export class SettingsViewModel {
     }
     this.autoSyncOnLaunch = enabled;
     await this.settings.updateSetting('autoSyncOnLaunch', enabled);
+  }
+
+  /**
+   * 设置应用语言
+   *
+   * 持久化 + `ApplicationContext.setLanguage` + 全局重渲染都由 Strings.applyLanguage
+   * 完成；UI 上下文由页面传入（ViewModel 拿不到）。切换后重读一次设置：
+   * biometricReason / autoSyncDisabledReason 这类已解析的提示文案要换新语言。
+   */
+  async setAppLanguage(value: string, uiContext: UIContext): Promise<void> {
+    this.appLanguage = value;
+    Strings.applyLanguage(uiContext.getHostContext(), value);
+    await this.load();
   }
 
   /**

@@ -6,6 +6,7 @@ import { SshKeyManager, SshKeyInfo, SshKeyStatus } from '../crypto/SshKeyManager
 import { KnownHostsStore } from './KnownHostsStore';
 import { invokeNativeGit, NativeGitRequest, NativeGitReply } from './NativeGitTask';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { taskpool } from '@kit.ArkTS';
 
@@ -121,7 +122,7 @@ export class GitClient {
     if (raw.includes('no callback set') || raw.includes('authentication required')
       || raw.includes('too many redirects') || raw.includes('401')
       || raw.includes('authentication') || raw.includes('credential')) {
-      return '远程仓库要求认证。请在「Git 配置」中填写用户名与访问令牌（Gitee 私人令牌，需含 projects 写权限）后重试';
+      return Strings.get('git_auth_required_hint');
     }
     return '';
   }
@@ -172,7 +173,7 @@ export class GitClient {
       return { success: true, error: '' };
     }
     if (!FileUtils.deleteDir(storePath)) {
-      return { success: false, error: '删除本地仓库失败：目录无法删除' };
+      return { success: false, error: Strings.get('git_remove_repo_dir_failed') };
     }
     // 重建空目录：克隆目标目录需要存在且为空（或不存在）
     FileUtils.ensureDir(storePath);
@@ -190,7 +191,7 @@ export class GitClient {
     try {
       const repoPath: string = SettingsRepository.getInstance().getSettings().storePath;
       if (repoPath.length === 0) {
-        return { success: false, error: '仓库路径未配置' };
+        return { success: false, error: Strings.get('repo_err_no_path') };
       }
 
       const gitDir: string = `${repoPath}/.git`;
@@ -238,7 +239,7 @@ export class GitClient {
       // 直接抛出会让「克隆/同步」这类调用点崩溃，故统一转成失败结果交给上层提示
       hilog.error(DOMAIN, TAG, 'callNativeGit(%{public}s) failed: %{public}s', fn,
         e instanceof Error ? `${e.name}: ${e.message}` : String(e));
-      return { success: false, error: 'native 调用失败，请重试', data: '' };
+      return { success: false, error: Strings.get('common_native_call_failed'), data: '' };
     }
   }
 
@@ -256,11 +257,11 @@ export class GitClient {
       // Git 配置页选一次，原先这里直接报错，导致引导页的克隆必然失败。
       const keys: SshKeyInfo[] = SshKeyManager.getInstance().listKeys();
       if (keys.length === 0) {
-        out.error = '尚未配置 SSH 密钥。请先在「SSH 密钥管理」中生成或导入密钥';
+        out.error = Strings.get('git_ssh_no_key_hint');
         return out;
       }
       if (keys.length > 1) {
-        out.error = `存在 ${keys.length} 把 SSH 密钥，请先在「Git 配置 → SSH 密钥」中选择用于认证的那把`;
+        out.error = Strings.fmt('git_ssh_multi_key_hint', keys.length);
         return out;
       }
       config.sshKeyAlias = keys[0].alias;
@@ -270,7 +271,7 @@ export class GitClient {
     }
     const pem: string = await SshKeyManager.getInstance().exportPrivateKeyPem(config.sshKeyAlias);
     if (pem.length === 0) {
-      out.error = `无法读取 SSH 私钥（${config.sshKeyAlias}）。请在「SSH 密钥管理」中重新生成或导入密钥`;
+      out.error = Strings.fmt('common_ssh_pem_read_failed', config.sshKeyAlias);
       return out;
     }
     // 私钥本身带口令时必须有口令，否则 libssh2 用不了这把钥匙
@@ -284,7 +285,7 @@ export class GitClient {
         hilog.warn(DOMAIN, TAG, 'resolveSshAuth: key status parse failed');
       }
       if (encrypted && config.sshKeyPassphrase.length === 0) {
-        out.error = '该 SSH 私钥已加密，请先在「Git 配置」中填写私钥口令';
+        out.error = Strings.get('git_ssh_key_encrypted');
         return out;
       }
     }
@@ -348,18 +349,18 @@ export class GitClient {
       || raw.includes('Repository not found') || raw.includes('repository not found')
       || raw.includes('could not read from remote')
       || raw.includes('Failed to receive response') || raw.includes('failed to receive response')) {
-      return '远程仓库不存在或路径错误：服务器已连通、认证已通过，请检查地址中的仓库路径';
+      return Strings.get('git_ssh_remote_notfound');
     }
     if (raw.includes('host key untrusted') || raw.includes('host key mismatch')) {
-      return '主机密钥未被信任或不一致：请先完成指纹确认';
+      return Strings.get('git_hostkey_not_trusted');
     }
     if (raw.includes('authentication') || raw.includes('auth fail') || raw.includes('publickey')) {
-      return 'SSH 认证失败：请确认公钥已添加到远端账号，且私钥口令正确';
+      return Strings.get('git_ssh_auth_failed');
     }
     if (raw.includes('failed to resolve address') || raw.includes('Could not resolve host')) {
-      return '无法解析主机地址：请检查网络与远程地址是否正确';
+      return Strings.get('gitcfg_https_err_dns');
     }
-    return `连接失败：${raw}`;
+    return Strings.fmt('gitcfg_https_err_generic', raw);
   }
 
   /**
@@ -397,7 +398,7 @@ export class GitClient {
     if (target === null) {
       return {
         ok: false,
-        error: '无法解析远程 SSH 地址。支持 git@host:path 与 ssh://user@host[:端口]/path',
+        error: Strings.get('git_ssh_url_unparsed_remote'),
         pem: '', passphrase: '', fingerprint: '',
       };
     }
@@ -424,8 +425,8 @@ export class GitClient {
     return {
       success: false,
       error: mismatch
-        ? '服务器主机密钥与已保存指纹不一致（可能存在中间人攻击）'
-        : '首次连接该服务器，需确认主机密钥指纹',
+        ? Strings.get('git_hostkey_mismatch_short')
+        : Strings.get('git_hostkey_first_connect'),
       pendingHostKeyFp: fp,
       pendingHostKeyType: keyType,
       hostKeyMismatch: mismatch,
@@ -443,7 +444,7 @@ export class GitClient {
     if (target === null) {
       return {
         success: false,
-        error: '无法解析 SSH 地址。支持 git@host:user/repo.git 与 ssh://git@host[:端口]/user/repo.git',
+        error: Strings.get('git_ssh_url_unparsed_clone'),
       };
     }
     const auth: SshAuthResolution = await this.resolveSshAuth(config, target.host, target.port);
@@ -469,13 +470,12 @@ export class GitClient {
     if (rawErr.includes('exists and is not an empty directory')) {
       return {
         success: false,
-        error: '本地仓库目录非空，无法克隆。请先清空该目录（「仓库管理 → 删除本地仓库」）后重试；'
-            + '若在「Git 配置」保存后触发克隆，可在弹窗中选择「删除并克隆」',
+        error: Strings.get('git_clone_dir_not_empty'),
       };
     }
     if (rawErr.includes('authentication') || rawErr.includes('auth fail')
         || rawErr.includes('publickey')) {
-      return { success: false, error: 'SSH 认证失败：请确认公钥已添加到远端账号，且私钥口令正确' };
+      return { success: false, error: Strings.get('git_ssh_auth_failed') };
     }
     return { success: false, error: GitClient.friendlySshRemoteError(rawErr) };
   }
@@ -489,7 +489,7 @@ export class GitClient {
    */
   async clone(remoteUrl: string): Promise<GitResult> {
     if (remoteUrl.trim().length === 0) {
-      return { success: false, error: '远程地址不能为空' };
+      return { success: false, error: Strings.get('git_err_url_empty') };
     }
 
     const url: string = remoteUrl.trim();
@@ -499,7 +499,7 @@ export class GitClient {
     if (!isSsh && !isHttps) {
       return {
         success: false,
-        error: '不支持的 URL 格式。请使用 git@host:user/repo.git（SSH）或 https://host/user/repo.git',
+        error: Strings.get('git_err_url_scheme'),
       };
     }
 
@@ -527,8 +527,7 @@ export class GitClient {
       if (rawErr.includes('exists and is not an empty directory')) {
         return {
           success: false,
-          error: '本地仓库目录非空，无法克隆。请先清空该目录（「仓库管理 → 删除本地仓库」）后重试；'
-            + '若在「Git 配置」保存后触发克隆，可在弹窗中选择「删除并克隆」',
+          error: Strings.get('git_clone_dir_not_empty'),
         };
       }
       if (rawErr.includes('unsupported URL protocol') || rawErr.includes('unsupported protocol')) {
@@ -540,15 +539,14 @@ export class GitClient {
         return {
           success: false,
           error: isHttps
-            ? 'HTTPS 克隆失败（native TLS 未就绪）。请检查网络与地址，或改用其它协议'
-            : '当前版本不支持 SSH 克隆（native 层未编入 SSH 传输）。请改用 HTTPS 地址 + 访问令牌：'
-              + '例如 https://gitee.com/<用户名>/<仓库>.git，并在「Git 配置」中填写用户名与 Token',
+            ? Strings.get('git_clone_https_tls_unready')
+            : Strings.get('git_clone_ssh_unsupported'),
         };
       }
       if (rawErr.includes('401') || rawErr.includes('authentication') || rawErr.includes('credential')) {
         return {
           success: false,
-          error: '认证失败：请检查 Git 配置中的用户名与 Token（GitHub/Gitee 需使用 Token 而非登录密码）',
+          error: Strings.get('git_clone_auth_failed'),
         };
       }
       // native 已就绪但克隆失败：返回真实错误
@@ -563,7 +561,7 @@ export class GitClient {
    */
   async pull(): Promise<GitResult> {
     if (!this.isGitRepo()) {
-      return { success: false, error: '当前目录不是 Git 仓库' };
+      return { success: false, error: Strings.get('gitlog_not_repo') };
     }
     const bridge = NativeBridge.getInstance();
     if (bridge.isAvailable()) {
@@ -598,7 +596,7 @@ export class GitClient {
       }
       const authErr: string = GitClient.translateAuthError(rawErr);
       if (authErr.length > 0) {
-        return { success: false, error: `拉取失败：${authErr}` };
+        return { success: false, error: Strings.fmt('git_pull_failed', authErr) };
       }
       return { success: false, error: rawErr };
     }
@@ -611,7 +609,7 @@ export class GitClient {
    */
   async push(): Promise<GitResult> {
     if (!this.isGitRepo()) {
-      return { success: false, error: '当前目录不是 Git 仓库' };
+      return { success: false, error: Strings.get('gitlog_not_repo') };
     }
     const bridge = NativeBridge.getInstance();
     if (bridge.isAvailable()) {
@@ -637,7 +635,7 @@ export class GitClient {
       }
       const authErr: string = GitClient.translateAuthError(rawErr);
       if (authErr.length > 0) {
-        return { success: false, error: `推送失败：${authErr}` };
+        return { success: false, error: Strings.fmt('git_push_failed', authErr) };
       }
       return { success: false, error: rawErr };
     }
@@ -651,7 +649,7 @@ export class GitClient {
    */
   async commitAll(message: string): Promise<GitResult> {
     if (!this.isGitRepo()) {
-      return { success: false, error: '当前目录不是 Git 仓库' };
+      return { success: false, error: Strings.get('gitlog_not_repo') };
     }
     const config: GitConfig = await SettingsRepository.getInstance().loadGitConfig();
     const msg: string = message.length > 0 ? message : this.buildAutoCommitMessage();

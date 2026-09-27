@@ -28,8 +28,8 @@ import { ThemeColors, Palette, Spacing, FontSize, ComponentSize, IconSize } from
 @ComponentV2
 export struct ToggleRow {
   @Require @Param icon: Resource;
-  @Param label: string = '';
-  @Param sublabel: string = '';
+  @Param label: ResourceStr = '';
+  @Param sublabel: ResourceStr = '';
   @Param isOn: boolean = false;
   @Param isEnabled: boolean = true;
   @Param onToggle: (v: boolean) => void = (v: boolean): void => {};
@@ -38,9 +38,10 @@ export struct ToggleRow {
     return ThemeColors.getInstance().palette();
   }
 
-  /** 双行（有说明）64vp / 单行 56vp，与官方列表行阶梯一致 */
+  /** 双行（有说明）64vp / 单行 56vp，与官方列表行阶梯一致（资源串说明视为有） */
   private get rowMinHeight(): number {
-    return this.sublabel.length > 0 ? ComponentSize.ROW_TWO_LINE : ComponentSize.ROW;
+    const hasSub: boolean = typeof this.sublabel === 'string' ? this.sublabel.length > 0 : true;
+    return hasSub ? ComponentSize.ROW_TWO_LINE : ComponentSize.ROW;
   }
 
   build() {

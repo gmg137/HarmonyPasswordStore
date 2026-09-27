@@ -8,6 +8,7 @@
 import { GpgKeyId } from '../model/GpgKeyId';
 import { NativeBridge, NativeResult } from '../common/NativeBridge';
 import { PgpKeyManager } from './PgpKeyManager';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 const DOMAIN = 0x0001;
@@ -310,7 +311,7 @@ export class PgpCrypto implements PgpCryptoInterface {
 
     const publicKeyArmored: string = normalArmored.join('\n');
     if (publicKeyArmored.length === 0) {
-      return { success: false, data: '', error: '无可用公钥（请先导入 PGP 密钥）' };
+      return { success: false, data: '', error: Strings.get('pgp_no_public_key') };
     }
     const result = NativeBridge.getInstance().pgpEncrypt(plaintext, publicKeyArmored);
     return { success: result.success, data: result.data, error: result.error };
@@ -327,13 +328,13 @@ export class PgpCrypto implements PgpCryptoInterface {
   async decrypt(ciphertext: string, candidateFingerprints?: string[]): Promise<CryptoResult> {
     const keys: GpgKeyId[] = await PgpKeyManager.getInstance().listKeys(true);
     if (keys.length === 0) {
-      return { success: false, data: '', error: '无可用私钥（请先导入 PGP 密钥）' };
+      return { success: false, data: '', error: Strings.get('pgp_no_secret_key') };
     }
 
     // 先按密文的收件人 Key ID 找出真正能解的密钥（换过 .gpg-id 时 .gpg-id 会指向别的密钥）
     const preferred: string[] = this.keysForCiphertext(ciphertext);
     const order: string[] = this.buildCandidateOrder(keys, candidateFingerprints, preferred);
-    let lastError: string = '解密失败';
+    let lastError: string = Strings.get('common_decrypt_failed');
     for (let i: number = 0; i < order.length; i++) {
       const fp: string = order[i];
       const secretKeyArmored: string = PgpKeyManager.getInstance().getKeyArmored(fp);
@@ -384,14 +385,14 @@ export class PgpCrypto implements PgpCryptoInterface {
   async unlockPassphrase(fingerprint: string, passphrase: string): Promise<UnlockResult> {
     if (passphrase.length === 0) {
       hilog.warn(DOMAIN, TAG, 'unlockPassphrase: empty passphrase');
-      return { success: false, error: '请输入密钥密码' };
+      return { success: false, error: Strings.get('common_enter_passphrase') };
     }
 
     // 检查密钥是否已导入
     const keys: GpgKeyId[] = await this.listKeys(true);
     if (keys.length === 0) {
       hilog.warn(DOMAIN, TAG, 'unlockPassphrase: no secret keys imported');
-      return { success: false, error: '尚未导入任何私钥，请先在「PGP 密钥管理」中导入' };
+      return { success: false, error: Strings.get('pgp_no_secret_imported') };
     }
 
     // 兼容旧数据：defaultKeyFingerprint 为空或指向已不存在的密钥时
@@ -408,14 +409,14 @@ export class PgpCrypto implements PgpCryptoInterface {
     }
     if (found === undefined) {
       hilog.warn(DOMAIN, TAG, 'unlockPassphrase: fingerprint not found after fallback');
-      return { success: false, error: '找不到该密钥，请重新导入' };
+      return { success: false, error: Strings.get('pgp_key_not_found_reimport') };
     }
 
     // 通过 native 验证 passphrase（rpgp 或 gpg_pqc 模块，按密钥类型分发）
     const secretKeyArmored: string = PgpKeyManager.getInstance().getKeyArmored(fp);
     if (secretKeyArmored.length === 0) {
       hilog.warn(DOMAIN, TAG, 'unlockPassphrase: key armored file missing for %{public}s', fp);
-      return { success: false, error: '密钥文件缺失，请重新导入该密钥' };
+      return { success: false, error: Strings.get('pgp_key_file_missing') };
     }
     const result = this.verifyPassphraseWithKey(fp, secretKeyArmored, passphrase);
     if (!result.success) {
@@ -437,15 +438,14 @@ export class PgpCrypto implements PgpCryptoInterface {
    */
   private static describeVerifyError(nativeError: string): string {
     if (nativeError.length === 0) {
-      return '密钥密码错误，请重试';
+      return Strings.get('common_passphrase_wrong');
     }
     // 公钥没有私钥段：这是导入环节的问题，不是密码错
     if (nativeError.includes('缺少私钥段')) {
-      return '该密钥不含私钥材料（可能是公钥），无法用于解密。'
-        + '请用 `gpg --export-secret-keys --armor <密钥ID>` 导出私钥后重新导入。';
+      return Strings.get('pgp_verify_no_secret_material');
     }
     if (nativeError.includes('未找到 GnuPG algo 8')) {
-      return '该密钥不含可用的 GnuPG ML-KEM 私钥材料，请确认导出的是私钥。';
+      return Strings.get('pgp_verify_no_mlkem_material');
     }
     // ML-KEM 私钥材料读取失败：**口令此时已经通过**（同一口令的 ECC 段已解开，
     // native 侧按段标注了失败位置），属密钥编码/格式问题，
@@ -454,19 +454,16 @@ export class PgpCrypto implements PgpCryptoInterface {
     // protected 位于 kyber768 列表内外 / 外层 composite-key），支持不全是
     // 「口令正确却被拒」的根因。
     if (nativeError.includes('ML-KEM') || nativeError.includes('kyber')) {
-      return '密钥的 ML-KEM 私钥材料无法读取（' + nativeError + '）。'
-        + '该段与 ECC 段共用同一口令，故这不是口令问题；'
-        + '请用较新的 gpg 重新导出该密钥后重新导入。';
+      return Strings.fmt('pgp_verify_mlkem_unreadable', nativeError);
     }
     // 经典曲线不支持：brainpool 系（ky768_bp256 / ky1024_bp384/512）的点是 65 字节，
     // 而 native 的 algo 8 只实现了 X25519（32 字节），必然报长度异常。
     // 这同样不是口令问题——报「密码错误」会让用户反复重试。
     if (nativeError.includes('ECC 公钥点长度异常') || nativeError.includes('X25519 材料长度必须')) {
-      return '该密钥的经典曲线本应用不支持（' + nativeError + '）。'
-        + '请改用 GnuPG 的 ky768_cv25519（ML-KEM-768 + Curve25519）密钥。';
+      return Strings.fmt('pgp_verify_curve_unsupported', nativeError);
     }
     // 其余情况（ECC 段 OCB 认证失败等）最可能就是口令不对
-    return '密钥密码错误，请重试';
+    return Strings.get('common_passphrase_wrong');
   }
 
   /**

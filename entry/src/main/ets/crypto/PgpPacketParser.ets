@@ -9,6 +9,7 @@
 import { util } from '@kit.ArkTS';
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { GpgKeyId } from '../model/GpgKeyId';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 const DOMAIN: number = 0x0001;
@@ -754,7 +755,7 @@ export class PgpPacketParser {
       || algorithm.startsWith('SLH-DSA')) {
       return '';
     }
-    return `不支持的密钥算法（${algorithm}），请改用 RSA 或 ECC 密钥。`;
+    return Strings.fmt('pgp_unsupported_algo_reason', algorithm);
   }
 
   /**

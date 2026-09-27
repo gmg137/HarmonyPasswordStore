@@ -2,6 +2,7 @@ import { GitClient, GitRepoStatus, GitResult } from '../utils/GitClient';
 import { KnownHostsStore, KnownHostKey } from '../utils/KnownHostsStore';
 import { SshUrlTarget } from '../utils/GitClient';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -49,7 +50,7 @@ export class SyncViewModel {
   async refreshStatus(): Promise<void> {
     this.repoStatus = await this.git.status();
     if (this.repoStatus.hasConflicts) {
-      this.conflictMessage = '检测到合并冲突，请手动解决后重试';
+      this.conflictMessage = Strings.get('sync_conflict_message');
     } else {
       this.conflictMessage = '';
     }
@@ -59,14 +60,14 @@ export class SyncViewModel {
    * 拉取远程更新
    */
   async pull(): Promise<void> {
-    await this.runOperation('正在拉取远程更新...', () => this.git.pull());
+    await this.runOperation(Strings.get('sync_pulling_remote'), () => this.git.pull());
   }
 
   /**
    * 推送本地提交
    */
   async push(): Promise<void> {
-    await this.runOperation('正在推送到远程...', () => this.git.push());
+    await this.runOperation(Strings.get('sync_pushing_remote'), () => this.git.push());
   }
 
   /**
@@ -74,7 +75,7 @@ export class SyncViewModel {
    * @param message 提交信息
    */
   async commit(message: string): Promise<void> {
-    await this.runOperation('正在提交变更...', () => this.git.commitAll(message));
+    await this.runOperation(Strings.get('sync_committing_changes'), () => this.git.commitAll(message));
   }
 
   /**
@@ -85,28 +86,28 @@ export class SyncViewModel {
     this.isSyncing = true;
     this.resultToast = '';
 
-    this.operationText = '正在拉取...';
+    this.operationText = Strings.get('sync_pulling');
     const pullResult = await this.git.pull();
     if (!pullResult.success) {
       this.finishWith(pullResult.error, false);
       return;
     }
 
-    this.operationText = '正在提交...';
+    this.operationText = Strings.get('sync_committing');
     const commitResult = await this.git.commitAll('');
     if (!commitResult.success) {
       // 无变更时提交可能失败，不视为错误
       hilog.info(DOMAIN, TAG, 'commit skipped: %{public}s', commitResult.error);
     }
 
-    this.operationText = '正在推送...';
+    this.operationText = Strings.get('sync_pushing');
     const pushResult = await this.git.push();
     if (!pushResult.success) {
       this.finishWith(pushResult.error, false);
       return;
     }
 
-    this.finishWith('同步完成', true);
+    this.finishWith(Strings.get('sync_done'), true);
   }
 
   /**
@@ -122,7 +123,7 @@ export class SyncViewModel {
       const result = await op();
       this.lastOperationSuccess = result.success;
       if (result.success) {
-        this.resultToast = '操作成功';
+        this.resultToast = Strings.get('sync_op_success');
       } else if (result.pendingHostKeyFp !== undefined && result.pendingHostKeyFp.length > 0) {
         // 主机密钥未信任（同类型指纹变化 = 可能中间人；新类型 = 没钉过的一把）：
         // 弹指纹确认卡，确认后重跑同一操作
@@ -139,7 +140,7 @@ export class SyncViewModel {
       }
     } catch (e) {
       this.lastOperationSuccess = false;
-      this.resultToast = '操作发生异常';
+      this.resultToast = Strings.get('sync_op_exception');
       hilog.error(DOMAIN, TAG, 'operation exception: %{public}s', JSON.stringify(e));
     }
     this.isSyncing = false;
@@ -166,7 +167,7 @@ export class SyncViewModel {
     const ok: boolean = await this.knownHosts.saveHostKey(host, port,
       { keyType: keyType, fingerprint: fp });
     if (!ok) {
-      this.resultToast = '保存主机密钥失败';
+      this.resultToast = Strings.get('sync_save_hostkey_failed');
       this.scheduleToastClear();
       return;
     }
@@ -207,12 +208,12 @@ export class SyncViewModel {
    * 状态摘要文本（供列表页展示）
    */
   getStatusSummary(): string {
-    if (!this.repoStatus || !this.repoStatus.isRepo) return '未配置 Git 仓库';
+    if (!this.repoStatus || !this.repoStatus.isRepo) return Strings.get('sync_status_no_repo');
     const parts: string[] = [];
     if (this.repoStatus.branch.length > 0) parts.push(this.repoStatus.branch);
-    if (this.repoStatus.changedCount > 0) parts.push(`${this.repoStatus.changedCount} 个变更`);
+    if (this.repoStatus.changedCount > 0) parts.push(Strings.fmt('sync_status_changes', this.repoStatus.changedCount));
     if (this.repoStatus.aheadCount > 0) parts.push(`↑${this.repoStatus.aheadCount}`);
     if (this.repoStatus.behindCount > 0) parts.push(`↓${this.repoStatus.behindCount}`);
-    return parts.length > 0 ? parts.join(' · ') : '已同步';
+    return parts.length > 0 ? parts.join(' · ') : Strings.get('sync_status_synced');
   }
 }

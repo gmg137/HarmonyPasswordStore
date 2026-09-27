@@ -185,7 +185,7 @@ export struct FolderTreeView {
           .fontColor([this.colors.textSecondary])
           .margin({ right: Spacing.SM })
 
-        Text('仓库根目录')
+        Text($r('app.string.store_root_dir'))
           .fontSize(FontSize.SUBTITLE)
           .fontColor(this.selectedPath.length === 0 ? this.colors.primary : this.colors.textPrimary)
           .fontWeight(this.selectedPath.length === 0 ? FontWeight.Medium : FontWeight.Normal)

@@ -26,6 +26,7 @@ import { RouteManager } from '../common/RouteManager';
 import { RouteNames } from '../common/Constants';
 import { AppLockManager } from '../utils/AppLockManager';
 import { ThemeColors, Palette, SYSTEM_DARK_KEY } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 import { SystemBars } from '../common/SystemBars';
 import { GitClient } from '../utils/GitClient';
 import { PgpCrypto, CryptoResult } from '../crypto/PgpCrypto';
@@ -43,6 +44,15 @@ export default class EntryAbility extends UIAbility {
    * 后者写进 AppStorage 会把「跟随系统」的判定污染成刚设置的值。
    */
   private appColorMode: ConfigurationConstant.ColorMode = ConfigurationConstant.ColorMode.COLOR_MODE_NOT_SET;
+  /**
+   * 上一次见到的应用语言（Configuration.language）
+   *
+   * onConfigurationUpdate 里与 newConfig.language 比对，检测系统语言变化：
+   * 跟随系统（未钉扎）时系统改语言会触发本回调，`$r` 资源由框架自动重解析，
+   * 但 `Strings.get` 取出的普通字符串要靠 `notifyLocaleChanged` 驱动整体重建才会刷新，
+   * 不补这一下会出现同一页面新旧语言混排（钉扎过语言的系统不再回调，见 Strings 注释）。
+   */
+  private lastLanguage: string = '';
 
   async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): Promise<void> {
     // 初始化文件工具上下文
@@ -53,6 +63,14 @@ export default class EntryAbility extends UIAbility {
     // 初始化设置仓库（Preferences 持久化）
     const settings: SettingsRepository = SettingsRepository.getInstance();
     await settings.init(this.context);
+
+    // 初始化字符串资源助手（非 UI 代码取串走它）并应用已保存的语言偏好：
+    // 必须先于 loadContent，首帧渲染即用目标语言；设置未就绪前不能读偏好，
+    // 而 onCreate 里已 await settings.init，此处读到的就是持久化值
+    Strings.init(this.context.getApplicationContext());
+    Strings.applyStoredLanguage(this.context);
+    // 记录初始应用语言，供 onConfigurationUpdate 检测后续语言变化（见字段注释）
+    this.lastLanguage = this.context.config.language ?? '';
 
     // 同步主题模式到全局调色板（读取系统 colorMode，SYSTEM 模式跟随系统）
     const isSystemDark: boolean = this.context.config.colorMode === ConfigurationConstant.ColorMode.COLOR_MODE_DARK;
@@ -158,6 +176,9 @@ export default class EntryAbility extends UIAbility {
       // init() 里的 await 早约 100ms，那时 getSettings() 还是默认值
       // （实测「启动时自动同步」永远读到 false，开关形同虚设）。
       SettingsRepository.getInstance().whenReady().then(() => {
+        // setLanguage 的文档口径要求窗口与页面加载完成后再调用；onCreate 里那次
+        // 保证首帧即目标语言，这里幂等补一次（同值重复设置无副作用）
+        Strings.applyStoredLanguage(this.context);
         // needsOnboarding 同样要在设置就绪后再判断（否则读到的仓库路径是默认值）
         const needsOnboarding: boolean = settings.needsOnboarding();
         // 引导页跳转由 Index.aboutToAppear 处理（pathStack 在该时机才就绪）
@@ -196,6 +217,15 @@ export default class EntryAbility extends UIAbility {
     }
     ThemeColors.getInstance().syncMode(isSystemDark);
     hilog.info(DOMAIN, TAG, 'onConfigurationUpdate: colorMode=%{public}d', newConfig.colorMode);
+
+    // 语言变化（仅跟随系统模式会收到：钉扎过语言的系统不再回调本应用）。
+    // 必须在检测到变化时通知 UI 整体重建，否则 Strings.get 文本停留在旧语言（见字段注释）。
+    // 我们自己 setLanguage 触发的回调也走这里：更新记录值，重复 notify 无副作用。
+    const language: string = newConfig.language ?? '';
+    if (language.length > 0 && language !== this.lastLanguage) {
+      this.lastLanguage = language;
+      Strings.notifyLocaleChanged();
+    }
 
     // 同步状态栏/导航栏颜色到新主题
     this.updateSystemBarColors();

@@ -10,6 +10,7 @@ import {
   GPG_ID_FILE,
 } from '../common/Constants';
 import { PasswordEntry, PasswordContent } from './PasswordEntry';
+import { Strings } from '../common/Strings';
 
 const DOMAIN = 0x0001;
 const TAG = 'PasswordRepository';
@@ -469,13 +470,13 @@ export class PasswordRepository {
       return { success: false, data: null, error: `Invalid path: ${e instanceof Error ? e.message : String(e)}` };
     }
     if (!FileUtils.exists(oldFullPath)) {
-      return { success: false, data: null, error: '源密码文件不存在' };
+      return { success: false, data: null, error: Strings.get('repo_src_entry_missing') };
     }
     if (oldPath === newPath) {
       return { success: true, data: null, error: '' };
     }
     if (FileUtils.exists(newFullPath)) {
-      return { success: false, data: null, error: '目标位置已存在同名密码' };
+      return { success: false, data: null, error: Strings.get('repo_dst_entry_exists') };
     }
 
     // 确保目标目录存在（跨目录移动时目标目录可能尚未创建）
@@ -492,7 +493,7 @@ export class PasswordRepository {
 
     const success: boolean = FileUtils.rename(oldFullPath, newFullPath);
     if (!success) {
-      return { success, data: null, error: '移动/重命名失败' };
+      return { success, data: null, error: Strings.get('repo_rename_failed') };
     }
     // 移走后源目录若为空则级联清理
     this.pruneEmptyParentDirs(oldPath);
@@ -546,13 +547,13 @@ export class PasswordRepository {
       return { success: false, data: null, error: `Invalid path: ${e instanceof Error ? e.message : String(e)}` };
     }
     if (!FileUtils.exists(oldDirPath)) {
-      return { success: false, data: null, error: '源文件夹不存在' };
+      return { success: false, data: null, error: Strings.get('repo_src_dir_missing') };
     }
     if (oldPath === newPath) {
       return { success: true, data: null, error: '' };
     }
     if (FileUtils.exists(newDirPath)) {
-      return { success: false, data: null, error: '目标文件夹已存在' };
+      return { success: false, data: null, error: Strings.get('repo_dst_dir_exists') };
     }
     // 目标父目录可能不存在
     const newParent: string = newPath.includes('/')
@@ -568,7 +569,7 @@ export class PasswordRepository {
 
     const success: boolean = FileUtils.rename(oldDirPath, newDirPath);
     if (!success) {
-      return { success, data: null, error: '文件夹重命名失败' };
+      return { success, data: null, error: Strings.get('repo_dir_rename_failed') };
     }
     // 随迁的子目录级 .gpg-id 不受影响（相对路径内文件未动）
     hilog.info(DOMAIN, TAG, 'renamed dir %{public}s -> %{public}s', oldPath, newPath);
@@ -724,7 +725,7 @@ export class PasswordRepository {
     } catch (e) {
       const reason: string = e instanceof Error ? e.message : String(e);
       hilog.error(DOMAIN, TAG, 'safeJoin rejected "%{public}s": %{public}s', relativePath, reason);
-      throw new Error(`非法路径（${relativePath}）：${reason}`);
+      throw new Error(Strings.fmt('repo_invalid_path', relativePath, reason));
     }
   }
 

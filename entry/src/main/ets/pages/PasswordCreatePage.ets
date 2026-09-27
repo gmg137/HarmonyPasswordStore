@@ -3,6 +3,7 @@ import { AppTitleBar } from '../views/AppTitleBar';
 import { RouteManager } from '../common/RouteManager';
 import { PasswordListViewModel } from '../viewmodel/PasswordListViewModel';
 import { ThemeColors, Palette, Radius, Spacing, ButtonSpec, FontSize, IconSize, ComponentSize, DividerSpec } from '../common/ThemeColors';
+import { Strings } from '../common/Strings';
 import { inputMethod } from '@kit.IMEKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
@@ -55,7 +56,7 @@ export struct PasswordCreatePage {
       Text(label)
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textSecondary)
-        .width(FORM_LABEL_W)
+        .width(Strings.labelWidth(FORM_LABEL_W))
 
       if (isPassword) {
         TextInput({ text: valueGetter(), placeholder: placeholder })
@@ -133,17 +134,17 @@ export struct PasswordCreatePage {
   build() {
     NavDestination() {
       Column() {
-        AppTitleBar({ title: this.isEditMode ? '编辑密码' : '新建密码' })
+        AppTitleBar({ title: this.isEditMode ? $r('app.string.create_edit_title') : $r('app.string.password_create') })
 
         Scroll() {
           Column() {
           // 所在目录
           if (this.viewModel.parentDir.length > 0) {
             Row() {
-              Text('目录')
+              Text($r('app.string.create_dir_label'))
                 .fontSize(FontSize.BODY)
                 .fontColor(this.colors.textSecondary)
-                .width(FORM_LABEL_W)
+                .width(Strings.labelWidth(FORM_LABEL_W))
               Text(this.viewModel.parentDir)
                 .fontSize(FontSize.SUBTITLE)
                 .fontColor(this.colors.textPrimary)
@@ -161,16 +162,16 @@ export struct PasswordCreatePage {
           }
 
           // 名称
-          this.formField('名称', '如: john@example.com', (): string => this.viewModel.name, false,
+          this.formField(Strings.get('common_name'), Strings.get('create_name_placeholder'), (): string => this.viewModel.name, false,
             (v: string) => { this.viewModel.name = v; })
 
           // 密码
-          this.formField('密码', '输入或生成密码', (): string => this.viewModel.password, true,
+          this.formField(Strings.get('common_password'), Strings.get('create_password_placeholder'), (): string => this.viewModel.password, true,
             (v: string) => { this.viewModel.onPasswordInput(v); })
 
           // 生成器面板切换
           Row() {
-            Text('密码生成器')
+            Text($r('app.string.passgen'))
               .fontSize(FontSize.SUBTITLE)
               .fontWeight(FontWeight.Medium)
               .fontColor(this.colors.textPrimary)
@@ -201,7 +202,7 @@ export struct PasswordCreatePage {
             Column() {
               // 长度：标题 + 拖动条 + 数字（一行）
               Row() {
-                Text('长度')
+                Text($r('app.string.passgen_length'))
                   .fontSize(FontSize.BODY)
                   .fontColor(this.colors.textSecondary)
                   .width(40)
@@ -222,18 +223,18 @@ export struct PasswordCreatePage {
               .width('100%')
               .padding({ left: Spacing.CARD, right: Spacing.CARD, top: Spacing.MD })
 
-              this.genParamToggle('大写字母 (A-Z)', this.viewModel.genParams.includeUppercase,
+              this.genParamToggle(Strings.get('create_gen_upper'), this.viewModel.genParams.includeUppercase,
                 () => { this.viewModel.updateGenParam('includeUppercase', !this.viewModel.genParams.includeUppercase); })
-              this.genParamToggle('小写字母 (a-z)', this.viewModel.genParams.includeLowercase,
+              this.genParamToggle(Strings.get('create_gen_lower'), this.viewModel.genParams.includeLowercase,
                 () => { this.viewModel.updateGenParam('includeLowercase', !this.viewModel.genParams.includeLowercase); })
-              this.genParamToggle('数字 (0-9)', this.viewModel.genParams.includeDigits,
+              this.genParamToggle(Strings.get('create_gen_digits'), this.viewModel.genParams.includeDigits,
                 () => { this.viewModel.updateGenParam('includeDigits', !this.viewModel.genParams.includeDigits); })
-              this.genParamToggle('特殊符号 (!@#$)', this.viewModel.genParams.includeSymbols,
+              this.genParamToggle(Strings.get('create_gen_symbols'), this.viewModel.genParams.includeSymbols,
                 () => { this.viewModel.updateGenParam('includeSymbols', !this.viewModel.genParams.includeSymbols); })
-              this.genParamToggle('排除歧义字符 (0/O, 1/l)', this.viewModel.genParams.excludeAmbiguous,
+              this.genParamToggle(Strings.get('passgen_exclude_ambiguous'), this.viewModel.genParams.excludeAmbiguous,
                 () => { this.viewModel.updateGenParam('excludeAmbiguous', !this.viewModel.genParams.excludeAmbiguous); })
 
-              Button('生成密码')
+              Button($r('app.string.create_generate'))
                 .type(ButtonType.Normal)
                 .borderRadius(ButtonSpec.SECONDARY_RADIUS)
                 .width('100%')
@@ -252,27 +253,27 @@ export struct PasswordCreatePage {
           }
 
           // 用户名
-          this.formField('用户名', '用户名（可选）', (): string => this.viewModel.username, false,
+          this.formField(Strings.get('common_username'), Strings.get('create_username_placeholder'), (): string => this.viewModel.username, false,
             (v: string) => { this.viewModel.username = v; })
 
           // 邮箱
-          this.formField('邮箱', '邮箱（可选）', (): string => this.viewModel.email, false,
+          this.formField(Strings.get('common_email'), Strings.get('create_email_placeholder'), (): string => this.viewModel.email, false,
             (v: string) => { this.viewModel.email = v; })
 
           // 手机号
-          this.formField('手机号', '手机号（可选）', (): string => this.viewModel.phone, false,
+          this.formField(Strings.get('common_phone'), Strings.get('create_phone_placeholder'), (): string => this.viewModel.phone, false,
             (v: string) => { this.viewModel.phone = v; })
 
           // 备注
-          this.formField('备注', '备注（可选）', (): string => this.viewModel.notes, false,
+          this.formField(Strings.get('common_notes'), Strings.get('create_notes_placeholder'), (): string => this.viewModel.notes, false,
             (v: string) => { this.viewModel.notes = v; })
 
           // 额外内容
           Column() {
-            Text('额外内容')
+            Text($r('app.string.common_extra_content'))
               .fontSize(FontSize.BODY)
               .fontColor(this.colors.textSecondary)
-            TextArea({ text: this.viewModel.extraContent, placeholder: '自定义额外内容（可选）' })
+            TextArea({ text: this.viewModel.extraContent, placeholder: $r('app.string.create_extra_placeholder') })
               .fontSize(FontSize.BODY)
               .fontColor(this.colors.textPrimary)
               .placeholderColor(this.colors.textTertiary)
@@ -297,7 +298,7 @@ export struct PasswordCreatePage {
           }
 
           // 保存按钮
-          Button('保存')
+          Button($r('app.string.common_save'))
             .type(ButtonType.Normal)
             .borderRadius(ButtonSpec.PRIMARY_RADIUS)
             .width('100%')

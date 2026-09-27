@@ -5,6 +5,7 @@ import { HostKeyConfirmDialog } from '../views/HostKeyConfirmDialog';
 import { ThemeColors, Palette, FontSize, ButtonSpec, Spacing, Radius, ComponentSize, IconSize, DividerSpec } from '../common/ThemeColors';
 import { RouteManager } from '../common/RouteManager';
 import { RouteNames } from '../common/Constants';
+import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -106,17 +107,18 @@ export struct OnboardingPage {
     const mismatch: boolean = this.viewModel.pendingHostKeyMismatch;
     const keyType: string = this.viewModel.pendingHostKeyType;
     const title: string = mismatch
-      ? '警告：主机密钥与已保存记录不一致'
-      : (keyType.length > 0 ? `首次连接：确认服务器${keyType}密钥指纹` : '首次连接：确认服务器指纹');
-    const hostLine: string = `主机 ${this.viewModel.pendingHost}:${this.viewModel.pendingPort} 的密钥指纹`
-      + (keyType.length > 0 ? `（${keyType}）` : '') + '：';
+      ? Strings.get('sync_hostkey_mismatch_title')
+      : (keyType.length > 0 ? Strings.fmt('sync_hostkey_first_type', keyType) : Strings.get('sync_hostkey_first'));
+    const hostLine: string = keyType.length > 0
+      ? Strings.fmt('gitcfg_hostkey_fp_typed', this.viewModel.pendingHost, this.viewModel.pendingPort, keyType)
+      : Strings.fmt('onboarding_hostkey_fp_line', this.viewModel.pendingHost, this.viewModel.pendingPort);
     const explanation: string = mismatch
-      ? '该主机已有信任记录，但本次同类型密钥的指纹不同。这可能是服务器更换了密钥，也可能是中间人攻击——'
-        + '请与服务器管理员核对后再决定；确认后将覆盖该类型记录。'
-      : '服务器提供多把不同类型的主机密钥，这是尚未记录的一把。确认后追加为本机信任记录；'
-        + '同类型密钥的指纹变化仍会被拒绝（防中间人攻击）。';
+      ? Strings.get('gitcfg_hostkey_mismatch_explain')
+      : Strings.get('sync_hostkey_new_detail');
     const fingerprint: string = this.viewModel.pendingHostKeyFp;
-    const confirmLabel: string = mismatch ? '仍要信任并克隆' : '信任并克隆';
+    const confirmLabel: string = mismatch
+      ? Strings.get('onboarding_trust_clone_mismatch')
+      : Strings.get('onboarding_trust_clone');
     try {
       this.getUIContext().getPromptAction().openCustomDialog({
         builder: (): void => {
@@ -158,17 +160,16 @@ export struct OnboardingPage {
   /** 本地目录非空：征求确认后删除再克隆（删除不可逆，文案必须说清后果） */
   private confirmDeleteAndClone(): void {
     this.getUIContext().showAlertDialog({
-      title: '本地目录已有内容',
-      message: '克隆要求目标目录为空，当前目录中已有文件（可能是上次克隆的残留或旧仓库）。\n\n'
-        + '继续将删除该目录下的全部内容，再从远程仓库重新克隆。此操作不可撤销。',
+      title: $r('app.string.onboarding_local_not_empty'),
+      message: $r('app.string.onboarding_local_not_empty_msg'),
       autoCancel: false,
       alignment: DialogAlignment.Center,
       primaryButton: {
-        value: '取消',
+        value: $r('app.string.common_cancel'),
         action: (): void => {},
       },
       secondaryButton: {
-        value: '删除并克隆',
+        value: $r('app.string.onboarding_delete_clone'),
         fontColor: this.colors.danger,
         action: (): void => {
           this.viewModel.deleteLocalRepoThenClone().then((outcome: RepoSetupOutcome): void => {
@@ -201,12 +202,12 @@ export struct OnboardingPage {
   @Builder
   welcomeStep() {
     Column() {
-      Text('欢迎使用 HarmonyPasswordStore')
+      Text($r('app.string.onboarding_welcome_title'))
         .fontSize(FontSize.DISPLAY_MD)
         .fontWeight(FontWeight.Bold)
         .textAlign(TextAlign.Center)
 
-      Text('与 pass 命令行工具完全兼容的密码管理器。密码以 GPG 加密文件存储，可通过 Git 在多设备间同步。')
+      Text($r('app.string.onboarding_welcome_desc'))
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textSecondary)
         .lineHeight(22)
@@ -214,19 +215,19 @@ export struct OnboardingPage {
         .margin({ top: Spacing.LG })
 
       Column() {
-        Text('· 标准 pass 目录结构与 .gpg 加密文件')
+        Text($r('app.string.onboarding_feature_pass'))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.colors.textTertiary)
           .margin({ bottom: Spacing.SM })
-        Text('· PGP 加密，密钥由 HUKS 安全管理')
+        Text($r('app.string.onboarding_feature_huks'))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.colors.textTertiary)
           .margin({ bottom: Spacing.SM })
-        Text('· Git 同步，支持 HTTPS 与 SSH')
+        Text($r('app.string.onboarding_feature_git'))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.colors.textTertiary)
           .margin({ bottom: Spacing.SM })
-        Text('· 内置密码生成器与口令词组')
+        Text($r('app.string.onboarding_feature_passgen'))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.colors.textTertiary)
       }
@@ -240,11 +241,11 @@ export struct OnboardingPage {
   @Builder
   repoSetupStep() {
     Column() {
-      Text('初始化密码仓库')
+      Text($r('app.string.onboarding_repo_title'))
         .fontSize(FontSize.TITLE)
         .fontWeight(FontWeight.Bold)
 
-      Text('新建一个空仓库，或从远程 Git 仓库克隆已有密码库。')
+      Text($r('app.string.onboarding_repo_desc'))
         .fontSize(FontSize.CAPTION)
         .fontColor(this.colors.textTertiary)
         .margin({ top: Spacing.SM })
@@ -252,7 +253,7 @@ export struct OnboardingPage {
       // 方式选择
       Row() {
         Column() {
-          Text('新建仓库')
+          Text($r('app.string.onboarding_mode_new'))
             .fontSize(FontSize.SUBTITLE)
             .fontWeight(this.viewModel.repoMode === 'new' ? FontWeight.Bold : FontWeight.Normal)
             .fontColor(this.viewModel.repoMode === 'new' ? this.colors.primary : this.colors.textSecondary)
@@ -277,7 +278,7 @@ export struct OnboardingPage {
         })
 
         Column() {
-          Text('克隆远程')
+          Text($r('app.string.onboarding_mode_clone'))
             .fontSize(FontSize.SUBTITLE)
             .fontWeight(this.viewModel.repoMode === 'clone' ? FontWeight.Bold : FontWeight.Normal)
             .fontColor(this.viewModel.repoMode === 'clone' ? this.colors.primary : this.colors.textSecondary)
@@ -309,7 +310,7 @@ export struct OnboardingPage {
       if (this.viewModel.repoMode === 'clone') {
         TextInput({
           text: this.viewModel.remoteUrl,
-          placeholder: 'git@host:用户名/仓库.git'
+          placeholder: $r('app.string.onboarding_url_placeholder')
         })
           .fontSize(FontSize.SUBTITLE)
           .placeholderFont({ size: FontSize.SUBTITLE })
@@ -330,7 +331,7 @@ export struct OnboardingPage {
         // SSH 密钥配置卡片：左侧密钥状态（未配置/已配置的密钥名），右侧配置按钮
         Row() {
           Text(this.viewModel.sshKeyLabel.length > 0
-            ? this.viewModel.sshKeyLabel : '未配置SSH密钥')
+            ? this.viewModel.sshKeyLabel : Strings.get('onboarding_ssh_not_configured'))
             .fontSize(FontSize.BODY)
             .fontColor(this.viewModel.sshKeyLabel.length > 0
               ? this.colors.textPrimary : this.colors.textTertiary)
@@ -338,7 +339,7 @@ export struct OnboardingPage {
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-          Button('配置SSH密钥')
+          Button($r('app.string.onboarding_ssh_configure'))
             .type(ButtonType.Normal)
             .borderRadius(ButtonSpec.SMALL_RADIUS)
             .height(ButtonSpec.SMALL_HEIGHT)
@@ -381,12 +382,11 @@ export struct OnboardingPage {
   @Builder
   keyImportStep() {
     Column() {
-      Text('设置 PGP 密钥')
+      Text($r('app.string.onboarding_pgp_title'))
         .fontSize(FontSize.TITLE)
         .fontWeight(FontWeight.Bold)
 
-      Text('点击「浏览」进入 PGP 密钥管理页，在那里新建或导入密钥（.asc / .pgp 文件或粘贴文本）。'
-        + '私钥将由系统 HUKS 安全保管，不会明文落盘。')
+      Text($r('app.string.onboarding_pgp_desc'))
         .fontSize(FontSize.CAPTION)
         .fontColor(this.colors.textTertiary)
         .lineHeight(20)
@@ -397,7 +397,7 @@ export struct OnboardingPage {
         // 「浏览」按钮前显示已导入的密钥名称（从密钥管理页返回后由 onShown 刷新）
         Text(this.viewModel.importedKeyLabel.length > 0
           ? this.viewModel.importedKeyLabel
-          : '尚未设置 PGP 密钥')
+          : Strings.get('onboarding_pgp_not_set'))
           .fontSize(FontSize.BODY)
           .fontColor(this.viewModel.importedKeyLabel.length > 0
             ? this.colors.textPrimary : this.colors.textTertiary)
@@ -405,7 +405,7 @@ export struct OnboardingPage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.Ellipsis })
 
-        Button('浏览')
+        Button($r('app.string.onboarding_browse'))
           .type(ButtonType.Normal)
           .borderRadius(ButtonSpec.SMALL_RADIUS)
           .height(ButtonSpec.SMALL_HEIGHT)
@@ -447,21 +447,21 @@ export struct OnboardingPage {
   @Builder
   finishStep() {
     Column() {
-      Text('设置完成')
+      Text($r('app.string.onboarding_finish_title'))
         .fontSize(FontSize.DISPLAY_MD)
         .fontWeight(FontWeight.Bold)
 
-      Text('一切就绪！现在可以开始管理您的密码了。')
+      Text($r('app.string.onboarding_finish_desc'))
         .fontSize(FontSize.BODY)
         .fontColor(this.colors.textSecondary)
         .margin({ top: Spacing.MD })
 
       Column() {
-        Text(this.viewModel.isRepoReady ? '✓ 密码仓库已初始化' : '· 密码仓库未初始化（可稍后在设置中完成）')
+        Text(this.viewModel.isRepoReady ? $r('app.string.onboarding_repo_done') : $r('app.string.onboarding_repo_todo'))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.viewModel.isRepoReady ? this.colors.success : this.colors.textTertiary)
           .margin({ bottom: Spacing.SM })
-        Text(this.viewModel.isKeyReady ? '✓ PGP 密钥已导入' : '· PGP 密钥未导入（可稍后在设置中完成）')
+        Text(this.viewModel.isKeyReady ? $r('app.string.onboarding_key_done') : $r('app.string.onboarding_key_todo'))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.viewModel.isKeyReady ? this.colors.success : this.colors.textTertiary)
       }
@@ -475,7 +475,7 @@ export struct OnboardingPage {
   build() {
     NavDestination() {
       Column() {
-        AppTitleBar({ title: '初始设置' })
+        AppTitleBar({ title: $r('app.string.onboarding_setup_title') })
 
         this.stepIndicator()
 
@@ -506,7 +506,7 @@ export struct OnboardingPage {
             // 欢迎页左侧给「跳过」：直接结束初始设置进应用（仓库未初始化也能进，
             // 之后可在「设置 → 重新运行初始设置」里再走一遍）
             // 次要按钮用系统原生风格：中性灰底 + 主文本色（不用次要文本色，太淡）
-            Button('跳过')
+            Button($r('app.string.onboarding_skip'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
               .width(ONBOARDING_BUTTON_WIDTH)
@@ -519,7 +519,7 @@ export struct OnboardingPage {
                 this.viewModel.finish();
               })
           } else {
-            Button('上一步')
+            Button($r('app.string.onboarding_prev'))
               .type(ButtonType.Normal)
               .borderRadius(ButtonSpec.SECONDARY_RADIUS)
               .width(ONBOARDING_BUTTON_WIDTH)
@@ -533,10 +533,11 @@ export struct OnboardingPage {
               })
           }
 
-          Button(this.viewModel.currentStep === STEP_WELCOME ? '开始' :
-            this.viewModel.currentStep === STEP_REPO_SETUP ? '初始化仓库' :
+          Button(this.viewModel.currentStep === STEP_WELCOME ? $r('app.string.common_start') :
+            this.viewModel.currentStep === STEP_REPO_SETUP ? $r('app.string.onboarding_init_repo') :
             this.viewModel.currentStep === STEP_KEY_IMPORT
-              ? (this.viewModel.isKeyConfigured() ? '下一步' : '跳过') : '完成')
+              ? (this.viewModel.isKeyConfigured() ? $r('app.string.onboarding_next') : $r('app.string.onboarding_skip'))
+              : $r('app.string.onboarding_done'))
             .type(ButtonType.Normal)
             .borderRadius(ButtonSpec.PRIMARY_RADIUS)
             .layoutWeight(1)
@@ -574,7 +575,9 @@ export struct OnboardingPage {
         // 返回键另见 onBackPressed（遮罩挡不住系统返回手势）。
         if (this.viewModel.isCloning) {
           LoadingOverlay({
-            text: this.viewModel.clonePercent >= 100 ? '正在检出文件…' : '正在克隆远程仓库…',
+            text: this.viewModel.clonePercent >= 100
+              ? Strings.get('onboarding_overlay_checkout')
+              : Strings.get('onboarding_overlay_cloning'),
             percent: this.viewModel.clonePercent,
           })
             .position({ x: 0, y: 0 })

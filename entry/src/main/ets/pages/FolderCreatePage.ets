@@ -74,17 +74,17 @@ export struct FolderCreatePage {
   build() {
     NavDestination() {
       Column() {
-        AppTitleBar({ title: '新建文件夹' })
+        AppTitleBar({ title: $r('app.string.folder_create_title') })
 
         Scroll() {
           Column() {
             // 文件夹名称输入
-            Text('文件夹名称')
+            Text($r('app.string.folder_name_label'))
               .fontSize(FontSize.CAPTION)
               .fontColor(this.colors.textSecondary)
               .margin({ bottom: Spacing.SM })
 
-            TextInput({ text: this.viewModel.folderName, placeholder: '输入文件夹名称' })
+            TextInput({ text: this.viewModel.folderName, placeholder: $r('app.string.folder_name_placeholder') })
               .fontSize(FontSize.SUBTITLE)
               .fontColor(this.colors.textPrimary)
               .placeholderFont({ size: FontSize.SUBTITLE })
@@ -99,13 +99,13 @@ export struct FolderCreatePage {
               })
 
             // 密钥选择（可选）
-            Text('加密密钥（可选，覆盖父目录密钥）')
+            Text($r('app.string.folder_key_label'))
               .fontSize(FontSize.CAPTION)
               .fontColor(this.colors.textSecondary)
               .margin({ bottom: Spacing.SM })
 
             if (this.viewModel.keys.length === 0) {
-              Text('暂无已导入的 PGP 密钥，将使用父目录密钥')
+              Text($r('app.string.folder_no_keys'))
                 .fontSize(FontSize.CAPTION)
                 .fontColor(this.colors.textTertiary)
                 .padding({ top: Spacing.MD, bottom: Spacing.MD })
@@ -116,7 +116,7 @@ export struct FolderCreatePage {
             }
 
             // 创建按钮
-            Button('创建文件夹')
+            Button($r('app.string.folder_create_btn'))
               .width('100%')
               .height(ButtonSpec.PRIMARY_HEIGHT)
               .type(ButtonType.Normal)
