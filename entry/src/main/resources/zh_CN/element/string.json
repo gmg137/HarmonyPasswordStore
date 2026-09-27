@@ -2057,6 +2057,26 @@
       "value": "删除仓库失败：%s"
     },
     {
+      "name": "repo_force_push_title",
+      "value": "强制推送到远程"
+    },
+    {
+      "name": "repo_force_push_sub",
+      "value": "将本地仓库强制推送到远程，操作不可撤销"
+    },
+    {
+      "name": "repo_force_push_confirm_msg",
+      "value": "将用本地仓库覆盖远程仓库，此操作不可撤销。"
+    },
+    {
+      "name": "repo_force_push_btn",
+      "value": "强制推送"
+    },
+    {
+      "name": "repo_force_push_failed_title",
+      "value": "强制推送失败"
+    },
+    {
       "name": "gitlog_not_repo",
       "value": "当前目录不是 Git 仓库"
     },

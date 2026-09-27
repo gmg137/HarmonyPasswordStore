@@ -606,8 +606,10 @@ export class GitClient {
 
   /**
    * 推送本地提交到远程（HTTPS 凭据自动传递）
+   * @param force true 时强制推送（refspec 加 '+' 前缀，覆盖远程分支历史）；
+   *              仓库管理「强制推送远程」专用，一键同步等常规推送保持 false
    */
-  async push(): Promise<GitResult> {
+  async push(force: boolean = false): Promise<GitResult> {
     if (!this.isGitRepo()) {
       return { success: false, error: Strings.get('gitlog_not_repo') };
     }
@@ -624,7 +626,7 @@ export class GitClient {
       }
       const result: NativeResult = await this.callNativeGit('gitPush',
         [this.getRepoPath(), isHttps ? config.username : '', isHttps ? config.password : '',
-          config.proxyUrl, ssh.pem, ssh.passphrase, ssh.fingerprint]);
+          config.proxyUrl, ssh.pem, ssh.passphrase, ssh.fingerprint, force ? '1' : '0']);
       if (result.success) {
         return { success: true, error: '' };
       }

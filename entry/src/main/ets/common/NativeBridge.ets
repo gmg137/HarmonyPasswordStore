@@ -290,10 +290,15 @@ export class NativeBridge {
         privateKeyPem, passphrase, knownHostFingerprint));
   }
 
+  /**
+   * 推送当前分支到远程
+   * @param force '1' 时强制推送（覆盖远程分支历史，仓库管理「强制推送远程」专用）
+   */
   gitPush(localPath: string, username: string, password: string, proxyUrl: string,
-          privateKeyPem: string, passphrase: string, knownHostFingerprint: string): NativeResult {
+          privateKeyPem: string, passphrase: string, knownHostFingerprint: string,
+          force: string): NativeResult {
     return this.callSafely('gitPush', (): NativeResult => hpsNative.gitPush(localPath, username, password, proxyUrl,
-      privateKeyPem, passphrase, knownHostFingerprint));
+      privateKeyPem, passphrase, knownHostFingerprint, force));
   }
 
   gitCommitAll(localPath: string, message: string, authorName: string, authorEmail: string): NativeResult {

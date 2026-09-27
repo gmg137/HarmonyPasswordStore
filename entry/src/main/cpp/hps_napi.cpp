@@ -1046,17 +1046,22 @@ static napi_value GitPull(napi_env env, napi_callback_info info) {
 }
 
 /**
- * gitPush(localPath, username, password, proxyUrl) -> { success, error }
+ * gitPush(localPath, username, password, proxyUrl, privateKeyPem, passphrase,
+ *         knownHostFingerprint, force) -> { success, error }
+ *
+ * force='1' 时 refspec 加 '+' 前缀（libgit2 的强制推送语义），
+ * 远程分支将被本地覆盖——「仓库管理 → 强制推送远程」专用。
  */
 static napi_value GitPush(napi_env env, napi_callback_info info) {
-    std::string args[7];
-    if (!GetArgs(env, info, 7, args)) {
+    std::string args[8];
+    if (!GetArgs(env, info, 8, args)) {
         return MakeResult(env, false,
             "invalid arguments: expected (localPath, username, password, proxyUrl, "
-            "privateKeyPem, passphrase, knownHostFingerprint)", "");
+            "privateKeyPem, passphrase, knownHostFingerprint, force)", "");
     }
-    OH_LOG_INFO(LOG_APP, "gitPush: path=%{public}s ssh=%{public}d", args[0].c_str(),
-                args[4].empty() ? 0 : 1);
+    const bool force = (args[7] == "1");
+    OH_LOG_INFO(LOG_APP, "gitPush: path=%{public}s ssh=%{public}d force=%{public}d", args[0].c_str(),
+                args[4].empty() ? 0 : 1, force ? 1 : 0);
 
     GitNetOpts net;
     net.creds.username = args[1];
@@ -1084,6 +1089,7 @@ static napi_value GitPush(napi_env env, napi_callback_info info) {
     // push 当前分支 → 同名远程分支。
     // 空 refspec（count=0）不会推送任何内容，必须显式给出 refspec；
     // 未指定时 libgit2 仅推送已配置的 push refspec，克隆仓库默认没有该配置。
+    // 前缀 '+' = 强制推送（覆盖远程历史，非快进也接受）。
     std::string refspec_str;
     git_reference *head_ref = nullptr;
     if (git_repository_head(&head_ref, repo) == 0) {
@@ -1092,6 +1098,9 @@ static napi_value GitPush(napi_env env, napi_callback_info info) {
             refspec_str = std::string("refs/heads/") + branch + ":refs/heads/" + branch;
         }
         git_reference_free(head_ref);
+    }
+    if (force && !refspec_str.empty()) {
+        refspec_str = "+" + refspec_str;
     }
     const char *refspec_items[] = { refspec_str.c_str() };
     const git_strarray refspecs = { const_cast<char **>(refspec_items), refspec_str.empty() ? 0u : 1u };

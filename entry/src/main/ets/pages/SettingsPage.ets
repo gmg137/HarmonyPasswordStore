@@ -338,7 +338,7 @@ export struct SettingsPage {
             }
 
             ListItem() {
-              this.navRow($r('sys.symbol.arrow_clockwise'), $r('app.string.onboarding_row_title'),
+              this.navRow($r('sys.symbol.repeat'), $r('app.string.onboarding_row_title'),
                 $r('app.string.onboarding_row_sub'),
                 () => {
                   this.viewModel.navigateToOnboarding();

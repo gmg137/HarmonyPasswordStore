@@ -62,8 +62,9 @@ export const gitTestRemote: (remoteUrl: string, username: string, password: stri
  */
 export const gitPull: (localPath: string, username: string, password: string, proxyUrl: string, rebase: string,
   privateKeyPem: string, passphrase: string, knownHostFingerprint: string) => NativeResult;
+/** force='1' 时强制推送（refspec 加 '+' 前缀，覆盖远程分支历史） */
 export const gitPush: (localPath: string, username: string, password: string, proxyUrl: string,
-  privateKeyPem: string, passphrase: string, knownHostFingerprint: string) => NativeResult;
+  privateKeyPem: string, passphrase: string, knownHostFingerprint: string, force: string) => NativeResult;
 export const gitCommitAll: (localPath: string, message: string, authorName: string, authorEmail: string) => NativeResult;
 export const gitLog: (localPath: string, limit: number) => NativeResult;
 export const gitStatus: (localPath: string) => NativeResult;

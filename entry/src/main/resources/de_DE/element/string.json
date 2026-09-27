@@ -2057,6 +2057,26 @@
       "value": "Repository konnte nicht gelöscht werden: %s"
     },
     {
+      "name": "repo_force_push_title",
+      "value": "Push erzwingen"
+    },
+    {
+      "name": "repo_force_push_sub",
+      "value": "Erzwingt einen Push des lokalen Repositorys zum Remote-Repository. Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "repo_force_push_confirm_msg",
+      "value": "Das Remote-Repository wird mit dem lokalen Repository überschrieben. Dies kann nicht rückgängig gemacht werden."
+    },
+    {
+      "name": "repo_force_push_btn",
+      "value": "Push erzwingen"
+    },
+    {
+      "name": "repo_force_push_failed_title",
+      "value": "Erzwungener Push fehlgeschlagen"
+    },
+    {
       "name": "gitlog_not_repo",
       "value": "Der aktuelle Ordner ist kein Git-Repository"
     },

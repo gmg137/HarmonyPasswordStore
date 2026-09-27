@@ -2057,6 +2057,26 @@
       "value": "刪除儲存庫失敗：%s"
     },
     {
+      "name": "repo_force_push_title",
+      "value": "強制推送至遠端"
+    },
+    {
+      "name": "repo_force_push_sub",
+      "value": "將本機儲存庫強制推送至遠端，操作無法復原"
+    },
+    {
+      "name": "repo_force_push_confirm_msg",
+      "value": "將以本機儲存庫覆蓋遠端儲存庫，此操作無法復原。"
+    },
+    {
+      "name": "repo_force_push_btn",
+      "value": "強制推送"
+    },
+    {
+      "name": "repo_force_push_failed_title",
+      "value": "強制推送失敗"
+    },
+    {
       "name": "gitlog_not_repo",
       "value": "目前目錄不是 Git 儲存庫"
     },

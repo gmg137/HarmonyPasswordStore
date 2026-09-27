@@ -2057,6 +2057,26 @@
       "value": "Failed to delete the repository: %s"
     },
     {
+      "name": "repo_force_push_title",
+      "value": "Force push to remote"
+    },
+    {
+      "name": "repo_force_push_sub",
+      "value": "Force-pushes the local repository to the remote. This cannot be undone."
+    },
+    {
+      "name": "repo_force_push_confirm_msg",
+      "value": "The remote repository will be overwritten with the local repository. This cannot be undone."
+    },
+    {
+      "name": "repo_force_push_btn",
+      "value": "Force push"
+    },
+    {
+      "name": "repo_force_push_failed_title",
+      "value": "Force push failed"
+    },
+    {
       "name": "gitlog_not_repo",
       "value": "The current folder is not a Git repository"
     },

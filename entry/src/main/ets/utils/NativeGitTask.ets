@@ -48,7 +48,8 @@ export function invokeNativeGit(req: NativeGitRequest): NativeGitReply {
       r = bridge.gitPull(a[0], a[1], a[2], a[3], a[4] === '1', a[5], a[6], a[7]);
       break;
     case 'gitPush':
-      r = bridge.gitPush(a[0], a[1], a[2], a[3], a[4], a[5], a[6]);
+      // force 以 '1'/'0' 传递（TaskPool 的载荷是字符串数组）
+      r = bridge.gitPush(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7]);
       break;
     case 'gitCommitAll':
       r = bridge.gitCommitAll(a[0], a[1], a[2], a[3]);
