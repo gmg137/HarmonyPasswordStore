@@ -21,6 +21,7 @@ import { GitClient } from '../utils/GitClient';
 import { formSheetOptions, menuSheetHeight, panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
 import { ReencryptService, ReencryptPlan, ReencryptOutcome } from '../utils/ReencryptService';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** 待执行的目录密钥变更（旧密钥口令在弹窗里解锁后继续） */
@@ -1445,10 +1446,10 @@ export struct PasswordListPage {
         .layoutWeight(1)
         .scrollBar(BarState.Off)
         .width('100%')
-        // 水平留白用 XL：与搜索结果计数行同值，卡片左缘和计数文字平齐
-        // （计数行上方同为 XL，见其注释）；底部留出 FAB 的高度 + 呼吸间距，
-        // 避免最后一项被浮动按钮压住。
-        .padding({ left: Spacing.XL, right: Spacing.XL, top: Spacing.XS, bottom: IconSize.FAB + Spacing.XL })
+        // 水平留白用 PAGE_H
+        // 底部只避让系统手势条
+        .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.XS,
+          bottom: SystemInsets.bottomVp() })
         .onClick(() => this.collapseSearchBar())
       }
 
@@ -1460,7 +1461,11 @@ export struct PasswordListPage {
           this.isCreateSheetVisible = true;
         },
       })
-      .position({ x: '82%', y: '88%' })
+      // 右缘锚定：FAB 右缘 = 父容器右缘 - (FAB 宽 + 卡片右距)，与列表卡片右缘
+      // 平齐（右距同为 Spacing.PAGE_H）。原先 x:'82%' 是左缘按屏宽的百分比、随屏宽
+      // 漂移，右侧与屏幕的间距锁不住（实测比卡片右缘多凸出约 15vp）。
+      .position({ x: '100%', y: '88%' })
+      .markAnchor({ x: IconSize.FAB + Spacing.PAGE_H, y: 0 })
       // 同步面板挂在此节点：同一节点只能挂一个 bindSheet（后挂的会覆盖先挂的），
       // 与根节点的 create sheet 分开挂载，否则「同步存储库」永远打不开
       .bindSheet(this.isSyncSheetVisible, this.syncSheetBuilder(), this.syncSheetOptions)

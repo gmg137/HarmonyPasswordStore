@@ -1005,7 +1005,7 @@ export struct PgpKeyManagerPage {
               .margin({ left: Spacing.SM })
           }
 
-          // 私钥/公钥改为标签：第三行让位给加密方式
+          // 私钥/公钥用标签显示；指纹行已按设计去掉，卡片只留名称行 + 加密方式行
           Text(key.isSecret ? $r('app.string.pgp_tag_secret') : $r('app.string.pgp_tag_public'))
             .fontSize(FontSize.OVERLINE)
             .fontColor(this.colors.textSecondary)
@@ -1016,13 +1016,7 @@ export struct PgpKeyManagerPage {
         }
         .alignItems(VerticalAlign.Center)
 
-        Text(this.viewModel.formatFingerprint(key.fingerprint))
-          .fontSize(FontSize.CAPTION)
-          .fontColor(this.colors.textTertiary)
-          .fontFamily('monospace')
-          .margin({ top: Spacing.XS })
-
-        // 第三行：加密方式（如 EdDSA / RSA）
+        // 第二行：加密方式（如 EdDSA / RSA）
         Text(this.algorithmText(key))
           .fontSize(FontSize.CAPTION)
           .fontColor(this.colors.textTertiary)
@@ -1108,7 +1102,10 @@ export struct PgpKeyManagerPage {
             this.isAddSheetVisible = true;
           },
         })
-        .position({ x: '82%', y: '88%' })
+        // 右缘锚定：FAB 右缘与页面卡片右缘平齐（右距 Spacing.XL），
+        // 写法与首页一致（x:'82%' 左缘百分比会随屏宽漂移，见 PasswordListPage 注释）
+        .position({ x: '100%', y: '88%' })
+        .markAnchor({ x: IconSize.FAB + Spacing.PAGE_H, y: 0 })
         // 编辑表单 sheet 绑定在 FAB 节点上：同一节点只能挂一个 bindSheet，
         // 两个都绑在根容器时后者会覆盖前者导致 + 号弹窗不弹出
         .bindSheet(this.isEditSheetVisible, this.editSheetBuilder(),

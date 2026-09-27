@@ -564,7 +564,10 @@ export struct SshKeyManagerPage {
             this.viewModel.openAddSheet();
           },
         })
-        .position({ x: '82%', y: '88%' })
+        // 右缘锚定：FAB 右缘与页面卡片右缘平齐（右距 Spacing.XL），
+        // 写法与首页一致（x:'82%' 左缘百分比会随屏宽漂移，见 PasswordListPage 注释）
+        .position({ x: '100%', y: '88%' })
+        .markAnchor({ x: IconSize.FAB + Spacing.PAGE_H, y: 0 })
       }
       .width('100%')
       .height('100%')
