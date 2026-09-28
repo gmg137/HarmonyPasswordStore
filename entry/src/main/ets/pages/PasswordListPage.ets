@@ -693,6 +693,21 @@ export struct PasswordListPage {
   }
 
   /**
+   * 搜索结果中点击目录：收起搜索框并进入该目录
+   *
+   * 不能沿用 collapseSearchBar：它按 currentDir（还是旧目录）重载列表，而旧实现
+   * 留着搜索关键词，loadEntries 会继续走搜索分支、列表纹丝不动（「点了进不去目录」）。
+   * 现由 enterDirectory 先记路径、清关键词、一次 loadEntries 直达目标目录，
+   * 这里只负责把顶栏收回标题模式。
+   */
+  private enterDirectoryFromSearch(relativePath: string): void {
+    this.viewModel.enterDirectory(relativePath);
+    if (this.isSearchBarVisible) {
+      this.isSearchBarVisible = false;
+    }
+  }
+
+  /**
    * 条目解密候选密钥：**密文实际收件人优先**，再退回 .gpg-id 指定的密钥
    *
    * `.gpg-id` 只决定加密时的接收方。改过 `.gpg-id`（换密钥）后，旧条目仍由旧密钥
@@ -1468,7 +1483,9 @@ export struct PasswordListPage {
             ListItem() {
               PasswordItemView({ entry: entry, onItemClicked: (e: PasswordEntryVM): void => {
                 if (e.isDirectory) {
-                  this.viewModel.onEntryClicked(e);
+                  // 搜索结果里点目录：进目录（内部先清关键词再加载，一次直达目标目录），
+                  // 顶栏同时恢复目录名标题
+                  this.enterDirectoryFromSearch(e.relativePath);
                 } else {
                   this.onPasswordEntryClick(e);
                 }

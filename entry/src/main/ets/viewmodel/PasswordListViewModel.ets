@@ -133,17 +133,19 @@ export class PasswordListViewModel {
       return;
     }
 
-    // 搜索只返回文件，不包含目录
-    this.filteredEntries = result.data
-      .filter((entry: PasswordEntry) => !entry.isDirectory)
-      .map((entry: PasswordEntry) => this.toVM(entry));
+    // 目录条目保留（不再过滤）：目录行可点、可进入；childCount 由 toVM 按
+    // listEntries 填好的 children 直接子项数取值，搜索场景无需另行统计
+    this.filteredEntries = result.data.map((entry: PasswordEntry) => this.toVM(entry));
 
     this.searchResultCount = this.filteredEntries.length;
 
-    // 模糊搜索时按名称字母序排序
-    this.filteredEntries.sort((a: PasswordEntryVM, b: PasswordEntryVM) =>
-      a.name.localeCompare(b.name)
-    );
+    // 搜索结果排序与目录浏览同口径：目录在前，组内按名称字母序
+    this.filteredEntries.sort((a: PasswordEntryVM, b: PasswordEntryVM) => {
+      if (a.isDirectory !== b.isDirectory) {
+        return a.isDirectory ? -1 : 1;
+      }
+      return a.name.localeCompare(b.name);
+    });
   }
 
   /**
@@ -196,16 +198,17 @@ export class PasswordListViewModel {
   }
 
   /**
-   * 点击条目处理
+   * 点击目录进入（含从搜索结果点击）：
+   * 必须先清空搜索关键词再加载，否则 loadEntries 会因关键词非空
+   * 继续走搜索分支，列表看似纹丝不动（表现为「点了进不去目录」）
    */
-  onEntryClicked(entry: PasswordEntryVM): void {
-    if (entry.isDirectory) {
-      this.currentDir = entry.relativePath;
-      this.loadEntries();
-    } else {
-      const param: PasswordDetailNavParam = { relativePath: entry.relativePath };
-      RouteManager.getInstance().pushPath(RouteNames.PASSWORD_DETAIL, param);
+  enterDirectory(relativePath: string): void {
+    this.currentDir = relativePath;
+    if (this.searchKeyword.length > 0) {
+      this.searchKeyword = '';
+      this.isSearching = false;
     }
+    this.loadEntries();
   }
 
   /**

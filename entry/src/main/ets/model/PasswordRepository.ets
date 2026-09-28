@@ -204,14 +204,30 @@ export class PasswordRepository {
 
   /**
    * 递归搜索所有密码文件
-   * @param keyword 搜索关键词
-   * @returns 匹配的条目列表
+   * @param keyword 搜索关键词（空串返回全部文件；目录命中时结果含目录行——模糊模式
+   *                其下密码按路径必然也已命中，精确模式会额外展开该目录下全部密码）
+   * @param isExact true = 精确匹配（条目名全等），false = 模糊匹配（包含）
    */
   searchEntries(keyword: string, isExact: boolean = false): RepoResult<PasswordEntry[]> {
+    if (keyword.length === 0) {
+      // 空关键词（自动填充等全量列举方）走纯文件列举：不做目录命中展开，
+      // 结果语义保持「全部密码文件」，调用方各自过滤 isDirectory
+      const all: PasswordEntry[] = [];
+      this.searchRecursive('', '', false, all);
+      return { success: true, data: all, error: '' };
+    }
     const results: PasswordEntry[] = [];
     const lowerKeyword: string = keyword.toLowerCase();
     this.searchRecursive('', lowerKeyword, isExact, results);
-    return { success: true, data: results, error: '' };
+    const seen: Set<string> = new Set();
+    const deduped: PasswordEntry[] = [];
+    for (const entry of results) {
+      if (!seen.has(entry.relativePath)) {
+        seen.add(entry.relativePath);
+        deduped.push(entry);
+      }
+    }
+    return { success: true, data: deduped, error: '' };
   }
 
   /**
@@ -225,6 +241,19 @@ export class PasswordRepository {
     for (const entry of result.data) {
       if (entry.isDirectory) {
         this.searchRecursive(entry.relativePath, keyword, isExact, results);
+        // 目录行本身也要进结果（此前目录仅作递归跳板，搜索结果里点不进目录）
+        // 模糊匹配比对完整相对路径（与文件分支同口径），目录路径是其全部后代的前缀，
+        // 命中目录时其后代密码必然也已命中——只补目录行，不重复展开子树；
+        // 精确匹配比对条目名（末段），命中目录时后代文件不会命中，须整树补入
+        const target: string = isExact
+          ? entry.name.toLowerCase()
+          : entry.relativePath.toLowerCase();
+        if (keyword.length > 0 && (isExact ? target === keyword : target.includes(keyword))) {
+          results.push(entry);
+          if (isExact) {
+            this.appendPasswordsUnder(entry.relativePath, results);
+          }
+        }
       } else {
         if (keyword.length === 0) {
           results.push(entry);
@@ -237,6 +266,24 @@ export class PasswordRepository {
         if (isExact ? target === keyword : target.includes(keyword)) {
           results.push(entry);
         }
+      }
+    }
+  }
+
+  /**
+   * 把 dirPath 目录（含子目录）下的全部密码文件加入 results
+   *
+   * 仅供精确模式在目录命中时展开子树（模糊模式的后代必已按路径命中，无需展开）。
+   * listEntries 只列一层，故逐层递归收集。
+   */
+  private appendPasswordsUnder(dirPath: string, results: PasswordEntry[]): void {
+    const result: RepoResult<PasswordEntry[]> = this.listEntries(dirPath);
+    if (!result.success || !result.data) return;
+    for (const entry of result.data) {
+      if (entry.isDirectory) {
+        this.appendPasswordsUnder(entry.relativePath, results);
+      } else {
+        results.push(entry);
       }
     }
   }
