@@ -67,6 +67,21 @@ export class PgpKeyManager {
    *  .gpg-id 中可能写入任一形态，解析时先经别名归一化） */
   private keyAliases: Map<string, string> = new Map();
 
+  /** 指纹 → armored 私钥文本缓存（getKeyArmored 读文件结果）。
+   *  重加密会逐条取同一批密钥的 armored，无缓存时每条都重复读同一文件。
+   *  任何密钥文件变更都必须经 `invalidateMaterialCaches` 失效 */
+  private keyArmoredCache: Map<string, string> = new Map();
+
+  /** 指纹 → armored 公钥文本缓存（exportPublicKey 的 native 提取结果）。
+   *  重加密循环里对每条条目加密都会取目标公钥，无缓存时每条都重复 native 解析 */
+  private exportedPublicCache: Map<string, string> = new Map();
+
+  /** 密钥文件内容缓存的唯一失效收口：导入/删除/改口令/全量重扫都会改文件 */
+  private invalidateMaterialCaches(): void {
+    this.keyArmoredCache.clear();
+    this.exportedPublicCache.clear();
+  }
+
   private constructor() {
   }
 
@@ -100,6 +115,7 @@ export class PgpKeyManager {
     this.keyCache = [];
     this.keyFiles.clear();
     this.keyAliases.clear();
+    this.invalidateMaterialCaches();
     const keysDir: string = this.getKeysDir();
     if (!FileUtils.exists(keysDir)) return;
 
@@ -225,6 +241,8 @@ export class PgpKeyManager {
       const filePath: string = `${this.getKeysDir()}/${fileName}`;
       FileUtils.writeTextFile(filePath, normalized);
       this.keyFiles.set(keyInfo.fingerprint, filePath);
+      // 同名重导入会覆盖旧文件，密钥材料缓存必须失效
+      this.invalidateMaterialCaches();
 
       // 更新缓存
       this.keyCache.push(keyInfo);
@@ -457,6 +475,7 @@ export class PgpKeyManager {
       // 从缓存与路径映射中移除
       this.keyCache = this.keyCache.filter((k: GpgKeyId) => k.fingerprint !== fingerprint);
       this.keyFiles.delete(fingerprint);
+      this.invalidateMaterialCaches();
 
       // 如为默认密钥，清除默认设置
       if (this.getDefaultKeyFingerprint() === fingerprint) {
@@ -479,6 +498,11 @@ export class PgpKeyManager {
   async exportPublicKey(fingerprint: string): Promise<string> {
     // 私钥文件中的公钥部分无法在纯 ArkTS 中分离提取，
     // 需 native rpgp 的 splitting 功能。当前返回空字符串并记录日志。
+    // 重加密会对每条条目重复取同一目标公钥，命中缓存即免重复 native 解析
+    const cachedPublic: string | undefined = this.exportedPublicCache.get(fingerprint);
+    if (cachedPublic !== undefined) {
+      return cachedPublic;
+    }
     const keyInfo: GpgKeyId | null = this.findKey(fingerprint);
     if (keyInfo === null) {
       hilog.warn(DOMAIN, TAG, 'exportPublicKey: key not found %{public}s', fingerprint);
@@ -496,6 +520,7 @@ export class PgpKeyManager {
       const armored: string = FileUtils.readTextFile(filePath);
       // 检查是否为公钥 armor（BEGIN PGP PUBLIC KEY BLOCK）
       if (armored.includes('PGP PUBLIC KEY BLOCK')) {
+        this.exportedPublicCache.set(fingerprint, armored);
         return armored;
       }
       // 私钥文件：通过 native rpgp 提取公钥部分
@@ -504,6 +529,7 @@ export class PgpKeyManager {
         hilog.warn(DOMAIN, TAG, 'exportPublicKey: native extract failed: %{public}s', result.error);
         return '';
       }
+      this.exportedPublicCache.set(fingerprint, result.data);
       return result.data;
     } catch (e) {
       hilog.error(DOMAIN, TAG, 'exportPublicKey failed: %{public}s', e instanceof Error ? e.message : String(e));
@@ -519,6 +545,12 @@ export class PgpKeyManager {
    * @returns armored 文本，不存在时返回空字符串
    */
   getKeyArmored(fingerprint: string): string {
+    // 命中内存缓存直接返回：重加密循环会逐条取同一批密钥的 armored，
+    // 无缓存时每条都重复读同一文件（失败结果不缓存，保证导入后立即可用）
+    const cached: string | undefined = this.keyArmoredCache.get(fingerprint);
+    if (cached !== undefined) {
+      return cached;
+    }
     // 优先用映射表定位文件（指纹与文件名可能不一致），
     // 映射缺失时回退"指纹.asc"约定路径
     const mappedPath: string | undefined = this.keyFiles.get(fingerprint);
@@ -531,7 +563,11 @@ export class PgpKeyManager {
       return '';
     }
     try {
-      return FileUtils.readTextFile(filePath);
+      const armored: string = FileUtils.readTextFile(filePath);
+      if (armored.length > 0) {
+        this.keyArmoredCache.set(fingerprint, armored);
+      }
+      return armored;
     } catch (e) {
       hilog.error(DOMAIN, TAG, 'getKeyArmored failed: %{public}s', e instanceof Error ? e.message : String(e));
       return '';

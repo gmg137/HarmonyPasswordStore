@@ -666,7 +666,10 @@ pub fn extract_public_keys_multi(armored: &str) -> Vec<GpgPqcPublicKey> {
 }
 
 /// 按 `-----BEGIN ...-----` / `-----END ...-----` 切分拼接的 armored 文本
-fn split_armor_blocks(armored: &str) -> Vec<String> {
+///
+/// crate 内公开：lib.rs 的普通密钥多接收方解析也用它（rpgp 0.20 的
+/// `from_armor_many` 对连续 armor 块只解析第一块，实测任何分隔符都如此）。
+pub(crate) fn split_armor_blocks(armored: &str) -> Vec<String> {
     let mut out = Vec::new();
     let mut cur: Vec<&str> = Vec::new();
     let mut in_block = false;

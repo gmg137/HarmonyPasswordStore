@@ -20,6 +20,7 @@ import { GitConfig } from '../model/GitConfig';
 import { GitClient } from '../utils/GitClient';
 import { formSheetOptions, menuSheetHeight, panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
 import { ReencryptService, ReencryptPlan, ReencryptOutcome } from '../utils/ReencryptService';
+import { LoadingOverlay } from '../views/LoadingOverlay';
 import { Strings } from '../common/Strings';
 import { SystemInsets } from '../utils/SystemInsets';
 import { hilog } from '@kit.PerformanceAnalysisKit';
@@ -106,6 +107,11 @@ export struct PasswordListPage {
     this.viewModel.loadEntries();
     // 根内容非 NavDestination：返回键经 Index.onBackPress 转发到此
     BackHandler.set((): boolean => {
+      // 目录密钥重加密（预扫/执行）期间吞掉返回：进度遮罩挡不住系统返回，
+      // 中途退出会让逐条重加密的结果无人接收（同克隆进度遮罩的约定）
+      if (this.reencryptBusy) {
+        return true;
+      }
       if (this.viewModel.currentDir.length > 0) {
         this.viewModel.navigateUp();
         return true;
@@ -251,6 +257,15 @@ export struct PasswordListPage {
   @Local dirKeySelectedFps: string[] = [];
   /** 重加密进行中：禁用重复点击 */
   @Local reencryptBusy: boolean = false;
+  /**
+   * 重加密**执行期**遮罩可见性（与 reencryptBusy 分开）：
+   * busy 覆盖预扫 + 执行两段（预扫时面板还开着，用面板按钮忙碌态反馈），
+   * 遮罩只在确认后真正逐条重加密时出现——避免口令弹窗期间闪遮罩
+   */
+  @Local reencryptRunning: boolean = false;
+  /** 重加密进度（已处理 / 需重加密条数），驱动 LoadingOverlay 进度环 */
+  @Local reencryptDone: number = 0;
+  @Local reencryptTotal: number = 0;
   /** 待执行的重加密（口令弹窗解锁成功后继续） */
   private pendingReencrypt: ReencryptPending | null = null;
 
@@ -798,30 +813,42 @@ export struct PasswordListPage {
       return;
     }
     const dirPath: string = this.viewModel.currentDir;
-    const plan: ReencryptPlan = ReencryptService.getInstance().plan(dirPath, fingerprints);
-    if (plan.error.length > 0) {
-      showToastSafe(this.getUIContext(), plan.error, 2500);
-      return;
-    }
-    if (plan.needsCount === 0) {
-      // 该目录下没有需要换的条目：直接写 .gpg-id 即可
-      const written = PasswordRepository.getInstance().setGpgIdForDir(dirPath, fingerprints);
-      showToastSafe(this.getUIContext(), written.success ? Strings.get('home_dirkey_updated_no_reencrypt') : written.error, 2500);
-      if (written.success) {
-        RepoChangeNotifier.connect().bump();
-        this.isCreateSheetVisible = false;
+    // 预扫现在跨线程逐条解析收件人（条目多时耗时数秒），必须置忙：
+    // 面板的取消/应用按钮会显示忙碌文案并禁用，防重复触发
+    this.reencryptBusy = true;
+    try {
+      const plan: ReencryptPlan = await ReencryptService.getInstance().plan(dirPath, fingerprints);
+      if (plan.error.length > 0) {
+        showToastSafe(this.getUIContext(), plan.error, 2500);
+        return;
       }
-      return;
-    }
+      // 预扫是异步的：期间用户可能已手势关闭面板（视为放弃本次变更），
+      // 此时丢弃结果——不写 .gpg-id、不弹确认框
+      if (!this.isCreateSheetVisible) {
+        return;
+      }
+      if (plan.needsCount === 0) {
+        // 该目录下没有需要换的条目：直接写 .gpg-id 即可
+        const written = PasswordRepository.getInstance().setGpgIdForDir(dirPath, fingerprints);
+        showToastSafe(this.getUIContext(), written.success ? Strings.get('home_dirkey_updated_no_reencrypt') : written.error, 2500);
+        if (written.success) {
+          RepoChangeNotifier.connect().bump();
+          this.isCreateSheetVisible = false;
+        }
+        return;
+      }
 
-    hilog.info(DOMAIN, TAG, 'applyDirKeys: count=%{public}d needs=%{public}d',
-      fingerprints.length, plan.needsCount);
-    // 先关面板再弹确认框：bindSheet 与 AlertDialog 同处 UIContext 顶层，
-    // 面板还在关闭动画中时确认框会被压在下面（实测确认框根本不进布局树）
-    this.isCreateSheetVisible = false;
-    setTimeout(() => {
-      this.showReencryptConfirm(dirPath, fingerprints, plan);
-    }, 400);
+      hilog.info(DOMAIN, TAG, 'applyDirKeys: count=%{public}d needs=%{public}d',
+        fingerprints.length, plan.needsCount);
+      // 先关面板再弹确认框：bindSheet 与 AlertDialog 同处 UIContext 顶层，
+      // 面板还在关闭动画中时确认框会被压在下面（实测确认框根本不进布局树）
+      this.isCreateSheetVisible = false;
+      setTimeout(() => {
+        this.showReencryptConfirm(dirPath, fingerprints, plan);
+      }, 400);
+    } finally {
+      this.reencryptBusy = false;
+    }
   }
 
   /** 重加密确认框（面板关闭后再弹，避免被面板遮挡） */
@@ -884,13 +911,26 @@ export struct PasswordListPage {
     await this.executeReencrypt(dirPath, fingerprints, plan);
   }
 
-  /** 逐条重加密并落盘；结果以 Toast 汇总（失败条目保持原样） */
+  /** 逐条重加密并落盘；进度以全模态遮罩反馈，结果以 Toast 汇总（失败条目保持原样） */
   private async executeReencrypt(dirPath: string, fingerprints: string[],
     plan: ReencryptPlan): Promise<void> {
     this.reencryptBusy = true;
-    const outcome: ReencryptOutcome =
-      await ReencryptService.getInstance().run(dirPath, fingerprints, plan);
-    this.reencryptBusy = false;
+    this.reencryptDone = 0;
+    this.reencryptTotal = plan.needsCount;
+    this.reencryptRunning = true;
+    let outcome: ReencryptOutcome;
+    try {
+      outcome = await ReencryptService.getInstance().run(
+        dirPath, fingerprints, plan,
+        (done: number, total: number): void => {
+          // TaskPool 逐条下发，每个 await 都让出主线程，这里能即时刷新
+          this.reencryptDone = done;
+          this.reencryptTotal = total;
+        });
+    } finally {
+      this.reencryptRunning = false;
+      this.reencryptBusy = false;
+    }
 
     let message: string;
     if (outcome.success) {
@@ -1508,6 +1548,21 @@ export struct PasswordListPage {
         .padding({ top: Spacing.XS, bottom: Spacing.XS })
         .position({ x: '58%', y: 56 })
         .zIndex(101)
+      }
+
+      // ===== 重加密进度遮罩（须为根 Column 最后一个子节点才能盖住全部内容） =====
+      // position 移出文档流（同上方设置菜单遮罩的写法），否则会被排在后面的兄弟
+      // 节点压住；触摸拦截由 LoadingOverlay 自带的 hitTestBehavior(Block) 负责，
+      // 返回键由 aboutToAppear 里 BackHandler 的 busy 分支消费
+      if (this.reencryptRunning) {
+        LoadingOverlay({
+          text: Strings.get('home_reencrypting'),
+          percent: this.reencryptTotal > 0
+            ? this.reencryptDone * 100 / this.reencryptTotal
+            : -1,
+        })
+          .position({ x: 0, y: 0 })
+          .zIndex(200)
       }
     }
     .width('100%')

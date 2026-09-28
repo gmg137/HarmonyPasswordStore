@@ -10,6 +10,9 @@ import { NativeBridge, NativeResult } from '../common/NativeBridge';
 import { PgpKeyManager } from './PgpKeyManager';
 import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { taskpool } from '@kit.ArkTS';
+import { invokeNativePgp } from '../utils/NativePgpTask';
+import { dispatchPgpLocal, NativePgpRequest } from '../utils/NativePgpDispatch';
 
 const DOMAIN = 0x0001;
 const TAG = 'PgpCrypto';
@@ -137,27 +140,48 @@ export class PgpCrypto implements PgpCryptoInterface {
    *
    * - 普通密钥：rpgp 的 pgpDecrypt
    * - GnuPG algo 8（PQC）密钥：gpg_pqc 独立模块的 pgpDecryptGpgPqc
+   *
+   * native 调用经 TaskPool 下发：重加密会逐条解密大量条目，S2K/OCB/ML-KEM
+   * 都是 CPU 密集操作，留在主线程会把界面卡死（真机实测被 watchdog 终止）。
    */
-  private decryptWithKey(fingerprint: string, ciphertext: string,
-    secretKeyArmored: string, passphrase: string): NativeResult {
+  private async decryptWithKey(fingerprint: string, ciphertext: string,
+    secretKeyArmored: string, passphrase: string): Promise<NativeResult> {
     if (this.isGpgPqcKey(fingerprint)) {
-      return NativeBridge.getInstance().pgpDecryptGpgPqc(ciphertext, secretKeyArmored, passphrase);
+      return this.callPgp('pgpDecryptGpgPqc', [ciphertext, secretKeyArmored, passphrase]);
     }
-    return NativeBridge.getInstance().pgpDecrypt(ciphertext, secretKeyArmored, passphrase);
+    return this.callPgp('pgpDecrypt', [ciphertext, secretKeyArmored, passphrase]);
   }
 
   /**
    * 校验指定密钥的口令（按密钥类型选择 native 入口）
    *
    * rpgp 丢弃 v5 子密钥包，无法校验 GnuPG algo 8 子密钥的保护段，
-   * 故这类密钥改由 gpg_pqc 模块尝试解出材料来判定。
+   * 故这类密钥改由 gpg_pqc 模块尝试解出材料来判定。同样经 TaskPool 下发。
    */
-  private verifyPassphraseWithKey(fingerprint: string, secretKeyArmored: string,
-    passphrase: string): NativeResult {
+  private async verifyPassphraseWithKey(fingerprint: string, secretKeyArmored: string,
+    passphrase: string): Promise<NativeResult> {
     if (this.isGpgPqcKey(fingerprint)) {
-      return NativeBridge.getInstance().pgpGpgPqcVerifyPassphrase(secretKeyArmored, passphrase);
+      return this.callPgp('pgpGpgPqcVerifyPassphrase', [secretKeyArmored, passphrase]);
     }
-    return NativeBridge.getInstance().pgpVerifyPassphrase(secretKeyArmored, passphrase);
+    return this.callPgp('pgpVerifyPassphrase', [secretKeyArmored, passphrase]);
+  }
+
+  /**
+   * 把 PGP native 调用分发到 TaskPool 工作线程
+   *
+   * 只承载「字符串入 → NativeResult 出」的纯调用（参数见 NativePgpDispatch）；
+   * taskpool 分发失败时回退主线程同步直调——正确性优先于流畅性，
+   * 宁可卡顿也不能让重加密中途失败。
+   */
+  private async callPgp(fn: string, args: string[]): Promise<NativeResult> {
+    const req: NativePgpRequest = { fn: fn, args: args };
+    try {
+      return await taskpool.execute(invokeNativePgp, req) as NativeResult;
+    } catch (e) {
+      hilog.warn(DOMAIN, TAG, 'taskpool dispatch failed for %{public}s, fallback to main thread: %{public}s',
+        fn, e instanceof Error ? `${e.name}: ${e.message}` : String(e));
+      return dispatchPgpLocal(fn, args);
+    }
   }
 
   /**
@@ -184,14 +208,31 @@ export class PgpCrypto implements PgpCryptoInterface {
   }
 
   /**
-   * 该密文**实际**由哪些已导入密钥加密（按 PKESK 的收件人 Key ID 匹配）
+   * 提取密文的收件人 Key ID（native 解析 PKESK，算法无关）——**TaskPool 版本**
    *
-   * 这是解密选密钥的权威依据（`pass` 的 `gpg --decrypt --list-only` 同理）：
-   * `.gpg-id` 只决定加密时的接收方，改过 `.gpg-id`（换密钥）后旧条目仍由旧密钥
-   * 加密——只有按密文判定才能索取正确的口令。
+   * 重加密预扫会对子树里每条条目各解析一次，条目多时同步版会把主线程
+   * 卡住（真机实测 freeze），故预扫一律走本方法；单条目快路径
+   * （点击条目弹口令框）仍可用同步版 `recipientKeyIds`。
+   * 无 PKESK（对称加密）或全为隐藏收件人时返回空数组。
    */
-  keysForCiphertext(ciphertext: string): string[] {
-    const ids: string[] = this.recipientKeyIds(ciphertext);
+  async recipientKeyIdsAsync(ciphertext: string): Promise<string[]> {
+    if (ciphertext.length === 0) {
+      return [];
+    }
+    const res: NativeResult = await this.callPgp('pgpRecipientKeyIds', [ciphertext]);
+    if (!res.success || res.data.length === 0) {
+      return [];
+    }
+    return res.data.split(',').filter((s: string) => s.length > 0);
+  }
+
+  /**
+   * 按收件人 Key ID 集合匹配已导入密钥（纯缓存查找，无 native 调用）
+   *
+   * 从 `keysForCiphertext` 抽出：预扫已经拿到 Key ID（经 TaskPool 异步解析），
+   * 匹配这步只查主线程密钥缓存，无需再为它付一次同步 native 解析的代价。
+   */
+  keysForIds(ids: string[]): string[] {
     const out: string[] = [];
     for (let i: number = 0; i < ids.length; i++) {
       const key: GpgKeyId | null = PgpKeyManager.getInstance().findByEncryptionKeyId(ids[i]);
@@ -203,10 +244,22 @@ export class PgpCrypto implements PgpCryptoInterface {
     // 上层只会报「缺少解密密钥」，看不出是「没导入」还是「匹配字段不对」
     if (ids.length > 0 && out.length === 0) {
       hilog.warn(DOMAIN, TAG,
-        'keysForCiphertext: no imported key matches PKESK ids=[%{public}s]',
+        'keysForIds: no imported key matches PKESK ids=[%{public}s]',
         ids.join(','));
     }
     return out;
+  }
+
+  /**
+   * 该密文**实际**由哪些已导入密钥加密（按 PKESK 的收件人 Key ID 匹配）
+   *
+   * 这是解密选密钥的权威依据（`pass` 的 `gpg --decrypt --list-only` 同理）：
+   * `.gpg-id` 只决定加密时的接收方，改过 `.gpg-id`（换密钥）后旧条目仍由旧密钥
+   * 加密——只有按密文判定才能索取正确的口令。
+   */
+  keysForCiphertext(ciphertext: string): string[] {
+    const ids: string[] = this.recipientKeyIds(ciphertext);
+    return this.keysForIds(ids);
   }
 
   /**
@@ -298,14 +351,14 @@ export class PgpCrypto implements PgpCryptoInterface {
     // 普通密钥的 PKESK 由 rpgp 构造、algo 8 的由 gpg_pqc 自建，明文只加密一次。
     // pass 本身支持多密钥（set_gpg_recipients 为每行各加一个 -r），故此处必须支持。
     if (pqcArmored.length > 0 && normalArmored.length > 0) {
-      const mixed = NativeBridge.getInstance().pgpEncryptMixed(
-        plaintext, pqcArmored.join('\n'), normalArmored.join('\n'));
+      const mixed = await this.callPgp('pgpEncryptMixed',
+        [plaintext, pqcArmored.join('\n'), normalArmored.join('\n')]);
       return { success: mixed.success, data: mixed.data, error: mixed.error };
     }
 
     if (pqcArmored.length > 0) {
       // GnuPG algo 8：走 native 独立模块（PKESK(algo 8) + SEIPDv1），支持多接收方
-      const pqcResult = NativeBridge.getInstance().pgpEncryptGpgPqc(plaintext, pqcArmored.join('\n'));
+      const pqcResult = await this.callPgp('pgpEncryptGpgPqc', [plaintext, pqcArmored.join('\n')]);
       return { success: pqcResult.success, data: pqcResult.data, error: pqcResult.error };
     }
 
@@ -313,7 +366,7 @@ export class PgpCrypto implements PgpCryptoInterface {
     if (publicKeyArmored.length === 0) {
       return { success: false, data: '', error: Strings.get('pgp_no_public_key') };
     }
-    const result = NativeBridge.getInstance().pgpEncrypt(plaintext, publicKeyArmored);
+    const result = await this.callPgp('pgpEncrypt', [plaintext, publicKeyArmored]);
     return { success: result.success, data: result.data, error: result.error };
   }
 
@@ -324,15 +377,22 @@ export class PgpCrypto implements PgpCryptoInterface {
    * 只有缓存在 passphraseCache 中的密钥才会带上其密码尝试；
    * 未缓存的密钥先用空密码尝试（覆盖无密码保护的密钥），失败则跳过，
    * 由上层在全部失败时弹框索取密码（避免用错密钥/错密码反复污染会话）。
+   *
+   * @param preferredFingerprints 密文收件人对应的已导入密钥指纹。**调用方已经解析过
+   *        收件人时必须传**（重加密管线的预扫结果就是逐条经 TaskPool 解析出来的）：
+   *        不传则本方法会用同步 native 解析一遍 PKESK，在逐条循环里重新拖住主线程。
    */
-  async decrypt(ciphertext: string, candidateFingerprints?: string[]): Promise<CryptoResult> {
+  async decrypt(ciphertext: string, candidateFingerprints?: string[],
+    preferredFingerprints?: string[]): Promise<CryptoResult> {
     const keys: GpgKeyId[] = await PgpKeyManager.getInstance().listKeys(true);
     if (keys.length === 0) {
       return { success: false, data: '', error: Strings.get('pgp_no_secret_key') };
     }
 
     // 先按密文的收件人 Key ID 找出真正能解的密钥（换过 .gpg-id 时 .gpg-id 会指向别的密钥）
-    const preferred: string[] = this.keysForCiphertext(ciphertext);
+    const preferred: string[] = preferredFingerprints !== undefined
+      ? preferredFingerprints
+      : this.keysForCiphertext(ciphertext);
     const order: string[] = this.buildCandidateOrder(keys, candidateFingerprints, preferred);
     let lastError: string = Strings.get('common_decrypt_failed');
     for (let i: number = 0; i < order.length; i++) {
@@ -349,7 +409,7 @@ export class PgpCrypto implements PgpCryptoInterface {
         const passphrase: string = candidatePasses[j];
         hilog.info(DOMAIN, TAG, 'decrypt: try key=%{public}s cached=%{public}s',
           fp.substring(fp.length - 8), cached !== undefined ? 'yes' : 'no');
-        const result = this.decryptWithKey(fp, ciphertext, secretKeyArmored, passphrase);
+        const result = await this.decryptWithKey(fp, ciphertext, secretKeyArmored, passphrase);
         if (result.success) {
           if (cached === undefined) {
             // 空密码试探成功 = 该密钥无密码保护，记住以免每次重试
@@ -418,7 +478,7 @@ export class PgpCrypto implements PgpCryptoInterface {
       hilog.warn(DOMAIN, TAG, 'unlockPassphrase: key armored file missing for %{public}s', fp);
       return { success: false, error: Strings.get('pgp_key_file_missing') };
     }
-    const result = this.verifyPassphraseWithKey(fp, secretKeyArmored, passphrase);
+    const result = await this.verifyPassphraseWithKey(fp, secretKeyArmored, passphrase);
     if (!result.success) {
       hilog.warn(DOMAIN, TAG, 'unlockPassphrase: native verify failed: %{public}s', result.error);
       // 透传 native 的真实原因（如「缺少私钥段」= 导入的是公钥），
@@ -500,7 +560,7 @@ export class PgpCrypto implements PgpCryptoInterface {
         continue;
       }
       // 空密码验证成功即表示私钥未加密（无密码保护）
-      const result = this.verifyPassphraseWithKey(fp, secretKeyArmored, '');
+      const result = await this.verifyPassphraseWithKey(fp, secretKeyArmored, '');
       if (result.success) {
         this.passphraseCache.set(fp, '');
         hilog.info(DOMAIN, TAG, 'ensureUnlocked: key %{public}s has no passphrase, auto-unlocked',

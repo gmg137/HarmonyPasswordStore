@@ -13,6 +13,7 @@ import { PasswordRepository } from '../model/PasswordRepository';
 import { PgpCrypto, UnlockResult } from '../crypto/PgpCrypto';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { ReencryptService, ReencryptPlan, ReencryptOutcome } from '../utils/ReencryptService';
+import { LoadingOverlay } from '../views/LoadingOverlay';
 import { Strings } from '../common/Strings';
 
 /** hilog 域 */
@@ -131,6 +132,9 @@ export struct PgpKeyManagerPage {
   @Local rootKeyError: string = '';
   /** 重加密进行中 */
   @Local rootKeyBusy: boolean = false;
+  /** 根目录重加密进度（已处理 / 需重加密条数），驱动 LoadingOverlay 进度环 */
+  @Local rootReencryptDone: number = 0;
+  @Local rootReencryptTotal: number = 0;
   /** 待执行：新默认密钥指纹与预扫结果 */
   private pendingRootKey: string = '';
   private pendingRootPlan: ReencryptPlan | null = null;
@@ -761,7 +765,7 @@ export struct PgpKeyManagerPage {
    * .gpg-id 决定（pass 约定）。两者不一致时用户会以为「设了默认却没生效」，
    * 故这里明确询问一次，而不是静默改写仓库内容（.gpg-id 会随同步下发到其他设备）。
    */
-  private offerSwitchRootKey(fingerprint: string): void {
+  private async offerSwitchRootKey(fingerprint: string): Promise<void> {
     const current: string = this.viewModel.rootGpgIdFingerprint();
     if (current.length === 0 || current === fingerprint) {
       return;
@@ -769,7 +773,14 @@ export struct PgpKeyManagerPage {
     // 预扫根目录范围：改 .gpg-id 后哪些条目需要重加密、需要哪把旧密钥的口令。
     // 与 pass init 一致：只有「由根 .gpg-id 管辖」的条目会被换；
     // 子目录自带 .gpg-id 的条目收件人不变，自动跳过（连口令都不需要）。
-    const plan: ReencryptPlan = ReencryptService.getInstance().plan('', [fingerprint]);
+    // 根目录条目多时预扫耗时数秒（逐条跨线程解析收件人），置忙碌防止重复触发
+    this.rootKeyBusy = true;
+    let plan: ReencryptPlan;
+    try {
+      plan = await ReencryptService.getInstance().plan('', [fingerprint]);
+    } finally {
+      this.rootKeyBusy = false;
+    }
     if (plan.error.length > 0) {
       showToastSafe(this.getUIContext(), plan.error, 2500);
       return;
@@ -873,12 +884,23 @@ export struct PgpKeyManagerPage {
     await this.runRootReencrypt(fingerprint, plan);
   }
 
-  /** 逐条重加密根目录条目并落盘；失败条目保持原样，结果以 Toast 汇总 */
+  /** 逐条重加密根目录条目并落盘；进度以全模态遮罩反馈，失败条目保持原样，结果以 Toast 汇总 */
   private async runRootReencrypt(fingerprint: string, plan: ReencryptPlan): Promise<void> {
     this.rootKeyBusy = true;
-    const outcome: ReencryptOutcome =
-      await ReencryptService.getInstance().run('', [fingerprint], plan);
-    this.rootKeyBusy = false;
+    this.rootReencryptDone = 0;
+    this.rootReencryptTotal = plan.needsCount;
+    let outcome: ReencryptOutcome;
+    try {
+      outcome = await ReencryptService.getInstance().run(
+        '', [fingerprint], plan,
+        (done: number, total: number): void => {
+          // TaskPool 逐条下发，每个 await 都让出主线程，这里能即时刷新
+          this.rootReencryptDone = done;
+          this.rootReencryptTotal = total;
+        });
+    } finally {
+      this.rootKeyBusy = false;
+    }
     let message: string;
     if (outcome.success) {
       message = Strings.fmt('pgp_root_reencrypted', outcome.reencrypted)
@@ -1110,6 +1132,19 @@ export struct PgpKeyManagerPage {
         // 两个都绑在根容器时后者会覆盖前者导致 + 号弹窗不弹出
         .bindSheet(this.isEditSheetVisible, this.editSheetBuilder(),
           this.editAction.length > 0 ? this.editSheetFormOptions : this.editSheetMenuOptions)
+
+        // ===== 根目录重加密进度遮罩（根 Column 最后一个子节点，盖住标题栏与列表） =====
+        // 触摸拦截由 LoadingOverlay 自带的 hitTestBehavior(Block) 负责
+        if (this.rootKeyBusy) {
+          LoadingOverlay({
+            text: Strings.get('home_reencrypting'),
+            percent: this.rootReencryptTotal > 0
+              ? this.rootReencryptDone * 100 / this.rootReencryptTotal
+              : -1,
+          })
+            .position({ x: 0, y: 0 })
+            .zIndex(200)
+        }
       }
       .width('100%')
       .height('100%')
@@ -1122,5 +1157,8 @@ export struct PgpKeyManagerPage {
     // 后挂的会覆盖先挂的（实测根容器同时挂 add 与 rootKey 时 + 号点了毫无反应）。
     // 故：FAB 节点挂 edit sheet，根容器挂 add sheet，NavDestination 挂 rootKey sheet。
     .bindSheet(this.isRootKeySheetVisible, this.rootKeySheetBuilder(), this.rootKeySheetOptions)
+    // 重加密（预扫/执行）期间吞掉返回：进度遮罩挡不住系统返回，
+    // 中途退出会让逐条重加密的结果无人接收（非 busy 时返回 false 不影响正常返回）
+    .onBackPressed((): boolean => this.rootKeyBusy)
   }
 }

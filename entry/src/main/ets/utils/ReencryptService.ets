@@ -109,7 +109,7 @@ export class ReencryptService {
    *                子目录下的条目都属于本次范围
    * @param targetFingerprints 目标接收方指纹（新密钥）
    */
-  plan(dirPath: string, targetFingerprints: string[]): ReencryptPlan {
+  async plan(dirPath: string, targetFingerprints: string[]): Promise<ReencryptPlan> {
     const plan: ReencryptPlan = {
       items: [],
       needsCount: 0,
@@ -128,23 +128,24 @@ export class ReencryptService {
       return plan;
     }
     const repo: PasswordRepository = PasswordRepository.getInstance();
-    const paths: string[] = [];
-    this.collect(repo, dirPath, paths);
-
     const crypto: PgpCrypto = PgpCrypto.getInstance();
+    // 单趟递归收集「由本目录 .gpg-id 管辖」的条目：每目录只探测一次 .gpg-id，
+    // 替代原先逐条 findGpgIdDir 向上逐级探测（条目 × 深度次文件 IO，主线程卡死帮凶之一）
+    const paths: string[] = [];
+    this.collectUnderGpgId(repo, dirPath, '', dirPath, paths);
+
     for (let i: number = 0; i < paths.length; i++) {
       const relativePath: string = paths[i];
-      // 只处理「由本目录 .gpg-id 管辖」的条目：更深层自带 .gpg-id 的条目收件人不变
-      if (repo.findGpgIdDir(relativePath) !== dirPath) {
-        continue;
-      }
       const ciphertext: string = repo.readCiphertext(relativePath);
       if (ciphertext.length === 0) {
         continue;
       }
-      const current: string[] = crypto.recipientKeyIds(ciphertext);
+      // 收件人解析是 native 密码学操作，必须下沉 TaskPool：
+      // 条目多时同步解析会把主线程卡住（真机实测冻结）
+      const current: string[] = await crypto.recipientKeyIdsAsync(ciphertext);
       const needs: boolean = !ReencryptService.sameIdSet(current, plan.targetKeyIds);
-      const decryptKeys: string[] = crypto.keysForCiphertext(ciphertext);
+      // 匹配已导入密钥只查缓存，复用上面解析出的 Key ID（不再重复解析一遍）
+      const decryptKeys: string[] = crypto.keysForIds(current);
       const item: ReencryptItem = {
         relativePath: relativePath,
         currentKeyIds: current,
@@ -175,10 +176,12 @@ export class ReencryptService {
    * @param dirPath 目标目录相对路径
    * @param targetFingerprints 目标接收方指纹
    * @param plan 预扫结果（由 {@link plan} 产出，避免重复解析）
+   * @param onProgress 每处理完一条（成功或失败）回调一次：
+   *        done = 已处理条数，total = 需重加密总数（进度遮罩用，可省略）
    * @returns 执行结果；**全部需要重加密的条目都成功**才写入 `.gpg-id`
    */
   async run(dirPath: string, targetFingerprints: string[],
-    plan: ReencryptPlan): Promise<ReencryptOutcome> {
+    plan: ReencryptPlan, onProgress?: (done: number, total: number) => void): Promise<ReencryptOutcome> {
     const outcome: ReencryptOutcome = {
       success: false,
       reencrypted: 0,
@@ -189,6 +192,9 @@ export class ReencryptService {
     };
     const repo: PasswordRepository = PasswordRepository.getInstance();
     const crypto: PgpCrypto = PgpCrypto.getInstance();
+    // 解密/加密是 native 密码学计算，decrypt()/encrypt() 内部已下沉 TaskPool，
+    // 循环里的每个 await 都会让出主线程——条目多时界面仍可渲染与响应
+    let done: number = 0;
 
     for (let i: number = 0; i < plan.items.length; i++) {
       const item: ReencryptItem = plan.items[i];
@@ -203,21 +209,36 @@ export class ReencryptService {
           error: Strings.fmt('reencrypt_missing_decrypt_key',
             item.currentKeyIds.join(Strings.get('common_list_sep')) || Strings.get('reencrypt_keyids_unlabeled')),
         });
+        done++;
+        if (onProgress !== undefined) {
+          onProgress(done, plan.needsCount);
+        }
         continue;
       }
       const ciphertext: string = repo.readCiphertext(item.relativePath);
       if (ciphertext.length === 0) {
         outcome.failures.push({ relativePath: item.relativePath, error: Strings.get('move_read_ciphertext_failed') });
+        done++;
+        if (onProgress !== undefined) {
+          onProgress(done, plan.needsCount);
+        }
         continue;
       }
       // 解密：候选只给「实际能解该密文的密钥」，避免用错密钥白跑；
-      // 多接收方条目会有多把候选，decrypt() 会按已解锁优先逐个尝试
-      const decrypted = await crypto.decrypt(ciphertext, item.decryptKeys);
+      // 多接收方条目会有多把候选，decrypt() 会按已解锁优先逐个尝试。
+      // 收件人指纹复用预扫结果（keysForIds 只查主线程密钥缓存，无 native 调用），
+      // 否则 decrypt 内部会为每条再同步解析一次 PKESK——正是要消除的主线程阻塞源
+      const decrypted = await crypto.decrypt(ciphertext, item.decryptKeys,
+        crypto.keysForIds(item.currentKeyIds));
       if (!decrypted.success) {
         outcome.failures.push({
           relativePath: item.relativePath,
           error: Strings.fmt('move_decrypt_failed', decrypted.error),
         });
+        done++;
+        if (onProgress !== undefined) {
+          onProgress(done, plan.needsCount);
+        }
         continue;
       }
       // 重加密到目标接收方（跨类型亦可：解密与加密是两个独立操作，各自只涉及一种密钥）
@@ -227,14 +248,26 @@ export class ReencryptService {
           relativePath: item.relativePath,
           error: Strings.fmt('reencrypt_encrypt_failed', encrypted.error),
         });
+        done++;
+        if (onProgress !== undefined) {
+          onProgress(done, plan.needsCount);
+        }
         continue;
       }
       const written = repo.overwriteCiphertext(item.relativePath, encrypted.data);
       if (!written.success) {
         outcome.failures.push({ relativePath: item.relativePath, error: written.error });
+        done++;
+        if (onProgress !== undefined) {
+          onProgress(done, plan.needsCount);
+        }
         continue;
       }
       outcome.reencrypted++;
+      done++;
+      if (onProgress !== undefined) {
+        onProgress(done, plan.needsCount);
+      }
     }
 
     // 只有「需要换的条目全部成功」才落盘新 .gpg-id：否则保持原状，让用户可重试
@@ -280,8 +313,26 @@ export class ReencryptService {
     return ids;
   }
 
-  /** 递归收集目录下的条目相对路径（不含 .gpg） */
-  private collect(repo: PasswordRepository, relativeDir: string, out: string[]): void {
+  /**
+   * 单趟递归收集「由 targetDir 的 .gpg-id 管辖」的条目相对路径（不含 .gpg）
+   *
+   * 语义与逐条 `findGpgIdDir(entry) === targetDir` 精确等价（就近 .gpg-id，
+   * 没有任何 .gpg-id 时由根管辖），但每目录只做一次 `.gpg-id` 存在性探测，
+   * 文件 IO 从 O(条目 × 深度) 降为 O(目录)——大量条目 + 深层子目录时
+   * 这正是预扫阶段的主线程卡顿来源之一。
+   *
+   * @param relativeDir 当前递归目录（'' = 根）
+   * @param governingDir 从祖先继承下来的管辖目录（'' = 根或未找到）
+   * @param targetDir 目标目录（与 governingDir 相等的条目才收集）
+   */
+  private collectUnderGpgId(repo: PasswordRepository, relativeDir: string,
+    governingDir: string, targetDir: string, out: string[]): void {
+    // 当前目录自带 .gpg-id：它成为子树内条目的新管辖目录
+    // （根目录的 .gpg-id 对应管辖目录 ''，与 findGpgIdDir 的返回口径一致）
+    let gov: string = governingDir;
+    if (relativeDir.length > 0 && repo.hasGpgId(relativeDir)) {
+      gov = relativeDir;
+    }
     const listed = repo.listEntries(relativeDir);
     if (!listed.success) {
       return;
@@ -293,8 +344,8 @@ export class ReencryptService {
     for (let i: number = 0; i < entries.length; i++) {
       const entry: PasswordEntry = entries[i];
       if (entry.isDirectory) {
-        this.collect(repo, entry.relativePath, out);
-      } else {
+        this.collectUnderGpgId(repo, entry.relativePath, gov, targetDir, out);
+      } else if (gov === targetDir) {
         out.push(entry.relativePath);
       }
     }

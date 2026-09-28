@@ -97,6 +97,32 @@ fn json_escape(s: &str) -> String {
 
 // ========== PGP 加密 ==========
 
+/// 解析「单个或多个 armored 公钥拼接」的输入
+///
+/// **不能**用 rpgp 的 `from_armor_many`：它对连续 armor 块只解析第一块
+/// （实测 `\n`/`\n\n`/无分隔/CRLF 全部如此），多接收方加密会静默丢掉
+/// 除第一把外的全部接收方——`.gpg-id` 写了 N 把密钥、密文却只发给第一把，
+/// 其余接收方永远解不开。改为按 BEGIN/END 切块逐把 `from_armor_single`，
+/// 与 PQC 路径 `gpg_pqc::extract_public_keys_multi` 的既有做法对齐。
+/// 单块解析失败**整体报错**（不静默跳过）：加密给少于请求的接收方属于
+/// 必须暴露的错误，宁失败不缺员。
+///
+/// 本函数**不加** `#[no_mangle]`（内部辅助，不导出符号）；紧接其后的
+/// `hps_pgp_encrypt` 才是 FFI 入口，属性只修饰紧随其后的第一个 item。
+fn parse_public_keys_many(armored: &str) -> Result<Vec<SignedPublicKey>, String> {
+    let blocks = gpg_pqc::split_armor_blocks(armored);
+    if blocks.is_empty() {
+        return Err("no public key block found".into());
+    }
+    let mut keys = Vec::with_capacity(blocks.len());
+    for block in &blocks {
+        let (key, _headers) = SignedPublicKey::from_armor_single(block.as_bytes())
+            .map_err(|e| format!("parse public key failed: {}", e))?;
+        keys.push(key);
+    }
+    Ok(keys)
+}
+
 #[no_mangle]
 pub extern "C" fn hps_pgp_encrypt(
     plaintext: *const c_char,
@@ -111,11 +137,10 @@ pub extern "C" fn hps_pgp_encrypt(
         }
 
         // 解析公钥证书（支持单个或多个 armored 公钥拼接）
-        let (pubkey_iter, _headers) = match SignedPublicKey::from_armor_many(pubkey_armored.as_bytes()) {
-            Ok(result) => result,
-            Err(e) => return FfiResult::err(format!("parse public key failed: {}", e)),
+        let pubkeys = match parse_public_keys_many(&pubkey_armored) {
+            Ok(k) => k,
+            Err(e) => return FfiResult::err(e),
         };
-        let pubkeys = pubkey_iter.filter_map(|k| k.ok()).collect::<Vec<_>>();
         if pubkeys.is_empty() {
             return FfiResult::err("no valid public key found".into());
         }
@@ -422,12 +447,8 @@ fn encrypt_mixed_core(plaintext: &str, pqc_armored: &str, normal_armored: &str) 
     }
 
     // 普通公钥（可多把，rpgp 逐个作为接收方）
-    let (pubkey_iter, _headers) =
-        match SignedPublicKey::from_armor_many(normal_armored.as_bytes()) {
-            Ok(result) => result,
-            Err(e) => return Err(format!("parse public key failed: {}", e)),
-        };
-    let normals: Vec<SignedPublicKey> = pubkey_iter.filter_map(|k| k.ok()).collect();
+    let normals: Vec<SignedPublicKey> = parse_public_keys_many(normal_armored)
+        .map_err(|e| format!("parse public key failed: {}", e))?;
     // GnuPG algo 8 公钥（可多把）
     let pqc_keys = gpg_pqc::extract_public_keys_multi(&pqc_armored);
     if normals.is_empty() || pqc_keys.is_empty() {
@@ -1684,5 +1705,75 @@ fn change_passphrase_pqc_empty_new_passphrase_rejected() {
     };
     let result = run_change_passphrase(&armored, "testpw123", "");
     assert!(result.is_err(), "PQC 密钥去除密码保护应被拒绝");
-}
+    }
+
+    /// 普通密钥多接收方回归：**每把接收方都必须有一个 PKESK，且每把都能解密**
+    ///
+    /// 回归的是 `from_armor_many` 陷阱：rpgp 0.20 对连续 armor 块只解析第一块，
+    /// 曾导致「.gpg-id 写了 N 把普通密钥、密文却只发给第一把」——其余接收方
+    /// 永远解不开，而用户毫无感知（PQC 路径因自带逐块解析从未受影响）。
+    /// 用内存生成的无口令密钥（与模拟器实测同构：Ed25519 主键 + Cv25519 子键），
+    /// 不依赖 fixture。
+    #[test]
+    fn multi_normal_recipients_round_trip() {
+        fn gen_passphraseless_key(user_id: &str) -> String {
+            let sub = SubkeyParamsBuilder::default()
+                .key_type(KeyType::ECDH(ECCCurve::Curve25519Legacy))
+                .can_encrypt(EncryptionCaps::All)
+                .build()
+                .expect("subkey params");
+            let params = SecretKeyParamsBuilder::default()
+                .key_type(KeyType::Ed25519Legacy)
+                .can_certify(true)
+                .can_sign(true)
+                .primary_user_id(user_id.to_string())
+                .subkey(sub)
+                .build()
+                .expect("key params");
+            let signed = params.generate(OsRng).expect("generate key");
+            signed
+                .to_armored_string(ArmorOptions::default())
+                .expect("armor key")
+        }
+
+        fn extract_public(seckey_armored: &str) -> String {
+            let (seckey, _headers) =
+                SignedSecretKey::from_armor_single(seckey_armored.as_bytes()).expect("parse seckey");
+            seckey
+                .to_public_key()
+                .to_armored_string(ArmorOptions::default())
+                .expect("armor pubkey")
+        }
+
+        let sec1 = gen_passphraseless_key("multi-rcpt-1 <m1@test>");
+        let sec2 = gen_passphraseless_key("multi-rcpt-2 <m2@test>");
+        let joined_pub = format!("{}\n{}", extract_public(&sec1), extract_public(&sec2));
+
+        // 走 FFI（与 ArkTS 同一条入口）：两把公钥必须产出 2 个 PKESK
+        let pt = CString::new("MULTI-NORMAL-往返").unwrap();
+        let pubs = CString::new(joined_pub).unwrap();
+        let r = hps_pgp_encrypt(pt.as_ptr(), pubs.as_ptr());
+        assert_eq!(r.success, 0, "encrypt failed: {}",
+            unsafe { CStr::from_ptr(r.error) }.to_string_lossy());
+        let armored = unsafe { CStr::from_ptr(r.data) }.to_string_lossy().into_owned();
+
+        let ids = gpg_pqc::recipient_keyids(&armored).expect("recipient_keyids");
+        assert_eq!(ids.len(), 2, "两把接收方都应有 PKESK，实际 {:?}", ids);
+
+        // 两把接收方各自都能解出同一明文
+        let msg = "MULTI-NORMAL-往返";
+        for (label, sec) in [("rcpt-1", &sec1), ("rcpt-2", &sec2)] {
+            let (seckey, _h) =
+                SignedSecretKey::from_armor_single(sec.as_bytes()).expect("parse seckey");
+            let (mut parsed, _h2) = Message::from_armor(armored.as_bytes()).expect("parse message");
+            let mut decrypted = parsed
+                .decrypt(&Password::empty(), &seckey)
+                .expect("decrypt with each recipient");
+            if decrypted.is_compressed() {
+                decrypted = decrypted.decompress().expect("decompress");
+            }
+            let data = decrypted.as_data_vec().expect("literal data");
+            assert_eq!(String::from_utf8_lossy(&data), msg, "{} 应能解密", label);
+        }
+    }
 }

@@ -622,6 +622,20 @@ export class PasswordRepository {
   }
 
   /**
+   * 判断目录是否自带 .gpg-id
+   *
+   * 供重加密预扫的单趟递归使用（每目录一次存在性探测，
+   * 替代逐条 findGpgIdDir 向上逐级探测的 O(条目×深度) 文件 IO）。
+   */
+  hasGpgId(relativeDir: string): boolean {
+    try {
+      return FileUtils.exists(`${this.safeJoinOrThrow(this.getStorePath(), relativeDir)}/${GPG_ID_FILE}`);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /**
    * 查找管辖该路径的 .gpg-id 所在目录（相对路径，根目录返回 ''）
    * 与 getGpgIdForPath 使用相同的向上遍历规则，供修复 .gpg-id 时定位写回位置
    * @param relativePath 相对路径（文件或目录）
