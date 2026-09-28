@@ -5,9 +5,7 @@ import { PasswordFileFormat, ThemeMode, SearchMode, RouteNames } from '../common
 import { ThemeColors, Palette, Radius, Spacing, FontSize, IconSize, ComponentSize, DividerSpec } from '../common/ThemeColors';
 import { RouteManager } from '../common/RouteManager';
 import { AppTitleBar } from '../views/AppTitleBar';
-import { ValueRow } from '../views/ValueRow';
 import { AppLanguage, AppLanguageOption } from '../common/AppLanguage';
-import { panelSheetOptions, themedSheetOptions, menuSheetHeight, SHEET_PAD_TOP } from '../common/SheetStyles';
 
 /**
  * 设置页
@@ -25,8 +23,6 @@ import { panelSheetOptions, themedSheetOptions, menuSheetHeight, SHEET_PAD_TOP }
 @ComponentV2
 export struct SettingsPage {
   @Local viewModel: SettingsViewModel = new SettingsViewModel();
-  /** 语言选择半模态可见性 */
-  @Local isLanguageSheetVisible: boolean = false;
 
   private get colors(): Palette {
     return ThemeColors.getInstance().palette();
@@ -37,28 +33,17 @@ export struct SettingsPage {
   }
 
   /**
-   * 语言选择弹窗面板高度：标题 1 行 + 候选 6 行，按 `menuSheetHeight` 精确算
-   * （百分比高度与 detents 解析不一致，会露出 backgroundColor，见 SheetStyles）
+   * 语言可选项（DropdownRow 用）
+   *
+   * 「系统默认」的标题走资源表随应用语言翻译；具体语言的标题是各自语言的专名，
+   * 不翻译（同原半模态面板的口径）。
    */
-  private get languageSheetHeight(): number {
-    return menuSheetHeight(AppLanguage.OPTIONS.length + 1, Spacing.LG);
-  }
-
-  /** 语言选择弹窗配置（getter + themedSheetOptions：背景色必须随主题更新） */
-  private get languageSheetOptions(): SheetOptions {
-    return themedSheetOptions(this, 'SettingsLanguage',
-      (): SheetOptions => panelSheetOptions(this.colors.surface, this.languageSheetHeight,
-        (): void => {
-          this.isLanguageSheetVisible = false;
-        }),
-      this.colors.surface, this.languageSheetHeight);
-  }
-
-  /** 当前语言值对应的显示标题（system 走资源表随应用语言翻译） */
-  private currentLanguageTitle(): ResourceStr {
-    const value: string = this.viewModel.appLanguage;
-    return value === AppLanguage.SYSTEM
-      ? $r('app.string.language_system') : AppLanguage.optionTitle(value);
+  private languageOptions(): DropdownOption[] {
+    return AppLanguage.OPTIONS.map((opt: AppLanguageOption): DropdownOption => {
+      const label: ResourceStr = opt.value === AppLanguage.SYSTEM
+        ? $r('app.string.language_system') : opt.nativeTitle;
+      return { label: label, value: opt.value };
+    });
   }
 
   /**
@@ -127,67 +112,6 @@ export struct SettingsPage {
   }
 
   /**
-   * 语言选择弹窗：标题 + 候选项（各语言用**原生写法**，当前项右侧主色对勾）
-   *
-   * 行高与留白必须与 `languageSheetHeight` 的算法**逐项对齐**：`menuSheetHeight`
-   * 按「行数 × ROW + 行间 4vp + SHEET_PAD_TOP + 底距」算，故根容器要真的给
-   * `space: Spacing.XS` 与上下内边距——少了这些，面板会比内容高出一截（内容贴在
-   * 顶部、底部空出 64vp），标题也会紧贴 dragBar 而其它菜单都有 24vp。
-   * 左右内边距给在**根容器**（与首页动作菜单同款）：行内再给会叠加。
-   * 「系统默认」的标题走资源表随应用语言翻译；具体语言的标题是各自语言的专名，不翻译。
-   */
-  @Builder
-  languageSheetBuilder() {
-    Column({ space: Spacing.XS }) {
-      // 标题用 Row 包裹做垂直居中（Text 自身没有 alignItems）
-      Row() {
-        Text($r('app.string.settings_language'))
-          .fontSize(FontSize.SUBTITLE)
-          .fontWeight(FontWeight.Medium)
-          .fontColor(this.colors.textSecondary)
-          .layoutWeight(1)
-      }
-      .width('100%')
-      .height(ComponentSize.ROW)
-      .alignItems(VerticalAlign.Center)
-
-      ForEach(AppLanguage.OPTIONS, (opt: AppLanguageOption) => {
-        Row() {
-          Text(opt.value === AppLanguage.SYSTEM
-            ? $r('app.string.language_system') : opt.nativeTitle)
-            .fontSize(FontSize.SUBTITLE)
-            .fontColor(this.colors.textPrimary)
-            .layoutWeight(1)
-
-          if (opt.value === this.viewModel.appLanguage) {
-            SymbolGlyph($r('sys.symbol.checkmark'))
-              .fontSize(IconSize.MD)
-              .fontColor([this.colors.primary])
-              .margin({ left: Spacing.SM })
-          }
-        }
-        .width('100%')
-        .height(ComponentSize.ROW)
-        .alignItems(VerticalAlign.Center)
-        .stateStyles({
-          normal: { .backgroundColor(Color.Transparent) },
-          pressed: { .backgroundColor(this.colors.pressed) },
-        })
-        .onClick(() => {
-          if (opt.value === this.viewModel.appLanguage) {
-            this.isLanguageSheetVisible = false;
-            return;
-          }
-          this.isLanguageSheetVisible = false;
-          this.viewModel.setAppLanguage(opt.value, this.getUIContext());
-        })
-      }, (opt: AppLanguageOption) => opt.value)
-    }
-    .width('100%')
-    .padding({ top: SHEET_PAD_TOP, left: Spacing.LG, right: Spacing.LG, bottom: Spacing.LG })
-  }
-
-  /**
    * 剪贴板自动清除的可选项
    *
    * 固定四档（15s / 30s / 1min / 2min）。**存量值不在四档内时必须把它补进列表**：
@@ -245,15 +169,17 @@ export struct SettingsPage {
               })
             }
 
-            // 语言取值行：独立 @ComponentV2（ValueRow）——@Builder 按值传参时值区
-            // 节点实测整个不渲染（AGENTS.md「@Builder 按值传参」坑的又一形态）
+            // 语言选择：与主题行同款的系统下拉菜单（不再用底部半模态面板）。
+            // 候选标题里「系统默认」走资源表随应用语言翻译，具体语言是各自语言的专名不翻译；
+            // DropdownOption.label 是 ResourceStr，正好混合两类来源。
             ListItem() {
-              ValueRow({
+              DropdownRow({
                 icon: $r('sys.symbol.translate'),
                 label: $r('app.string.settings_language'),
-                valueText: this.currentLanguageTitle(),
-                onTapped: (): void => {
-                  this.isLanguageSheetVisible = true;
+                currentValue: this.viewModel.appLanguage,
+                options: this.languageOptions(),
+                onSelect: (v: string): void => {
+                  this.viewModel.setAppLanguage(v, this.getUIContext());
                 },
               })
             }
@@ -492,8 +418,6 @@ export struct SettingsPage {
       .width('100%')
       .height('100%')
       .backgroundColor(this.colors.background)
-      // 语言选择半模态挂在根容器上（本页此前没有 bindSheet，同节点占用不冲突）
-      .bindSheet(this.isLanguageSheetVisible, this.languageSheetBuilder(), this.languageSheetOptions)
     }
     .hideTitleBar(true)
     // 从「Git 配置 / 仓库管理」返回时重新判断自动同步是否可用：
