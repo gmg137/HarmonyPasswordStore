@@ -37,7 +37,7 @@ export interface Palette {
   divider: string;
   /** 强调色（HarmonyOS 品牌蓝） */
   primary: string;
-  /** 强调色淡背景 */
+  /** 强调色淡背景（选中态/强调色底文字按钮，约 10% 不透明度） */
   primarySoft: string;
   /** 强调色背景上的文字色（按钮/标签内文字） */
   onPrimary: string;
@@ -98,7 +98,10 @@ const LIGHT_PALETTE: Palette = {
   textTertiary: '#9AA0A9',
   divider: '#E5E8EA',
   primary: '#0A59F7',
-  primarySoft: '#0A59F71A',
+  // ArkUI 的 8 位 hex 是 #AARRGGBB（alpha 在前）。曾误写成 '#0A59F71A'
+  // ——RGB 反着读，渲染成约 4% 不透明度的黄绿色（R=0x59 G=0xF7 B=0x1A），
+  // 浅色下肉眼几乎不可见，用户反馈为「按钮浅黄色太不显眼」。
+  primarySoft: '#1A0A59F7',
   onPrimary: '#FFFFFF',
   success: '#64BB5C',
   warning: '#E8A739',
@@ -124,7 +127,8 @@ const DARK_PALETTE: Palette = {
   textTertiary: '#888888',
   divider: '#333333',
   primary: '#317AF7',
-  primarySoft: '#317AF733',
+  // 同上，#AARRGGBB：曾写成 '#317AF733'（RGB 反读成深黄绿色）。
+  primarySoft: '#33317AF7',
   onPrimary: '#FFFFFF',
   success: '#7ED680',
   warning: '#FFB84D',
