@@ -1,11 +1,15 @@
 # AGENTS.md
 
-HarmonyOS（ArkTS）密码管理器，兼容 pass（password-store）。构建走 Hvigor，无 npm/hvigorw，一切经 `devecocli`。
+HarmonyOS（ArkTS）密码管理器，兼容 pass（password-store）。构建走 Hvigor，无项目内 hvigorw wrapper，日常构建一切经 `devecocli`；命令行工具集在 `~/.deveco-cli-clt/`（`bin/` 在 PATH，内含 `hvigorw`/`Emulator`/`ohpm` 等 wrapper，会自动注入 `DEVECO_SDK_HOME`/`DEVECO_NODE_HOME`）。
 
 ## 命令
 
 - 构建 `devecocli build`；清缓存 `devecocli build clean`；release（含 ArkTS 混淆）`devecocli build --build-mode release`
   - **release 包的混淆会改属性名，凡是「以字符串形式出现在别处」的名字都必须登记到 `entry/obfuscation-rules.txt` 的 `-keep-property-name`**，否则 release 包会静默失效而 debug 包一切正常（详见「易踩坑」的 NAPI 函数名那条）
+- 生成 .app 发布包 `hvigorw -p product=default -p buildMode=release assembleApp`（`devecocli build` 只产出 .hap，没有 .app 选项，须直接走 hvigor）
+  - 产物在**项目根** `build/outputs/default/HarmonyPasswordStore-default-signed.app`（不是 `entry/build` 下），内含 `pack.info` + `pac.json` + 各模块 .hap；另有 `-unsigned` 版本
+  - **`assembleApp` 是项目级任务，不能带 `--mode module`**（报「Task assembleApp was not found」）；也不要直接调 `hvigor/bin/hvigorw.js`——绕过 wrapper 后 `DEVECO_SDK_HOME` 未注入，报 `00303217 Invalid value of 'DEVECO_SDK_HOME'`
+  - 当前 `build-profile.json5` 的签名材料是**调试证书**（`keyAlias: debugKey`），签出的 .app 可本地验证/内部分发；**上架 AGC 须替换为发布证书 + 发布 Profile** 再重新 assembleApp
 - 部署 `devecocli run --device 127.0.0.1:5555`（模拟器；真机 `192.168.1.2:39243`，多设备须显式 `-t`）
 - 检查 `devecocli check lint`（配置 `code-linter.json5`）
   - **「Files checked: 0 / No defects found」不是通过，是没跑起来**：本机 CLI 的 lint 曾对任意路径（项目根、`entry/src/main/ets`、单个 `.ets` 文件、带 `--config-path`/`--output-path`/`--product`）都返回 `filesChecked: 0`，即一条规则都没执行。看到 0 文件就不要把它当验收结论，以 `devecocli build` 的 ArkTS 编译结果为准
