@@ -81,6 +81,10 @@
       "value": "Exact match"
     },
     {
+      "name": "search_content",
+      "value": "Content match"
+    },
+    {
       "name": "onboarding_row_title",
       "value": "Run setup again"
     },
@@ -419,6 +423,30 @@
     {
       "name": "home_search_try_other",
       "value": "Try a different keyword"
+    },
+    {
+      "name": "home_search_content_missing",
+      "value": "%d entries have no decryption key and were not matched by content"
+    },
+    {
+      "name": "home_search_content_hit",
+      "value": "Content match: %s"
+    },
+    {
+      "name": "home_content_unlock_title",
+      "value": "Unlock the key for “%s” (%d entries) to match content"
+    },
+    {
+      "name": "home_search_content_locked",
+      "value": "%d entries are locked — tap to unlock and match"
+    },
+    {
+      "name": "home_search_content_progress",
+      "value": "Matching content %d/%d"
+    },
+    {
+      "name": "home_search_content_pending",
+      "value": "Searching content…"
     },
     {
       "name": "home_create_first_hint",

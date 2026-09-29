@@ -256,6 +256,7 @@ export struct SettingsPage {
                 options: [
                   { label: $r('app.string.search_fuzzy'), value: `${SearchMode.FUZZY}` },
                   { label: $r('app.string.search_exact'), value: `${SearchMode.EXACT}` },
+                  { label: $r('app.string.search_content'), value: `${SearchMode.CONTENT}` },
                 ],
                 onSelect: (v: string): void => {
                   this.viewModel.setSearchMode(Number.parseInt(v) as SearchMode);

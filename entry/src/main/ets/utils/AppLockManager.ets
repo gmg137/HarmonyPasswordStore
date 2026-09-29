@@ -1,6 +1,7 @@
 import { SettingsRepository } from '../model/SettingsRepository';
 import { SshKeyManager } from '../crypto/SshKeyManager';
 import { PgpCrypto } from '../crypto/PgpCrypto';
+import { ContentSearchService } from './ContentSearchService';
 import { BiometricHelper, BiometricDetail } from './BiometricHelper';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
@@ -99,6 +100,8 @@ export class AppLockManager {
   private clearSensitiveCaches(): void {
     SshKeyManager.getInstance().clearCache();
     PgpCrypto.getInstance().lock();
+    // 内容匹配的可搜索文本缓存（条目明文的派生文本，见 ContentSearchService 类注释）
+    ContentSearchService.getInstance().clearCache();
   }
 
   /**

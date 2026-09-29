@@ -26,6 +26,8 @@ export const pgpGpgPqcVerifyPassphrase: (secretKeyArmored: string, passphrase: s
 export const pgpEncryptMixed: (plaintext: string, gpgpqcPubkeysArmored: string, normalPubkeysArmored: string) => NativeResult;
 /** 提取密文 PKESK 的收件人 Key ID（逗号分隔，大写十六进制；无则空串） */
 export const pgpRecipientKeyIds: (ciphertext: string) => NativeResult;
+/** 清空 native 侧的已解锁私钥缓存（上锁 / 切后台时调用，data 为空串） */
+export const pgpLock: () => NativeResult;
 export const pgpListKeys: (armoredKeyring: string) => NativeResult;
 export const pgpExtractPublicKey: (secretKeyArmored: string) => NativeResult;
 export const pgpVerifyPassphrase: (secretKeyArmored: string, passphrase: string) => NativeResult;

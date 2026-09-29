@@ -81,6 +81,10 @@
       "value": "精确匹配"
     },
     {
+      "name": "search_content",
+      "value": "内容匹配"
+    },
+    {
       "name": "onboarding_row_title",
       "value": "重新运行初始设置"
     },
@@ -419,6 +423,30 @@
     {
       "name": "home_search_try_other",
       "value": "换个关键词试试"
+    },
+    {
+      "name": "home_search_content_missing",
+      "value": "%d 条缺少解密密钥，内容未参与匹配"
+    },
+    {
+      "name": "home_search_content_hit",
+      "value": "内容匹配：%s"
+    },
+    {
+      "name": "home_content_unlock_title",
+      "value": "解锁「%s」的密钥（%d 条）以匹配内容"
+    },
+    {
+      "name": "home_search_content_locked",
+      "value": "%d 条密码未参与匹配，点按解锁密钥并重新匹配"
+    },
+    {
+      "name": "home_search_content_progress",
+      "value": "正在匹配内容 %d/%d"
+    },
+    {
+      "name": "home_search_content_pending",
+      "value": "正在搜索内容…"
     },
     {
       "name": "home_create_first_hint",

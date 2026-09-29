@@ -3,6 +3,7 @@ import { RouteNames, SearchMode, SortMode } from '../common/Constants';
 import { PasswordRepository } from '../model/PasswordRepository';
 import { SettingsRepository } from '../model/SettingsRepository';
 import { PasswordEntry } from '../model/PasswordEntry';
+import { ContentSearchService, ContentSearchCallbacks, ContentSearchProgress, ContentHit } from '../utils/ContentSearchService';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -25,6 +26,12 @@ export interface PasswordEntryVM {
   childCount: number;
   /** 最后修改时间 */
   lastModified: number;
+  /**
+   * 内容匹配的命中片段（仅「内容匹配」模式搜出来的条目有值，空串表示名称命中或目录浏览）
+   *
+   * 片段取自 `PasswordFileParser.searchableText`，因此**不含主密码**。
+   */
+  contentSnippet: string;
 }
 
 /**
@@ -68,10 +75,44 @@ export class PasswordListViewModel {
   /** 搜索结果数量 */
   @Trace searchResultCount: number = 0;
 
+  // ===== 内容匹配（`SearchMode.CONTENT`）状态 =====
+  /** 内容匹配是否进行中（真正在跑 run） */
+  @Trace contentRunning: boolean = false;
+  /**
+   * 本轮内容匹配是否已安排（含防抖等待窗口）或进行中
+   *
+   * 与 `contentRunning` 分开：内容阶段有 600ms 防抖窗口，那段时间里**一条结果都还
+   * 没有**——页面据此避免先渲染「找到 0 个结果」与空状态（内容模式的关键词常常不在
+   * 条目名里，先报 0 再冒出一堆命中会让用户以为搜索失败）。
+   */
+  @Trace contentPending: boolean = false;
+  /** 已处理条数 / 总条数 */
+  @Trace contentScanned: number = 0;
+  @Trace contentTotal: number = 0;
+  /** 因密钥未解锁而未参与匹配的条数 */
+  @Trace contentLocked: number = 0;
+  /** 因缺少解密密钥而未参与匹配的条数 */
+  @Trace contentMissing: number = 0;
+
   private repo: PasswordRepository = PasswordRepository.getInstance();
   private settings: SettingsRepository = SettingsRepository.getInstance();
   /** 搜索防抖计时器 */
   private searchTimer: number = -1;
+  /**
+   * 内容匹配流程令牌：cancel/重新发起时自增，用于丢弃在途流程的完成回调
+   * （否则旧流程 resolve 时会把新流程的 contentRunning 置回 false，进度行消失）
+   */
+  private contentRunToken: number = 0;
+  /** 内容阶段防抖计时器 */
+  private contentTimer: number = -1;
+  /**
+   * 内容阶段防抖延迟（ms，比名称阶段的 `SEARCH_DEBOUNCE` 长）
+   *
+   * 一次内容扫描要读并解密**全库**：沿用 300ms 会在连打时反复重启整轮扫描
+   * （已解密的条目有缓存，但读密文、解析收件人、枚举都要重做）。名字阶段先上屏，
+   * 内容阶段等用户停手再启动。
+   */
+  private static readonly CONTENT_DEBOUNCE: number = 600;
   /** 防抖延迟（ms） */
   private static readonly SEARCH_DEBOUNCE: number = 300;
 
@@ -87,6 +128,7 @@ export class PasswordListViewModel {
     if (!this.isStoreInitialized) {
       this.filteredEntries = [];
       this.isLoading = false;
+      this.cancelContentSearch(false);
       return;
     }
 
@@ -102,6 +144,8 @@ export class PasswordListViewModel {
    * 加载当前目录内容
    */
   private loadDirectoryContents(): void {
+    // 离开搜索态（清空关键词/进目录）：停掉在途的内容匹配，缓存保留供下次复用
+    this.cancelContentSearch(false);
     const result = this.repo.listEntries(this.currentDir);
     if (!result.success || !result.data) {
       hilog.warn(DOMAIN, TAG, 'loadDirectoryContents failed: %{public}s', result.error);
@@ -120,16 +164,21 @@ export class PasswordListViewModel {
 
   /**
    * 全局搜索
+   *
+   * 名称/路径匹配同步完成、结果先上屏；`SearchMode.CONTENT` 时再异步启动内容匹配，
+   * 命中项由 `mergeContentHits` 增量并入列表（用户不必等解密完才看到结果）。
    */
   private loadSearchResults(): void {
     const searchMode: SearchMode = this.settings.getSettings().searchMode;
     const keyword: string = this.searchKeyword.trim();
 
     // 精确匹配与模糊匹配必须传不同参数，否则设置页的模式切换完全无效
+    // （内容模式的名称阶段与模糊同口径，故只有 EXACT 传 true）
     const result = this.repo.searchEntries(keyword, searchMode === SearchMode.EXACT);
     if (!result.success || !result.data) {
       this.filteredEntries = [];
       this.searchResultCount = 0;
+      this.cancelContentSearch(false);
       return;
     }
 
@@ -138,14 +187,172 @@ export class PasswordListViewModel {
     this.filteredEntries = result.data.map((entry: PasswordEntry) => this.toVM(entry));
 
     this.searchResultCount = this.filteredEntries.length;
+    this.sortSearchResults();
 
-    // 搜索结果排序与目录浏览同口径：目录在前，组内按名称字母序
-    this.filteredEntries.sort((a: PasswordEntryVM, b: PasswordEntryVM) => {
-      if (a.isDirectory !== b.isDirectory) {
-        return a.isDirectory ? -1 : 1;
+    if (searchMode === SearchMode.CONTENT) {
+      this.scheduleContentSearch(keyword);
+    } else {
+      this.cancelContentSearch(false);
+      // 离开内容匹配模式：拒绝记忆作废（下次切回内容匹配应重新询问未解锁目录）
+      ContentSearchService.getInstance().clearRejections();
+    }
+  }
+
+  /** 安排内容匹配：清掉待触发的计时器后延迟启动（用户停手才真正开跑） */
+  private scheduleContentSearch(keyword: string): void {
+    if (this.contentTimer !== -1) {
+      clearTimeout(this.contentTimer);
+    }
+    // 从「已安排」起就算 pending：防抖窗口内页面不显示「0 个结果」与空状态
+    this.contentPending = true;
+    this.contentTimer = setTimeout((): void => {
+      this.contentTimer = -1;
+      this.startContentSearch(keyword);
+    }, PasswordListViewModel.CONTENT_DEBOUNCE);
+  }
+
+  /**
+   * 启动内容匹配（异步）：进度写进 contentXxx 状态，命中批量并入列表
+   */
+  private startContentSearch(keyword: string): void {
+    const service: ContentSearchService = ContentSearchService.getInstance();
+    // 令牌自增使上一轮的在途流程失效（旧流程 .then 回来时不再动运行态）
+    const token: number = ++this.contentRunToken;
+    this.contentRunning = true;
+    this.contentPending = true;
+    this.contentScanned = 0;
+    this.contentTotal = 0;
+    this.contentLocked = 0;
+    this.contentMissing = 0;
+
+    const callbacks: ContentSearchCallbacks = {
+      onProgress: (progress: ContentSearchProgress): void => {
+        if (token !== this.contentRunToken) {
+          return;
+        }
+        this.contentScanned = progress.scanned;
+        this.contentTotal = progress.total;
+        this.contentLocked = progress.locked;
+        this.contentMissing = progress.missingKey;
+      },
+      onHits: (hits: ContentHit[]): void => {
+        if (token !== this.contentRunToken) {
+          return;
+        }
+        this.mergeContentHits(hits);
+      },
+    };
+
+    service.run(keyword, callbacks).then((): void => {
+      if (token === this.contentRunToken) {
+        this.contentRunning = false;
+        this.contentPending = false;
       }
-      return a.name.localeCompare(b.name);
+    }).catch((e: Error): void => {
+      if (token === this.contentRunToken) {
+        this.contentRunning = false;
+        this.contentPending = false;
+      }
+      hilog.warn(DOMAIN, TAG, 'content search failed: %{public}s', e.message);
     });
+  }
+
+  /**
+   * 取消内容匹配并复位进度状态
+   *
+   * @param clearCache 是否连明文缓存一并丢弃（仓库变更/上锁时为 true）
+   */
+  private cancelContentSearch(clearCache: boolean): void {
+    if (this.contentTimer !== -1) {
+      clearTimeout(this.contentTimer);
+      this.contentTimer = -1;
+    }
+    this.contentRunToken++;
+    const service: ContentSearchService = ContentSearchService.getInstance();
+    service.cancel();
+    if (clearCache) {
+      service.clearCache();
+    }
+    this.contentRunning = false;
+    this.contentPending = false;
+    this.contentScanned = 0;
+    this.contentTotal = 0;
+    this.contentLocked = 0;
+    this.contentMissing = 0;
+  }
+
+  /**
+   * 内容命中批量并入列表
+   *
+   * 名称已命中的条目不再重复加入（同一 relativePath 只出现一行），
+   * 并入后仍按「目录在前、组内名称字母序」重排，与名称阶段同口径；
+   * 内容命中的行带上 `contentSnippet`，列表用它显示「为什么命中」。
+   */
+  private mergeContentHits(hits: ContentHit[]): void {
+    if (hits.length === 0) {
+      return;
+    }
+    const existing: Set<string> = new Set<string>();
+    for (let i: number = 0; i < this.filteredEntries.length; i++) {
+      existing.add(this.filteredEntries[i].relativePath);
+    }
+    const merged: PasswordEntryVM[] = this.filteredEntries.slice();
+    for (let i: number = 0; i < hits.length; i++) {
+      const hit: ContentHit = hits[i];
+      if (existing.has(hit.entry.relativePath)) {
+        continue;
+      }
+      existing.add(hit.entry.relativePath);
+      const vm: PasswordEntryVM = this.toVM(hit.entry);
+      vm.contentSnippet = hit.snippet;
+      merged.push(vm);
+    }
+    if (merged.length === this.filteredEntries.length) {
+      return;
+    }
+    merged.sort(PasswordListViewModel.compareEntries);
+    this.filteredEntries = merged;
+    this.searchResultCount = merged.length;
+  }
+
+  /**
+   * 重新匹配内容：清掉「已拒绝解锁」记忆并重跑内容匹配
+   *
+   * 状态行的未解锁提示点按后走这里——用户拒绝过的目录会重新弹口令框
+   * （已在此前输入过口令的密钥直接命中缓存，不再询问）。
+   */
+  retryContentUnlock(): void {
+    const keyword: string = this.searchKeyword.trim();
+    if (keyword.length === 0) {
+      return;
+    }
+    ContentSearchService.getInstance().retryUnlock();
+    this.startContentSearch(keyword);
+  }
+
+  /** 搜索结果排序：目录在前，组内按名称字母序（目录浏览与搜索同口径） */
+  private sortSearchResults(): void {
+    this.filteredEntries.sort(PasswordListViewModel.compareEntries);
+  }
+
+  private static compareEntries(a: PasswordEntryVM, b: PasswordEntryVM): number {
+    if (a.isDirectory !== b.isDirectory) {
+      return a.isDirectory ? -1 : 1;
+    }
+    return a.name.localeCompare(b.name);
+  }
+
+  /**
+   * 仓库变更（保存/删除/移动/拉取）后的处理
+   *
+   * 内容匹配的明文缓存必须丢弃：`lastModified` 只有秒级精度，
+   * 同一秒内的编辑靠 mtime 比对发现不了，留着就会用旧文本给出结果。
+   * 拒绝记忆一并清掉：内容变了，之前拒绝解锁的目录值得再问一次。
+   */
+  onRepoChanged(): void {
+    this.cancelContentSearch(true);
+    ContentSearchService.getInstance().clearRejections();
+    this.loadEntries();
   }
 
   /**
@@ -158,6 +365,7 @@ export class PasswordListViewModel {
       isDirectory: entry.isDirectory,
       childCount: entry.children.length,
       lastModified: entry.lastModified,
+      contentSnippet: '',
     };
   }
 
@@ -167,6 +375,10 @@ export class PasswordListViewModel {
   updateSearchKeyword(keyword: string): void {
     this.searchKeyword = keyword;
     this.isSearching = keyword.trim().length > 0;
+
+    // 立刻停掉在途的内容匹配：防抖窗口内关键词已变，旧流程的解密结果不再是本轮要的
+    // （缓存保留——已解密的条目下次仍可直接复用）
+    this.cancelContentSearch(false);
 
     // 防抖：清除旧计时器，延迟执行搜索
     if (this.searchTimer !== -1) {
@@ -194,6 +406,8 @@ export class PasswordListViewModel {
    */
   clearSearch(): void {
     this.searchKeyword = '';
+    // 离开这一轮搜索：拒绝记忆作废（下次同关键词应重新询问未解锁目录）
+    ContentSearchService.getInstance().clearRejections();
     this.loadEntries();
   }
 
@@ -208,6 +422,8 @@ export class PasswordListViewModel {
       this.searchKeyword = '';
       this.isSearching = false;
     }
+    // 从搜索结果进入目录 = 离开这一轮搜索，拒绝记忆作废
+    ContentSearchService.getInstance().clearRejections();
     this.loadEntries();
   }
 

@@ -333,6 +333,18 @@ static napi_value PgpRecipientKeyIds(napi_env env, napi_callback_info info) {
 }
 
 /**
+ * pgpLock() -> { success, error, data="" }
+ *
+ * 清空 native 侧的「已解锁私钥缓存」（缓存里是明文私钥材料，见 rpgp_wrapper 的说明）。
+ * 必须在应用上锁 / 切到后台时调用——与 ArkTS 侧 PgpCrypto.lock() 清口令缓存同一
+ * 生命周期，漏掉它等于给「切后台清敏感缓存」留了个缺口。
+ */
+static napi_value PgpLock(napi_env env, napi_callback_info info) {
+    hps_pgp_lock();
+    return MakeResult(env, true, "", "");
+}
+
+/**
  * pgpEncryptMixed(plaintext, gpgpqcPubkeysArmored, normalPubkeysArmored)
  *   -> { success, error, data=armored 密文 }
  *
@@ -1678,6 +1690,7 @@ static napi_value Init(napi_env env, napi_value exports) {
         { "pgpGpgPqcVerifyPassphrase", nullptr, PgpGpgPqcVerifyPassphrase, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "pgpEncryptMixed", nullptr, PgpEncryptMixed, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "pgpRecipientKeyIds", nullptr, PgpRecipientKeyIds, nullptr, nullptr, nullptr, napi_default, nullptr },
+        { "pgpLock", nullptr, PgpLock, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "pgpListKeys", nullptr, PgpListKeys, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "pgpExtractPublicKey", nullptr, PgpExtractPublicKey, nullptr, nullptr, nullptr, napi_default, nullptr },
         { "pgpVerifyPassphrase", nullptr, PgpVerifyPassphrase, nullptr, nullptr, nullptr, napi_default, nullptr },

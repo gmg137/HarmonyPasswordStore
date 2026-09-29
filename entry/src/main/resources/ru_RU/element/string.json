@@ -81,6 +81,10 @@
       "value": "Точный поиск"
     },
     {
+      "name": "search_content",
+      "value": "Поиск по содержимому"
+    },
+    {
       "name": "onboarding_row_title",
       "value": "Запустить настройку заново"
     },
@@ -419,6 +423,30 @@
     {
       "name": "home_search_try_other",
       "value": "Попробуйте другое ключевое слово"
+    },
+    {
+      "name": "home_search_content_missing",
+      "value": "%d записей без ключа расшифрования, содержимое не учтено"
+    },
+    {
+      "name": "home_search_content_hit",
+      "value": "Совпадение содержимого: %s"
+    },
+    {
+      "name": "home_content_unlock_title",
+      "value": "Разблокируйте ключ для «%s», чтобы сопоставить %d записей"
+    },
+    {
+      "name": "home_search_content_locked",
+      "value": "%d записей заблокировано — нажмите, чтобы разблокировать"
+    },
+    {
+      "name": "home_search_content_progress",
+      "value": "Сопоставление содержимого %d/%d"
+    },
+    {
+      "name": "home_search_content_pending",
+      "value": "Поиск по содержимому…"
     },
     {
       "name": "home_create_first_hint",

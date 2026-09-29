@@ -20,6 +20,7 @@ import { GitConfig } from '../model/GitConfig';
 import { GitClient } from '../utils/GitClient';
 import { formSheetOptions, menuSheetHeight, panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
 import { ReencryptService, ReencryptPlan, ReencryptOutcome } from '../utils/ReencryptService';
+import { ContentSearchService, ContentUnlockRequest } from '../utils/ContentSearchService';
 import { LoadingOverlay } from '../views/LoadingOverlay';
 import { Strings } from '../common/Strings';
 import { SystemInsets } from '../utils/SystemInsets';
@@ -105,6 +106,9 @@ export struct PasswordListPage {
   aboutToAppear(): void {
 
     this.viewModel.loadEntries();
+    // 内容匹配遇到未解锁目录时经此回调索取口令（页面是弹窗的唯一持有者）
+    ContentSearchService.getInstance().setUnlockHandler(
+      (req: ContentUnlockRequest): Promise<boolean> => this.requestContentUnlock(req));
     // 根内容非 NavDestination：返回键经 Index.onBackPress 转发到此
     BackHandler.set((): boolean => {
       // 目录密钥重加密（预扫/执行）期间吞掉返回：进度遮罩挡不住系统返回，
@@ -122,6 +126,10 @@ export struct PasswordListPage {
 
   aboutToDisappear(): void {
     BackHandler.set(null);
+    // 页面销毁后没人再能兑现解锁请求：解除回调并兑现为「取消」，
+    // 否则在途的内容匹配会一直挂在 await 上（虽有超时兜底，但要等满 2 分钟）
+    ContentSearchService.getInstance().setUnlockHandler(null);
+    this.settleContentUnlock(false);
   }
 
   /**
@@ -130,7 +138,9 @@ export struct PasswordListPage {
    */
   @Monitor('notifier.nonce')
   onRepoChange(): void {
-    this.viewModel.loadEntries();
+    // 交给 VM：仓库内容已变，内容匹配的明文缓存必须一并丢弃（mtime 只有秒级精度），
+    // 再由它重载列表
+    this.viewModel.onRepoChanged();
   }
 
   /**
@@ -268,6 +278,18 @@ export struct PasswordListPage {
   @Local reencryptTotal: number = 0;
   /** 待执行的重加密（口令弹窗解锁成功后继续） */
   private pendingReencrypt: ReencryptPending | null = null;
+
+  /**
+   * 待解锁的目录组（内容匹配在只读搜索中遇到未解锁目录时请求）
+   *
+   * 与 `pendingReencrypt` 同样是「口令弹窗的第三种用途」：确认则兑现 true、
+   * 取消/遮罩关闭则兑现 false（见 `settleContentUnlock`）。
+   */
+  private pendingContentUnlock: ContentUnlockRequest | null = null;
+  /** 内容解锁请求的兑现函数（未决时非空；弹窗三条关闭路径都要兑现，否则 service 挂住） */
+  private contentUnlockSettle: ((ok: boolean) => void) | null = null;
+  /** 当前弹窗是否为内容解锁（决定标题文案） */
+  @Local isContentUnlockDialog: boolean = false;
 
   /** 菜单态：屏幕高度 1/3（三项动作：创建目录 / 修改目录密钥 / 创建密码）——getter 随主题刷新，见 syncSheetOptions */
   private get createSheetMenuOptions(): SheetOptions {
@@ -705,6 +727,52 @@ export struct PasswordListPage {
     if (this.isSearchBarVisible) {
       this.isSearchBarVisible = false;
     }
+  }
+
+  /**
+   * 内容匹配状态行：进行中显示「已处理/总数」，结束后提示未参与匹配的条数
+   *
+   * 文案在 builder **内部**按状态现取（不按值传参）——`@Builder` 的按值传参在
+   * 参数变化时不会刷新，而这里的进度每秒要变好几次（同 FormRow/ToggleRow 的坑）。
+   */
+  @Builder
+  contentStatusLine() {
+    Row() {
+      if (this.viewModel.contentRunning) {
+        Text(Strings.fmt('home_search_content_progress',
+          this.viewModel.contentScanned, this.viewModel.contentTotal))
+          .fontSize(FontSize.CAPTION)
+          .fontColor(this.colors.textTertiary)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      } else if (this.viewModel.contentLocked > 0) {
+        // 可点：重跑内容匹配并重新弹口令框（此前输入过的密钥走口令缓存，不再询问）
+        Text(Strings.fmt('home_search_content_locked', this.viewModel.contentLocked))
+          .fontSize(FontSize.CAPTION)
+          .fontColor(this.colors.primary)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      } else if (this.viewModel.contentMissing > 0) {
+        Text(Strings.fmt('home_search_content_missing', this.viewModel.contentMissing))
+          .fontSize(FontSize.CAPTION)
+          .fontColor(this.colors.textTertiary)
+          .maxLines(1)
+          .textOverflow({ overflow: TextOverflow.Ellipsis })
+      }
+    }
+    .width('100%')
+    // 与上方计数行同样的缩进（对齐列表卡片左缘）
+    .padding({ left: Spacing.XL, right: Spacing.XL, bottom: Spacing.XS })
+    // 整行可点（非 Button 的可点元素必须给按压反馈）：只有「未解锁」态才真的重跑
+    .onClick((): void => {
+      if (!this.viewModel.contentRunning && this.viewModel.contentLocked > 0) {
+        this.viewModel.retryContentUnlock();
+      }
+    })
+    .stateStyles({
+      normal: { .backgroundColor(Color.Transparent) },
+      pressed: { .backgroundColor(this.colors.pressed) },
+    })
   }
 
   /**
@@ -1169,6 +1237,56 @@ export struct PasswordListPage {
     }
   }
 
+  /**
+   * 内容匹配请求解锁（注入给 `ContentSearchService` 的回调）
+   *
+   * 弹出口令框并返回一个 Promise：确认解锁 / 取消 / 遮罩关闭 / 页面销毁时兑现
+   * （后三条兑现为 false）。service 侧另有超时兜底，双保险。
+   */
+  private requestContentUnlock(req: ContentUnlockRequest): Promise<boolean> {
+    // 弹窗已被别的用途占用（进详情页 / 重加密 / 上一笔内容解锁）：直接按取消兑现。
+    //
+    // 口令弹窗是**单例**（共用 `passphraseDialogId` 一个槽位），而本方法是唯一能
+    // **自发**触发它的入口——内容搜索跑到未解锁目录就会弹，不需要用户点击。用户
+    // 在扫描进行中点了某个未解锁条目时，两个入口会先后 `openCustomDialog`，而
+    // `openDialogSafe` 的 id 是在 `.then` 里异步赋值的：后开的 id 覆盖先开的，
+    // 先开的那个弹窗此后关不掉（`closePassphraseDialog` 只认最新 id）。
+    // 这里不抢占：内容搜索只是锦上添花，用户主动点的操作优先，未解锁的目录
+    // 计入 `locked` 由状态行提示重跑即可。
+    if (this.isPassphraseDialogVisible) {
+      hilog.info(DOMAIN, TAG, 'content unlock skipped: passphrase dialog already in use');
+      return Promise.resolve(false);
+    }
+    return new Promise<boolean>((resolve: (ok: boolean) => void): void => {
+      // 上一笔未兑现（理论不该发生）：先按取消收尾，避免 Promise 泄漏
+      this.settleContentUnlock(false);
+      this.pendingContentUnlock = req;
+      this.contentUnlockSettle = resolve;
+      this.isContentUnlockDialog = true;
+      this.dialogPassphrase = '';
+      this.dialogError = '';
+      this.dialogKeyId = req.keyLabel;
+      this.isPassphraseDialogVisible = true;
+      this.openPassphraseDialog();
+    });
+  }
+
+  /**
+   * 兑现内容解锁请求（幂等）
+   *
+   * 必须在**所有**关闭路径上调用：确认解锁传 true，其余传 false。
+   * 漏掉任一条会让 service 的 `await unlockHandler(...)` 一直挂着。
+   */
+  private settleContentUnlock(ok: boolean): void {
+    const resolve: ((ok: boolean) => void) | null = this.contentUnlockSettle;
+    this.contentUnlockSettle = null;
+    this.pendingContentUnlock = null;
+    this.isContentUnlockDialog = false;
+    if (resolve !== null) {
+      resolve(ok);
+    }
+  }
+
   private openPassphraseDialog(): void {
     this.openDialogSafe((): Promise<number> => this.getUIContext().getPromptAction().openCustomDialog({
       builder: (): void => {
@@ -1182,6 +1300,19 @@ export struct PasswordListPage {
       backgroundColor: Color.Transparent,
       backgroundBlurStyle: BlurStyle.NONE,
       isModal: true,
+      // 点遮罩关闭不会走 closePassphraseDialog：内容解锁请求必须在这里兑现为「取消」，
+      // 否则等待解锁的 service 会挂到超时（进度行卡住不动的典型成因）
+      onWillDismiss: (action: DismissDialogAction): void => {
+        this.settleContentUnlock(false);
+        // 占用状态同样必须在这里复位：本回调不走 closePassphraseDialog，
+        // 漏掉这两行会让 isPassphraseDialogVisible 卡在 true（弹窗其实已关），
+        // 此后 requestContentUnlock 的「弹窗已占用」守卫把**所有**后续内容解锁
+        // 都拒掉，而未解锁目录只会越攒越多；passphraseDialogId 也会一直指向
+        // 一个已经关闭的弹窗。
+        this.passphraseDialogId = -1;
+        this.isPassphraseDialogVisible = false;
+        action.dismiss();
+      },
     }));
   }
 
@@ -1191,6 +1322,8 @@ export struct PasswordListPage {
       this.passphraseDialogId = -1;
     }
     this.isPassphraseDialogVisible = false;
+    // 取消按钮路径：同样兑现（已兑现过则幂等无副作用）
+    this.settleContentUnlock(false);
   }
 
   /**
@@ -1202,6 +1335,34 @@ export struct PasswordListPage {
     }
     this.isUnlocking = true;
     this.dialogError = '';
+
+    // 内容匹配解锁：只验证该目录组的候选密钥口令，验证通过后兑现请求、由 service
+    // 继续解密这一组并出结果（不跳详情页）
+    const contentReq: ContentUnlockRequest | null = this.pendingContentUnlock;
+    if (contentReq !== null) {
+      let unlocked: boolean = false;
+      let reason: string = Strings.get('common_passphrase_wrong');
+      for (let i: number = 0; i < contentReq.candidateFingerprints.length; i++) {
+        const res: UnlockResult = await PgpCrypto.getInstance().unlockPassphrase(
+          contentReq.candidateFingerprints[i], this.dialogPassphrase);
+        if (res.success) {
+          unlocked = true;
+          break;
+        }
+        if (res.error.length > 0) {
+          reason = res.error;
+        }
+      }
+      this.isUnlocking = false;
+      if (!unlocked) {
+        this.dialogError = reason;
+        return;
+      }
+      // 先兑现 true 再关弹窗：closePassphraseDialog 会把未决请求兑现成 false
+      this.settleContentUnlock(true);
+      this.closePassphraseDialog();
+      return;
+    }
 
     // 解锁目标：重加密待办优先（需旧密钥口令），否则按条目的密文收件人
     const pending: ReencryptPending | null = this.pendingReencrypt;
@@ -1254,7 +1415,15 @@ export struct PasswordListPage {
   @Builder
   passphraseDialogBuilder() {
     Column() {
-      Text($r('app.string.home_passphrase_title'))
+      // 内容解锁用目录维度的标题（说明为哪个目录、多少条解锁），
+      // 其余两种用途（进详情页 / 重加密）保持通用标题
+      // （ResourceStr 两分支混用允许，同顶栏标题的写法）
+      Text(this.isContentUnlockDialog && this.pendingContentUnlock !== null
+        ? Strings.fmt('home_content_unlock_title',
+          this.pendingContentUnlock.dirPath.length > 0
+            ? this.pendingContentUnlock.dirPath : Strings.get('home_root_title'),
+          this.pendingContentUnlock.entryCount)
+        : $r('app.string.home_passphrase_title'))
         .fontSize(FontSize.TITLE)
         .fontWeight(FontWeight.Bold)
         .fontColor(this.colors.textPrimary)
@@ -1452,7 +1621,13 @@ export struct PasswordListPage {
       // ===== 搜索结果计数（目录导航已上移至顶栏） =====
       if (this.viewModel.searchKeyword.length > 0) {
         Row() {
-          Text(Strings.fmt('found_results', this.viewModel.filteredEntries.length))
+          // 内容匹配已安排/进行中且暂无结果时**不能**显示「找到 0 个结果」：
+          // 内容阶段是异步的（关键词常常只出现在字段内容里，名称阶段必然是 0），
+          // 先报 0 再冒出一堆命中会让用户以为搜索失败。已有结果时照常显示计数
+          // （数字会随命中分批增长）
+          Text(this.viewModel.contentPending && this.viewModel.filteredEntries.length === 0
+            ? Strings.get('home_search_content_pending')
+            : Strings.fmt('found_results', this.viewModel.filteredEntries.length))
             .fontSize(FontSize.CAPTION)
             .fontColor(this.colors.textSecondary)
             .layoutWeight(1)
@@ -1460,23 +1635,40 @@ export struct PasswordListPage {
         .width('100%')
         // 与列表卡片的水平留白（XL）对齐，计数文字跟卡片左缘平齐
         .padding({ left: Spacing.XL, right: Spacing.XL, bottom: Spacing.XS })
+
+        // 内容匹配状态行（仅内容模式且有话要说时出现）：进行中显示进度，
+        // 结束后提示「未参与匹配」的条数。单独一行而不是塞进上面的计数行——
+        // 德/俄语的长文案与计数挤在一行会互相压缩（i18n 布局的老问题）
+        if (this.viewModel.contentRunning || this.viewModel.contentLocked > 0
+          || this.viewModel.contentMissing > 0) {
+          this.contentStatusLine()
+        }
       }
 
       // ===== 列表区 =====
       if (this.viewModel.filteredEntries.length === 0) {
-        Column() {
-          EmptyState({
-            icon: $r('sys.symbol.lock'),
-            title: this.viewModel.searchKeyword.length > 0
-              ? Strings.get('home_search_no_match') : Strings.get('home_store_empty'),
-            hint: this.viewModel.searchKeyword.length > 0
-              ? Strings.get('home_search_try_other') : Strings.get('home_create_first_hint'),
-          })
+        if (this.viewModel.contentPending) {
+          // 内容匹配已安排（含 600ms 防抖窗口）或正在跑：这里留白——
+          // 空状态的文案是「没有找到匹配的密码」，此刻结论还不成立（关键词可能只
+          // 出现在字段内容里），而且它的点击会收起搜索框、中断本轮搜索
+          Column()
+            .width('100%')
+            .layoutWeight(1)
+        } else {
+          Column() {
+            EmptyState({
+              icon: $r('sys.symbol.lock'),
+              title: this.viewModel.searchKeyword.length > 0
+                ? Strings.get('home_search_no_match') : Strings.get('home_store_empty'),
+              hint: this.viewModel.searchKeyword.length > 0
+                ? Strings.get('home_search_try_other') : Strings.get('home_create_first_hint'),
+            })
+          }
+          .width('100%')
+          .layoutWeight(1)
+          .justifyContent(FlexAlign.Center)
+          .onClick(() => this.collapseSearchBar())
         }
-        .width('100%')
-        .layoutWeight(1)
-        .justifyContent(FlexAlign.Center)
-        .onClick(() => this.collapseSearchBar())
       } else {
         List({ scroller: this.listScroller, space: Spacing.CARD_GAP }) {
           ForEach(this.viewModel.filteredEntries, (entry: PasswordEntryVM) => {

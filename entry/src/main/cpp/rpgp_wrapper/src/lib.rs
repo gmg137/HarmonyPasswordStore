@@ -11,6 +11,7 @@
 //! 内存：
 //! - hps_pgp_result_free(result) 释放
 
+use std::collections::HashMap;
 use std::ffi::{CStr, CString};
 use std::os::raw::{c_char, c_int};
 use std::panic::{self, AssertUnwindSafe};
@@ -26,7 +27,7 @@ use pgp::crypto::sym::SymmetricKeyAlgorithm;
 use pgp::types::{DecryptionKey, KeyDetails, Password, SigningKey};
 use rand::rngs::OsRng;
 
-use std::sync::{Arc, OnceLock};
+use std::sync::{Arc, Mutex, OnceLock};
 use russh::client;
 use russh::keys::{decode_secret_key, PrivateKeyWithHashAlg};
 
@@ -197,6 +198,103 @@ pub extern "C" fn hps_pgp_extract_public_key(seckey_armored: *const c_char) -> F
     })
 }
 
+// ========== 已解锁私钥缓存 ==========
+//
+// 为什么需要：`hps_pgp_decrypt` 原先每次调用都从 armored 文本重新解析私钥，并由
+// `decrypt_the_ring` 用口令跑一遍**迭代 S2K** 解锁（GnuPG 默认 count 可达 65M 哈希量，
+// 单次几十毫秒）。内容搜索要逐条解密整个仓库，「每条一次解锁」会被放大成 N 倍——
+// 冷缓存首搜的耗时几乎全在这里。缓存后每把密钥每会话只解锁一次。
+//
+// 键 = armored 文本 + 口令：换了口令（或换/改写了密钥文件）后两者都会变，
+// 旧条目自然不再命中，不需要额外的失效逻辑。
+//
+// **值是明文私钥材料**，与 ArkTS 侧的口令缓存同级敏感：`hps_pgp_lock()` 必须清空它
+// （`PgpCrypto.lock()` 在上锁/切后台时调用，见 AppLockManager.clearSensitiveCaches）。
+
+/// 已解锁私钥缓存上限（按键数计：正常仓库只有个位数密钥；
+/// 超限就整体清空，避免异常调用方塞入无限多口令把内存撑爆）
+const MAX_UNLOCKED_KEYS: usize = 16;
+
+/// 普通密钥（rpgp 路径）：`remove_password` 之后的密钥副本（私钥段已是明文）
+static UNLOCKED_KEYS: OnceLock<Mutex<HashMap<String, Arc<SignedSecretKey>>>> = OnceLock::new();
+
+/// GnuPG algo 8 密钥：已解出的 ECC 标量 + ML-KEM 材料
+static UNLOCKED_PQC_KEYS: OnceLock<Mutex<HashMap<String, Arc<gpg_pqc::GpgPqcKey>>>> = OnceLock::new();
+
+fn unlocked_keys() -> &'static Mutex<HashMap<String, Arc<SignedSecretKey>>> {
+    UNLOCKED_KEYS.get_or_init(|| Mutex::new(HashMap::new()))
+}
+
+fn unlocked_pqc_keys() -> &'static Mutex<HashMap<String, Arc<gpg_pqc::GpgPqcKey>>> {
+    UNLOCKED_PQC_KEYS.get_or_init(|| Mutex::new(HashMap::new()))
+}
+
+/// 缓存键：armored 文本 + 口令（`\u{0}` 不会出现在 armor 文本或口令里）
+fn unlocked_cache_key(armored: &str, passphrase: &str) -> String {
+    format!("{}\u{0}{}", armored, passphrase)
+}
+
+/// 取（未命中则解析并解锁后缓存）私钥：主键与子键都就地去除口令保护
+///
+/// 口令错误时由 `remove_password` 报错，错误文案保持「unlock … failed」形态，
+/// 便于上层把它归为「口令不正确」。
+fn cached_secret_key(armored: &str, passphrase: &str) -> Result<Arc<SignedSecretKey>, String> {
+    let key = unlocked_cache_key(armored, passphrase);
+    if let Some(hit) = unlocked_keys().lock().unwrap_or_else(|e| e.into_inner()).get(&key) {
+        return Ok(hit.clone());
+    }
+
+    let (mut seckey, _headers) = SignedSecretKey::from_armor_single(armored.as_bytes())
+        .map_err(|e| format!("parse secret key failed: {}", e))?;
+    let pw = Password::from(passphrase);
+    seckey.primary_key.remove_password(&pw)
+        .map_err(|e| format!("unlock secret key failed: {}", e))?;
+    // 子键尽力而为：主键口令正确即可用（旧实现里 rpgp 也只解锁它真正用到的那把），
+    // 子键口令与主键不同（gpg 允许 `--change-passphrase <subkey>`）时不能让整体失败——
+    // 那把子键解不开，用到它的密文照旧失败，与旧行为一致
+    for sub in seckey.secret_subkeys.iter_mut() {
+        let _ = sub.key.remove_password(&pw);
+    }
+
+    let arc = Arc::new(seckey);
+    let mut slot = unlocked_keys().lock().unwrap_or_else(|e| e.into_inner());
+    if slot.len() >= MAX_UNLOCKED_KEYS {
+        slot.clear();
+    }
+    slot.insert(key, arc.clone());
+    Ok(arc)
+}
+
+/// 取（未命中则解出后缓存）GnuPG algo 8 的私钥材料
+///
+/// `gpg_pqc::extract_key` 内部的 `s2k_iterated_salted` 与 rpgp 侧同样是迭代 S2K，
+/// 逐条解密时同样会被放大，故一并缓存。
+fn cached_pqc_key(armored: &str, passphrase: &str) -> Result<Arc<gpg_pqc::GpgPqcKey>, String> {
+    let key = unlocked_cache_key(armored, passphrase);
+    if let Some(hit) = unlocked_pqc_keys().lock().unwrap_or_else(|e| e.into_inner()).get(&key) {
+        return Ok(hit.clone());
+    }
+
+    let parsed = gpg_pqc::extract_key(armored, passphrase)
+        .map_err(|e| format!("parse gpg pqc key failed: {}", e))?;
+    let arc = Arc::new(parsed);
+    let mut slot = unlocked_pqc_keys().lock().unwrap_or_else(|e| e.into_inner());
+    if slot.len() >= MAX_UNLOCKED_KEYS {
+        slot.clear();
+    }
+    slot.insert(key, arc.clone());
+    Ok(arc)
+}
+
+/// 清空已解锁私钥缓存（应用上锁 / 切到后台时调用）
+///
+/// hps_pgp_lock()
+#[no_mangle]
+pub extern "C" fn hps_pgp_lock() {
+    unlocked_keys().lock().unwrap_or_else(|e| e.into_inner()).clear();
+    unlocked_pqc_keys().lock().unwrap_or_else(|e| e.into_inner()).clear();
+}
+
 // ========== PGP 解密 ==========
 #[no_mangle]
 pub extern "C" fn hps_pgp_decrypt(
@@ -216,10 +314,11 @@ pub extern "C" fn hps_pgp_decrypt(
             return FfiResult::err("secret key is empty".into());
         }
 
-        // 解析私钥证书
-        let (seckey, _headers) = match SignedSecretKey::from_armor_single(seckey_armored.as_bytes()) {
-            Ok(result) => result,
-            Err(e) => return FfiResult::err(format!("parse secret key failed: {}", e)),
+        // 取已解锁私钥：未命中缓存时解析并就地去除口令保护（迭代 S2K 只跑这一次，
+        // 之后同一把密钥的每条密文都直接复用——内容搜索逐条解密的耗时全在这里）
+        let seckey = match cached_secret_key(&seckey_armored, &passphrase) {
+            Ok(k) => k,
+            Err(e) => return FfiResult::err(e),
         };
 
         // 解析密文消息
@@ -228,8 +327,8 @@ pub extern "C" fn hps_pgp_decrypt(
             Err(e) => return FfiResult::err(format!("parse ciphertext failed: {}", e)),
         };
 
-        // 解密（Password 从 &str 构造）
-        let pw = Password::from(passphrase.as_str());
+        // 密钥已在 `cached_secret_key` 里解锁（私钥段为明文），故这里**不带口令**
+        // 且 `is_locked = false`：rpgp 会直接用明文材料，跳过迭代 S2K。
         // **必须显式开启 GnuPG AEAD（tag 20）**：GnuPG 2.4+ 对「偏好里带 AEAD 的密钥」
         // 默认用这种 GnuPG 私有格式加密消息，而 rpgp 出于「非 IETF 标准」默认拒绝
         // （报 `GnuPG's AEAD packet (type 20) is non-standard, 'DecryptionOptions'
@@ -237,12 +336,12 @@ pub extern "C" fn hps_pgp_decrypt(
         // 都解不开——而 gpg/pass 自己解得好好的，用户只会看到「解密失败」。
         // 注：`gpg_pqc`（GnuPG algo 8）那条路径自己实现了 tag 20 分块解密，与本处无关。
         let ring = TheRing {
-            secret_keys: vec![&seckey],
-            key_passwords: vec![&pw],
+            secret_keys: vec![&*seckey],
+            key_passwords: Vec::new(),
             decrypt_options: DecryptionOptions::new().enable_gnupg_aead(),
             ..Default::default()
         };
-        let mut decrypted = match msg.decrypt_the_ring(ring, true) {
+        let mut decrypted = match msg.decrypt_the_ring(ring, false) {
             Ok((d, _)) => d,
             Err(e) => return FfiResult::err(format!("decrypt failed: {}", e)),
         };
@@ -301,10 +400,11 @@ pub extern "C" fn hps_pgp_decrypt_gpg_pqc(
             return FfiResult::err("secret key is empty".into());
         }
 
-        // 提取私钥材料（含带口令保护段解密）
-        let key = match gpg_pqc::extract_key(&seckey_armored, &passphrase) {
+        // 取私钥材料（未命中缓存时才解保护段——这一步同样是迭代 S2K，
+        // 逐条解密时会被放大成 N 倍）
+        let key = match cached_pqc_key(&seckey_armored, &passphrase) {
             Ok(k) => k,
-            Err(e) => return FfiResult::err(format!("parse gpg pqc key failed: {}", e)),
+            Err(e) => return FfiResult::err(e),
         };
 
         // 密文可能是 armored 文本，也可能是二进制 OpenPGP
@@ -376,7 +476,8 @@ pub extern "C" fn hps_pgp_gpg_pqc_verify_passphrase(
         if armored.is_empty() {
             return FfiResult::err("secret key is empty".into());
         }
-        match gpg_pqc::extract_key(&armored, &passphrase) {
+        // 走与解密同一份缓存：口令正确时顺带把这把密钥解好（随后的逐条解密不必重复解保护段）
+        match cached_pqc_key(&armored, &passphrase) {
             Ok(_) => FfiResult::ok("1".into()),
             Err(e) => FfiResult::err(format!("gpg pqc verify failed: {}", e)),
         }
@@ -596,28 +697,18 @@ pub extern "C" fn hps_pgp_verify_passphrase(
             return FfiResult::err("secret key is empty".into());
         }
 
-        let (seckey, _headers) = match SignedSecretKey::from_armor_single(seckey_armored.as_bytes()) {
-            Ok(result) => result,
-            Err(e) => return FfiResult::err(format!("parse secret key failed: {}", e)),
-        };
-
-        // 未加密（无密码保护）的私钥：空密码即可，直接判定为验证通过，
-        // 否则对未加密私钥传空密码走 sign 会触发 S2K 解密 panic
-        // （Unexpected digest length）。这是「无密码密钥免弹框」的关键判定。
-        if !seckey.secret_params().is_encrypted() {
-            return FfiResult::ok(String::new());
-        }
-
-        // 用 unlock 直接解锁主键：口令错误时 S2K 解密失败返回 Err。
+        // 走解锁缓存：口令正确时顺带把这把密钥解锁好（紧随其后的逐条解密不必再跑
+        // 迭代 S2K），口令错误时由 `remove_password` 报错。
         //
         // 不要改用 sign 来验证——EdDSA 等算法的 sign 要求传入的 digest 长度
         // 与哈希算法严格匹配（SHA-256 必须恰好 32 字节），传任意短原文会报
         // "Unexpected digest length N for hash algorithm Sha256"，
         // 导致**正确口令也被误判为错误**。
-        let pw = Password::from(passphrase.as_str());
-        match seckey.primary_key.unlock(&pw, |_pub, _priv| Ok(())) {
-            Ok(Ok(())) => FfiResult::ok(String::new()),
-            Ok(Err(e)) => FfiResult::err(format!("passphrase verification failed: {}", e)),
+        //
+        // 未加密（无密码保护）的私钥：`remove_password` 对未锁定的包是 no-op，
+        // 任何口令（含空串）都判定为验证通过——这是「无密码密钥免弹框」的关键判定。
+        match cached_secret_key(&seckey_armored, &passphrase) {
+            Ok(_) => FfiResult::ok(String::new()),
             Err(e) => FfiResult::err(format!("passphrase verification failed: {}", e)),
         }
     })
@@ -1775,5 +1866,92 @@ fn change_passphrase_pqc_empty_new_passphrase_rejected() {
             let data = decrypted.as_data_vec().expect("literal data");
             assert_eq!(String::from_utf8_lossy(&data), msg, "{} 应能解密", label);
         }
+    }
+
+    /// FFI 结果 → Result（ok 取 data，失败取 error）
+    fn ffi_outcome(r: FfiResult) -> Result<String, String> {
+        let data = if r.data.is_null() {
+            String::new()
+        } else {
+            unsafe { CStr::from_ptr(r.data) }.to_string_lossy().into_owned()
+        };
+        let error = if r.error.is_null() {
+            String::new()
+        } else {
+            unsafe { CStr::from_ptr(r.error) }.to_string_lossy().into_owned()
+        };
+        if r.success == 0 {
+            Ok(data)
+        } else {
+            Err(error)
+        }
+    }
+
+    /// 生成一把带口令的测试密钥（内存，不依赖 fixture），返回 armored 私钥
+    fn locked_test_key(passphrase: &str) -> String {
+        let uid = CString::new("Cache Test <cache@example.org>").unwrap();
+        let kind = CString::new("eddsa").unwrap();
+        let pw = CString::new(passphrase).unwrap();
+        ffi_outcome(hps_pgp_generate_key(uid.as_ptr(), kind.as_ptr(), pw.as_ptr()))
+            .expect("generate key")
+    }
+
+    /// 已解锁私钥缓存：同密钥同口令第二次取用命中缓存（同一实例），上锁后重新解锁
+    ///
+    /// 回归的是「内容搜索冷缓存首搜慢」的根因：解密原先每条密文都重新解析私钥并跑
+    /// 一遍**迭代 S2K**（GnuPG 默认 count 可达 65M 哈希量），逐条解密时被放大成 N 倍。
+    #[test]
+    fn unlocked_key_cache_reuses_instance_and_lock_clears() {
+        let armored = locked_test_key("cache-pw-123");
+
+        let first = cached_secret_key(&armored, "cache-pw-123").expect("首次解锁");
+        let second = cached_secret_key(&armored, "cache-pw-123").expect("二次取用");
+        assert!(Arc::ptr_eq(&first, &second), "同密钥同口令应命中缓存（同一实例）");
+
+        // 缓存键含口令：错误口令不得命中，必须失败
+        assert!(cached_secret_key(&armored, "wrong-pw").is_err(), "错误口令必须失败");
+
+        // 上锁（切后台）清空缓存：重新解锁得到新实例，且仍能用
+        hps_pgp_lock();
+        let after_lock = cached_secret_key(&armored, "cache-pw-123").expect("上锁后重新解锁");
+        assert!(!Arc::ptr_eq(&first, &after_lock), "上锁后应重新解锁（非缓存实例）");
+    }
+
+    /// `hps_pgp_decrypt` 的「已解锁密钥 + 无口令」路径回归
+    ///
+    /// 接入缓存后解密不再把口令交给 rpgp（`decrypt_the_ring(ring, false)` + 明文私钥段），
+    /// 这条用例覆盖三条路径：首次（未命中缓存）、二次（命中缓存）、上锁后（重新解锁），
+    /// 并确认错误口令仍然失败。
+    #[test]
+    fn decrypt_uses_unlocked_cache_and_survives_lock() {
+        let secret = locked_test_key("decrypt-pw-456");
+        let public = ffi_outcome(hps_pgp_extract_public_key(
+            CString::new(secret.clone()).unwrap().as_ptr(),
+        ))
+        .expect("extract public key");
+        let plain = "cache integration";
+        let cipher = ffi_outcome(hps_pgp_encrypt(
+            CString::new(plain).unwrap().as_ptr(),
+            CString::new(public).unwrap().as_ptr(),
+        ))
+        .expect("encrypt");
+
+        let decrypt = |pw: &str| -> Result<String, String> {
+            ffi_outcome(hps_pgp_decrypt(
+                CString::new(cipher.clone()).unwrap().as_ptr(),
+                CString::new(secret.clone()).unwrap().as_ptr(),
+                CString::new(pw).unwrap().as_ptr(),
+            ))
+        };
+
+        // ① 首次：未命中缓存（解析 + 迭代 S2K 解锁）
+        assert_eq!(decrypt("decrypt-pw-456").expect("first decrypt"), plain);
+        // ② 二次：命中缓存，结果必须一致
+        assert_eq!(decrypt("decrypt-pw-456").expect("cached decrypt"), plain);
+        // ③ 错误口令：不得命中缓存，必须失败
+        assert!(decrypt("bad-pw").is_err(), "错误口令必须失败");
+        // ④ 上锁清空缓存后仍能解（重新解锁一次）
+        hps_pgp_lock();
+        assert_eq!(decrypt("decrypt-pw-456").expect("decrypt after lock"), plain);
     }
 }

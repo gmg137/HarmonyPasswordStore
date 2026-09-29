@@ -36,10 +36,19 @@ export enum PasswordFileOrganization {
 
 /** 搜索匹配模式 */
 export enum SearchMode {
-  /** 模糊匹配 */
+  /** 模糊匹配（条目完整相对路径包含关键词） */
   FUZZY = 0,
-  /** 精确匹配 */
+  /** 精确匹配（条目名与关键词全等） */
   EXACT = 1,
+  /**
+   * 内容匹配（名称匹配同模糊，另外解密条目并匹配字段内容）
+   *
+   * 「内容」= 除主密码以外的字段值（user/email/phone/notes 与额外内容的**值**，
+   * 不含字段名，规则见 `PasswordFileParser.searchableText`）。逐条解密是异步开销，
+   * 由 `utils/ContentSearchService` 承担（原生调用一律走 TaskPool），
+   * 名称匹配阶段与模糊模式一致。
+   */
+  CONTENT = 2,
 }
 
 /**

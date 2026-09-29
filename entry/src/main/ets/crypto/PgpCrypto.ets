@@ -285,6 +285,33 @@ export class PgpCrypto implements PgpCryptoInterface {
     return out;
   }
 
+  /**
+   * 条目解密的候选密钥——**TaskPool 版本**（语义同 `entryDecryptionCandidates`）
+   *
+   * 批量场景（内容搜索逐条预扫）不能用同步版：`keysForCiphertext` 会为**每条**密文
+   * 同步调 native 解析 PKESK，逐条循环等于把主线程重新绑住（同 `recipientKeyIdsAsync`
+   * 与重加密预扫的教训）。本方法把收件人解析放进 TaskPool，密钥匹配只查主线程缓存。
+   */
+  async entryDecryptionCandidatesAsync(ciphertext: string,
+    gpgIdFingerprints: string[]): Promise<string[]> {
+    const out: string[] = [];
+    if (ciphertext.length > 0) {
+      const ids: string[] = await this.recipientKeyIdsAsync(ciphertext);
+      const byCipher: string[] = this.keysForIds(ids);
+      for (let i: number = 0; i < byCipher.length; i++) {
+        PgpCrypto.addUnique(out, byCipher[i]);
+      }
+    }
+    for (let i: number = 0; i < gpgIdFingerprints.length; i++) {
+      const resolved: GpgKeyId | null =
+        PgpKeyManager.getInstance().resolveKeyByIdEntry(gpgIdFingerprints[i]);
+      if (resolved !== null) {
+        PgpCrypto.addUnique(out, resolved.fingerprint);
+      }
+    }
+    return out;
+  }
+
   private buildCandidateOrder(keys: GpgKeyId[], candidateFingerprints?: string[],
     preferred: string[] = []): string[] {
     const ordered: string[] = [];
@@ -608,5 +635,12 @@ export class PgpCrypto implements PgpCryptoInterface {
 
   lock(): void {
     this.passphraseCache.clear();
+    // native 侧另有一份「已解锁私钥缓存」（内容搜索逐条解密才不必每条重跑迭代
+    // S2K），那里是明文私钥材料，上锁/切后台必须一起清——否则等于给
+    // 「切后台清敏感缓存」留了个缺口。
+    const res: NativeResult = NativeBridge.getInstance().pgpLock();
+    if (!res.success) {
+      hilog.warn(DOMAIN, TAG, 'lock: native pgpLock failed: %{public}s', res.error);
+    }
   }
 }

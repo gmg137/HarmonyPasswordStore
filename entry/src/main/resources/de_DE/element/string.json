@@ -81,6 +81,10 @@
       "value": "Exakte Suche"
     },
     {
+      "name": "search_content",
+      "value": "Inhaltssuche"
+    },
+    {
       "name": "onboarding_row_title",
       "value": "Einrichtung erneut ausführen"
     },
@@ -419,6 +423,30 @@
     {
       "name": "home_search_try_other",
       "value": "Versuche ein anderes Stichwort"
+    },
+    {
+      "name": "home_search_content_missing",
+      "value": "%d Einträge ohne Schlüssel, Inhalt nicht abgeglichen"
+    },
+    {
+      "name": "home_search_content_hit",
+      "value": "Inhaltstreffer: %s"
+    },
+    {
+      "name": "home_content_unlock_title",
+      "value": "Schlüssel für „%s“ entsperren, um %d Einträge zu durchsuchen"
+    },
+    {
+      "name": "home_search_content_locked",
+      "value": "%d Einträge gesperrt — zum Entsperren tippen"
+    },
+    {
+      "name": "home_search_content_progress",
+      "value": "Inhalt wird abgeglichen %d/%d"
+    },
+    {
+      "name": "home_search_content_pending",
+      "value": "Inhalt wird durchsucht…"
     },
     {
       "name": "home_create_first_hint",

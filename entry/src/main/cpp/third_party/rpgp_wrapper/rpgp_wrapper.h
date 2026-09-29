@@ -26,6 +26,14 @@ FfiResult hps_pgp_recipient_keyids(const char *ciphertext);
 FfiResult hps_pgp_gpg_pqc_verify_passphrase(const char *seckey_armored, const char *passphrase);
 FfiResult hps_pgp_list_keys(const char *keyring_armored);
 FfiResult hps_pgp_verify_passphrase(const char *seckey_armored, const char *passphrase);
+
+/**
+ * 清空 native 侧的「已解锁私钥缓存」（上锁 / 切后台时调用）
+ *
+ * 缓存里是明文私钥材料（迭代 S2K 每把密钥每会话只跑一次，内容搜索逐条解密
+ * 才不至于把 S2K 放大成 N 倍），生命周期必须与 ArkTS 的口令缓存一致。
+ */
+void hps_pgp_lock(void);
 FfiResult hps_pgp_extract_public_key(const char *seckey_armored);
 FfiResult hps_pgp_generate_key(const char *user_id, const char *key_type, const char *passphrase);
 FfiResult hps_pgp_change_passphrase(const char *seckey_armored, const char *old_passphrase,

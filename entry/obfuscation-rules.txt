@@ -122,6 +122,7 @@ pgpGpgPqcSupported
 pgpGpgPqcVerifyPassphrase
 pgpEncryptMixed
 pgpRecipientKeyIds
+pgpLock
 pgpListKeys
 pgpExtractPublicKey
 pgpVerifyPassphrase

@@ -134,6 +134,16 @@ export class NativeBridge {
       (): NativeResult => hpsNative.pgpRecipientKeyIds(ciphertext));
   }
 
+  /**
+   * 清空 native 侧的已解锁私钥缓存
+   *
+   * 与 `PgpCrypto.lock()`（清口令缓存）配套：缓存里是明文私钥材料，
+   * 必须在上锁 / 切后台时一起清掉（见 AppLockManager.clearSensitiveCaches）。
+   */
+  pgpLock(): NativeResult {
+    return this.callSafely('pgpLock', (): NativeResult => hpsNative.pgpLock());
+  }
+
   pgpListKeys(armoredKeyring: string): NativeResult {
     return this.callSafely('pgpListKeys', (): NativeResult => hpsNative.pgpListKeys(armoredKeyring));
   }
