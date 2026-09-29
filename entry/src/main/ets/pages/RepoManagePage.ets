@@ -2,7 +2,6 @@ import { RepoManageViewModel } from '../viewmodel/RepoManageViewModel';
 import { RouteManager } from '../common/RouteManager';
 import { RouteNames } from '../common/Constants';
 import { ThemeColors, Palette, ButtonSpec, Spacing, FontSize, Radius, IconSize, ComponentSize, DividerSpec } from '../common/ThemeColors';
-import { panelSheetOptions, themedSheetOptions, SHEET_PAD_TOP, SHEET_PAD_BOTTOM } from '../common/SheetStyles';
 import { AppTitleBar } from '../views/AppTitleBar';
 import { LoadingOverlay } from '../views/LoadingOverlay';
 import { HostKeyConfirmDialog } from '../views/HostKeyConfirmDialog';
@@ -35,22 +34,6 @@ export struct RepoManagePage {
 
   private get colors(): Palette {
     return ThemeColors.getInstance().palette();
-  }
-
-  /** 删除确认面板配置：getter + themedSheetOptions（backgroundColor 随主题刷新，防上拉露旧色） */
-  private get deleteSheetOptions(): SheetOptions {
-    return themedSheetOptions(this, 'RepoDelete',
-      (): SheetOptions => panelSheetOptions(this.colors.surface, 260,
-        (): void => this.viewModel.setDeleteDialogVisible(false)),
-      this.colors.surface, 260);
-  }
-
-  /** 强制推送确认面板配置（与删除确认同款短面板） */
-  private get forcePushSheetOptions(): SheetOptions {
-    return themedSheetOptions(this, 'RepoForcePush',
-      (): SheetOptions => panelSheetOptions(this.colors.surface, 260,
-        (): void => this.viewModel.setForcePushConfirmVisible(false)),
-      this.colors.surface, 260);
   }
 
   aboutToAppear(): void {
@@ -274,7 +257,7 @@ export struct RepoManagePage {
               this.dangerRow($r('app.string.repo_delete_btn'), $r('app.string.repo_danger_hint'),
                 !this.viewModel.isBusy,
                 (): void => {
-                  this.viewModel.setDeleteDialogVisible(true);
+                  this.showDeleteConfirmDialog();
                 })
             }
           }
@@ -312,10 +295,6 @@ export struct RepoManagePage {
         .scrollBar(BarState.Off)
         .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H, bottom: Spacing.PAGE_H })
         .backgroundColor(this.colors.background)
-        // 强制推送确认面板挂在 List 上：同一节点只能挂一个 bindSheet（后挂的覆盖
-        // 先挂的），根节点已被删除确认面板占用，再挂会让删除确认永远弹不出来
-        .bindSheet(this.viewModel.isForcePushConfirmVisible, this.forcePushConfirmBuilder(),
-          this.forcePushSheetOptions)
 
         // ===== 强制推送：全模态遮罩 =====
         // `.position({x:0,y:0})` 把它移出文档流、叠在整页之上；返回键另见
@@ -337,10 +316,6 @@ export struct RepoManagePage {
     .onShown(() => {
       this.viewModel.load();
     })
-    // 删除确认：危险操作二次确认（半模态，点遮罩可取消）
-    // options 走 getter+themedSheetOptions：backgroundColor 过期会在面板拉高后露出旧色
-    .bindSheet(this.viewModel.isDeleteDialogVisible, this.deleteConfirmBuilder(),
-      this.deleteSheetOptions)
   }
 
   /**
@@ -359,17 +334,69 @@ export struct RepoManagePage {
     }
   }
 
-  /** 点「强制推送远程」：瞬时前置校验通过则弹确认面板，否则弹失败原因 */
+  /** 点「强制推送远程」：瞬时前置校验通过则弹确认弹窗，否则弹失败原因 */
   private async onForcePushTapped(): Promise<void> {
     const ok: boolean = await this.viewModel.precheckForcePush();
     if (ok) {
-      this.viewModel.setForcePushConfirmVisible(true);
+      this.showForcePushConfirmDialog();
       return;
     }
     this.showForcePushErrorDialog();
   }
 
-  /** 确认面板点「强制推送」：关面板后执行（连接测试 + 推送 + TOFU/失败弹窗） */
+  /**
+   * 删除仓库确认（系统原生警告弹窗）
+   *
+   * 原先是 bindSheet 半模态（自绘标题/正文/双按钮），改用系统 AlertDialog 居中弹窗——
+   * 危险操作的二次确认是系统弹窗的典型场景，原生样式自带标题加粗、正文次要色与
+   * 双按钮横排。破坏性按钮按系统惯例用红色文字（`fontColor` 设调色板 danger 色）。
+   * 文案沿用原面板的键（repo_delete_btn / repo_delete_confirm_msg），内容不变。
+   *
+   * 触发点在页面按钮上、本页无任何 bindSheet 打开，不踩「面板未关闭时
+   * AlertDialog 不进布局树」的坑（见 AGENTS.md）。
+   */
+  private showDeleteConfirmDialog(): void {
+    this.getUIContext().showAlertDialog({
+      title: Strings.get('repo_delete_btn'),
+      message: Strings.get('repo_delete_confirm_msg'),
+      autoCancel: true,
+      alignment: DialogAlignment.Center,
+      primaryButton: {
+        value: $r('app.string.common_cancel'),
+        action: (): void => {},
+      },
+      secondaryButton: {
+        value: $r('app.string.delete'),
+        fontColor: this.colors.danger,
+        action: (): void => {
+          this.viewModel.deleteRepo();
+        },
+      },
+    });
+  }
+
+  /** 强制推送确认（系统原生警告弹窗，与删除确认同构；正文写后果——覆盖远端） */
+  private showForcePushConfirmDialog(): void {
+    this.getUIContext().showAlertDialog({
+      title: Strings.get('repo_force_push_title'),
+      message: Strings.get('repo_force_push_confirm_msg'),
+      autoCancel: true,
+      alignment: DialogAlignment.Center,
+      primaryButton: {
+        value: $r('app.string.common_cancel'),
+        action: (): void => {},
+      },
+      secondaryButton: {
+        value: $r('app.string.repo_force_push_btn'),
+        fontColor: this.colors.danger,
+        action: (): void => {
+          this.runForcePush();
+        },
+      },
+    });
+  }
+
+  /** 确认弹窗点「强制推送」：执行（连接测试 + 推送 + TOFU/失败弹窗） */
   private runForcePush(): void {
     this.viewModel.runForcePush().then((): void => {
       if (this.viewModel.pendingHostKeyFp.length > 0) {
@@ -495,124 +522,5 @@ export struct RepoManagePage {
         e instanceof Error ? `${e.name}: ${e.message}` : String(e));
     }
     this.hostKeyDialogId = -1;
-  }
-
-  /** 删除仓库确认面板 */
-  @Builder
-  deleteConfirmBuilder() {
-    Column() {
-      Text($r('app.string.repo_delete_btn'))
-        .fontSize(FontSize.SUBTITLE)
-        .fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textPrimary)
-        .width('100%')
-        .textAlign(TextAlign.Center)
-
-      Text($r('app.string.repo_delete_confirm_msg'))
-        .fontSize(FontSize.CAPTION)
-        .fontColor(this.colors.textSecondary)
-        .width('100%')
-        .textAlign(TextAlign.Center)
-        .margin({ top: Spacing.MD })
-
-      // 弹性占位：把按钮行撑到面板底部（与其它半模态弹窗一致）
-      Blank()
-        .layoutWeight(1)
-
-      Row({ space: ButtonSpec.ROW_GAP }) {
-        Button($r('app.string.common_cancel'))
-          .type(ButtonType.Normal)
-          .borderRadius(ButtonSpec.SECONDARY_RADIUS)
-          .layoutWeight(1)
-          .height(ButtonSpec.SECONDARY_HEIGHT)
-          .backgroundColor(this.colors.neutralButton)
-          .fontColor(this.colors.textSecondary)
-          .fontSize(ButtonSpec.FONT_SIZE)
-          .onClick(() => {
-            this.viewModel.setDeleteDialogVisible(false);
-          })
-
-        Button($r('app.string.delete'))
-          .type(ButtonType.Normal)
-          .borderRadius(ButtonSpec.DANGER_RADIUS)
-          .layoutWeight(1)
-          .height(ButtonSpec.DANGER_HEIGHT)
-          .backgroundColor(this.colors.danger)
-          .fontColor(this.colors.onPrimary)
-          .fontSize(ButtonSpec.FONT_SIZE)
-          .fontWeight(ButtonSpec.FONT_WEIGHT)
-          .onClick(() => {
-            this.viewModel.deleteRepo();
-          })
-      }
-      .width('100%')
-    }
-    .width('100%')
-    .height('100%')
-    // 统一面板内边距：顶部让开 dragBar，底部给按钮行留出与屏幕下沿的距离
-    .padding({ top: SHEET_PAD_TOP, left: Spacing.PAGE_H, right: Spacing.PAGE_H, bottom: SHEET_PAD_BOTTOM })
-    .alignItems(HorizontalAlign.Center)
-    .backgroundColor(this.colors.surface)
-  }
-
-  /** 强制推送确认面板（危险操作二次确认，与删除确认同款结构） */
-  @Builder
-  forcePushConfirmBuilder() {
-    Column() {
-      Text($r('app.string.repo_force_push_title'))
-        .fontSize(FontSize.SUBTITLE)
-        .fontWeight(FontWeight.Medium)
-        .fontColor(this.colors.textPrimary)
-        .width('100%')
-        .textAlign(TextAlign.Center)
-
-      // 正文写**后果**（覆盖远端），不是行提示的复述——行提示已在上方卡片里显示过同一句话；
-      // 与删除确认（repo_danger_hint 行提示 + repo_delete_confirm_msg 正文）同一口径
-      Text($r('app.string.repo_force_push_confirm_msg'))
-        .fontSize(FontSize.CAPTION)
-        .fontColor(this.colors.textSecondary)
-        .width('100%')
-        .textAlign(TextAlign.Center)
-        .margin({ top: Spacing.MD })
-
-      // 弹性占位：把按钮行撑到面板底部（与其它半模态弹窗一致）
-      Blank()
-        .layoutWeight(1)
-
-      Row({ space: ButtonSpec.ROW_GAP }) {
-        Button($r('app.string.common_cancel'))
-          .type(ButtonType.Normal)
-          .borderRadius(ButtonSpec.SECONDARY_RADIUS)
-          .layoutWeight(1)
-          .height(ButtonSpec.SECONDARY_HEIGHT)
-          .backgroundColor(this.colors.neutralButton)
-          .fontColor(this.colors.textSecondary)
-          .fontSize(ButtonSpec.FONT_SIZE)
-          .onClick(() => {
-            this.viewModel.setForcePushConfirmVisible(false);
-          })
-
-        // 按钮用短键（与删除面板的 `delete` 同款）：标题是完整表述，按钮要短
-        Button($r('app.string.repo_force_push_btn'))
-          .type(ButtonType.Normal)
-          .borderRadius(ButtonSpec.DANGER_RADIUS)
-          .layoutWeight(1)
-          .height(ButtonSpec.DANGER_HEIGHT)
-          .backgroundColor(this.colors.danger)
-          .fontColor(this.colors.onPrimary)
-          .fontSize(ButtonSpec.FONT_SIZE)
-          .fontWeight(ButtonSpec.FONT_WEIGHT)
-          .onClick(() => {
-            this.viewModel.setForcePushConfirmVisible(false);
-            this.runForcePush();
-          })
-      }
-      .width('100%')
-    }
-    .width('100%')
-    .height('100%')
-    .padding({ top: SHEET_PAD_TOP, left: Spacing.PAGE_H, right: Spacing.PAGE_H, bottom: SHEET_PAD_BOTTOM })
-    .alignItems(HorizontalAlign.Center)
-    .backgroundColor(this.colors.surface)
   }
 }

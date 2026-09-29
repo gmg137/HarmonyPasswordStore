@@ -1185,6 +1185,20 @@ static napi_value GitCommitAll(napi_env env, napi_callback_info info) {
         std::string msg = "write_tree failed: " + GitLastErr();
         return MakeResult(env, false, msg.c_str(), "");
     }
+
+    // 把 index 写回磁盘。git_commit_create 只更新引用、不写 .git/index，而内存
+    // index 随本函数结束销毁——漏掉这一步时磁盘 index 停留在提交前的旧状态，
+    // gitStatus（SHOW_INDEX_AND_WORKDIR 口径）会把「HEAD 已新、index 未跟上」
+    // 继续算成变更，changedCount 永不归零，同步面板的「N 个变更」在提交/同步
+    // 完成后依然显示。放在无变化判断之前：即使本次跳过提交，磁盘 index 也借机
+    // 与工作区对齐（顺带修正存量仓库遗留的旧 index）。写入失败按提交失败返回，
+    // 保证「提交成功 ⇒ 状态摘要正确」。
+    if (git_index_write(index) != 0) {
+        git_index_free(index);
+        git_repository_free(repo);
+        std::string msg = "index write failed: " + GitLastErr();
+        return MakeResult(env, false, msg.c_str(), "");
+    }
     git_index_free(index);
 
     git_tree *tree = nullptr;
@@ -1385,6 +1399,22 @@ static napi_value GitStatus(napi_env env, napi_callback_info info) {
         branch = git_reference_shorthand(head);
     }
 
+    // ahead/behind：本地 HEAD 与其 upstream 的分叉提交数（同步摘要的 ↑N/↓N）。
+    // 无 upstream（从未推送/无远程）或 detached HEAD 时 git_branch_upstream 失败，
+    // 保持 0——摘要只显示分支名与变更数，与旧行为一致
+    size_t ahead = 0;
+    size_t behind = 0;
+    if (head != nullptr) {
+        git_reference *upstream = nullptr;
+        if (git_branch_upstream(&upstream, head) == 0) {
+            // 直接引用的 target 即 oid；上游分支被删等异常时 target 为零 oid，
+            // git_graph_ahead_behind 返回错误，ahead/behind 维持 0，无需特判
+            git_graph_ahead_behind(&ahead, &behind, repo,
+                git_reference_target(head), git_reference_target(upstream));
+            git_reference_free(upstream);
+        }
+    }
+
     // status
     git_status_options opts = GIT_STATUS_OPTIONS_INIT;
     opts.show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
@@ -1414,7 +1444,11 @@ static napi_value GitStatus(napi_env env, napi_callback_info info) {
     json += branch ? branch : "";
     json += "\",\"changedCount\":";
     json += std::to_string(changed);
-    json += ",\"aheadCount\":0,\"behindCount\":0,\"hasConflicts\":";
+    json += ",\"aheadCount\":";
+    json += std::to_string(ahead);
+    json += ",\"behindCount\":";
+    json += std::to_string(behind);
+    json += ",\"hasConflicts\":";
     json += has_conflicts ? "true" : "false";
     json += "}";
 

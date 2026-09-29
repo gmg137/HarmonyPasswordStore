@@ -4,6 +4,7 @@ import { GitClient, GitRepoStatus, GitResult, SshUrlTarget } from '../utils/GitC
 import { KnownHostsStore } from '../utils/KnownHostsStore';
 import { GitConfig } from '../model/GitConfig';
 import { FileUtils } from '../utils/FileUtils';
+import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Strings } from '../common/Strings';
 
@@ -44,10 +45,6 @@ export class RepoManageViewModel {
    * 用自增序号保证每次操作都触发一次（与 RepoChangeNotifier.nonce 同一机制）。
    */
   @Trace resultNonce: number = 0;
-  /** 删除确认对话框是否可见 */
-  @Trace isDeleteDialogVisible: boolean = false;
-  /** 强制推送确认面板是否可见 */
-  @Trace isForcePushConfirmVisible: boolean = false;
   /** 强制推送执行中（LoadingOverlay 全模态遮罩） */
   @Trace isForcePushing: boolean = false;
   /** 强制推送失败原因（空 = 无；页面据此弹失败原因弹窗，展示后清空） */
@@ -109,18 +106,6 @@ export class RepoManageViewModel {
   async setPullRebase(value: boolean): Promise<void> {
     this.pullRebase = value;
     await this.settings.updateSetting('gitPullRebase', value);
-  }
-
-  /**
-   * 打开/关闭删除确认对话框
-   */
-  setDeleteDialogVisible(visible: boolean): void {
-    this.isDeleteDialogVisible = visible;
-  }
-
-  /** 打开/关闭强制推送确认面板 */
-  setForcePushConfirmVisible(visible: boolean): void {
-    this.isForcePushConfirmVisible = visible;
   }
 
   /** 清空强制推送失败原因（页面弹过失败弹窗后调用，避免重复弹出） */
@@ -323,7 +308,6 @@ export class RepoManageViewModel {
    * 使应用回到「未初始化」状态，需要重新初始化或克隆。
    */
   async deleteRepo(): Promise<void> {
-    this.isDeleteDialogVisible = false;
     this.isBusy = true;
     this.resultMessage = '';
 
@@ -353,6 +337,11 @@ export class RepoManageViewModel {
       // 结果放在所有 await 之后：见 runForcePush 里同样的处理（保证 nonce 变化
       // 一定被 @Monitor 观察到，不会第二次操作时不弹气泡）
       this.finish(true, Strings.get('repo_deleted'));
+      // 广播仓库已删除：首页是 Navigation 根内容（常驻不销毁），只靠 RepoChangeNotifier
+      // 感知仓库变更——漏掉 bump 会让我返回首页后列表仍是删除前的旧数据（同
+      // GitConfigViewModel.cloneNow 的收尾口径）。首页 onRepoChanged 会顺带清掉
+      // 内容匹配的明文缓存并把列表复位到未初始化空状态
+      RepoChangeNotifier.connect().bump();
     } catch (e) {
       const msg: string = e instanceof Error ? e.message : String(e);
       hilog.error(DOMAIN, TAG, 'deleteRepo failed: %{public}s', msg);

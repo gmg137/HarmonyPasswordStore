@@ -7,6 +7,9 @@
    id="svg5"
    sodipodi:docname="foreground.svg"
    inkscape:version="1.4.4 (unknown)"
+   inkscape:export-filename="/home/gmg/startIcon.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -22,9 +25,9 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:zoom="0.70710678"
-     inkscape:cx="550.83618"
-     inkscape:cy="509.82399"
+     inkscape:zoom="0.5"
+     inkscape:cx="564"
+     inkscape:cy="571"
      inkscape:window-width="1920"
      inkscape:window-height="1011"
      inkscape:window-x="0"
@@ -74,52 +77,66 @@
   <g
      id="g6"
      transform="translate(0,-19.000033)">
-    <path
-       d="M 360,550 V 410 a 152,152 0 0 1 304,0 v 140"
-       fill="none"
-       stroke="#ffffff"
-       stroke-width="72"
-       stroke-linecap="round"
-       id="path1" />
-    <path
-       d="m 275,440 c -39.888,0 -72,32.112 -72,72 v 27.48828 c 0,0 21.345,152.60193 32.1455,228.79582 C 239.5839,799.59551 274.9966,840 314.9999,840 h 394 c 40.0033,0 75.4641,-40.61199 79.8377,-71.72499 L 821,539.47656 V 512 c 0,-39.888 -32.112,-72 -72,-72 z"
-       style="fill:#ffffff;stroke-width:1.0287"
-       id="path8"
-       sodipodi:nodetypes="sscsssscsss" />
     <g
-       id="g5">
-      <path
-         d="M 420,720 V 560"
-         stroke="#0a59f7"
-         stroke-width="28"
-         stroke-linecap="round"
-         fill="none"
-         id="path2" />
-      <path
-         d="m 420,640 c 0,-80 184,0 184,-80"
-         stroke="#0a59f7"
-         stroke-width="28"
-         stroke-linecap="round"
-         fill="none"
-         id="path3" />
-      <circle
-         cx="420"
-         cy="720"
-         r="44"
-         fill="#0a59f7"
-         id="circle3" />
-      <circle
-         cx="420"
-         cy="560"
-         r="44"
-         fill="#0a59f7"
-         id="circle4" />
-      <circle
-         cx="604"
-         cy="560"
-         r="44"
-         fill="#0a59f7"
-         id="circle5" />
+       id="g5"
+       style="fill:#ffffff;fill-opacity:1;stroke:#1aad19;stroke-opacity:1"
+       transform="matrix(1.0809061,0,0,1.0809063,-41.423949,-17.961221)">
+      <g
+         id="g1"
+         transform="matrix(0.98502994,0,0,0.98502982,7.6646721,-15.179644)">
+        <path
+           d="M 347.70226,576.53728 V 425.21039 a 164.29774,164.29776 0 0 1 328.59548,0 v 151.32689"
+           fill="none"
+           stroke="#ffffff"
+           stroke-width="77.8252"
+           stroke-linecap="round"
+           id="path1"
+           style="fill:none;fill-opacity:1;stroke:#ffffff;stroke-opacity:1"
+           transform="matrix(0.92514974,0,0,0.92514957,38.323356,16.616816)" />
+        <path
+           d="M 255.82525,457.63758 C 212.71005,457.63758 178,492.34764 178,535.46285 v 29.71225 c 0,0 23.07195,164.94839 34.74626,247.30684 4.7975,33.84471 43.0753,77.51818 86.31513,77.51818 H 724.9384 c 43.23981,0 81.56961,-43.89776 86.29706,-77.528 L 846,565.16241 v -29.69956 c 0,-43.11521 -34.71005,-77.82527 -77.82525,-77.82527 z"
+           style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1.11193;stroke-opacity:1"
+           id="path8"
+           sodipodi:nodetypes="sscsssscsss"
+           transform="matrix(0.92514974,0,0,0.92514957,38.323356,16.616816)" />
+        <path
+           d="M 420,720 V 560"
+           stroke="#0a59f7"
+           stroke-width="28"
+           stroke-linecap="round"
+           fill="none"
+           id="path2"
+           style="fill:#ffffff;fill-opacity:1;stroke:#0a59f7;stroke-opacity:1" />
+        <path
+           d="m 420,640 c 0,-80 184,0 184,-80"
+           stroke="#0a59f7"
+           stroke-width="28"
+           stroke-linecap="round"
+           fill="none"
+           id="path3"
+           style="fill:none;fill-opacity:1;stroke:#0a59f7;stroke-opacity:1" />
+        <circle
+           cx="420"
+           cy="720"
+           r="44"
+           fill="#0a59f7"
+           id="circle3"
+           style="fill:#0a59f7;fill-opacity:1;stroke:none;stroke-opacity:1" />
+        <circle
+           cx="420"
+           cy="560"
+           r="44"
+           fill="#0a59f7"
+           id="circle4"
+           style="fill:#0a59f7;fill-opacity:1;stroke:none;stroke-opacity:1" />
+        <circle
+           cx="604"
+           cy="560"
+           r="44"
+           fill="#0a59f7"
+           id="circle5"
+           style="fill:#0a59f7;fill-opacity:1;stroke:none;stroke-opacity:1" />
+      </g>
     </g>
   </g>
 </svg>

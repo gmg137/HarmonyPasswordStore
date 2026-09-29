@@ -158,7 +158,7 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "密码仓库"
+      "value": "PasswordStore"
     },
     {
       "name": "search_placeholder",
@@ -262,7 +262,7 @@
     },
     {
       "name": "home_root_title",
-      "value": "密码仓库"
+      "value": "PasswordStore"
     },
     {
       "name": "home_create_password",

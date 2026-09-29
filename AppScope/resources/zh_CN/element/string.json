@@ -2,7 +2,7 @@
   "string": [
     {
       "name": "app_name",
-      "value": "密码仓库"
+      "value": "PasswordStore"
     }
   ]
 }
