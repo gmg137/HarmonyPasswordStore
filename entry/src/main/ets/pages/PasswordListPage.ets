@@ -1713,8 +1713,15 @@ export struct PasswordListPage {
       // 右缘锚定：FAB 右缘 = 父容器右缘 - (FAB 宽 + 卡片右距)，与列表卡片右缘
       // 平齐（右距同为 Spacing.PAGE_H）。原先 x:'82%' 是左缘按屏宽的百分比、随屏宽
       // 漂移，右侧与屏幕的间距锁不住（实测比卡片右缘多凸出约 15vp）。
-      .position({ x: '100%', y: '88%' })
-      .markAnchor({ x: IconSize.FAB + Spacing.PAGE_H, y: 0 })
+      // **底边锚定同理**：FAB 底边 = 父容器底边 - (导航条高度 + 呼吸间距)，
+      // 与屏高无关。原先 y:'88%' 按父容器高度取百分比——手机竖屏下 12% 屏高恰好
+      // 躲过导航条，但窗口变矮（横屏/分屏）时会把 FAB 顶出屏幕下沿，导航条变高
+      // （三键导航约 48vp）时又会落进避让区，正是 AGC 审核点名的「悬浮按钮」。
+      .position({ x: '100%', y: '100%' })
+      .markAnchor({
+        x: IconSize.FAB + Spacing.PAGE_H,
+        y: IconSize.FAB + Spacing.XL + SystemInsets.bottomVp(),
+      })
       // 同步面板挂在此节点：同一节点只能挂一个 bindSheet（后挂的会覆盖先挂的），
       // 与根节点的 create sheet 分开挂载，否则「同步存储库」永远打不开
       .bindSheet(this.isSyncSheetVisible, this.syncSheetBuilder(), this.syncSheetOptions)

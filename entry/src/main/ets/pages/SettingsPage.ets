@@ -6,6 +6,7 @@ import { ThemeColors, Palette, Radius, Spacing, FontSize, IconSize, ComponentSiz
 import { RouteManager } from '../common/RouteManager';
 import { AppTitleBar } from '../views/AppTitleBar';
 import { AppLanguage, AppLanguageOption } from '../common/AppLanguage';
+import { SystemInsets } from '../utils/SystemInsets';
 
 /**
  * 设置页
@@ -403,11 +404,13 @@ export struct SettingsPage {
             color: this.colors.divider,
           })
 
-          // 底部留白（保持改版前的滚动到底余量）
+          // 底部留白：改版前的滚动到底余量 + 系统导航条高度。沉浸式布局下内容延伸
+          // 到导航条之下，不留出这一截时「滚到底」的最后一行会被导航条压住
+          // （原本只有一个固定 48vp 的余量，导航条一高就不够，见 SystemInsets）
           ListItem() {
             Column()
               .width('100%')
-              .height(Spacing.XL * 2)
+              .height(Spacing.XL * 2 + SystemInsets.bottomVp())
           }
         }
         .layoutWeight(1)

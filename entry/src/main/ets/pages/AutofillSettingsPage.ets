@@ -4,6 +4,7 @@ import { SettingsRepository } from '../model/SettingsRepository';
 import { PasswordRepository } from '../model/PasswordRepository';
 import { ThemeColors, Palette, FontSize, Spacing, Radius, ComponentSize } from '../common/ThemeColors';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 
 /**
  * 自动填充设置页
@@ -131,7 +132,12 @@ export struct AutofillSettingsPage {
           Blank()
             .height(ComponentSize.CONTROL_SMALL)
         }
-        .padding(Spacing.PAGE_H)
+        // 底部额外留出系统导航条高度：沉浸式布局下内容延伸到导航条之下，
+        // 只给 PAGE_H 时滚到底的最后一行会被导航条压住（见 SystemInsets）
+        .padding({
+          left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.PAGE_H,
+          bottom: Spacing.PAGE_H + SystemInsets.bottomVp(),
+        })
       }
       .layoutWeight(1)
       .scrollBar(BarState.Auto)

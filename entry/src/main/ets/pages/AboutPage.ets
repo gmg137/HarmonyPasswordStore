@@ -1,6 +1,7 @@
 import { ThemeColors, Palette, Spacing, FontSize, Radius, IconSize, ComponentSize } from '../common/ThemeColors';
 import { AppTitleBar } from '../views/AppTitleBar';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 import { bundleManager } from '@kit.AbilityKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
@@ -160,7 +161,12 @@ export struct AboutPage {
             // 上间距与「源代码」卡片一致（原先由已移除的隐私政策卡片提供）
             .margin({ top: Spacing.CARD_GAP, bottom: Spacing.LG })
         }
-        .padding(Spacing.PAGE_H)
+        // 底部额外留出系统导航条高度：沉浸式布局下内容延伸到导航条之下，
+        // 只给 PAGE_H 时滚到底的最后一行会被导航条压住（见 SystemInsets）
+        .padding({
+          left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.PAGE_H,
+          bottom: Spacing.PAGE_H + SystemInsets.bottomVp(),
+        })
       }
       .layoutWeight(1)
       .scrollBar(BarState.Auto)

@@ -16,11 +16,28 @@ export const SYSTEM_DARK_KEY: string = 'systemIsDark';
  * 不再硬编码十六进制颜色值。
  *
  * 色彩体系对齐 HarmonyOS Design 语义色（取值对齐系统令牌）：
- * - 强调色 light `#0A59F7` / dark `#317AF7`（ohos_id_color_emphasize）
+ * - 强调色 light `#0B4ED6` / dark `#4D8DFF`（ohos_id_color_emphasize 的加深/提亮版，见下）
  * - 页面底 light `#F1F3F5`（background_secondary）/ dark `#000000`
  * - 卡片 light `#FFFFFF`（comp_background_list_card）/ dark `#1A1A1A`
  * - 主文本 light `#182431`（font_primary）/ dark `#E5E5E5`
- * - 告警 `#E84026`（warning）/ 成功 `#64BB5C`（confirm）
+ * - 告警 `#B3261E`（warning）/ 成功 `#256D2C`（confirm）
+ *
+ * ## 取值受**对比度下限**约束，不是纯观感选择（AGC 上架审核要求）
+ *
+ * - 图标/标题文字与背景 > **3:1**，正文文字与背景 > **4.5:1**；
+ * - 因此**每一个会被当作前景色用的 token，都必须对「卡片白 / 页面底 / 输入框底 /
+ *   中性按钮底」四个浅色背景（深色为对应四个深底）全部达标**——最坏情况通常是
+ *   `neutralButton`（浅 `#E5E5E5`、深 `#2E2E2E`）或 `inputBackground`；
+ * - 语义色（success/warning/danger）在本应用里既做**色块填充**（强度条、圆点）又做
+ *   **文字/图标**，故必须按文字口径取值（浅色下要压到深绿/深褐/深红，亮绿 `#64BB5C`
+ *   与橙黄 `#E8A739` 只有 1.9~2.1:1，是首轮审核被打回的直接原因）；
+ * - 强调色还多一条约束：**白字落在强调色上要 >3:1**（按钮/FAB 图标），所以深色
+ *   `primary` 不能一味提亮（`#5A96FF` 上白字只有 2.9:1）；
+ * - 改任何一个取值都必须重跑 `scripts/check-contrast.mjs`（全矩阵校验，低于阈值即退出非零）。
+ *
+ * 代价：4.5:1 的下限会把灰色阶梯压得很紧（主/次/三级 = `#182431`/`#4E5563`/`#5F6672`），
+ * 「提示文字明显更淡」的观感变弱。要保留更淡的提示层，只能**只在图标位**用它（3:1），
+ * 正文位必须换回深一档。
  */
 export interface Palette {
   /** 页面背景 */
@@ -89,46 +106,61 @@ export interface Palette {
   strengthStrong: string;
 }
 
-/** 浅色调色板（对齐 HarmonyOS 浅色语义） */
+/** 浅色调色板（对齐 HarmonyOS 浅色语义；取值同时满足对比度下限，见文件头） */
 const LIGHT_PALETTE: Palette = {
   background: '#F1F3F5',
   surface: '#FFFFFF',
   textPrimary: '#182431',
-  textSecondary: '#6B7280',
-  textTertiary: '#9AA0A9',
+  // 原 #6B7280：在 neutralButton(#E5E5E5) 上仅 3.84:1、inputBackground 上 4.04:1，
+  // 低于正文 4.5:1 的下限（取消按钮文字、分段控件未选中文字都落在这些底上）
+  textSecondary: '#4E5563',
+  // 原 #9AA0A9：仅 2.09~2.63:1，**同时**低于正文 4.5:1 与图标 3:1 —— 行尾箭头、
+  // 空状态图标、行说明、输入框占位符全是这个色，是首轮审核「两处不达标」的根因
+  textTertiary: '#5F6672',
   divider: '#E5E8EA',
-  primary: '#0A59F7',
+  // 原 #0A59F7：白字在其上 5.55:1 但作为**前景**落在 neutralButton 上只有 4.40:1
+  primary: '#0B4ED6',
   // ArkUI 的 8 位 hex 是 #AARRGGBB（alpha 在前）。曾误写成 '#0A59F71A'
   // ——RGB 反着读，渲染成约 4% 不透明度的黄绿色（R=0x59 G=0xF7 B=0x1A），
   // 浅色下肉眼几乎不可见，用户反馈为「按钮浅黄色太不显眼」。
-  primarySoft: '#1A0A59F7',
+  primarySoft: '#1A0B4ED6',
   onPrimary: '#FFFFFF',
-  success: '#64BB5C',
-  warning: '#E8A739',
-  danger: '#E84026',
+  // 原 #64BB5C（2.39:1）/ #E8A739（2.10:1）/ #E84026（4.04:1）：语义色在本应用里
+  // 同时是状态文字与勾选图标，必须按正文口径压暗（色块填充观感随之变深，可接受）
+  success: '#256D2C',
+  warning: '#8A5A00',
+  danger: '#B3261E',
   dangerSoft: '#FEF2F2',
   inputBackground: '#E8EBED',
   neutralButton: '#E5E5E5',
   pressed: '#E6E7E9',
   warningSoft: '#FEF7E8',
   overlayScrim: '#66000000',
-  strengthWeak: '#E84026',
-  strengthFair: '#E8A739',
-  strengthGood: '#64BB5C',
-  strengthStrong: '#4A8F44',
+  strengthWeak: '#B3261E',
+  strengthFair: '#8A5A00',
+  strengthGood: '#256D2C',
+  // 「极强」比「强」再深一档，保持四级阶梯可辨（同为深绿系）
+  strengthStrong: '#1B5E20',
 };
 
-/** 深色调色板（对齐 HarmonyOS 深色语义，深蓝黑体系） */
+/** 深色调色板（对齐 HarmonyOS 深色语义，深蓝黑体系；取值同时满足对比度下限） */
 const DARK_PALETTE: Palette = {
   background: '#000000',
   surface: '#1A1A1A',
   textPrimary: '#E5E5E5',
-  textSecondary: '#999999',
-  textTertiary: '#888888',
+  // 原 #999999：在 neutralButton(#2E2E2E) 上 4.77:1 达标，但二级文字要**比三级更亮**
+  // 才能维持层次（见下条 textTertiary 的反转说明），故整体提亮一档
+  textSecondary: '#B0B0B0',
+  // 原 #888888：在 inputBackground 上 4.27:1、neutralButton 上 3.83:1，低于 4.5:1。
+  // 注意深色下「更弱的提示」反而要**更亮**才够对比度——层次靠与 textSecondary 的相对
+  // 亮度维持（#999999 < #B0B0B0），不是靠调暗
+  textTertiary: '#999999',
   divider: '#333333',
-  primary: '#317AF7',
+  // 原 #317AF7：作为前景落在卡片上只有 4.36:1（未达 4.5:1）；提亮到 #4D8DFF 后
+  // 四个深底全达标，且白字在其上仍有 3.20:1（FAB/按钮图标不破线）
+  primary: '#4D8DFF',
   // 同上，#AARRGGBB：曾写成 '#317AF733'（RGB 反读成深黄绿色）。
-  primarySoft: '#33317AF7',
+  primarySoft: '#334D8DFF',
   onPrimary: '#FFFFFF',
   success: '#7ED680',
   warning: '#FFB84D',

@@ -7,6 +7,7 @@ import { LoadingOverlay } from '../views/LoadingOverlay';
 import { HostKeyConfirmDialog } from '../views/HostKeyConfirmDialog';
 import { showToastSafe } from '../utils/ToastUtil';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -282,11 +283,12 @@ export struct RepoManagePage {
             }
           }
 
-          // 底部留白（保持滚动到底的余量）
+          // 底部留白：滚动到底的余量 + 系统导航条高度（沉浸式布局下内容延伸到导航条
+          // 之下，不额外留这一截时最后一行会被导航条压住，见 SystemInsets）
           ListItem() {
             Column()
               .width('100%')
-              .height(Spacing.XL * 2)
+              .height(Spacing.XL * 2 + SystemInsets.bottomVp())
           }
         }
         .layoutWeight(1)

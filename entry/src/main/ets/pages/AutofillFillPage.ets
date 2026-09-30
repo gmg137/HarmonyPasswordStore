@@ -5,6 +5,7 @@ import { RouteManager } from '../common/RouteManager';
 import { ThemeColors, Palette, ButtonSpec, FontSize, Spacing, Radius, IconSize } from '../common/ThemeColors';
 import { EmptyState } from '../views/EmptyState';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 const DOMAIN: number = 0x0001;
@@ -189,8 +190,10 @@ export struct AutofillFillPage {
               .alignItems(HorizontalAlign.Start)
             }
 
+            // 底部留白：呼吸间距 + 系统导航条高度（沉浸式布局下内容延伸到导航条之下，
+            // 不留这一截时滚到底的「复制用户名/密码」按钮会被导航条压住）
             Blank()
-              .height(Spacing.XL)
+              .height(Spacing.XL + SystemInsets.bottomVp())
           }
           .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H })
         }

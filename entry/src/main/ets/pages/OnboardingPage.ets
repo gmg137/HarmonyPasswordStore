@@ -6,6 +6,7 @@ import { ThemeColors, Palette, FontSize, ButtonSpec, Spacing, Radius, ComponentS
 import { RouteManager } from '../common/RouteManager';
 import { RouteNames } from '../common/Constants';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -30,9 +31,16 @@ export struct OnboardingPage {
   @Local viewModel: OnboardingViewModel = new OnboardingViewModel();
   /** 主机指纹确认弹窗 id（-1 = 未打开） */
   @Local hostKeyDialogId: number = -1;
+  /** 底部系统栏（导航条/手势条）高度（vp）：沉浸式布局下底部按钮行据此避让 */
+  @Local bottomInset: number = 0;
 
   private get colors(): Palette {
     return ThemeColors.getInstance().palette();
+  }
+
+  aboutToAppear(): void {
+    // 沉浸式布局下底部按钮行要避开系统导航条（换算集中见 SystemInsets）
+    this.bottomInset = SystemInsets.bottomVp();
   }
 
   /**
@@ -566,7 +574,9 @@ export struct OnboardingPage {
             })
         }
         .width('100%')
-        .padding({ left: Spacing.XL, right: Spacing.XL, bottom: Spacing.XL })
+        // 底部留白 = 系统导航条高度（与详情页、移动/重命名页、Git 配置页同一口径）：
+        // 沉浸式布局下内容延伸到导航条之下，只给固定 24vp 会压进导航条避让区
+        .padding({ left: Spacing.XL, right: Spacing.XL, bottom: this.bottomInset })
 
         // ===== 克隆进度：全模态遮罩 =====
         // `.position({x:0,y:0})` 把它**移出文档流**、叠在整页之上（同 PasswordListPage

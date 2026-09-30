@@ -3,6 +3,7 @@ import { AppTitleBar } from '../views/AppTitleBar';
 import { RouteManager } from '../common/RouteManager';
 import { ThemeColors, Palette, Radius, Spacing, FontSize, ButtonSpec, ComponentSize, IconSize } from '../common/ThemeColors';
 import { GpgKeyId } from '../model/GpgKeyId';
+import { SystemInsets } from '../utils/SystemInsets';
 
 /**
  * 创建文件夹页
@@ -158,7 +159,12 @@ export struct FolderCreatePage {
                 .margin({ bottom: Spacing.SM })
             }
           }
-          .padding(Spacing.PAGE_H)
+          // 底部额外留出系统导航条高度：创建按钮在滚动内容末尾，滚到底时
+          // 只给 PAGE_H 会被导航条压住（见 SystemInsets）
+          .padding({
+            left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.PAGE_H,
+            bottom: Spacing.PAGE_H + SystemInsets.bottomVp(),
+          })
           .backgroundColor(this.colors.background)
         }
         .layoutWeight(1)

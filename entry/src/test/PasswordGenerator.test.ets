@@ -2,6 +2,7 @@ import { describe, it, expect } from '@ohos/hypium';
 import { PasswordGenerator, PasswordGenParams } from '../../main/ets/passgen/PasswordGenerator';
 import { DicewareGenerator, DicewareGenParams } from '../../main/ets/passgen/DicewareGenerator';
 import { Strings } from '../../main/ets/common/Strings';
+import { ThemeColors, Palette } from '../../main/ets/common/ThemeColors';
 
 /**
  * 密码生成器单元测试
@@ -89,6 +90,23 @@ export default function generatorTest() {
       expect(PasswordGenerator.getStrengthLabel(60)).assertEqual(Strings.get('common_strength_fair'));
       expect(PasswordGenerator.getStrengthLabel(100)).assertEqual(Strings.get('common_strength_good'));
       expect(PasswordGenerator.getStrengthLabel(130)).assertEqual(Strings.get('common_strength_strong'));
+    });
+
+    it('strength_color_matches_label_tier', 0, () => {
+      // 文案与颜色必须落在**同一档**：`PasswordCreateViewModel` 曾把阈值抄成
+      // `< 8`，于是 80~119 bits 的密码标签显示「强」、颜色却是「极强」的，
+      // 且「强」这一档的颜色永远取不到（两处 if 链肉眼看着一模一样）。
+      // 这里按档位断言颜色 token，任何一处再抄一份阈值都会立刻挂掉。
+      const p: Palette = ThemeColors.getInstance().palette();
+      expect(PasswordGenerator.getStrengthColor(30)).assertEqual(p.strengthWeak);
+      expect(PasswordGenerator.getStrengthColor(60)).assertEqual(p.strengthFair);
+      expect(PasswordGenerator.getStrengthColor(100)).assertEqual(p.strengthGood);
+      expect(PasswordGenerator.getStrengthColor(130)).assertEqual(p.strengthStrong);
+      // 边界值：阈值本身属于下一档（< 而非 <=）
+      expect(PasswordGenerator.getStrengthColor(120)).assertEqual(p.strengthStrong);
+      expect(PasswordGenerator.getStrengthColor(80)).assertEqual(p.strengthGood);
+      expect(PasswordGenerator.strengthTier(80)).assertEqual(2);
+      expect(PasswordGenerator.strengthTier(120)).assertEqual(3);
     });
   });
 

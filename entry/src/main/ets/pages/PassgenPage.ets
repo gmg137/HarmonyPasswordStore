@@ -3,6 +3,7 @@ import { AppTitleBar } from '../views/AppTitleBar';
 import { RouteManager } from '../common/RouteManager';
 import { ThemeColors, Palette, ButtonSpec, FontSize, Radius, Spacing, ComponentSize } from '../common/ThemeColors';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 
 /**
  * 密码生成器页
@@ -271,7 +272,11 @@ export struct PassgenPage {
               .margin({ top: Spacing.LG, bottom: Spacing.XL })
           }
         }
-        .padding(Spacing.PAGE_H)
+        // 底部额外留出系统导航条高度：滚到底时末尾的熵值说明会被导航条压住
+        .padding({
+          left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.PAGE_H,
+          bottom: Spacing.PAGE_H + SystemInsets.bottomVp(),
+        })
       }
       .layoutWeight(1)
       .scrollBar(BarState.Auto)

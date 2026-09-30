@@ -1,12 +1,23 @@
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import { ThemeColors } from '../common/ThemeColors';
+import { ThemeColors, Palette } from '../common/ThemeColors';
 import { Strings } from '../common/Strings';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
 /** hilog 标签 */
 const TAG: string = 'PasswordGenerator';
+
+/** 强度档位阈值（bits，升序）：< 40 弱 / < 80 中 / < 120 强 / ≥ 120 极强 */
+const STRENGTH_TIER_THRESHOLDS: number[] = [40, 80, 120];
+
+/** 各档位的文案 key（下标 = `strengthTier()` 的返回值，顺序与上一行严格对应） */
+const STRENGTH_TIER_LABEL_KEYS: string[] = [
+  'common_strength_weak',
+  'common_strength_fair',
+  'common_strength_good',
+  'common_strength_strong',
+];
 
 /**
  * 密码生成器
@@ -218,23 +229,36 @@ export class PasswordGenerator {
   }
 
   /**
+   * 强度档位（0=弱 1=中 2=强 3=极强）
+   *
+   * **文案与颜色必须共用这一个判定**，各写一份阈值必然漂移：
+   * `PasswordCreateViewModel.getStrengthColor` 曾把 `< 120` 误写成 `< 8`，
+   * 于是 80~119 bits 的密码「标签显示『强』、颜色却是『极强』的」，且「强」
+   * 这一档的颜色永远取不到——两处 if 链看着一模一样，肉眼复核根本发现不了。
+   * 阈值只在本文件定义一次，ViewModel 一律转发到 `getStrengthLabel`/`getStrengthColor`。
+   */
+  static strengthTier(entropy: number): number {
+    for (let i: number = 0; i < STRENGTH_TIER_THRESHOLDS.length; i++) {
+      if (entropy < STRENGTH_TIER_THRESHOLDS[i]) {
+        return i;
+      }
+    }
+    return STRENGTH_TIER_THRESHOLDS.length;
+  }
+
+  /**
    * 获取强度等级文本
    */
   static getStrengthLabel(entropy: number): string {
-    if (entropy < 40) return Strings.get('common_strength_weak');
-    if (entropy < 80) return Strings.get('common_strength_fair');
-    if (entropy < 120) return Strings.get('common_strength_good');
-    return Strings.get('common_strength_strong');
+    return Strings.get(STRENGTH_TIER_LABEL_KEYS[PasswordGenerator.strengthTier(entropy)]);
   }
 
   /**
    * 获取强度等级颜色
    */
   static getStrengthColor(entropy: number): string {
-    const p = ThemeColors.getInstance().palette();
-    if (entropy < 40) return p.strengthWeak;
-    if (entropy < 80) return p.strengthFair;
-    if (entropy < 120) return p.strengthGood;
-    return p.strengthStrong;
+    const p: Palette = ThemeColors.getInstance().palette();
+    const tierColors: string[] = [p.strengthWeak, p.strengthFair, p.strengthGood, p.strengthStrong];
+    return tierColors[PasswordGenerator.strengthTier(entropy)];
   }
 }

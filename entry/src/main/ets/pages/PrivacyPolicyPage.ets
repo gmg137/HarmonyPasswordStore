@@ -1,6 +1,7 @@
 import { ThemeColors, Palette, Spacing, FontSize, Radius } from '../common/ThemeColors';
 import { AppTitleBar } from '../views/AppTitleBar';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 
 /**
  * 隐私政策页
@@ -69,7 +70,12 @@ export struct PrivacyPolicyPage {
 
           this.section(Strings.get('privacy_s8_title'), Strings.get('privacy_s8_body'))
         }
-        .padding(Spacing.PAGE_H)
+        // 底部额外留出系统导航条高度：沉浸式布局下内容延伸到导航条之下，
+        // 只给 PAGE_H 时滚到底的最后一段正文会被导航条压住（见 SystemInsets）
+        .padding({
+          left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.PAGE_H,
+          bottom: Spacing.PAGE_H + SystemInsets.bottomVp(),
+        })
       }
       .layoutWeight(1)
       .scrollBar(BarState.Auto)

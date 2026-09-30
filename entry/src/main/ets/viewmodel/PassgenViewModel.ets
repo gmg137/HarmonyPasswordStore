@@ -136,14 +136,11 @@ export class PassgenViewModel {
   /**
    * 获取强度文本
    *
-   * 阈值与 PasswordGenerator.getStrengthLabel 保持一致（<40 弱 / <80 中 / <120 强）：
-   * 两处都经 Strings.get('common_strength_*') 取本地化文案，改阈值时须两处同步。
+   * 转发到 `PasswordGenerator`：阈值与分档只在那里定义一次（原先本类抄了一份
+   * if 链、并靠注释约定「改阈值时两处同步」——文案与颜色就是在这种抄写里漂移的）
    */
   getStrengthLabel(): string {
-    if (this.entropy < 40) return Strings.get('common_strength_weak');
-    if (this.entropy < 80) return Strings.get('common_strength_fair');
-    if (this.entropy < 120) return Strings.get('common_strength_good');
-    return Strings.get('common_strength_strong');
+    return PasswordGenerator.getStrengthLabel(this.entropy);
   }
 
   /**

@@ -5,7 +5,6 @@ import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { PgpKeyManager } from '../crypto/PgpKeyManager';
 import { GpgIdValidation, GpgKeyId } from '../model/GpgKeyId';
 import { FileUtils } from '../utils/FileUtils';
-import { ThemeColors } from '../common/ThemeColors';
 import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
@@ -351,22 +350,19 @@ export class PasswordCreateViewModel {
 
   /**
    * 密码强度等级文本
+   *
+   * 转发到 `PasswordGenerator`：阈值只在那里定义一次。**不要在本类里再抄一份
+   * if 链**——`getStrengthColor` 曾把 `< 120` 抄成 `< 8`，导致 80~119 bits 的密码
+   * 「标签说强、颜色是极强的色」，且「强」这一档的颜色永远取不到。
    */
   getStrengthLabel(): string {
-    if (this.passwordStrength < 40) return Strings.get('common_strength_weak');
-    if (this.passwordStrength < 80) return Strings.get('common_strength_fair');
-    if (this.passwordStrength < 120) return Strings.get('common_strength_good');
-    return Strings.get('common_strength_strong');
+    return PasswordGenerator.getStrengthLabel(this.passwordStrength);
   }
 
   /**
-   * 密码强度颜色
+   * 密码强度颜色（同上一处，转发到唯一实现）
    */
   getStrengthColor(): string {
-    const p = ThemeColors.getInstance().palette();
-    if (this.passwordStrength < 40) return p.strengthWeak;
-    if (this.passwordStrength < 80) return p.strengthFair;
-    if (this.passwordStrength <8) return p.strengthGood;
-    return p.strengthStrong;
+    return PasswordGenerator.getStrengthColor(this.passwordStrength);
   }
 }

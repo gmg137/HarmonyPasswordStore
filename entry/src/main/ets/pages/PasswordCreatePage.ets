@@ -4,6 +4,7 @@ import { RouteManager } from '../common/RouteManager';
 import { PasswordListViewModel } from '../viewmodel/PasswordListViewModel';
 import { ThemeColors, Palette, Radius, Spacing, ButtonSpec, FontSize, IconSize, ComponentSize, DividerSpec } from '../common/ThemeColors';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 import { inputMethod } from '@kit.IMEKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
@@ -323,7 +324,12 @@ export struct PasswordCreatePage {
               .margin({ bottom: Spacing.LG })
           }
         }
-        .padding(Spacing.PAGE_H)
+        // 底部额外留出系统导航条高度：保存按钮在滚动内容末尾，滚到底时
+        // 只给 PAGE_H 会被导航条压住（见 SystemInsets）
+        .padding({
+          left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.PAGE_H,
+          bottom: Spacing.PAGE_H + SystemInsets.bottomVp(),
+        })
         .backgroundColor(this.colors.background)
       }
       .layoutWeight(1)

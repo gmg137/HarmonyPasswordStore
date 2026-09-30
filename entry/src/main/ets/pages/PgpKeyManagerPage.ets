@@ -15,6 +15,7 @@ import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
 import { ReencryptService, ReencryptPlan, ReencryptOutcome } from '../utils/ReencryptService';
 import { LoadingOverlay } from '../views/LoadingOverlay';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -1105,9 +1106,11 @@ export struct PgpKeyManagerPage {
               }, (key: GpgKeyId) => key.fingerprint)
             }
 
-            // 底部留出 FAB 的高度 + 呼吸间距，避免最后一项被浮动按钮压住
+            // 底部留出 FAB 的高度 + 呼吸间距 + 系统导航条高度：FAB 现在按
+            // 「导航条高度 + 呼吸间距」锚定在底部（见其 markAnchor），占位必须同步
+            // 加高，否则最后一项会被上移后的浮动按钮压住
             Blank()
-              .height(IconSize.FAB + Spacing.XL + Spacing.LG)
+              .height(IconSize.FAB + Spacing.XL + SystemInsets.bottomVp())
           }
           .padding(Spacing.PAGE_H)
         }
@@ -1125,9 +1128,13 @@ export struct PgpKeyManagerPage {
           },
         })
         // 右缘锚定：FAB 右缘与页面卡片右缘平齐（右距 Spacing.XL），
-        // 写法与首页一致（x:'82%' 左缘百分比会随屏宽漂移，见 PasswordListPage 注释）
-        .position({ x: '100%', y: '88%' })
-        .markAnchor({ x: IconSize.FAB + Spacing.PAGE_H, y: 0 })
+        // 写法与首页一致（x:'82%' 左缘百分比会随屏宽漂移，见 PasswordListPage 注释）。
+        // 底边按「导航条高度 + 呼吸间距」锚定，不用百分比（理由见 PasswordListPage）
+        .position({ x: '100%', y: '100%' })
+        .markAnchor({
+          x: IconSize.FAB + Spacing.PAGE_H,
+          y: IconSize.FAB + Spacing.XL + SystemInsets.bottomVp(),
+        })
         // 编辑表单 sheet 绑定在 FAB 节点上：同一节点只能挂一个 bindSheet，
         // 两个都绑在根容器时后者会覆盖前者导致 + 号弹窗不弹出
         .bindSheet(this.isEditSheetVisible, this.editSheetBuilder(),

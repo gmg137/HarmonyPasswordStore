@@ -10,6 +10,7 @@ import { LoadingOverlay } from '../views/LoadingOverlay';
 import { FormRow } from '../views/FormRow';
 import { HostKeyConfirmDialog } from '../views/HostKeyConfirmDialog';
 import { Strings } from '../common/Strings';
+import { SystemInsets } from '../utils/SystemInsets';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 
 /** hilog 域 */
@@ -30,6 +31,8 @@ export struct GitConfigPage {
   @Local isSshKeyPickerVisible: boolean = false;
   /** 主机指纹确认弹窗 id（-1 = 未打开） */
   @Local hostKeyDialogId: number = -1;
+  /** 底部系统栏（导航条/手势条）高度（vp）：沉浸式布局下底部按钮栏据此避让 */
+  @Local bottomInset: number = 0;
 
   private get colors(): Palette {
     return ThemeColors.getInstance().palette();
@@ -46,6 +49,8 @@ export struct GitConfigPage {
 
   aboutToAppear(): void {
     this.viewModel.load();
+    // 沉浸式布局下底部固定栏要避开系统导航条（换算集中见 SystemInsets）
+    this.bottomInset = SystemInsets.bottomVp();
   }
 
   /**
@@ -658,15 +663,16 @@ export struct GitConfigPage {
             })
         }
         .width('100%')
-        // 底部留白直接对齐半模态弹窗的按钮行：**只给 SHEET_PAD_BOTTOM(24vp)**。
-        // 曾再叠一层系统导航条高度（bottomInset+24），实测按钮底边距屏幕下沿 52vp，
-        // 比 PGP 页「导入文本密钥」弹窗的按钮高得多（那个只有 24vp）——这就是
-        // 「按钮位置太高」的来源。半模态与页面底栏都用同一个常量，视觉才一致。
+        // 底部留白 = 系统导航条高度（`SystemInsets.bottomVp()`），与详情页、移动/重命名页
+        // 同一个口径。**不要**退回 `SHEET_PAD_BOTTOM`(24vp)：那是半模态弹窗**面板内部**
+        // 按钮行的口径——面板由系统整体抬到导航条之上，它的 24vp 是相对面板底边的；
+        // 而页面底栏的 padding 是相对**屏幕下沿**的，只给 24vp 就会压进导航条避让区
+        // （AGC 上架审核报的「底部固定控件与导航条互相遮挡」正是此处）。
         // 另：**不要**给底栏加顶边框——那会在按钮上方凭空多出一条分隔线。
         .padding({
           left: Spacing.PAGE_H, right: Spacing.PAGE_H,
           top: Spacing.CARD_GAP,
-          bottom: SHEET_PAD_BOTTOM,
+          bottom: this.bottomInset,
         })
         .backgroundColor(this.colors.background)
 

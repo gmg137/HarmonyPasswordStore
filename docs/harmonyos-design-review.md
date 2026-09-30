@@ -1,5 +1,20 @@
 # HarmonyPasswordStore 鸿蒙原生设计规范审查报告
 
+> ⚠️ **本文档是 2026-09-16 的历史快照，不是现行规范，不要照抄其中的色值。**
+>
+> - 调色板的**唯一事实来源**是 `entry/src/main/ets/common/ThemeColors.ets`，并受
+>   `node scripts/check-contrast.mjs` 的全矩阵对比度校验约束（AGC 上架审核要求
+>   图标/标题 >3:1、正文 >4.5:1）。本报告写于该约束引入之前，色值建议按当时的
+>   「品牌色对齐」口径给出，**多数已被对比度下限否决**——例如它建议的强调色
+>   `#007DFF`/`#4DA0FF`、三级文字 `#9AA0A9`、成功绿 `#64BB5C`、警告橙 `#E8A739`
+>   均不达标。
+> - 文中的「现状」代码块同样已过时（深色 `surface`/`divider` 等取值与实际不符），
+>   逐页面清单里还包含 `PinSetupPage`、`PasskeyListPage` 等**已被删除**的页面。
+> - 以下建议经评估后**明确不采纳**，不要再按本文档改回去：深色背景改深蓝黑体系
+>   （`#1A1A2E`/`#22223B`——现行仍是纯黑体系）、强调色改 `#007DFF`/`#4DA0FF`、
+>   新增底部 TabBar、`Spacing.CARD` 由 12 改 16。
+> - 现行约定以 `AGENTS.md` 为准（「架构」与「易踩坑」两节）。
+
 > 审查日期：2026-09-16  
 > 审查范围：`entry/src/main/ets/` 下全部 20+ 页面与 3 个视图组件  
 > 对标规范：HarmonyOS Design（references/styles/huawei-harmonyos.md）  
@@ -89,27 +104,10 @@ const DARK_PALETTE: Palette = {
 
 **影响**：全局所有使用 `colors.primary` 的组件颜色均偏差，包括按钮、链接、选中态、开关等。
 
-**修复方案**：
-```typescript
-// ThemeColors.ets — 对齐鸿蒙品牌色
-export const EMPHASIZE_COLOR: string = '#007DFF';
-
-const LIGHT_PALETTE: Palette = {
-  // ...
-  primary: '#007DFF',        // 鸿蒙蓝
-  primarySoft: '#0A59F71A',  // 保持（淡背景仍可用）
-  onPrimary: '#FFFFFF',
-  // ...
-};
-
-const DARK_PALETTE: Palette = {
-  // ...
-  primary: '#4DA0FF',        // 鸿蒙蓝（深色模式）
-  primarySoft: '#4DA0FF1A',  // 深色模式淡背景同步调整
-  onPrimary: '#FFFFFF',
-  // ...
-};
-```
+**修复方案**：**已否决**（2026-09 AGC 对比度要求引入后）。建议的 `#007DFF`（浅）
+与 `#4DA0FF`（深）都不满足「作为前景色落在卡片/输入框底上 >4.5:1」，深色
+`#4DA0FF` 还会让白字图标掉到 3:1 以下。现行强调色为浅 `#0B4ED6` / 深 `#4D8DFF`，
+理由与全部取值见 [§6.1](#61-themecolorsets-完整修复)。
 
 ---
 
@@ -128,19 +126,9 @@ const DARK_PALETTE: Palette = {
 };
 ```
 
-**修复方案**：
-```typescript
-const DARK_PALETTE: Palette = {
-  background: '#1A1A2E',   // 鸿蒙深色主背景
-  surface: '#22223B',       // 鸿蒙深色卡片背景
-  divider: '#3A3A52',       // 鸿蒙深色分隔线
-  inputBackground: '#45455E', // 鸿蒙深色输入框背景
-  textPrimary: '#E8E8F0',   // 鸿蒙深色主文字
-  textSecondary: '#A0A0B8', // 鸿蒙深色次级文字
-  textTertiary: '#707088',  // 鸿蒙深色占位文字
-  // ...
-};
-```
+**修复方案**：**已否决**。深色体系保持纯黑（`background #000000` / `surface #1A1A1A` /
+`divider #333333` / `inputBackground #262626`）——深蓝黑底在 OLED 上更费电、且与
+系统深色页面观感不一致；现行取值见 [§6.1](#61-themecolorsets-完整修复)。
 
 ---
 
@@ -298,15 +286,10 @@ export class Spacing {
 | textSecondary | `#6C7280` | `#5E5E5E` |
 | textTertiary | `#9AA0A9` | `#99182431`（带透明度，非法） |
 
-**修复方案**：
-```typescript
-const LIGHT_PALETTE: Palette = {
-  textPrimary: '#191919',    // 对齐鸿蒙纯黑
-  textSecondary: '#6C7280', // 对齐鸿蒙灰6
-  textTertiary: '#9AA0A9',  // 对齐鸿蒙灰4（实色，不用透明度）
-  // ...
-};
-```
+**修复方案**：**已否决**（对比度要求引入后重新取值）。`#9AA0A9` 作为正文只有
+2.63:1、作为图标也只有 2.63:1，两条线都不达标——它正是首轮 AGC 审核报的
+「两处对比度不足」。现行取值：主 `#182431` / 次 `#4E5563` / 三级 `#5F6672`，
+详见 [§6.1](#61-themecolorsets-完整修复)。
 
 ---
 
@@ -316,17 +299,10 @@ const LIGHT_PALETTE: Palette = {
 
 **规范要求**：浅色 `#E8A739`，深色 `#FFB84D`
 
-**修复方案**：
-```typescript
-const LIGHT_PALETTE: Palette = {
-  warning: '#E8A739',  // 对齐鸿蒙警告橙
-  // ...
-};
-const DARK_PALETTE: Palette = {
-  warning: '#FFB84D',  // 对齐鸿蒙深色警告
-  // ...
-};
-```
+**修复方案**：**已否决**（浅色侧）。`#E8A739` 在本应用里是**状态文字与勾选图标**
+而不只是色块，只有 2.10:1，低于正文 4.5:1 与图标 3:1。现行浅色警告色为
+`#8A5A00`（最低 4.71:1）；深色 `#FFB84D` 保持不变。详见
+[§6.1](#61-themecolorsets-完整修复)。
 
 ---
 
@@ -544,6 +520,11 @@ vibrator.startVibration({ type: 'light', duration: 10 },
 
 ### ThemeColors.ets
 
+> ⚠️ **本表已整体过时**：「规范值」列按品牌色对齐口径给出，其中强调色、三级文字、
+> 警告色等多项已被对比度下限否决；「当前值」列也与现状不符（深色 `surface`/`divider`
+> 等）。**以 [§6.1](#61-themecolorsets-完整修复) 的现行取值为准**，改色后跑
+> `node scripts/check-contrast.mjs`。
+
 | 检查项 | 规范值 | 当前值 | 状态 |
 |--------|--------|--------|------|
 | 强调色（浅色） | #007DFF | #0A59F7 | ❌ |
@@ -629,44 +610,62 @@ vibrator.startVibration({ type: 'light', duration: 10 },
 
 ### 6.1 ThemeColors.ets 完整修复
 
-```typescript
-/** HarmonyOS Design 强调色（鸿蒙蓝） */
-export const EMPHASIZE_COLOR: string = '#007DFF';
+> ⚠️ **本节已按 2026-09 的 AGC 对比度要求重写**：原方案（`#007DFF` 强调色、
+> `#9AA0A9` 三级文字、`#64BB5C`/`#E8A739` 语义色、深蓝黑深色背景）均不满足
+> 「图标/标题 >3:1、正文 >4.5:1」，已被否决。下面是**当前实际取值**，与
+> `ThemeColors.ets` 保持一致；改色后必须跑 `node scripts/check-contrast.mjs`。
 
-/** 浅色调色板（对齐 HarmonyOS 浅色语义） */
+```typescript
+/** 浅色调色板（取值受对比度下限约束，见 ThemeColors.ets 文件头） */
 const LIGHT_PALETTE: Palette = {
-  background: '#F1F3F5',     // 灰白主背景 ✅
-  surface: '#FFFFFF',         // 卡片背景 ✅
-  textPrimary: '#191919',    // 纯黑主文字 ← 修正
-  textSecondary: '#6C7280', // 灰6次级文字 ← 修正
-  textTertiary: '#9AA0A9',  // 灰4三级文字（实色） ← 修正
-  divider: '#E5E8EA',       // 分隔线 ✅（微调）
-  primary: '#007DFF',       // 鸿蒙蓝 ← 修正
-  primarySoft: '#007DFF1A', // 鸿蒙蓝淡背景 ← 修正
-  onPrimary: '#FFFFFF',     // ✅
-  success: '#64BB5C',       // 成功绿 ✅
-  warning: '#E8A739',       // 警告橙 ← 修正
-  danger: '#E84026',       // 错误红 ✅
-  dangerSoft: '#FEF2F2',   // ✅
-  inputBackground: '#F1F3F5', // ✅
+  background: '#F1F3F5',      // 灰白主背景
+  surface: '#FFFFFF',          // 卡片背景
+  textPrimary: '#182431',     // 主文字（12.48:1）
+  textSecondary: '#4E5563',   // 次级文字（最低 5.95:1）
+  textTertiary: '#5F6672',    // 三级文字/图标（最低 4.59:1）
+  divider: '#E5E8EA',         // 分隔线
+  primary: '#0B4ED6',         // 强调色（作为前景最低 5.70:1，白字在其上 6.83:1）
+  primarySoft: '#1A0B4ED6',   // 强调色淡背景（#AARRGGBB，alpha 在前）
+  onPrimary: '#FFFFFF',
+  success: '#256D2C',         // 成功（最低 5.05:1）
+  warning: '#8A5A00',         // 警告（最低 4.71:1）
+  danger: '#B3261E',          // 错误（最低 5.19:1）
+  dangerSoft: '#FEF2F2',
+  inputBackground: '#E8EBED',
+  neutralButton: '#E5E5E5',   // 中性按钮底（与页面底区分，见 AGENTS.md）
+  pressed: '#E6E7E9',         // 按压态（必须是不透明复合色）
+  warningSoft: '#FEF7E8',
+  overlayScrim: '#66000000',
+  strengthWeak: '#B3261E',
+  strengthFair: '#8A5A00',
+  strengthGood: '#256D2C',
+  strengthStrong: '#1B5E20',
 };
 
-/** 深色调色板（对齐 HarmonyOS 深色语义） */
+/** 深色调色板（对齐 HarmonyOS 深色语义，深蓝黑体系） */
 const DARK_PALETTE: Palette = {
-  background: '#1A1A2E',    // 深蓝黑主背景 ← 修正
-  surface: '#22223B',       // 深色卡片背景 ← 修正
-  textPrimary: '#E8E8F0',  // 深色主文字 ← 修正
-  textSecondary: '#A0A0B8',// 深色次级文字 ← 修正
-  textTertiary: '#707088', // 深色占位文字 ← 修正
-  divider: '#3A3A52',      // 深色分隔线 ← 修正
-  primary: '#4DA0FF',      // 鸿蒙蓝（深色） ← 修正
-  primarySoft: '#4DA0FF1A',// 深色淡背景 ← 修正
-  onPrimary: '#FFFFFF',     // ✅
-  success: '#7ED680',       // 深色成功绿 ← 修正
-  warning: '#FFB84D',       // 深色警告橙 ← 修正
-  danger: '#FF6B5E',        // 深色错误红 ← 修正
-  dangerSoft: '#2A1A18',   // 深色错误淡背景 ← 修正
-  inputBackground: '#45455E',// 深色输入框背景 ← 修正
+  background: '#000000',
+  surface: '#1A1A1A',
+  textPrimary: '#E5E5E5',
+  textSecondary: '#B0B0B0',   // 深色下二级比三级更亮才维持得住层次
+  textTertiary: '#999999',    // 「更弱的提示」反而要更亮才够 4.5:1
+  divider: '#333333',
+  primary: '#4D8DFF',         // 提亮以满足前景 4.5:1，白字在其上仍 3.20:1
+  primarySoft: '#334D8DFF',   // #AARRGGBB
+  onPrimary: '#FFFFFF',
+  success: '#7ED680',
+  warning: '#FFB84D',
+  danger: '#FF6B5E',
+  dangerSoft: '#2A1A18',
+  inputBackground: '#262626',
+  neutralButton: '#2E2E2E',
+  pressed: '#333333',
+  warningSoft: '#2A2113',
+  overlayScrim: '#8C000000',
+  strengthWeak: '#FF6B5E',
+  strengthFair: '#FFB84D',
+  strengthGood: '#7ED680',
+  strengthStrong: '#9CE89C',
 };
 ```
 
