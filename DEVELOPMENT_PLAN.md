@@ -10,6 +10,8 @@
 >
 > **包名**：`com.github.gmg137.HarmonyPasswordStore`
 
+> **注**：本文档为开发期计划书，反映撰写时点的规划与状态。后续演进以 README 与 CHANGELOG 为准——Passkey（WebAuthn）与 PIN 解锁已整体移除（应用锁仅保留生物识别）；PGP 目录多密钥、混合收件人、GnuPG algo 8（ML-KEM）后量子密钥、「内容匹配」搜索等均已落地。
+
 ---
 
 ## 目录
@@ -1062,8 +1064,8 @@ Passkey CBOR 数据结构详见 [PasskeyStorage.md](https://github.com/agrahn/An
 | 工具 | 版本 | 路径 |
 |------|------|------|
 | devecocli | 1.3.2 | — |
-| HarmonyOS SDK | API 26 | `/home/gmg/.deveco-cli-clt/sdk/default` |
-| Native 工具链 | — | `/home/gmg/.deveco-cli-clt/sdk/default/openharmony/native/` |
+| HarmonyOS SDK | API 26 | `$DEVECO_SDK_HOME`（如 `~/.deveco-cli-clt/sdk/default`） |
+| Native 工具链 | — | `$DEVECO_SDK_HOME/openharmony/native/` |
 | Rust 目标 | aarch64-unknown-linux-ohos + x86_64-unknown-linux-ohos | `rustup target add` |
 | 参考仓库 | HarmonyOSComponentUXExamples | `/tmp/uxref` |
 

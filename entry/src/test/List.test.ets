@@ -2,6 +2,7 @@ import { parserTest } from './PasswordFileParser.test';
 import { generatorTest } from './PasswordGenerator.test';
 import { matcherTest } from './CredentialMatcher.test';
 import { pathSafetyTest } from './PathSafety.test';
+import { pgpPacketParserTest } from './PgpPacketParser.test';
 
 /**
  * 本地单元测试入口
@@ -15,4 +16,5 @@ export default function testsuite() {
   generatorTest();
   matcherTest();
   pathSafetyTest();
+  pgpPacketParserTest();
 }

@@ -78,10 +78,25 @@ find_library(hilog-lib hilog_ndk.z)
 # time_service_ndk: Rust std 依赖的系统时间库
 # find_library 在 OHOS 构建系统中找不到它，直接用 sysroot 路径
 set(TIME_LIB ${CMAKE_CURRENT_SOURCE_DIR}/third_party/sysroot/usr/lib/${TIME_LIB_ARCH}/libtime_service_ndk.so)
-# 回退到 SDK sysroot 路径
+# 回退到 SDK sysroot 路径：优先 DEVECO_SDK_HOME（devecocli / DevEco Studio 构建时注入，
+# 兼容「…/sdk」与「…/sdk/default」两种布局），否则尝试 deveco-cli-clt 的默认安装位置
 if(NOT EXISTS ${TIME_LIB})
-  set(OHOS_NDK /home/gmg/.deveco-cli-clt/sdk/default/openharmony/native)
-  set(TIME_LIB ${OHOS_NDK}/sysroot/usr/lib/${TIME_LIB_ARCH}/libtime_service_ndk.so)
+  set(OHOS_NDK_CANDIDATES
+    "$ENV{DEVECO_SDK_HOME}/openharmony/native"
+    "$ENV{DEVECO_SDK_HOME}/default/openharmony/native"
+    "$ENV{HOME}/.deveco-cli-clt/sdk/default/openharmony/native"
+  )
+  foreach(OHOS_NDK IN LISTS OHOS_NDK_CANDIDATES)
+    if(OHOS_NDK AND EXISTS "${OHOS_NDK}/sysroot/usr/lib/${TIME_LIB_ARCH}/libtime_service_ndk.so")
+      set(TIME_LIB "${OHOS_NDK}/sysroot/usr/lib/${TIME_LIB_ARCH}/libtime_service_ndk.so")
+      break()
+    endif()
+  endforeach()
+  if(NOT EXISTS ${TIME_LIB})
+    message(FATAL_ERROR
+      "未找到 libtime_service_ndk.so（sysroot: ${TIME_LIB_ARCH}）。"
+      "请设置 DEVECO_SDK_HOME 指向 HarmonyOS SDK 根目录（其下应有 openharmony/native/sysroot）。")
+  endif()
 endif()
 target_link_libraries(nativebridge
   PUBLIC

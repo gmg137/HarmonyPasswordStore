@@ -829,8 +829,8 @@ export struct PasswordListPage {
   /**
    * 密钥展示标签列表（同名密钥追加指纹后缀区分）
    *
-   * 一个目录可能同时挂同名不同邮箱的两把密钥（如 gmg137@live.com 与 gmg137@163.com），
-   * 只显示姓名会让「将用「gmg137、test、gmg137」重新加密」这类文案无法辨认到底选了哪两把。
+   * 一个目录可能同时挂同名不同邮箱的两把密钥（如 user@example.com 与 user@example.org），
+   * 只显示姓名会让「将用「user、test、user」重新加密」这类文案无法辨认到底选了哪两把。
    */
   private keyLabelsFor(fingerprints: string[]): string[] {
     const mgr: PgpKeyManager = PgpKeyManager.getInstance();

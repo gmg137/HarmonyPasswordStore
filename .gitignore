@@ -4,6 +4,7 @@
 /.idea
 **/build
 /.hvigor
+**/.hvigor/
 # 注意：'.cxx' 无前导斜杠时只匹配顶层，entry/.cxx 匹配不到；
 # 该目录含 CMakeCache.txt 与 compile_commands.json，里面有本机绝对路径。
 **/.cxx/
@@ -12,6 +13,7 @@
 /.clang-tidy
 **/.test
 /.appanalyzer
+/build-profile.json5
 
 # Rust 构建缓存（2.7 GB）
 **/target/
@@ -36,3 +38,5 @@ local.properties
 /.codeartsdoer
 # ZCode 会话产物（计划文件等，不入库）
 /.zcode/
+# 本机专属环境信息（AGENTS.md 引用的真机地址、fixture/testenv 路径等）
+AGENTS.local.md

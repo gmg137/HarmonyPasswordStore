@@ -1,0 +1,87 @@
+{
+  // 模板：复制为 build-profile.json5 并填入实际路径与口令。
+  // keyPassword/storePassword 不能填明文——hvigor 只接受 AES-128-GCM 加密的 hex 串，
+  // 且解密密钥取自 storeFile 同目录下的 material/ 目录（devecocli signature generate
+  // 会自动生成；手工配置发布证书时须按同一算法生成 material 并加密口令）。
+  app: {
+    signingConfigs: [
+      {
+        name: 'debug',
+        type: 'HarmonyOS',
+        material: {
+          certpath: 'PATH_TO_YOUR.cer',
+          keyAlias: 'YOUR_KEY_ALIAS',
+          keyPassword: 'YOUR_ENCRYPTED_KEY_PASSWORD',
+          profile: 'PATH_TO_YOUR.p7b',
+          signAlg: 'SHA256withECDSA',
+          storeFile: 'PATH_TO_YOUR.p12',
+          storePassword: 'YOUR_ENCRYPTED_STORE_PASSWORD',
+        },
+      },
+      {
+        name: 'release',
+        type: 'HarmonyOS',
+        material: {
+          storeFile: 'PATH_TO_YOUR.p12',
+          storePassword: 'YOUR_ENCRYPTED_STORE_PASSWORD',
+          keyAlias: 'YOUR_KEY_ALIAS',
+          keyPassword: 'YOUR_ENCRYPTED_KEY_PASSWORD',
+          signAlg: 'SHA256withECDSA',
+          profile: 'PATH_TO_YOUR.p7b',
+          certpath: 'PATH_TO_YOUR.cer',
+        },
+      },
+    ],
+    products: [
+      {
+        name: 'default',
+        signingConfig: 'debug',
+        targetSdkVersion: '26.0.0',
+        compatibleSdkVersion: '6.1.1(24)',
+        runtimeOS: 'HarmonyOS',
+        buildOption: {
+          strictMode: {
+            caseSensitiveCheck: true,
+            useNormalizedOHMUrl: true,
+          },
+        },
+      },
+      {
+        name: 'release',
+        signingConfig: 'release',
+        targetSdkVersion: '26.0.0',
+        compatibleSdkVersion: '6.1.1(24)',
+        runtimeOS: 'HarmonyOS',
+        buildOption: {
+          strictMode: {
+            caseSensitiveCheck: true,
+            useNormalizedOHMUrl: true,
+          },
+        },
+      },
+    ],
+    buildModeSet: [
+      {
+        name: 'debug',
+      },
+      {
+        name: 'release',
+      },
+    ],
+  },
+  modules: [
+    {
+      name: 'entry',
+      srcPath: './entry',
+      targets: [
+        {
+          name: 'default',
+          applyToProducts: [
+            'default',
+            'release',
+          ],
+        },
+      ],
+    },
+  ],
+}

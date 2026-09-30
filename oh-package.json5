@@ -1,6 +1,12 @@
 {
   "modelVersion": "26.0.0",
   "description": "HarmonyOS password manager compatible with pass (password-store)",
+  "license": "GPL-3.0",
+  "author": "gmg137",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gmg137/HarmonyPasswordStore"
+  },
   "dependencies": {
   },
   "devDependencies": {
