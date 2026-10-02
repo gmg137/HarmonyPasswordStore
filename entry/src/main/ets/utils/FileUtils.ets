@@ -33,6 +33,16 @@ export class FileUtils {
   }
 
   /**
+   * 获取应用沙箱缓存目录（导出仓库的临时压缩包等用后即删的文件放这里）
+   */
+  static getCacheDir(): string {
+    if (!FileUtils.context) {
+      throw new Error('FileUtils not initialized, call init() first');
+    }
+    return FileUtils.context.cacheDir;
+  }
+
+  /**
    * 确保目录存在，不存在则创建
    */
   static ensureDir(dirPath: string): void {

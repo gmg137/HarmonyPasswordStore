@@ -4,7 +4,9 @@ import { GitClient, GitRepoStatus, GitResult, SshUrlTarget } from '../utils/GitC
 import { KnownHostsStore } from '../utils/KnownHostsStore';
 import { GitConfig } from '../model/GitConfig';
 import { FileUtils } from '../utils/FileUtils';
+import { RepoExportService } from '../utils/RepoExportService';
 import { RepoChangeNotifier } from '../common/RepoChangeNotifier';
+import { picker } from '@kit.CoreFileKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { Strings } from '../common/Strings';
 
@@ -47,6 +49,8 @@ export class RepoManageViewModel {
   @Trace resultNonce: number = 0;
   /** 强制推送执行中（LoadingOverlay 全模态遮罩） */
   @Trace isForcePushing: boolean = false;
+  /** 仓库导出进行中（LoadingOverlay 全模态遮罩） */
+  @Trace isExporting: boolean = false;
   /** 强制推送失败原因（空 = 无；页面据此弹失败原因弹窗，展示后清空） */
   @Trace forcePushError: string = '';
   /** TOFU：待确认的主机密钥指纹（空 = 无待确认项） */
@@ -299,6 +303,63 @@ export class RepoManageViewModel {
     this.pendingPort = 22;
     this.pendingHostKeyType = '';
     this.pendingHostKeyMismatch = false;
+  }
+
+  /**
+   * 导出仓库：打包为 zip → 系统保存对话框 → 复制到用户选定的位置
+   *
+   * zlib 只认应用沙箱路径、写不了保存对话框返回的 URI，故压缩包先落在
+   * 应用缓存目录，用户选好位置后整文件复制过去，无论成败（含取消）都在
+   * finally 里删临时文件。
+   *
+   * 结果走 finish()：成功经 @Monitor 弹成功气泡，失败留在页面状态行；
+   * 用户在保存对话框里取消不算结果，不弹任何提示。
+   */
+  async exportRepo(): Promise<void> {
+    if (this.isExporting) {
+      return;
+    }
+    const storePath: string = this.settings.getStorePath();
+    if (storePath.length === 0) {
+      this.finish(false, Strings.get('repo_err_no_path'));
+      return;
+    }
+    if (!FileUtils.isDirectory(storePath) || FileUtils.listDir(storePath).length === 0) {
+      this.finish(false, Strings.get('repo_export_empty'));
+      return;
+    }
+    this.isExporting = true;
+    this.resultMessage = '';
+    const fileName: string = RepoExportService.buildZipName(new Date());
+    const tempZip: string = `${FileUtils.getCacheDir()}/${fileName}`;
+    try {
+      // 同名残留先删（同一秒内重复导出）：zlib 对已存在目标文件的行为无契约，删掉最稳
+      FileUtils.deleteFile(tempZip);
+      await RepoExportService.zipDir(storePath, tempZip);
+
+      const docPicker: picker.DocumentViewPicker = new picker.DocumentViewPicker();
+      const opts: picker.DocumentSaveOptions = {
+        newFileNames: [fileName],
+        fileSuffixChoices: ['.zip'],
+      };
+      const uris: string[] = await docPicker.save(opts);
+      if (uris.length === 0) {
+        // 用户取消保存：不是失败，不弹任何提示
+        return;
+      }
+      RepoExportService.copyFileToUri(tempZip, uris[0]);
+      hilog.info(DOMAIN, TAG, 'repo exported: %{public}s', fileName);
+      // 结果放在所有 await 之后：见 runForcePush 里同样的处理（保证 nonce 变化
+      // 一定被 @Monitor 观察到，不会第二次操作时不弹气泡）
+      this.finish(true, Strings.get('repo_export_done'));
+    } catch (e) {
+      const msg: string = e instanceof Error ? `${e.name}: ${e.message}` : String(e);
+      hilog.error(DOMAIN, TAG, 'exportRepo failed: %{public}s', msg);
+      this.finish(false, Strings.fmt('repo_export_failed', msg));
+    } finally {
+      FileUtils.deleteFile(tempZip);
+      this.isExporting = false;
+    }
   }
 
   /**

@@ -106,7 +106,7 @@
     },
     {
       "name": "repo_row_sub",
-      "value": "Конфигурация Git / извлечение с rebase / удаление локального репозитория"
+      "value": "Конфигурация Git / извлечение с rebase / экспорт / удаление локального репозитория"
     },
     {
       "name": "pgp_row_title",
@@ -2051,6 +2051,30 @@
     {
       "name": "repo_gitcfg_sub",
       "value": "Удалённый адрес / аутентификация / личность для коммитов"
+    },
+    {
+      "name": "repo_export_title",
+      "value": "Экспортировать репозиторий"
+    },
+    {
+      "name": "repo_export_sub",
+      "value": "Упаковать репозиторий в ZIP-архив и сохранить"
+    },
+    {
+      "name": "repo_export_zipping",
+      "value": "Упаковка репозитория..."
+    },
+    {
+      "name": "repo_export_done",
+      "value": "Репозиторий экспортирован"
+    },
+    {
+      "name": "repo_export_failed",
+      "value": "Не удалось экспортировать репозиторий: %s"
+    },
+    {
+      "name": "repo_export_empty",
+      "value": "Репозиторий пуст, нечего экспортировать"
     },
     {
       "name": "repo_section_danger",

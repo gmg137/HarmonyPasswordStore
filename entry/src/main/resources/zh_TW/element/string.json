@@ -106,7 +106,7 @@
     },
     {
       "name": "repo_row_sub",
-      "value": "Git 設定 / 拉取變基 / 刪除本地儲存庫"
+      "value": "Git 設定 / 拉取變基 / 匯出儲存庫 / 刪除本機儲存庫"
     },
     {
       "name": "pgp_row_title",
@@ -2051,6 +2051,30 @@
     {
       "name": "repo_gitcfg_sub",
       "value": "遠端位址 / 認證方式 / 提交身分"
+    },
+    {
+      "name": "repo_export_title",
+      "value": "匯出儲存庫"
+    },
+    {
+      "name": "repo_export_sub",
+      "value": "將儲存庫打包為 ZIP 壓縮檔並儲存"
+    },
+    {
+      "name": "repo_export_zipping",
+      "value": "正在打包儲存庫..."
+    },
+    {
+      "name": "repo_export_done",
+      "value": "儲存庫已匯出"
+    },
+    {
+      "name": "repo_export_failed",
+      "value": "匯出儲存庫失敗：%s"
+    },
+    {
+      "name": "repo_export_empty",
+      "value": "儲存庫為空，沒有可匯出的內容"
     },
     {
       "name": "repo_section_danger",

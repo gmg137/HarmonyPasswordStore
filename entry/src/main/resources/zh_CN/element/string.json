@@ -106,7 +106,7 @@
     },
     {
       "name": "repo_row_sub",
-      "value": "Git 配置 / 拉取变基 / 删除本地仓库"
+      "value": "Git 配置 / 拉取变基 / 导出仓库 / 删除本地仓库"
     },
     {
       "name": "pgp_row_title",
@@ -2051,6 +2051,30 @@
     {
       "name": "repo_gitcfg_sub",
       "value": "远程地址 / 认证方式 / 提交身份"
+    },
+    {
+      "name": "repo_export_title",
+      "value": "导出仓库"
+    },
+    {
+      "name": "repo_export_sub",
+      "value": "将仓库打包为 ZIP 压缩包并保存"
+    },
+    {
+      "name": "repo_export_zipping",
+      "value": "正在打包仓库..."
+    },
+    {
+      "name": "repo_export_done",
+      "value": "仓库已导出"
+    },
+    {
+      "name": "repo_export_failed",
+      "value": "导出仓库失败：%s"
+    },
+    {
+      "name": "repo_export_empty",
+      "value": "仓库为空，没有可导出的内容"
     },
     {
       "name": "repo_section_danger",

@@ -101,6 +101,41 @@ export struct RepoManagePage {
     .onClick(() => onTapped())
   }
 
+  /**
+   * 普通导航行（主色标题 + 说明 + 右箭头，dangerRow 同构）
+   *
+   * 常态显式透明（stateStyles 是替换不是叠加），按压才显 `pressed` 色。
+   */
+  @Builder
+  navRow(label: ResourceStr, sublabel: ResourceStr, onTapped: () => void) {
+    Row() {
+      Column() {
+        Text(label)
+          .fontSize(FontSize.SUBTITLE)
+          .fontColor(this.colors.textPrimary)
+        Text(sublabel)
+          .fontSize(FontSize.CAPTION)
+          .fontColor(this.colors.textTertiary)
+          .margin({ top: Spacing.XS })
+      }
+      .alignItems(HorizontalAlign.Start)
+      .layoutWeight(1)
+
+      SymbolGlyph($r('sys.symbol.chevron_right'))
+        .fontSize(IconSize.CHEVRON)
+        .fontColor([this.colors.textTertiary])
+    }
+    .width('100%')
+    .constraintSize({ minHeight: ComponentSize.ROW_TWO_LINE })
+    .padding({ top: Spacing.MD, bottom: Spacing.MD })
+    .alignItems(VerticalAlign.Center)
+    .stateStyles({
+      normal: { .backgroundColor(Color.Transparent) },
+      pressed: { .backgroundColor(this.colors.pressed) },
+    })
+    .onClick(() => onTapped())
+  }
+
   /** 状态提示行 */
   @Builder
   statusRow(message: string, success: boolean) {
@@ -198,40 +233,21 @@ export struct RepoManagePage {
           .padding({ left: Spacing.CARD, right: Spacing.CARD })
           .clip(true)
 
-          // ===== 仓库操作 =====
+          // ===== 仓库操作：Git 配置 + 导出仓库，同一个列表组 =====
           ListItem() {
             this.sectionTitle(Strings.get('repo_section_ops'), false)
           }
 
           ListItemGroup() {
             ListItem() {
-              Row() {
-                Column() {
-                  Text($r('app.string.git_config'))
-                    .fontSize(FontSize.SUBTITLE)
-                    .fontColor(this.colors.textPrimary)
-                  Text($r('app.string.repo_gitcfg_sub'))
-                    .fontSize(FontSize.CAPTION)
-                    .fontColor(this.colors.textTertiary)
-                    .margin({ top: Spacing.XS })
-                }
-                .alignItems(HorizontalAlign.Start)
-                .layoutWeight(1)
-
-                SymbolGlyph($r('sys.symbol.chevron_right'))
-                  .fontSize(IconSize.CHEVRON)
-                  .fontColor([this.colors.textTertiary])
-              }
-              .width('100%')
-              .constraintSize({ minHeight: ComponentSize.ROW_TWO_LINE })
-              .padding({ top: Spacing.MD, bottom: Spacing.MD })
-              .alignItems(VerticalAlign.Center)
-              .stateStyles({
-                normal: { .backgroundColor(Color.Transparent) },
-                pressed: { .backgroundColor(this.colors.pressed) },
-              })
-              .onClick(() => {
+              this.navRow($r('app.string.git_config'), $r('app.string.repo_gitcfg_sub'), (): void => {
                 RouteManager.getInstance().pushPath(RouteNames.GIT_CONFIG);
+              })
+            }
+
+            ListItem() {
+              this.navRow($r('app.string.repo_export_title'), $r('app.string.repo_export_sub'), (): void => {
+                this.viewModel.exportRepo();
               })
             }
           }
@@ -239,6 +255,12 @@ export struct RepoManagePage {
           .backgroundColor(this.colors.surface)
           .padding({ left: Spacing.CARD, right: Spacing.CARD })
           .clip(true)
+          .divider({
+            strokeWidth: DividerSpec.STROKE,
+            startMargin: Spacing.CARD,
+            endMargin: Spacing.CARD,
+            color: this.colors.divider,
+          })
 
           // ===== 危险操作：强制推送远程 + 删除本地仓库，同一个列表组 =====
           ListItem() {
@@ -305,14 +327,21 @@ export struct RepoManagePage {
           LoadingOverlay({ text: Strings.get('sync_pushing_remote') })
             .position({ x: 0, y: 0 })
         }
+
+        // ===== 导出仓库：全模态遮罩（打包阶段 + 保存对话框背后的复制阶段） =====
+        if (this.viewModel.isExporting) {
+          LoadingOverlay({ text: Strings.get('repo_export_zipping') })
+            .position({ x: 0, y: 0 })
+        }
       }
       .width('100%')
       .height('100%')
       .backgroundColor(this.colors.background)
     }
     .hideTitleBar(true)
-    // 强制推送进行中吞掉返回：中断后遮罩复位，但用户会误以为操作已取消
-    .onBackPressed((): boolean => this.viewModel.isForcePushing)
+    // 强制推送/导出进行中吞掉返回：中断后遮罩复位，但用户会误以为操作已取消
+    // （导出的遮罩还要盖住系统保存对话框打开前后的页面期，对话框本身在独立窗口）
+    .onBackPressed((): boolean => this.viewModel.isForcePushing || this.viewModel.isExporting)
     // 从「克隆 / Git 配置」返回时重读状态：克隆完成后本页仍在导航栈里，
     // 不刷新就会一直显示「未克隆远程仓库 / 尚未配置远程地址」
     .onShown(() => {

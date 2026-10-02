@@ -106,7 +106,7 @@
     },
     {
       "name": "repo_row_sub",
-      "value": "Git-Konfiguration / Pull mit Rebase / lokales Repository löschen"
+      "value": "Git-Konfiguration / Pull mit Rebase / Export / lokales Repository löschen"
     },
     {
       "name": "pgp_row_title",
@@ -2051,6 +2051,30 @@
     {
       "name": "repo_gitcfg_sub",
       "value": "Remote-Adresse / Authentifizierung / Commit-Identität"
+    },
+    {
+      "name": "repo_export_title",
+      "value": "Repository exportieren"
+    },
+    {
+      "name": "repo_export_sub",
+      "value": "Repository als ZIP-Archiv packen und speichern"
+    },
+    {
+      "name": "repo_export_zipping",
+      "value": "Repository wird gepackt…"
+    },
+    {
+      "name": "repo_export_done",
+      "value": "Repository exportiert"
+    },
+    {
+      "name": "repo_export_failed",
+      "value": "Repository konnte nicht exportiert werden: %s"
+    },
+    {
+      "name": "repo_export_empty",
+      "value": "Das Repository ist leer, nichts zu exportieren"
     },
     {
       "name": "repo_section_danger",

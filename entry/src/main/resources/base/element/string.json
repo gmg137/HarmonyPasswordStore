@@ -106,7 +106,7 @@
     },
     {
       "name": "repo_row_sub",
-      "value": "Git config / pull with rebase / delete local repository"
+      "value": "Git config / pull with rebase / export / delete local repository"
     },
     {
       "name": "pgp_row_title",
@@ -2051,6 +2051,30 @@
     {
       "name": "repo_gitcfg_sub",
       "value": "Remote URL / authentication / commit identity"
+    },
+    {
+      "name": "repo_export_title",
+      "value": "Export repository"
+    },
+    {
+      "name": "repo_export_sub",
+      "value": "Pack the repository into a ZIP archive and save it"
+    },
+    {
+      "name": "repo_export_zipping",
+      "value": "Packing repository…"
+    },
+    {
+      "name": "repo_export_done",
+      "value": "Repository exported"
+    },
+    {
+      "name": "repo_export_failed",
+      "value": "Failed to export the repository: %s"
+    },
+    {
+      "name": "repo_export_empty",
+      "value": "The repository is empty, nothing to export"
     },
     {
       "name": "repo_section_danger",
