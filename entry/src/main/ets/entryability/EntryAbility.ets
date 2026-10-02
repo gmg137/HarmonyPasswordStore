@@ -57,6 +57,13 @@ export default class EntryAbility extends UIAbility {
   async onCreate(want: Want, launchParam: AbilityConstant.LaunchParam): Promise<void> {
     // 初始化文件工具上下文
     FileUtils.init(this.context);
+    // 初始化字符串资源助手（非 UI 代码取串走它）。
+    // **必须放在本方法的第一个 await 之前**：框架不等待 async onCreate，
+    // onWindowStageCreate 里的 loadContent 会在下面的 await settings.init 返回前就
+    // 渲染出首帧（实测首帧 47.269、onCreate 结束 47.431），那时 appContext 还是 null，
+    // Strings.get 只兜底返回 key 本身——首页空状态于是显示 home_store_empty 字样。
+    // 放在 await 之前（与 FileUtils.init 一样是同步前缀）可保证首帧就取到真文案。
+    Strings.init(this.context.getApplicationContext());
     // 初始化 SSH known_hosts 存储上下文（替代已废弃的 getContext）
     KnownHostsStore.getInstance().init(this.context);
 
@@ -64,10 +71,8 @@ export default class EntryAbility extends UIAbility {
     const settings: SettingsRepository = SettingsRepository.getInstance();
     await settings.init(this.context);
 
-    // 初始化字符串资源助手（非 UI 代码取串走它）并应用已保存的语言偏好：
-    // 必须先于 loadContent，首帧渲染即用目标语言；设置未就绪前不能读偏好，
-    // 而 onCreate 里已 await settings.init，此处读到的就是持久化值
-    Strings.init(this.context.getApplicationContext());
+    // 应用已保存的语言偏好：必须等设置就绪（appLanguage 是持久化值）。
+    // 首帧可能已早于这里渲染完成，故 applyStoredLanguage 内部会通知 UI 重建
     Strings.applyStoredLanguage(this.context);
     // 记录初始应用语言，供 onConfigurationUpdate 检测后续语言变化（见字段注释）
     this.lastLanguage = this.context.config.language ?? '';

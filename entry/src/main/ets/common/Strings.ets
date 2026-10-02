@@ -52,7 +52,11 @@ export class Strings {
   /** 取字符串资源（key 为 string.json 里的 name，运行期给定） */
   static get(key: string): string {
     if (Strings.appContext === null) {
-      // EntryAbility.onCreate 之前不会有人取串；防御性兜底返回 key 本身
+      // 走到这里说明有人在 `Strings.init` 之前取串——实测确实会发生：框架不等待
+      // async onCreate，页面首帧早于 `onCreate` 里 await 之后的 `Strings.init`。
+      // 返回 key 本身只是「不崩」的兜底，界面上表现为「文案没翻译」（首页空状态
+      // 显示 home_store_empty），必须留日志，否则这类时序问题无从定位。
+      hilog.error(DOMAIN, TAG, 'Strings.get(%{public}s) called before init, returning raw key', key);
       return key;
     }
     try {
@@ -67,6 +71,7 @@ export class Strings {
   /** 取带参格式化串（资源值里写 %s / %d，参数按顺序填充） */
   static fmt(key: string, ...args: Array<string | number>): string {
     if (Strings.appContext === null) {
+      hilog.error(DOMAIN, TAG, 'Strings.fmt(%{public}s) called before init, returning raw key', key);
       return key;
     }
     try {
@@ -151,23 +156,25 @@ export class Strings {
    *
    * 仅具体语言才钉扎；system 交给系统资源匹配（见类注释的钉扎副作用）。
    *
-   * **必须 notifyLocaleChanged**：`onCreate` 里那次调用早于窗口就绪，`setLanguage`
-   * 可能不生效；窗口加载完成后 EntryAbility 会再调一次（幂等），若这次才真正生效，
-   * `$r` 资源由框架自动重解析，而页面 build 里经 `Strings.get` 取出的**普通字符串**
-   * 不会重算，也没有别的东西触发重渲染——首屏就会停留在系统语言。
+   * **两种偏好都要 notifyLocaleChanged**：`onCreate` 里那次调用早于窗口就绪，
+   * `setLanguage` 可能不生效；更关键的是**首帧可能早于本方法执行**——框架不等待
+   * async onCreate，页面渲染完成后才走到这里，那一帧里 `Strings.get` 取到的是 key
+   * 本身（如首页空状态的 `home_store_empty`）。`$r` 资源由框架自动重解析，而
+   * `Strings.get` 取出的**普通字符串**不会重算，只能靠重建刷新；「跟随系统」这条
+   * 分支原先直接 return 不通知，而仓库为空这类页面之后再无状态变化、不会二次渲染，
+   * 错文案就永久留在屏幕上（显式钉语言的分支会通知，所以切到具体语言反而正常）。
    */
   static applyStoredLanguage(context: common.Context): void {
     const value: string = SettingsRepository.getInstance().getSettings().appLanguage;
     Strings.current = value;
     Strings.appContext = context.getApplicationContext();
-    if (value === AppLanguage.SYSTEM) {
-      return;
-    }
-    try {
-      Strings.appContext.setLanguage(Strings.resolveLanguageTag(value));
-    } catch (e) {
-      hilog.error(DOMAIN, TAG, 'applyStoredLanguage %{public}s failed: %{public}s',
-        value, e instanceof Error ? e.message : String(e));
+    if (value !== AppLanguage.SYSTEM) {
+      try {
+        Strings.appContext.setLanguage(Strings.resolveLanguageTag(value));
+      } catch (e) {
+        hilog.error(DOMAIN, TAG, 'applyStoredLanguage %{public}s failed: %{public}s',
+          value, e instanceof Error ? e.message : String(e));
+      }
     }
     Strings.notifyLocaleChanged();
   }
