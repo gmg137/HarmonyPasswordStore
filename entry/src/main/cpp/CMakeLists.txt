@@ -7,6 +7,25 @@ project(nativebridge)
 
 set(NATIVERENDER_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
+# 裁剪策略：打进 HAP 的 .so 由 hvigor 的 DoNativeStrip 负责（见
+# entry/build-profile.json5 的 nativeLib.debugSymbol.strip），而静态库与中间产物
+# 不经过它，故在这里补两步：
+#   - 链接前对预编译静态库做 --strip-debug（去掉调试段、保留符号表仍可链接）：
+#     rpgp_wrapper 的两个归档各带约 6 MB 调试段，是 third_party 体积的大头；
+#   - 链接后对刚产出的 libnativebridge.so 做 --strip-all（打包时会再裁一次）。
+# 归档裁剪是「内容真变了才写回」的（strip_archive.cmake 比对 SHA256），否则每次
+# 构建都刷新 .a 的 mtime，会让 Ninja 反复重链接。
+find_program(HPS_STRIP_TOOL llvm-strip
+  HINTS
+    "${OHOS_SDK_NATIVE}/llvm/bin"
+    "$ENV{DEVECO_SDK_HOME}/openharmony/native/llvm/bin"
+    "$ENV{DEVECO_SDK_HOME}/default/openharmony/native/llvm/bin"
+    "$ENV{HOME}/.deveco-cli-clt/sdk/default/openharmony/native/llvm/bin"
+)
+if(NOT HPS_STRIP_TOOL)
+  message(WARNING "llvm-strip not found; native artifacts stay unstripped")
+endif()
+
 include_directories(${NATIVERENDER_ROOT_PATH})
 include_directories(${NATIVERENDER_ROOT_PATH}/third_party/libgit2/include)
 include_directories(${NATIVERENDER_ROOT_PATH}/third_party/rpgp_wrapper)
@@ -114,3 +133,30 @@ target_link_libraries(nativebridge
   rpgp_wrapper
   z
 )
+
+if(HPS_STRIP_TOOL)
+  # 链接前逐个裁剪本 ABI 用到的静态库（内容守卫，避免无谓刷新 mtime）
+  set(HPS_ARCHIVES
+    ${LIBGIT2_LIB}
+    ${LIBSSH2_LIB}
+    ${OPENSSL_DIR}/lib64/libcrypto.a
+    ${MBEDTLS_DIR}/lib/libmbedtls.a
+    ${MBEDTLS_DIR}/lib/libmbedx509.a
+    ${MBEDTLS_DIR}/lib/libmbedcrypto.a
+    ${RPGP_LIB}
+  )
+  foreach(HPS_ARCHIVE IN LISTS HPS_ARCHIVES)
+    add_custom_command(TARGET nativebridge PRE_BUILD
+      COMMAND ${CMAKE_COMMAND}
+        -DSTRIP_TOOL=${HPS_STRIP_TOOL}
+        -DARCHIVE=${HPS_ARCHIVE}
+        -P ${CMAKE_CURRENT_SOURCE_DIR}/strip_archive.cmake
+      VERBATIM)
+  endforeach()
+
+  # 链接后裁剪刚产出的 .so，中间产物也不再带调试段
+  add_custom_command(TARGET nativebridge POST_BUILD
+    COMMAND ${HPS_STRIP_TOOL} --strip-all $<TARGET_FILE:nativebridge>
+    COMMENT "strip libnativebridge.so (${OHOS_ARCH})"
+    VERBATIM)
+endif()

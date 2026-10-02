@@ -65,6 +65,10 @@ build_one() {
     "CFLAGS_${triple}=--sysroot=$SDK_NATIVE/sysroot" \
     cargo build --target "$triple" $flag
   cp "target/$triple/$profile/librpgp_wrapper.a" "$out"
+  # 裁剪调试段（--strip-debug 保留符号表，仍可链接）：产物随仓库入库，每架构
+  # 约 -6 MB。CMake 侧还有一道内容守卫的兜底裁剪，这里做是为了让入库的 .a
+  # 本身就是裁剪过的。
+  "$SDK_NATIVE/llvm/bin/llvm-strip" --strip-debug "$out"
   echo "已更新 $(cd "$(dirname "$out")" && pwd)/$(basename "$out")"
 }
 

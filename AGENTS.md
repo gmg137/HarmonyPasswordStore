@@ -6,10 +6,19 @@ HarmonyOS（ArkTS）密码管理器，兼容 pass（password-store）。构建�
 
 - 构建 `devecocli build`；清缓存 `devecocli build clean`；release（含 ArkTS 混淆）`devecocli build --build-mode release`
   - **release 包的混淆会改属性名，凡是「以字符串形式出现在别处」的名字都必须登记到 `entry/obfuscation-rules.txt` 的 `-keep-property-name`**，否则 release 包会静默失效而 debug 包一切正常（详见「易踩坑」的 NAPI 函数名那条）
-- 生成 .app 发布包 `hvigorw -p product=default -p buildMode=release assembleApp`（`devecocli build` 只产出 .hap，没有 .app 选项，须直接走 hvigor）
-  - 产物在**项目根** `build/outputs/default/HarmonyPasswordStore-default-signed.app`（不是 `entry/build` 下），内含 `pack.info` + `pac.json` + 各模块 .hap；另有 `-unsigned` 版本
+- 生成 .app 发布包 `hvigorw -p product=release -p buildMode=release assembleApp`（`devecocli build` 只产出 .hap，没有 .app 选项，须直接走 hvigor）
+  - **必须是 `product=release`**：`product=default` 绑的是调试证书（`keyAlias: debugKey`），签出来只能本地验证/内部分发；`release` 产品绑 `releaseKey`（材料在 `~/agc-key/`）。校验签的是哪张证书：把 `~/agc-key/release-2026.cer` 里第 3 张（leaf，subject 以 `,Release` 结尾）转成 DER 后在整个 .app 里搜，命中即发布证书
+  - 产物在**项目根** `build/outputs/release/HarmonyPasswordStore-release-signed.app`（不是 `entry/build` 下），内含 `pack.info` + `pac.json` + 各模块 .hap；另有 `-unsigned` 版本
   - **`assembleApp` 是项目级任务，不能带 `--mode module`**（报「Task assembleApp was not found」）；也不要直接调 `hvigor/bin/hvigorw.js`——绕过 wrapper 后 `DEVECO_SDK_HOME` 未注入，报 `00303217 Invalid value of 'DEVECO_SDK_HOME'`
-  - 当前 `build-profile.json5` 的签名材料是**调试证书**（`keyAlias: debugKey`），签出的 .app 可本地验证/内部分发；**上架 AGC 须替换为发布证书 + 发布 Profile** 再重新 assembleApp
+  - **release 包只含 arm64-v8a**（x86_64 只给模拟器），ABI 拆分与 .so/.a 裁剪见下条
+- **ABI 按构建模式拆分，且 .so/.a 全程裁剪**（配置在 `entry/build-profile.json5` + `entry/src/main/cpp/CMakeLists.txt`，对齐 `../HDict` 的做法）：
+  - `buildOption.externalNativeOptions.abiFilters` 是**基础档**，只留 `arm64-v8a`；`buildOptionSet` 的 `debug` 档把 `x86_64` 加回来——模拟器是 x86_64，而 `devecocli build` 走 debug 档，模拟器调试不受影响。**per-mode `abiFilters` 只作用于模块自身 CMake 的产物**，依赖 har 里的 so 不受它管，故 `release` 档另加 `napiLibFilterOption.excludes: ["**/x86_64/**"]`（当前无此类依赖，留作防御）
+  - 实测：release HAP **27.9 MB → 13.8 MB**（`.app` 6.2 MB），HAP 内只剩 `libs/arm64-v8a/{libc++_shared,libnativebridge}.so`；debug HAP 仍双 ABI（模拟器可装）
+  - `buildOption.nativeLib.debugSymbol.strip: true` 显式固化 hvigor 的 DoNativeStrip——打包进 HAP 的 .so 本就被裁，写出来是防工具默认值变化
+  - **静态库与中间产物不经过 DoNativeStrip**，由 `CMakeLists.txt` 补两步：链接前对 7 个预编译 `.a` 做 `llvm-strip --strip-debug`，链接后对刚产出的 `libnativebridge.so` 做 `--strip-all`。归档裁剪走 `strip_archive.cmake`，**先比 SHA256、内容真变了才 rename**（`--strip-debug` 内容幂等但会刷 mtime，不守卫 Ninja 就会每次重链接）
+  - 实测收益：`librpgp_wrapper.a` 19.8 → 13.8 MB、`librpgp_wrapper_x64.a` 20.9 → 15.1 MB（每架构约 -6 MB，`third_party` 里的调试段大头就在这两个），libgit2/libcrypto/mbedtls 各只省几十 KB；debug 档中间产物 .so 15.2 → 11.3 MB
+  - **`.a` 只能用 `--strip-debug`（保留符号表才可链接），只有 `.so` 能用 `--strip-all`**。已验证零功能改动：两个归档共 630 个成员对象在 `objcopy --strip-debug` 后与原文件**逐字节相同**
+  - 新 `third_party/rpgp_wrapper` 归档由 `build-ohos.sh` 生成时即裁剪（让入库的 .a 本身就是裁过的），CMake 那道是兜底。**`third_party/*.a` 是入库文件，首次裁剪会让 `git status` 出现二进制改动**（两个 rpgp 归档各约 -6 MB，其余几十 KB），属预期
 - 部署 `devecocli run --device 127.0.0.1:5555`（模拟器；真机地址见 `AGENTS.local.md`，多设备须显式 `-t`）
 - 检查 `devecocli check lint`（配置 `code-linter.json5`）
   - **「Files checked: 0 / No defects found」不是通过，是没跑起来**：本机 CLI 的 lint 曾对任意路径（项目根、`entry/src/main/ets`、单个 `.ets` 文件、带 `--config-path`/`--output-path`/`--product`）都返回 `filesChecked: 0`，即一条规则都没执行。看到 0 文件就不要把它当验收结论，以 `devecocli build` 的 ArkTS 编译结果为准
@@ -101,7 +110,7 @@ HarmonyOS（ArkTS）密码管理器，兼容 pass（password-store）。构建�
 
 ## 易踩坑
 
-- **双 ABI**：改 Rust 后须运行 `entry/src/main/cpp/rpgp_wrapper/build-ohos.sh`（交叉编译双 ABI 并复制到 `third_party/rpgp_wrapper/librpgp_wrapper.a`（arm64）与 `librpgp_wrapper_x64.a`（x86_64）；工具链位置经 `DEVECO_SDK_HOME`/`HPS_SDK_NATIVE` 定位，`.cargo/config.toml` 已删除、不再入库任何绝对路径），否则模拟器跑不到新代码。新增 NAPI 函数要同步改 **4 处**：`hps_napi.cpp`（处理器 + 注册）、`types/libnativebridge/index.d.ts`、`NativeBridge.ets`，以及 `third_party/rpgp_wrapper/rpgp_wrapper.h`（FFI 声明）；漏改静态库会报 `undefined symbol` 链接失败
+- **双 ABI**：改 Rust 后须运行 `entry/src/main/cpp/rpgp_wrapper/build-ohos.sh`（交叉编译双 ABI 并复制到 `third_party/rpgp_wrapper/librpgp_wrapper.a`（arm64）与 `librpgp_wrapper_x64.a`（x86_64），复制后即 `llvm-strip --strip-debug` 裁剪，见「ABI 按构建模式拆分」；工具链位置经 `DEVECO_SDK_HOME`/`HPS_SDK_NATIVE` 定位，`.cargo/config.toml` 已删除、不再入库任何绝对路径），否则模拟器跑不到新代码。新增 NAPI 函数要同步改 **4 处**：`hps_napi.cpp`（处理器 + 注册）、`types/libnativebridge/index.d.ts`、`NativeBridge.ets`，以及 `third_party/rpgp_wrapper/rpgp_wrapper.h`（FFI 声明）；漏改静态库会报 `undefined symbol` 链接失败
 - **模拟器沙箱无法直写**：`hdc file send` 与应用沙箱（`/data/app/el2/100/base/<bundle>/haps/entry/files`）被 SELinux（`debug_hap_data_file`）拒绝，`smode`/`target mount` 在模拟器上也不可用。验证 native 链路请用 `src/bin/gpg_pqc_test.rs`：编 x86_64 后推入 `/data/local/tmp`（可写）直接运行，绕开应用沙箱。**读取不受限**：`hdc shell cat`/`ls` 与 `hdc file recv` 可直接拉出沙箱内的 `.gpg-id`、`.asc`、`.gpg`（设备端验证的常规手段：拉出密文用 host `gpg --list-packets`/`--decrypt` 核对收件人与互操作）
 - **模拟器在软键盘弹起时渲染器可能卡死（屏幕全黑）**：现象是 `snapshot_display`/`ui screenshot` 只有状态栏、其余全黑，但 `ui layout` 仍返回**完整正确**的节点树、进程存活、无 faultlog——**不要据此判断为应用 bug**（曾误判为页面渲染问题）。实测触发场景是文本输入页 + 键盘；恢复手段：`hdc shell "uinput -K -d 2 -u 2"` 发 BACK 键收起键盘（IME 会先吃掉 BACK，页面不会退出），必要时 `aa force-stop` 后重新 `aa start`。另：`devecocli run` 的 `Smoke: FAIL_BLANK` 在启动瞬间也可能误报（随后截图正常）
 - **pgp/ml-kem 依赖冲突**：上游 `pgp 0.20` 的 `draft-pqc` 要求 `ml-kem 0.2.1`（依赖 `kem 0.3.0-pre.0`），而 `russh 0.63.3` 强制 `ml-kem 0.3`（要求 `kem 0.3.0`）；Cargo 统一 `kem` 到正式版后 `ml-kem 0.2.1` 编译失败。**不能直接升版本**，必须走 `third_party/pgp-patched`。另：ml-kem 0.3 的 `encapsulate_with_rng` 要 `rand_core 0.10`，与本项目 `rand 0.8` 不同 trait，故改用 `encapsulate_deterministic` 自行供随机数

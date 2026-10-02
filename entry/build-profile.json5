@@ -1,13 +1,21 @@
 {
   "apiType": "stageMode",
   "buildOption": {
+    // 打包期统一裁剪 so 的调试段：hvigor 的 DoNativeStrip 读这个开关（默认即 on，
+    // 显式写出以免工具默认值变化后打出一份带调试段的包）。
+    "nativeLib": {
+      "debugSymbol": {
+        "strip": true,
+        "exclude": []
+      }
+    },
+    // 基础 ABI 只留 arm64（全部真机）；x86_64 是模拟器镜像，由下面 debug 档加回。
     "externalNativeOptions": {
       "path": "./src/main/cpp/CMakeLists.txt",
       "arguments": "",
       "cppFlags": "",
       "abiFilters": [
-        "arm64-v8a",
-        "x86_64"
+        "arm64-v8a"
       ]
     },
     "resOptions": {
@@ -18,7 +26,29 @@
   },
   "buildOptionSet": [
     {
+      "name": "debug",
+      "externalNativeOptions": {
+        // 模拟器是 x86_64，调试必须双 ABI。
+        "abiFilters": [
+          "arm64-v8a",
+          "x86_64"
+        ]
+      }
+    },
+    {
       "name": "release",
+      "externalNativeOptions": {
+        "abiFilters": [
+          "arm64-v8a"
+        ]
+      },
+      // 按档位的 abiFilters 只管模块自身 CMake 的产物；依赖 har 里的 so 仍会
+      // 双 ABI 一起打包（当前无此类依赖，留作防御），release 下按路径剔掉 x86_64。
+      "napiLibFilterOption": {
+        "excludes": [
+          "**/x86_64/**"
+        ]
+      },
       "arkOptions": {
         "obfuscation": {
           "ruleOptions": {
