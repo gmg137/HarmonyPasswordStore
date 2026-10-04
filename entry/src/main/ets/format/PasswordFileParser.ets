@@ -6,7 +6,6 @@ const USER_PREFIX: string = 'user:';
 const EMAIL_PREFIX: string = 'email:';
 /** 手机号字段前缀 */
 const PHONE_PREFIX: string = 'phone:';
-/** URL 字段前缀 */
 /** 备注字段前缀 */
 const NOTES_PREFIX: string = 'notes:';
 /** 内容匹配：额外内容行里「标签: 值」的标签最大长度（超长视为普通文本，不剥标签） */

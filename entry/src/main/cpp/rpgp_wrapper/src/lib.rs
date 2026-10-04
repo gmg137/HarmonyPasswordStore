@@ -12,7 +12,9 @@
 //! - hps_pgp_result_free(result) 释放
 
 use std::collections::HashMap;
+use std::collections::hash_map::DefaultHasher;
 use std::ffi::{CStr, CString};
+use std::hash::{Hash, Hasher};
 use std::os::raw::{c_char, c_int};
 use std::panic::{self, AssertUnwindSafe};
 use std::ptr;
@@ -216,22 +218,32 @@ pub extern "C" fn hps_pgp_extract_public_key(seckey_armored: *const c_char) -> F
 const MAX_UNLOCKED_KEYS: usize = 16;
 
 /// 普通密钥（rpgp 路径）：`remove_password` 之后的密钥副本（私钥段已是明文）
-static UNLOCKED_KEYS: OnceLock<Mutex<HashMap<String, Arc<SignedSecretKey>>>> = OnceLock::new();
+static UNLOCKED_KEYS: OnceLock<Mutex<HashMap<u64, Arc<SignedSecretKey>>>> = OnceLock::new();
 
 /// GnuPG algo 8 密钥：已解出的 ECC 标量 + ML-KEM 材料
-static UNLOCKED_PQC_KEYS: OnceLock<Mutex<HashMap<String, Arc<gpg_pqc::GpgPqcKey>>>> = OnceLock::new();
+static UNLOCKED_PQC_KEYS: OnceLock<Mutex<HashMap<u64, Arc<gpg_pqc::GpgPqcKey>>>> = OnceLock::new();
 
-fn unlocked_keys() -> &'static Mutex<HashMap<String, Arc<SignedSecretKey>>> {
+fn unlocked_keys() -> &'static Mutex<HashMap<u64, Arc<SignedSecretKey>>> {
     UNLOCKED_KEYS.get_or_init(|| Mutex::new(HashMap::new()))
 }
 
-fn unlocked_pqc_keys() -> &'static Mutex<HashMap<String, Arc<gpg_pqc::GpgPqcKey>>> {
+fn unlocked_pqc_keys() -> &'static Mutex<HashMap<u64, Arc<gpg_pqc::GpgPqcKey>>> {
     UNLOCKED_PQC_KEYS.get_or_init(|| Mutex::new(HashMap::new()))
 }
 
-/// 缓存键：armored 文本 + 口令（`\u{0}` 不会出现在 armor 文本或口令里）
-fn unlocked_cache_key(armored: &str, passphrase: &str) -> String {
-    format!("{}\u{0}{}", armored, passphrase)
+/// 缓存键：armored 文本 + 口令的哈希
+///
+/// 不直接用 `armored + "\u{0}" + passphrase` 作键：
+/// 1. 明文口令会因此驻留 HashMap 键字符串中（上锁才清，会话期间始终在内存）；
+/// 2. `\u{0}` 假设口令不含空字节，含空字节的口令会与其它组合碰撞。
+/// 改为对 (armored, passphrase) 做 SipHash（DefaultHasher），键中不再出现口令明文，
+/// 也无分隔符歧义。SipHash 64 位输出对「个位数密钥 × 个位数口令」的缓存规模
+/// 碰撞概率可忽略。
+fn unlocked_cache_key(armored: &str, passphrase: &str) -> u64 {
+    let mut hasher = DefaultHasher::new();
+    armored.hash(&mut hasher);
+    passphrase.hash(&mut hasher);
+    hasher.finish()
 }
 
 /// 取（未命中则解析并解锁后缓存）私钥：主键与子键都就地去除口令保护
@@ -969,16 +981,28 @@ pub extern "C" fn hps_pgp_restore_backup(
             Ok(d) => d,
             Err(e) => return FfiResult::err(format!("wrong backup password or corrupt backup: {}", e)),
         };
-        let mut decrypted = match decrypted.decompress() {
-            Ok(d) => d,
-            Err(e) => return FfiResult::err(format!("decompress failed: {}", e)),
-        };
+        // 备份虽通常由用户自己生成，但还原入口同样面向不可信输入（备份文件可被篡改），
+        // 解压炸弹防护与 hps_pgp_decrypt 对齐：先判压缩再解压，再校验字面数据长度。
+        if decrypted.is_compressed() {
+            decrypted = match decrypted.decompress() {
+                Ok(d) => d,
+                Err(e) => return FfiResult::err(format!("decompress failed: {}", e)),
+            };
+        }
 
         match decrypted.as_data_vec() {
-            Ok(data) => match String::from_utf8(data) {
-                Ok(text) => FfiResult::ok(text),
-                Err(_) => FfiResult::err("backup content is not valid UTF-8".into()),
-            },
+            Ok(data) => {
+                if data.len() as u64 > gpg_pqc::MAX_DECOMPRESSED_BYTES {
+                    return FfiResult::err(format!(
+                        "decompressed backup too large ({} bytes)",
+                        data.len()
+                    ));
+                }
+                match String::from_utf8(data) {
+                    Ok(text) => FfiResult::ok(text),
+                    Err(_) => FfiResult::err("backup content is not valid UTF-8".into()),
+                }
+            }
             Err(e) => FfiResult::err(format!("read backup data failed: {}", e)),
         }
     })

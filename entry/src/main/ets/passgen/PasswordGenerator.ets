@@ -105,8 +105,11 @@ function secureRandomInt(max: number): number {
     val = (val << 8) | (bytes[2] & 0xFF);
     val = (val << 8) | (bytes[3] & 0xFF);
     val >>>= 0;
-    // 用模运算映射到目标范围
-    return Math.floor(val / 0xFFFFFFFF * max);
+    // 映射到 [0, max)：除以 2^32 而非 2^32-1，否则 val=0xFFFFFFFF 时
+    // 比值为 1.0，floor(max) 越出 [0,max)（charAt(max) 返回空串，密码偶发少一位）。
+    // 仍存在极小模数偏差（2^32 不总能被 max 整除），但密码生成场景可接受；
+    // 如需严格无偏可改为 rejection sampling。
+    return Math.floor(val / 0x100000000 * max);
   } catch (e) {
     hilog.warn(DOMAIN, TAG, 'secureRandomInt fallback to Math.random: %{public}s', JSON.stringify(e));
     return Math.floor(Math.random() * max);
