@@ -67,35 +67,22 @@ export class PassgenViewModel {
    * 更新随机密码参数
    */
   updateRandomParam(key: string, value: boolean | number | string): void {
-    // 先保存所有旧值（避免修改后引用同一对象导致值丢失）
-    const params: PasswordGenParams = {
-      length: this.randomParams.length,
-      includeUppercase: this.randomParams.includeUppercase,
-      includeLowercase: this.randomParams.includeLowercase,
-      includeDigits: this.randomParams.includeDigits,
-      includeSymbols: this.randomParams.includeSymbols,
-      customCharset: this.randomParams.customCharset,
-      excludeAmbiguous: this.randomParams.excludeAmbiguous,
-    };
-
+    // PasswordGenParams 是 @ObservedV2 类，逐字段 @Trace：直接改即被追踪
     if (key === 'length' && typeof value === 'number') {
-      params.length = value;
+      this.randomParams.length = value;
     } else if (key === 'includeUppercase' && typeof value === 'boolean') {
-      params.includeUppercase = value;
+      this.randomParams.includeUppercase = value;
     } else if (key === 'includeLowercase' && typeof value === 'boolean') {
-      params.includeLowercase = value;
+      this.randomParams.includeLowercase = value;
     } else if (key === 'includeDigits' && typeof value === 'boolean') {
-      params.includeDigits = value;
+      this.randomParams.includeDigits = value;
     } else if (key === 'includeSymbols' && typeof value === 'boolean') {
-      params.includeSymbols = value;
+      this.randomParams.includeSymbols = value;
     } else if (key === 'customCharset' && typeof value === 'string') {
-      params.customCharset = value;
+      this.randomParams.customCharset = value;
     } else if (key === 'excludeAmbiguous' && typeof value === 'boolean') {
-      params.excludeAmbiguous = value;
+      this.randomParams.excludeAmbiguous = value;
     }
-
-    // 用新对象触发 @Trace 刷新
-    this.randomParams = params;
   }
 
   /**
@@ -111,14 +98,6 @@ export class PassgenViewModel {
     } else if (key === 'includeDigits' && typeof value === 'boolean') {
       this.dicewareParams.includeDigits = value;
     }
-    // 触发 @Trace 刷新
-    const old: DicewareGenParams = this.dicewareParams;
-    this.dicewareParams = {
-      wordCount: old.wordCount,
-      separator: old.separator,
-      capitalize: old.capitalize,
-      includeDigits: old.includeDigits,
-    };
   }
 
   /**

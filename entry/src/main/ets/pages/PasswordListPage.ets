@@ -409,6 +409,8 @@ export struct PasswordListPage {
             }
             .layoutWeight(1)
             .width('100%')
+            // 滑到上下边界时给回弹动效反馈
+            .edgeEffect(EdgeEffect.Spring)
           }
 
           Row({ space: ButtonSpec.ROW_GAP }) {
@@ -572,6 +574,8 @@ export struct PasswordListPage {
         // 固定高度（而非自适应）：键盘弹起时面板被压缩，自适应列表会把按钮行挤出面板
         .height(ComponentSize.ROW_TWO_LINE * 3 + Spacing.XS * 3)
         .scrollBar(BarState.Auto)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
 
         // 弹性占位：把按钮行撑到面板底部（与 PGP/SSH 表单一致）
         Blank()
@@ -1671,29 +1675,38 @@ export struct PasswordListPage {
         }
       } else {
         List({ scroller: this.listScroller, space: Spacing.CARD_GAP }) {
-          ForEach(this.viewModel.filteredEntries, (entry: PasswordEntryVM) => {
-            ListItem() {
-              PasswordItemView({ entry: entry, onItemClicked: (e: PasswordEntryVM): void => {
-                if (e.isDirectory) {
-                  // 搜索结果里点目录：进目录（内部先清关键词再加载，一次直达目标目录），
-                  // 顶栏同时恢复目录名标题
-                  this.enterDirectoryFromSearch(e.relativePath);
-                } else {
-                  this.onPasswordEntryClick(e);
-                }
-              } })
-            }
-            // 左滑露出删除按钮（参照 TKeShi 的 swipeAction end 形态）
-            .swipeAction({
-              end: (): void => {
-                this.swipeDeleteAction(entry);
-              },
-              edgeEffect: SwipeEdgeEffect.Spring,
+          // Repeat + virtualScroll：按需渲染视口内条目并复用节点（reusable 自
+          // API 18 起默认 true，此处显式写出）。pass 仓库条目可达数百条，
+          // ForEach 会一次性构建全部节点，进入目录/搜索过滤时的全量创建销毁
+          // 吃帧率；其余小集合列表（密钥/提交历史）仍用 ForEach。
+          Repeat<PasswordEntryVM>(this.viewModel.filteredEntries)
+            .each((ri: RepeatItem<PasswordEntryVM>) => {
+              ListItem() {
+                PasswordItemView({ entry: ri.item, onItemClicked: (e: PasswordEntryVM): void => {
+                  if (e.isDirectory) {
+                    // 搜索结果里点目录：进目录（内部先清关键词再加载，一次直达目标目录），
+                    // 顶栏同时恢复目录名标题
+                    this.enterDirectoryFromSearch(e.relativePath);
+                  } else {
+                    this.onPasswordEntryClick(e);
+                  }
+                } })
+              }
+              // 左滑露出删除按钮（参照 TKeShi 的 swipeAction end 形态）
+              .swipeAction({
+                end: (): void => {
+                  this.swipeDeleteAction(ri.item);
+                },
+                edgeEffect: SwipeEdgeEffect.Spring,
+              })
             })
-          }, (entry: PasswordEntryVM) => entry.relativePath)
+            .key((entry: PasswordEntryVM) => entry.relativePath)
+            .virtualScroll({ reusable: true })
         }
         .layoutWeight(1)
         .scrollBar(BarState.Off)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
         .width('100%')
         // 水平留白用 PAGE_H
         // 底部只避让系统手势条

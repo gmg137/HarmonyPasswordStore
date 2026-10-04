@@ -185,10 +185,6 @@
       "value": "Git configuration"
     },
     {
-      "name": "AutofillAbility_desc",
-      "value": "Password Store autofill service"
-    },
-    {
       "name": "sort_recent",
       "value": "Recent"
     },
@@ -1043,42 +1039,6 @@
     {
       "name": "folder_create_btn",
       "value": "Create folder"
-    },
-    {
-      "name": "autofill_title",
-      "value": "Autofill suggestions"
-    },
-    {
-      "name": "autofill_pick_for",
-      "value": "Choose credentials for %s"
-    },
-    {
-      "name": "autofill_matching",
-      "value": "Matching…"
-    },
-    {
-      "name": "autofill_no_match",
-      "value": "No matching passwords"
-    },
-    {
-      "name": "autofill_no_match_hint",
-      "value": "You can search on the main screen and copy manually"
-    },
-    {
-      "name": "autofill_unlocked_prompt",
-      "value": "Unlocked. Choose an action"
-    },
-    {
-      "name": "autofill_err_load",
-      "value": "Failed to load candidates"
-    },
-    {
-      "name": "autofill_fill_applied",
-      "value": "Autofilled %d fields"
-    },
-    {
-      "name": "autofill_fill_failed",
-      "value": "Autofill failed; use copy instead"
     },
     {
       "name": "onboarding_hostkey_fp_line",
@@ -2439,90 +2399,6 @@
     {
       "name": "repo_invalid_path",
       "value": "Invalid path (%s): %s"
-    },
-    {
-      "name": "autofill_settings_title",
-      "value": "Autofill"
-    },
-    {
-      "name": "autofill_svc_status",
-      "value": "Autofill service status"
-    },
-    {
-      "name": "autofill_repo_ready",
-      "value": "Store ready"
-    },
-    {
-      "name": "autofill_repo_not_init",
-      "value": "Store not initialized"
-    },
-    {
-      "name": "autofill_entry_count_label",
-      "value": "Available password entries"
-    },
-    {
-      "name": "autofill_entry_count",
-      "value": "%d entries"
-    },
-    {
-      "name": "autofill_biometric_cap",
-      "value": "Biometric capability"
-    },
-    {
-      "name": "autofill_biometric_support",
-      "value": "Supported: %s"
-    },
-    {
-      "name": "autofill_biometric_unsupported",
-      "value": "Not supported"
-    },
-    {
-      "name": "autofill_howto_title",
-      "value": "How to enable autofill"
-    },
-    {
-      "name": "autofill_howto_step1",
-      "value": "1. Open system Settings → More settings → Passwords & autofill (or \"autofill service\")"
-    },
-    {
-      "name": "autofill_howto_step2",
-      "value": "2. Choose \"Password Store (HarmonyPasswordStore)\" as the autofill service"
-    },
-    {
-      "name": "autofill_howto_step3",
-      "value": "3. Tap an input field in an app or browser and the fill suggestions will appear"
-    },
-    {
-      "name": "autofill_rule_title",
-      "value": "Matching rules"
-    },
-    {
-      "name": "autofill_rule_match",
-      "value": "· Matches the requesting app's package name or web domain against entry names/paths"
-    },
-    {
-      "name": "autofill_rule_priority",
-      "value": "· Exact matches are shown first; ties are ordered by last used"
-    },
-    {
-      "name": "autofill_rule_nodecrypt",
-      "value": "· Matching never decrypts files; decryption happens only after you choose"
-    },
-    {
-      "name": "autofill_sec_title",
-      "value": "Security notes"
-    },
-    {
-      "name": "autofill_sec_fields",
-      "value": "· Fill candidates show only the name and username, never the password"
-    },
-    {
-      "name": "autofill_sec_memory",
-      "value": "· The decrypted password exists only briefly in memory"
-    },
-    {
-      "name": "autofill_sec_usage",
-      "value": "· Successful fills record usage time to improve candidate ordering"
     }
   ]
 }

@@ -185,10 +185,6 @@
       "value": "Git 設定"
     },
     {
-      "name": "AutofillAbility_desc",
-      "value": "密碼庫自動填入服務"
-    },
-    {
       "name": "sort_recent",
       "value": "最近"
     },
@@ -1043,42 +1039,6 @@
     {
       "name": "folder_create_btn",
       "value": "建立資料夾"
-    },
-    {
-      "name": "autofill_title",
-      "value": "填充建議"
-    },
-    {
-      "name": "autofill_pick_for",
-      "value": "為 %s 選擇憑證"
-    },
-    {
-      "name": "autofill_matching",
-      "value": "比對中..."
-    },
-    {
-      "name": "autofill_no_match",
-      "value": "沒有符合的密碼"
-    },
-    {
-      "name": "autofill_no_match_hint",
-      "value": "可在主介面搜尋後手動複製"
-    },
-    {
-      "name": "autofill_unlocked_prompt",
-      "value": "已解鎖，請選擇操作"
-    },
-    {
-      "name": "autofill_err_load",
-      "value": "載入候選失敗"
-    },
-    {
-      "name": "autofill_fill_applied",
-      "value": "已自動填充 %d 個欄位"
-    },
-    {
-      "name": "autofill_fill_failed",
-      "value": "自動填充失敗，可使用複製"
     },
     {
       "name": "onboarding_hostkey_fp_line",
@@ -2439,90 +2399,6 @@
     {
       "name": "repo_invalid_path",
       "value": "非法路徑（%s）：%s"
-    },
-    {
-      "name": "autofill_settings_title",
-      "value": "自動填充"
-    },
-    {
-      "name": "autofill_svc_status",
-      "value": "填充服務狀態"
-    },
-    {
-      "name": "autofill_repo_ready",
-      "value": "儲存庫就緒"
-    },
-    {
-      "name": "autofill_repo_not_init",
-      "value": "儲存庫未初始化"
-    },
-    {
-      "name": "autofill_entry_count_label",
-      "value": "可用密碼條目"
-    },
-    {
-      "name": "autofill_entry_count",
-      "value": "%d 條"
-    },
-    {
-      "name": "autofill_biometric_cap",
-      "value": "生物辨識能力"
-    },
-    {
-      "name": "autofill_biometric_support",
-      "value": "支援%s"
-    },
-    {
-      "name": "autofill_biometric_unsupported",
-      "value": "不支援"
-    },
-    {
-      "name": "autofill_howto_title",
-      "value": "如何啟用自動填充"
-    },
-    {
-      "name": "autofill_howto_step1",
-      "value": "1. 開啟系統設定 → 更多設定 → 密碼與填充（或「自動填充服務」）"
-    },
-    {
-      "name": "autofill_howto_step2",
-      "value": "2. 選擇「密碼庫（HarmonyPasswordStore）」作為填充服務"
-    },
-    {
-      "name": "autofill_howto_step3",
-      "value": "3. 在應用或瀏覽器中點擊輸入框時，系統將彈出填充建議"
-    },
-    {
-      "name": "autofill_rule_title",
-      "value": "匹配規則"
-    },
-    {
-      "name": "autofill_rule_match",
-      "value": "· 按請求方應用套件名稱或網頁網域與密碼條目名稱/路徑匹配"
-    },
-    {
-      "name": "autofill_rule_priority",
-      "value": "· 完全匹配的條目優先展示，同分按最近使用排序"
-    },
-    {
-      "name": "autofill_rule_nodecrypt",
-      "value": "· 匹配過程不解密檔案，僅在您選擇後才會解密"
-    },
-    {
-      "name": "autofill_sec_title",
-      "value": "安全說明"
-    },
-    {
-      "name": "autofill_sec_fields",
-      "value": "· 填充候選預設只顯示名稱與使用者名稱，不顯示密碼"
-    },
-    {
-      "name": "autofill_sec_memory",
-      "value": "· 解密後的密碼僅短暫存在於記憶體中"
-    },
-    {
-      "name": "autofill_sec_usage",
-      "value": "· 填充成功會記錄使用時間，用於最佳化候選排序"
     }
   ]
 }

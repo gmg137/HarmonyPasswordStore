@@ -317,6 +317,8 @@ export struct RepoManagePage {
         // 与设置页一致不显示滚动条（`BarState.Off`）：沉浸式页面右侧留一条
         // 常驻灰条既干扰视觉，也与同层级页面的观感不统一
         .scrollBar(BarState.Off)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
         .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H, bottom: Spacing.PAGE_H })
         .backgroundColor(this.colors.background)
 

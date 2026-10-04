@@ -185,10 +185,6 @@
       "value": "Git 配置"
     },
     {
-      "name": "AutofillAbility_desc",
-      "value": "密码仓库自动填充服务"
-    },
-    {
       "name": "sort_recent",
       "value": "最近"
     },
@@ -1043,42 +1039,6 @@
     {
       "name": "folder_create_btn",
       "value": "创建文件夹"
-    },
-    {
-      "name": "autofill_title",
-      "value": "填充建议"
-    },
-    {
-      "name": "autofill_pick_for",
-      "value": "为 %s 选择凭据"
-    },
-    {
-      "name": "autofill_matching",
-      "value": "匹配中..."
-    },
-    {
-      "name": "autofill_no_match",
-      "value": "没有匹配的密码"
-    },
-    {
-      "name": "autofill_no_match_hint",
-      "value": "可在主界面搜索后手动复制"
-    },
-    {
-      "name": "autofill_unlocked_prompt",
-      "value": "已解锁，请选择操作"
-    },
-    {
-      "name": "autofill_err_load",
-      "value": "加载候选失败"
-    },
-    {
-      "name": "autofill_fill_applied",
-      "value": "已自动填充 %d 个字段"
-    },
-    {
-      "name": "autofill_fill_failed",
-      "value": "自动填充失败，可使用复制"
     },
     {
       "name": "onboarding_hostkey_fp_line",
@@ -2439,90 +2399,6 @@
     {
       "name": "repo_invalid_path",
       "value": "非法路径（%s）：%s"
-    },
-    {
-      "name": "autofill_settings_title",
-      "value": "自动填充"
-    },
-    {
-      "name": "autofill_svc_status",
-      "value": "填充服务状态"
-    },
-    {
-      "name": "autofill_repo_ready",
-      "value": "仓库就绪"
-    },
-    {
-      "name": "autofill_repo_not_init",
-      "value": "仓库未初始化"
-    },
-    {
-      "name": "autofill_entry_count_label",
-      "value": "可用密码条目"
-    },
-    {
-      "name": "autofill_entry_count",
-      "value": "%d 条"
-    },
-    {
-      "name": "autofill_biometric_cap",
-      "value": "生物识别能力"
-    },
-    {
-      "name": "autofill_biometric_support",
-      "value": "支持%s"
-    },
-    {
-      "name": "autofill_biometric_unsupported",
-      "value": "不支持"
-    },
-    {
-      "name": "autofill_howto_title",
-      "value": "如何启用自动填充"
-    },
-    {
-      "name": "autofill_howto_step1",
-      "value": "1. 打开系统设置 → 更多设置 → 密码与填充（或\"自动填充服务\"）"
-    },
-    {
-      "name": "autofill_howto_step2",
-      "value": "2. 选择\"密码仓库（HarmonyPasswordStore）\"作为填充服务"
-    },
-    {
-      "name": "autofill_howto_step3",
-      "value": "3. 在应用或浏览器中点击输入框时，系统将弹出填充建议"
-    },
-    {
-      "name": "autofill_rule_title",
-      "value": "匹配规则"
-    },
-    {
-      "name": "autofill_rule_match",
-      "value": "· 按请求方应用包名或网页域名与密码条目名称/路径匹配"
-    },
-    {
-      "name": "autofill_rule_priority",
-      "value": "· 完全匹配的条目优先展示，同分按最近使用排序"
-    },
-    {
-      "name": "autofill_rule_nodecrypt",
-      "value": "· 匹配过程不解密文件，仅在您选择后才会解密"
-    },
-    {
-      "name": "autofill_sec_title",
-      "value": "安全说明"
-    },
-    {
-      "name": "autofill_sec_fields",
-      "value": "· 填充候选默认只显示名称与用户名，不显示密码"
-    },
-    {
-      "name": "autofill_sec_memory",
-      "value": "· 解密后的密码仅短暂存在于内存中"
-    },
-    {
-      "name": "autofill_sec_usage",
-      "value": "· 填充成功会记录使用时间，用于优化候选排序"
     }
   ]
 }

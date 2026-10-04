@@ -295,6 +295,8 @@ export struct GitConfigPage {
       })
       .layoutWeight(1)
       .scrollBar(BarState.Off)
+      // 滑到上下边界时给回弹动效反馈
+      .edgeEffect(EdgeEffect.Spring)
     }
     .width('100%')
     .height('100%')
@@ -619,6 +621,8 @@ export struct GitConfigPage {
         .layoutWeight(1)
         .scrollBar(BarState.Auto)
         .align(Alignment.Top)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
 
         // ===== 固定底部按钮栏（不随内容滚动） =====
         // 作为 Scroll 的兄弟节点即可固定在底部；底部内边距必须自行避让系统导航条

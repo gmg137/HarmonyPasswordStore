@@ -14,7 +14,6 @@ A native HarmonyOS client for the [pass](https://www.passwordstore.org/) passwor
 | Password generator | Cryptographically secure randomness; length, character sets, ambiguous-character exclusion; Diceware passphrases with entropy estimation |
 | PGP key management | Import from text or file (armor and binary auto-detected), generate EdDSA/RSA keys, change passphrases, export `.asc` files, choose the default encryption key |
 | Git sync | clone / pull / push / commit over SSH and HTTPS; three-state TOFU host-key verification (first-connect confirm / trusted / same-type mismatch alert); force push; pull with rebase; HTTPS proxy |
-| Autofill | Integrated with the system autofill framework; matches credentials by package name / domain |
 | Biometric unlock | Fingerprint / face (system prompt raised automatically on lock); session timeout auto-lock; locking wipes in-memory passphrases and decryption caches |
 | File management | Directory tree, move / rename entries (auto re-encryption across key directories), create and delete folders |
 | Password file format | Binary (identical to desktop pass output) or ASCII armor, switchable anytime (only affects new writes) |
@@ -72,7 +71,7 @@ entry/src/test/
 ├── PasswordFileParser.test.ets # pass format parse / serialize round-trip / searchable text & snippets
 ├── PgpPacketParser.test.ets    # armor conversion (CRC24 against RFC 4880 vectors) & fingerprint vs. gpg
 ├── PasswordGenerator.test.ets  # generator length / charsets / ambiguity exclusion / entropy
-├── CredentialMatcher.test.ets  # autofill package/domain matching / RP ID verification
+├── RepoExport.test.ets         # export archive name (local time, zero-padded, 0-based getMonth)
 └── PathSafety.test.ets         # path traversal protection (user input and repo content)
 ```
 

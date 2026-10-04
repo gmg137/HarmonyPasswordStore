@@ -1,5 +1,11 @@
 import { zlib } from '@kit.BasicServicesKit';
 import { fileIo as fs } from '@kit.CoreFileKit';
+import { hilog } from '@kit.PerformanceAnalysisKit';
+
+/** hilog 域 */
+const DOMAIN: number = 0x0001;
+/** hilog 标签 */
+const TAG: string = 'RepoExportService';
 
 /**
  * 仓库导出服务
@@ -37,7 +43,12 @@ export class RepoExportService {
       level: zlib.CompressLevel.COMPRESS_LEVEL_DEFAULT_COMPRESSION,
       keepTopLevelFolder: true,
     };
-    await zlib.compressFile(sourceDir, destZip, options);
+    try {
+      await zlib.compressFile(sourceDir, destZip, options);
+    } catch (e) {
+      // zlib 的原始错误不带路径上下文，补上后再抛给调用方（那里统一弹「导出失败」）
+      throw new Error(`compress ${sourceDir} -> ${destZip} failed: ${e instanceof Error ? e.message : String(e)}`);
+    }
   }
 
   /**
@@ -47,11 +58,22 @@ export class RepoExportService {
    * 无论复制成败都要关闭 fd，避免句柄泄漏。
    */
   static copyFileToUri(tempZip: string, targetUri: string): void {
-    const file: fs.File = fs.openSync(targetUri, fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
+    let file: fs.File | undefined = undefined;
     try {
+      file = fs.openSync(targetUri, fs.OpenMode.READ_WRITE | fs.OpenMode.TRUNC);
       fs.copyFileSync(tempZip, file.fd);
+    } catch (e) {
+      throw new Error(`copy ${tempZip} -> ${targetUri} failed: ${e instanceof Error ? e.message : String(e)}`);
     } finally {
-      fs.closeSync(file);
+      if (file !== undefined) {
+        try {
+          fs.closeSync(file);
+        } catch (e) {
+          // 关闭失败没有补救手段（fd 随进程回收），但不能让它盖住上面复制失败的原始错误
+          hilog.warn(DOMAIN, TAG, 'close %{public}s failed: %{public}s', targetUri,
+            e instanceof Error ? e.message : String(e));
+        }
+      }
     }
   }
 }

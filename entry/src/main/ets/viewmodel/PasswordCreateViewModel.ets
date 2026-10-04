@@ -152,6 +152,7 @@ export class PasswordCreateViewModel {
    * 更新生成器参数
    */
   updateGenParam(key: string, value: boolean | number | string): void {
+    // PasswordGenParams 是 @ObservedV2 类，逐字段 @Trace：直接改即被追踪
     if (key === 'length' && typeof value === 'number') {
       this.genParams.length = value;
     } else if (key === 'includeUppercase' && typeof value === 'boolean') {
@@ -167,17 +168,6 @@ export class PasswordCreateViewModel {
     } else if (key === 'customCharset' && typeof value === 'string') {
       this.genParams.customCharset = value;
     }
-    // 触发 @Trace 刷新：重新赋值整个对象
-    const old: PasswordGenParams = this.genParams;
-    this.genParams = {
-      length: old.length,
-      includeUppercase: old.includeUppercase,
-      includeLowercase: old.includeLowercase,
-      includeDigits: old.includeDigits,
-      includeSymbols: old.includeSymbols,
-      customCharset: old.customCharset,
-      excludeAmbiguous: old.excludeAmbiguous,
-    };
   }
 
   /**

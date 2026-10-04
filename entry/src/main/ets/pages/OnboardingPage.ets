@@ -191,14 +191,28 @@ export struct OnboardingPage {
   }
 
 
+  /**
+   * 步骤指示器圆点边长（vp）：当前步稍大
+   *
+   * 圆点用「正方形 + 圆角」绘制而非 `Circle().fill()`：SDK 把
+   * `CircleAttribute.fill` 的 `@since` 标成 26.0.0（它覆盖了基类
+   * `CommonShapeMethod.fill` 的 @since 11，属注解漏标），在本项目
+   * compatibleSdkVersion 6.1.1(24) 下会报「API 26 起才支持」的编译告警。
+   * 边长一半的圆角与 `Circle` 渲染完全等价。
+   */
+  private stepDotSize(step: number): number {
+    return this.viewModel.currentStep === step ? IconSize.STEP_DOT_ACTIVE : IconSize.STEP_DOT;
+  }
+
   @Builder
   stepIndicator() {
     Row() {
       ForEach([0, 1, 2, 3], (step: number) => {
-        Circle()
-          .width(this.viewModel.currentStep === step ? IconSize.STEP_DOT_ACTIVE : IconSize.STEP_DOT)
-          .height(this.viewModel.currentStep === step ? IconSize.STEP_DOT_ACTIVE : IconSize.STEP_DOT)
-          .fill(this.viewModel.currentStep >= step ? this.colors.primary : this.colors.divider)
+        Row()
+          .width(this.stepDotSize(step))
+          .height(this.stepDotSize(step))
+          .backgroundColor(this.viewModel.currentStep >= step ? this.colors.primary : this.colors.divider)
+          .borderRadius(this.stepDotSize(step) / 2)
           .margin({ left: Spacing.XS, right: Spacing.XS })
       }, (step: number) => step.toString())
     }

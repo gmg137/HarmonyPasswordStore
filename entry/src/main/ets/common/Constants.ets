@@ -126,8 +126,6 @@ export class RouteNames {
   static readonly SSH_KEY_MANAGER: string = 'SshKeyManagerPage';
   static readonly PASSGEN: string = 'PassgenPage';
   static readonly SETTINGS: string = 'SettingsPage';
-  static readonly AUTOFILL_SETTINGS: string = 'AutofillSettingsPage';
-  static readonly AUTOFILL_FILL: string = 'AutofillFillPage';
   static readonly ONBOARDING: string = 'OnboardingPage';
   static readonly LOCK: string = 'LockPage';
   static readonly FOLDER_CREATE: string = 'FolderCreatePage';

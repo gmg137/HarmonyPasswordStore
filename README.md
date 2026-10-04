@@ -14,7 +14,6 @@
 | 密码生成 | 密码学安全随机源；长度、字符集、排除易混淆字符；Diceware 口令词组与熵值评估 |
 | PGP 密钥管理 | 从文本或文件导入（armor 与二进制自动识别）、生成 EdDSA/RSA 密钥、修改密钥口令、导出 `.asc` 文件、默认加密密钥选择 |
 | Git 同步 | SSH 与 HTTPS 的 clone / pull / push / commit；主机指纹 TOFU 三态校验（首连确认 / 已信任 / 同类型不匹配告警）；强制推送；拉取变基；HTTPS 代理 |
-| 自动填充 | 对接系统自动填充框架，按包名 / 域名匹配凭据候选 |
 | 生物识别解锁 | 指纹 / 面容（锁屏自动拉起系统认证）；会话超时自动上锁；上锁即清空内存中的口令与解密缓存 |
 | 文件管理 | 目录树浏览、条目移动 / 重命名（跨密钥目录自动重加密）、目录创建与删除 |
 | 密码文件格式 | 二进制（与桌面 pass 输出一致）或 ASCII armor，可随时切换（仅影响新写入） |
@@ -72,7 +71,7 @@ entry/src/test/
 ├── PasswordFileParser.test.ets # pass 格式解析 / 序列化往返 / 可搜索文本与命中片段
 ├── PgpPacketParser.test.ets    # armor 转换（CRC24 对拍 RFC 4880 标准向量）与 gpg 指纹对拍
 ├── PasswordGenerator.test.ets  # 生成器长度 / 字符集 / 歧义排除 / 熵值
-├── CredentialMatcher.test.ets  # 自动填充包名域名匹配 / RP ID 校验
+├── RepoExport.test.ets         # 导出包文件名（本地时间补零，含 getMonth 0 基）
 └── PathSafety.test.ets         # 路径穿越防护（用户输入与仓库内容双来源）
 ```
 

@@ -19,6 +19,7 @@ const FORM_LABEL_W: number = 72;
  * 新建/编辑密码页
  *
  * 创建或编辑密码条目，支持密码生成器，保存时加密写入 .gpg 文件。
+ * 保存按钮**固定在页面底部**（不随内容滚动），避让口径与详情页/移动页一致。
  */
 @ComponentV2
 export struct PasswordCreatePage {
@@ -31,7 +32,12 @@ export struct PasswordCreatePage {
   /** 是否编辑模式（标题与初始化流程区分） */
   @Local isEditMode: boolean = false;
 
+  /** 底部系统栏高度（vp）：底部固定按钮栏据此避让 */
+  @Local bottomInset: number = 0;
+
   aboutToAppear(): void {
+    // 沉浸式布局下底部固定按钮栏要避开系统导航条（px→vp 换算集中见 SystemInsets）
+    this.bottomInset = SystemInsets.bottomVp();
     // NavPathInfo.param 在 aboutToAppear 时序下可能未就绪，
     // 改用 RouteManager 暂存的最近一次 push 参数
     const param: Object | undefined = RouteManager.getInstance().takeLastParam();
@@ -289,51 +295,63 @@ export struct PasswordCreatePage {
           .borderRadius(Radius.CARD)
           .margin({ top: Spacing.CARD_GAP })
           .alignItems(HorizontalAlign.Start)
-
-          // 错误提示
-          if (this.viewModel.errorMessage.length > 0) {
-            Text(this.viewModel.errorMessage)
-              .fontSize(FontSize.BODY)
-              .fontColor(this.colors.danger)
-              .padding(Spacing.MD)
-          }
-
-          // 保存按钮
-          Button($r('app.string.common_save'))
-            .type(ButtonType.Normal)
-            .borderRadius(ButtonSpec.PRIMARY_RADIUS)
-            .width('100%')
-            .height(ButtonSpec.PRIMARY_HEIGHT)
-            .fontSize(ButtonSpec.FONT_SIZE)
-            .fontWeight(ButtonSpec.FONT_WEIGHT)
-            .margin({ top: Spacing.LG, bottom: Spacing.XL })
-            .enabled(this.viewModel.canSave())
-            .onClick(() => {
-              this.viewModel.save().then(() => {
-                if (this.viewModel.isSaved) {
-                  RouteManager.getInstance().pop();
-                }
-              });
-            })
-
-          // 保存中加载
-          if (this.viewModel.isSaving) {
-            LoadingProgress()
-              .width(IconSize.LG)
-              .height(IconSize.LG)
-              .margin({ bottom: Spacing.LG })
-          }
         }
-        // 底部额外留出系统导航条高度：保存按钮在滚动内容末尾，滚到底时
-        // 只给 PAGE_H 会被导航条压住（见 SystemInsets）
         .padding({
-          left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.PAGE_H,
-          bottom: Spacing.PAGE_H + SystemInsets.bottomVp(),
+          left: Spacing.PAGE_H, right: Spacing.PAGE_H,
+          top: Spacing.PAGE_H, bottom: Spacing.PAGE_H,
         })
         .backgroundColor(this.colors.background)
       }
       .layoutWeight(1)
       .scrollBar(BarState.Auto)
+      // 内容比视口矮时 Scroll 默认垂直居中，显式顶到左上
+      .align(Alignment.TopStart)
+      // 滑到上下边界时给回弹动效反馈
+      .edgeEffect(EdgeEffect.Spring)
+      .backgroundColor(this.colors.background)
+
+      // ===== 固定底部保存栏（不随内容滚动）=====
+      Column() {
+        // 错误提示随按钮放固定栏：滚动区里的提示可能被键盘挡住，
+        // 固定栏保证任何滚动位置、任何键盘状态下都可见
+        if (this.viewModel.errorMessage.length > 0) {
+          Text(this.viewModel.errorMessage)
+            .fontSize(FontSize.CAPTION)
+            .fontColor(this.colors.danger)
+            .width('100%')
+            .margin({ bottom: Spacing.SM })
+        }
+
+        Button($r('app.string.common_save'))
+          .type(ButtonType.Normal)
+          .borderRadius(ButtonSpec.PRIMARY_RADIUS)
+          .width('100%')
+          .height(ButtonSpec.PRIMARY_HEIGHT)
+          .fontSize(ButtonSpec.FONT_SIZE)
+          .fontWeight(ButtonSpec.FONT_WEIGHT)
+          .enabled(this.viewModel.canSave())
+          .onClick(() => {
+            this.viewModel.save().then(() => {
+              if (this.viewModel.isSaved) {
+                RouteManager.getInstance().pop();
+              }
+            });
+          })
+
+        if (this.viewModel.isSaving) {
+          LoadingProgress()
+            .width(IconSize.LG)
+            .height(IconSize.LG)
+            .margin({ top: Spacing.MD })
+        }
+      }
+      .width('100%')
+      .padding({
+        left: Spacing.PAGE_H, right: Spacing.PAGE_H, top: Spacing.MD,
+        // 与详情页/移动页底部按钮完全同口径：只避让系统导航条
+        // （SystemInsets.bottomVp），不要再叠加别的间距
+        bottom: this.bottomInset,
+      })
       .backgroundColor(this.colors.background)
       }
       .width('100%')

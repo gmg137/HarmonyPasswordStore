@@ -185,10 +185,6 @@
       "value": "Git-Konfiguration"
     },
     {
-      "name": "AutofillAbility_desc",
-      "value": "AutoFill-Dienst des Passwortspeichers"
-    },
-    {
       "name": "sort_recent",
       "value": "Zuletzt"
     },
@@ -1043,42 +1039,6 @@
     {
       "name": "folder_create_btn",
       "value": "Ordner erstellen"
-    },
-    {
-      "name": "autofill_title",
-      "value": "AutoFill-Vorschläge"
-    },
-    {
-      "name": "autofill_pick_for",
-      "value": "Zugangsdaten für %s auswählen"
-    },
-    {
-      "name": "autofill_matching",
-      "value": "Abgleich läuft…"
-    },
-    {
-      "name": "autofill_no_match",
-      "value": "Keine passenden Passwörter"
-    },
-    {
-      "name": "autofill_no_match_hint",
-      "value": "Du kannst auf dem Hauptbildschirm suchen und manuell kopieren"
-    },
-    {
-      "name": "autofill_unlocked_prompt",
-      "value": "Entsperrt. Aktion auswählen"
-    },
-    {
-      "name": "autofill_err_load",
-      "value": "Kandidaten konnten nicht geladen werden"
-    },
-    {
-      "name": "autofill_fill_applied",
-      "value": "%d Felder automatisch ausgefüllt"
-    },
-    {
-      "name": "autofill_fill_failed",
-      "value": "AutoFill fehlgeschlagen; kopiere stattdessen manuell"
     },
     {
       "name": "onboarding_hostkey_fp_line",
@@ -2439,90 +2399,6 @@
     {
       "name": "repo_invalid_path",
       "value": "Ungültiger Pfad (%s): %s"
-    },
-    {
-      "name": "autofill_settings_title",
-      "value": "AutoFill"
-    },
-    {
-      "name": "autofill_svc_status",
-      "value": "Status des AutoFill-Dienstes"
-    },
-    {
-      "name": "autofill_repo_ready",
-      "value": "Passwortspeicher bereit"
-    },
-    {
-      "name": "autofill_repo_not_init",
-      "value": "Passwortspeicher nicht initialisiert"
-    },
-    {
-      "name": "autofill_entry_count_label",
-      "value": "Verfügbare Passworteinträge"
-    },
-    {
-      "name": "autofill_entry_count",
-      "value": "%d Einträge"
-    },
-    {
-      "name": "autofill_biometric_cap",
-      "value": "Biometrie-Fähigkeit"
-    },
-    {
-      "name": "autofill_biometric_support",
-      "value": "Unterstützt: %s"
-    },
-    {
-      "name": "autofill_biometric_unsupported",
-      "value": "Nicht unterstützt"
-    },
-    {
-      "name": "autofill_howto_title",
-      "value": "So aktivierst du AutoFill"
-    },
-    {
-      "name": "autofill_howto_step1",
-      "value": "1. Öffne Systemeinstellungen → Weitere Einstellungen → Passwörter & AutoFill (oder „AutoFill-Dienst“)"
-    },
-    {
-      "name": "autofill_howto_step2",
-      "value": "2. Wähle „Passwortspeicher (HarmonyPasswordStore)“ als AutoFill-Dienst"
-    },
-    {
-      "name": "autofill_howto_step3",
-      "value": "3. Tippe in einer App oder im Browser auf ein Eingabefeld, dann erscheinen die AutoFill-Vorschläge"
-    },
-    {
-      "name": "autofill_rule_title",
-      "value": "Abgleichregeln"
-    },
-    {
-      "name": "autofill_rule_match",
-      "value": "· Gleicht den Paketnamen der anfragenden App oder Webdomäne mit Eintragsnamen/Pfaden ab"
-    },
-    {
-      "name": "autofill_rule_priority",
-      "value": "· Exakte Treffer zuerst; bei Gleichstand nach letzter Verwendung sortiert"
-    },
-    {
-      "name": "autofill_rule_nodecrypt",
-      "value": "· Der Abgleich entschlüsselt keine Dateien; Entschlüsselung erst nach deiner Auswahl"
-    },
-    {
-      "name": "autofill_sec_title",
-      "value": "Sicherheitshinweise"
-    },
-    {
-      "name": "autofill_sec_fields",
-      "value": "· Kandidaten zeigen standardmäßig nur den Namen und Benutzernamen, niemals das Passwort"
-    },
-    {
-      "name": "autofill_sec_memory",
-      "value": "· Das entschlüsselte Passwort existiert nur kurz im Speicher"
-    },
-    {
-      "name": "autofill_sec_usage",
-      "value": "· Erfolgreiche Füllvorgänge protokollieren die Nutzungszeit zur Verbesserung der Kandidatenreihenfolge"
     }
   ]
 }

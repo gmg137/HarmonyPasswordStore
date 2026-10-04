@@ -29,37 +29,34 @@ const STRENGTH_TIER_LABEL_KEYS: string[] = [
 
 /**
  * 密码生成参数
+ *
+ * @ObservedV2 + @Trace：生成器面板直接读取各字段，逐字段修改即可被 V2 状态
+ * 管理追踪——普通 interface 的嵌套属性修改不可观测，ViewModel 只能靠「重建
+ * 整个对象再重赋值」触发刷新（样板已随本类化一并移除）。
  */
-export interface PasswordGenParams {
+@ObservedV2
+export class PasswordGenParams {
   /** 密码长度 */
-  length: number;
+  @Trace length: number = 20;
   /** 是否包含大写字母 */
-  includeUppercase: boolean;
+  @Trace includeUppercase: boolean = true;
   /** 是否包含小写字母 */
-  includeLowercase: boolean;
+  @Trace includeLowercase: boolean = true;
   /** 是否包含数字 */
-  includeDigits: boolean;
+  @Trace includeDigits: boolean = true;
   /** 是否包含特殊符号 */
-  includeSymbols: boolean;
+  @Trace includeSymbols: boolean = true;
   /** 自定义字符集（为空时使用上述选项自动构建） */
-  customCharset: string;
+  @Trace customCharset: string = '';
   /** 避免歧义字符（如 0/O, 1/l/I） */
-  excludeAmbiguous: boolean;
+  @Trace excludeAmbiguous: boolean = false;
 }
 
 /**
  * 默认密码生成参数
  */
 export function createDefaultPasswordGenParams(): PasswordGenParams {
-  return {
-    length: 20,
-    includeUppercase: true,
-    includeLowercase: true,
-    includeDigits: true,
-    includeSymbols: true,
-    customCharset: '',
-    excludeAmbiguous: false,
-  };
+  return new PasswordGenParams();
 }
 
 /** 大写字母 */

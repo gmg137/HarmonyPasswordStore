@@ -1,6 +1,5 @@
 import { parserTest } from './PasswordFileParser.test';
 import { generatorTest } from './PasswordGenerator.test';
-import { matcherTest } from './CredentialMatcher.test';
 import { pathSafetyTest } from './PathSafety.test';
 import { pgpPacketParserTest } from './PgpPacketParser.test';
 import { repoExportTest } from './RepoExport.test';
@@ -15,7 +14,6 @@ import { repoExportTest } from './RepoExport.test';
 export default function testsuite() {
   parserTest();
   generatorTest();
-  matcherTest();
   pathSafetyTest();
   pgpPacketParserTest();
   repoExportTest();

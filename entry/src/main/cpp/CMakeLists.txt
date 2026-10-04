@@ -5,6 +5,18 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(nativebridge)
 
+# SDK 的 ohos.toolchain.cmake 把 CMAKE_<LANG>_COMPILER_EXTERNAL_TOOLCHAIN 指向 llvm
+# 目录本身（与 CMAKE_<LANG>_COMPILER 是同一个 llvm），CMake 据此给每个编译单元都加
+# `--gcc-toolchain=<sdk>/native/llvm`；编译器就是它自己，clang 于是对每个文件报
+# 「argument unused during compilation: '--gcc-toolchain=…'」（x86_64 / arm64 各一条）。
+# 该参数在本工程没有任何作用（没有外部 GCC 工具链要指向），unset 后 CMake 不再生成它。
+# 必须用 unset 而不是置空字符串：CMake 在变量「有定义」时就拼这个选项，置空会拼出
+# `--gcc-toolchain=`，那同样是个无效参数。比全局加 -Qunused-arguments 精准——不会
+# 顺手掩盖其它「参数未使用」类告警。
+unset(CMAKE_C_COMPILER_EXTERNAL_TOOLCHAIN)
+unset(CMAKE_CXX_COMPILER_EXTERNAL_TOOLCHAIN)
+unset(CMAKE_ASM_COMPILER_EXTERNAL_TOOLCHAIN)
+
 set(NATIVERENDER_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 
 # 裁剪策略：打进 HAP 的 .so 由 hvigor 的 DoNativeStrip 负责（见

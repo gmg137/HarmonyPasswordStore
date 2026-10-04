@@ -16,8 +16,6 @@ import { GitConfigPage } from './GitConfigPage';
 import { RepoManagePage } from './RepoManagePage';
 import { OnboardingPage } from './OnboardingPage';
 import { LockPage } from './LockPage';
-import { AutofillFillPage } from './AutofillFillPage';
-import { AutofillSettingsPage } from './AutofillSettingsPage';
 import { FolderCreatePage } from './FolderCreatePage';
 import { MoveEntryPage } from './MoveEntryPage';
 import { PrivacyPolicyPage } from './PrivacyPolicyPage';
@@ -91,10 +89,6 @@ struct Index {
       OnboardingPage()
     } else if (name === RouteNames.LOCK) {
       LockPage()
-    } else if (name === RouteNames.AUTOFILL_FILL) {
-      AutofillFillPage()
-    } else if (name === RouteNames.AUTOFILL_SETTINGS) {
-      AutofillSettingsPage()
     } else if (name === RouteNames.FOLDER_CREATE) {
       FolderCreatePage()
     } else if (name === RouteNames.MOVE_ENTRY) {

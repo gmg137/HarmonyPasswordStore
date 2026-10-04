@@ -133,6 +133,8 @@ export struct GitLogView {
           startMargin: DividerSpec.INSET_TEXT,
           endMargin: DividerSpec.INSET_TEXT,
         })
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
         .width('100%')
         .constraintSize({ minHeight: ComponentSize.EMPTY_ICON * 2 })
       }

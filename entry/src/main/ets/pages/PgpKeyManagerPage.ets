@@ -1117,6 +1117,8 @@ export struct PgpKeyManagerPage {
         .layoutWeight(1)
         .scrollBar(BarState.Auto)
         .align(Alignment.TopStart)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
         .backgroundColor(this.colors.background)
 
         // ===== 右下角 + 号 FAB（与首页样式一致） =====

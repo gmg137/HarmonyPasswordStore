@@ -8,28 +8,27 @@ const TAG: string = 'DicewareGenerator';
 
 /**
  * Diceware 生成参数
+ *
+ * @ObservedV2 + @Trace：面板直接读取各字段，逐字段修改即可被 V2 状态管理
+ * 追踪（普通 interface 的嵌套属性修改不可观测，见 PasswordGenParams 的说明）。
  */
-export interface DicewareGenParams {
+@ObservedV2
+export class DicewareGenParams {
   /** 词组数量（通常 4-7 个） */
-  wordCount: number;
+  @Trace wordCount: number = 4;
   /** 分隔符 */
-  separator: string;
+  @Trace separator: string = '-';
   /** 是否首字母大写 */
-  capitalize: boolean;
+  @Trace capitalize: boolean = false;
   /** 是否在词组间插入数字 */
-  includeDigits: boolean;
+  @Trace includeDigits: boolean = false;
 }
 
 /**
  * 默认 Diceware 参数
  */
 export function createDefaultDicewareParams(): DicewareGenParams {
-  return {
-    wordCount: 4,
-    separator: '-',
-    capitalize: false,
-    includeDigits: false,
-  };
+  return new DicewareGenParams();
 }
 
 /**

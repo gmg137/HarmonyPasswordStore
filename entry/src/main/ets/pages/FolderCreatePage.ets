@@ -169,6 +169,8 @@ export struct FolderCreatePage {
         }
         .layoutWeight(1)
         .scrollBar(BarState.Auto)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
         .backgroundColor(this.colors.background)
       }
     }

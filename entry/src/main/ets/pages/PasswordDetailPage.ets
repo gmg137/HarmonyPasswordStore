@@ -470,6 +470,8 @@ export struct PasswordDetailPage {
           .layoutWeight(1)
           .align(Alignment.TopStart)
           .scrollBar(BarState.Auto)
+          // 滑到上下边界时给回弹动效反馈
+          .edgeEffect(EdgeEffect.Spring)
         }
 
         // ===== 固定底部操作栏（不随列表滚动，仅解密成功后显示） =====

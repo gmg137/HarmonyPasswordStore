@@ -185,10 +185,6 @@
       "value": "Конфигурация Git"
     },
     {
-      "name": "AutofillAbility_desc",
-      "value": "Служба автозаполнения хранилища паролей"
-    },
-    {
       "name": "sort_recent",
       "value": "Недавние"
     },
@@ -1043,42 +1039,6 @@
     {
       "name": "folder_create_btn",
       "value": "Создать папку"
-    },
-    {
-      "name": "autofill_title",
-      "value": "Предложения автозаполнения"
-    },
-    {
-      "name": "autofill_pick_for",
-      "value": "Выберите учётные данные для %s"
-    },
-    {
-      "name": "autofill_matching",
-      "value": "Поиск совпадений..."
-    },
-    {
-      "name": "autofill_no_match",
-      "value": "Нет подходящих паролей"
-    },
-    {
-      "name": "autofill_no_match_hint",
-      "value": "Можно выполнить поиск на главном экране и скопировать вручную"
-    },
-    {
-      "name": "autofill_unlocked_prompt",
-      "value": "Разблокировано. Выберите действие"
-    },
-    {
-      "name": "autofill_err_load",
-      "value": "Не удалось загрузить кандидатов"
-    },
-    {
-      "name": "autofill_fill_applied",
-      "value": "Автоматически заполнено полей: %d"
-    },
-    {
-      "name": "autofill_fill_failed",
-      "value": "Не удалось выполнить автозаполнение; используйте копирование"
     },
     {
       "name": "onboarding_hostkey_fp_line",
@@ -2439,90 +2399,6 @@
     {
       "name": "repo_invalid_path",
       "value": "Недопустимый путь (%s): %s"
-    },
-    {
-      "name": "autofill_settings_title",
-      "value": "Автозаполнение"
-    },
-    {
-      "name": "autofill_svc_status",
-      "value": "Статус службы заполнения"
-    },
-    {
-      "name": "autofill_repo_ready",
-      "value": "Хранилище готово"
-    },
-    {
-      "name": "autofill_repo_not_init",
-      "value": "Хранилище не инициализировано"
-    },
-    {
-      "name": "autofill_entry_count_label",
-      "value": "Доступные записи паролей"
-    },
-    {
-      "name": "autofill_entry_count",
-      "value": "Записей: %d"
-    },
-    {
-      "name": "autofill_biometric_cap",
-      "value": "Биометрия"
-    },
-    {
-      "name": "autofill_biometric_support",
-      "value": "Поддерживается: %s"
-    },
-    {
-      "name": "autofill_biometric_unsupported",
-      "value": "Не поддерживается"
-    },
-    {
-      "name": "autofill_howto_title",
-      "value": "Как включить автозаполнение"
-    },
-    {
-      "name": "autofill_howto_step1",
-      "value": "1. Откройте Настройки системы → Дополнительно → Пароли и автозаполнение (или «служба автозаполнения»)"
-    },
-    {
-      "name": "autofill_howto_step2",
-      "value": "2. Выберите «Хранилище паролей (HarmonyPasswordStore)» как службу заполнения"
-    },
-    {
-      "name": "autofill_howto_step3",
-      "value": "3. Нажмите на поле ввода в приложении или браузере — появятся предложения заполнения"
-    },
-    {
-      "name": "autofill_rule_title",
-      "value": "Правила сопоставления"
-    },
-    {
-      "name": "autofill_rule_match",
-      "value": "· Сопоставляет имя пакета запрашивающего приложения или домен сайта с именами/путями записей"
-    },
-    {
-      "name": "autofill_rule_priority",
-      "value": "· Точные совпадения показываются первыми; при равенстве — по недавнему использованию"
-    },
-    {
-      "name": "autofill_rule_nodecrypt",
-      "value": "· Сопоставление не расшифровывает файлы; расшифровка происходит только после вашего выбора"
-    },
-    {
-      "name": "autofill_sec_title",
-      "value": "Примечания по безопасности"
-    },
-    {
-      "name": "autofill_sec_fields",
-      "value": "· Кандидаты заполнения показывают только имя и имя пользователя, но никогда — пароль"
-    },
-    {
-      "name": "autofill_sec_memory",
-      "value": "· Расшифрованный пароль существует в памяти лишь короткое время"
-    },
-    {
-      "name": "autofill_sec_usage",
-      "value": "· При успешном заполнении фиксируется время использования для улучшения порядка кандидатов"
     }
   ]
 }

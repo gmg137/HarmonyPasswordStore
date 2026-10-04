@@ -11,26 +11,24 @@ import { ThemeColors, Palette } from '../../main/ets/common/ThemeColors';
  */
 function makeParams(length: number, upper: boolean, lower: boolean,
   digits: boolean, symbols: boolean, noAmbiguous: boolean): PasswordGenParams {
-  const params: PasswordGenParams = {
-    length: length,
-    includeUppercase: upper,
-    includeLowercase: lower,
-    includeDigits: digits,
-    includeSymbols: symbols,
-    customCharset: '',
-    excludeAmbiguous: noAmbiguous,
-  };
+  // PasswordGenParams 已是 @ObservedV2 类（字段带 @Trace），只能经构造函数实例化
+  const params: PasswordGenParams = new PasswordGenParams();
+  params.length = length;
+  params.includeUppercase = upper;
+  params.includeLowercase = lower;
+  params.includeDigits = digits;
+  params.includeSymbols = symbols;
+  params.excludeAmbiguous = noAmbiguous;
   return params;
 }
 
 function makeDicewareParams(wordCount: number, separator: string,
   capitalize: boolean, includeDigits: boolean): DicewareGenParams {
-  const params: DicewareGenParams = {
-    wordCount: wordCount,
-    separator: separator,
-    capitalize: capitalize,
-    includeDigits: includeDigits,
-  };
+  const params: DicewareGenParams = new DicewareGenParams();
+  params.wordCount = wordCount;
+  params.separator = separator;
+  params.capitalize = capitalize;
+  params.includeDigits = includeDigits;
   return params;
 }
 

@@ -220,6 +220,8 @@ export struct SyncSheet {
           GitLogView({ refreshToken: this.logRefreshToken })
         }
         .scrollBar(BarState.Auto)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
       }
       .width('100%')
       .layoutWeight(1)

@@ -415,6 +415,8 @@ export struct SettingsPage {
         }
         .layoutWeight(1)
         .scrollBar(BarState.Off)
+        // 滑到上下边界时给回弹动效反馈
+        .edgeEffect(EdgeEffect.Spring)
         // 顶部不留白：首个分组标题自身已有 SECTION_TOP_FIRST(12vp) 上边距
         .padding({ left: Spacing.PAGE_H, right: Spacing.PAGE_H, bottom: Spacing.PAGE_H })
         .backgroundColor(this.colors.background)
