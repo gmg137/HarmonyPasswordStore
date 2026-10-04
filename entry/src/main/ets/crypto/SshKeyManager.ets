@@ -7,6 +7,7 @@ import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { util } from '@kit.ArkTS';
 import { fileIo as fs } from '@kit.CoreFileKit';
 import { Strings } from '../common/Strings';
+import { SuppressWarnings, SuppressWarningsType } from '@ohos.annotation';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -563,6 +564,9 @@ export class SshKeyManager {
    *
    * @param alias 密钥别名
    */
+  // 28057 是 syscap 提示性告警：cryptoFramework 在 deviceTypes(phone) 上全量可用，
+  // 用官方注解抑制（仅作用于编译期，不改运行时行为）
+  @SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
   async exportPrivateKeyPem(alias: string): Promise<string> {
     // 1) 落盘的私钥文件（加密存储；老版本留下的明文也能直读，见下）
     const keyPath: string = `${this.getKeysDir()}/${alias}.key`;

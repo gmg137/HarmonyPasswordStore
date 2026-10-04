@@ -11,6 +11,7 @@ import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { GpgKeyId } from '../model/GpgKeyId';
 import { Strings } from '../common/Strings';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { SuppressWarnings, SuppressWarningsType } from '@ohos.annotation';
 
 const DOMAIN: number = 0x0001;
 const TAG: string = 'PgpParser';
@@ -877,6 +878,9 @@ export class PgpPacketParser {
    *
    * 注意长度字段与哈希范围都是**公钥部分**（私钥包须截断，见 publicMaterialEnd）。
    */
+  // 28057 是 syscap 提示性告警：cryptoFramework 在 deviceTypes(phone) 上全量可用，
+  // 用官方注解抑制（仅作用于编译期，不改运行时行为）
+  @SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
   private static async computeV4Fingerprint(data: Uint8Array, header: PacketHeader): Promise<FingerprintResult> {
     // 私钥包只取公钥部分；公钥包此处即为整个包体
     const bodyLen: number = PgpPacketParser.publicMaterialEnd(
@@ -914,6 +918,7 @@ export class PgpPacketParser {
    * 关键：总长与哈希范围都只覆盖**公钥材料**（`10 + 材料长度`），不含私钥段。
    * Key ID 取指纹**最左** 8 字节（v4 取最右 8 字节）。
    */
+  @SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
   private static async computeV5Fingerprint(data: Uint8Array, header: PacketHeader): Promise<FingerprintResult> {
     const body: number = header.bodyOffset;
     if (body + 10 > data.length) {
@@ -958,6 +963,7 @@ export class PgpPacketParser {
    * 与 v4 的差异：前缀为 0x9B（v4 是 0x99 + 2 字节长度），哈希用 SHA-256（v4 用 SHA-1），
    * 且多一个「四字节密钥材料长度」字段。总长 = 1(版本) + 4(时间) + 1(算法) + 4(材料长) + 材料长。
    */
+  @SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
   private static async computeV6Fingerprint(data: Uint8Array, header: PacketHeader): Promise<FingerprintResult> {
     const body: number = header.bodyOffset;
     if (body + 10 > data.length) {

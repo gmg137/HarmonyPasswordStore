@@ -3,6 +3,7 @@ import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { util } from '@kit.ArkTS';
 import { hilog } from '@kit.PerformanceAnalysisKit';
 import { BusinessError } from '@kit.BasicServicesKit';
+import { SuppressWarnings, SuppressWarningsType } from '@ohos.annotation';
 
 /** hilog 域 */
 const DOMAIN: number = 0x0001;
@@ -53,6 +54,9 @@ export class SecretStore {
   /**
    * 确保指定别名的 HUKS 密钥存在
    */
+  // 28057 是 syscap 提示性告警：HUKS/cryptoFramework 在 deviceTypes(phone) 上全量可用，
+  // 用官方注解抑制（仅作用于编译期，不改运行时行为）
+  @SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
   private async ensureKey(alias: string): Promise<boolean> {
     const properties: huks.HuksParam[] = [
       { tag: huks.HuksTag.HUKS_TAG_ALGORITHM, value: huks.HuksKeyAlg.HUKS_ALG_AES },
@@ -109,6 +113,7 @@ export class SecretStore {
    * @param encrypt true 加密（tag 由 outData 尾部返回）/ false 解密（须传 tag）
    * @returns 加密时为 `密文||tag`，解密时为明文；失败返回 null
    */
+  @SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
   private async gcmOnce(alias: string, encrypt: boolean, nonce: Uint8Array,
                         inData: Uint8Array, tag?: Uint8Array): Promise<Uint8Array | null> {
     const properties: huks.HuksParam[] = [
@@ -233,6 +238,7 @@ export class SecretStore {
     return value.length > 0 && /^[A-Za-z0-9+/]+={0,2}$/.test(value) && value.length >= 24;
   }
 
+  @SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
   private randomBytes(len: number): Uint8Array {
     try {
       const rand: cryptoFramework.Random = cryptoFramework.createRandom();

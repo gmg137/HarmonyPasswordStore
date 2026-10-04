@@ -1,5 +1,6 @@
 import { cryptoFramework } from '@kit.CryptoArchitectureKit';
 import { hilog } from '@kit.PerformanceAnalysisKit';
+import { SuppressWarnings, SuppressWarningsType } from '@ohos.annotation';
 import { ThemeColors, Palette } from '../common/ThemeColors';
 import { Strings } from '../common/Strings';
 
@@ -86,6 +87,9 @@ function removeAmbiguous(charset: string): string {
  * 使用 cryptoFramework 生成密码学安全的随机数
  * 返回 [0, max) 范围内的整数
  */
+// 28057 是 syscap 提示性告警：cryptoFramework 在 deviceTypes(phone) 上全量可用，
+// 用官方注解抑制（仅作用于编译期，不改运行时行为）
+@SuppressWarnings({ rules: [SuppressWarningsType.SYSCAP] })
 function secureRandomInt(max: number): number {
   try {
     const random: cryptoFramework.Random = cryptoFramework.createRandom();
